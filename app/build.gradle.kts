@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-parcelize")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -36,7 +39,25 @@ android {
 }
 
 dependencies {
+    //room
+    implementation(libs.androidx.room.compiler)
+    implementation(libs.room.runtime)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.logging.interceptor)
 
+    //retrofit
+    implementation(libs.retrofit)
+
+    //hilt
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
+    //coil
+    implementation(libs.coil)
+
+
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
