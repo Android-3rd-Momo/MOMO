@@ -4,6 +4,7 @@ plugins {
     id("kotlin-parcelize")
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -36,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    viewBinding {
+        enable = true
+    }
 }
 
 dependencies {
@@ -54,6 +58,11 @@ dependencies {
     ksp(libs.hilt.compiler)
     //coil
     implementation(libs.coil)
+
+    //fireBase
+    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-database-ktx")
 
 
     implementation(libs.androidx.fragment.ktx)
