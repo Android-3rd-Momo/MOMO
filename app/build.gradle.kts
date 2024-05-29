@@ -40,11 +40,11 @@ android {
 
 dependencies {
     //room
-    implementation(libs.androidx.room.compiler)
     implementation(libs.room.runtime)
     implementation(libs.converter.gson)
     implementation(libs.gson)
     implementation(libs.logging.interceptor)
+    ksp(libs.room.compiler)
 
     //retrofit
     implementation(libs.retrofit)
