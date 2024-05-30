@@ -7,16 +7,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
+import kr.nbc.momo.databinding.ActivityMainBinding
+import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        supportFragmentManager.beginTransaction().apply {
+            add(R.id.flTest, ChattingRoomFragment())
+            commit()
         }
     }
 }
