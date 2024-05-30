@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.databinding.FragmentChattingRoomBinding
+import kr.nbc.momo.presentation.UiState
 
 @AndroidEntryPoint
 class ChattingRoomFragment : Fragment() {
@@ -54,10 +55,16 @@ class ChattingRoomFragment : Fragment() {
     private fun observeChatList() {
         lifecycleScope.launch {
             viewModel.chatMessages.collect { chatMessages ->
-                Log.d("데이터 받아옴", chatMessages.groupId)
-                rvAdapter.itemList = chatMessages.chatList
-                rvAdapter.notifyDataSetChanged()
-                binding.rvFireBase.scrollToPosition(chatMessages.chatList.lastIndex)
+                when(chatMessages){
+                    is UiState.Loading -> {}
+                    is UiState.Success -> {
+                        rvAdapter.itemList = chatMessages.data
+                        binding.rvFireBase.scrollToPosition(chatMessages.data.chatList.lastIndex)
+                    }
+                    is UiState.Error -> {
+                        Log.d("error", chatMessages.message)
+                    }
+                }
             }
         }
     }

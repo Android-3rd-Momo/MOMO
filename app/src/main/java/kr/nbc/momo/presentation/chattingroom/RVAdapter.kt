@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemBinding
 import kr.nbc.momo.presentation.chattingroom.model.ChatModel
+import kr.nbc.momo.presentation.chattingroom.model.GroupChatModel
 
 class RVAdapter():RecyclerView.Adapter<RVAdapter.ItemViewHolder>() {
-    var itemList = listOf<ChatModel>()
+    var itemList = GroupChatModel()
     class ItemViewHolder(
         private val binding: RvItemBinding,
     ): RecyclerView.ViewHolder(binding.root){
@@ -24,10 +25,10 @@ class RVAdapter():RecyclerView.Adapter<RVAdapter.ItemViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return itemList.chatList.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(itemList[position])
+        holder.bind(itemList.chatList[position])
     }
 }
