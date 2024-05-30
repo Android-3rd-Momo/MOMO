@@ -7,6 +7,7 @@ import kr.nbc.momo.databinding.RvItemElseBinding
 import kr.nbc.momo.databinding.RvItemUserBinding
 import kr.nbc.momo.presentation.chattingroom.model.ChatModel
 import kr.nbc.momo.presentation.chattingroom.model.GroupChatModel
+import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToKorea
 import java.text.SimpleDateFormat
 
 class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -17,7 +18,7 @@ class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<Recycl
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatModel: ChatModel) {
             with(binding) {
-                tv1.text = chatModel.text + SimpleDateFormat("HH:mm:ss").format(chatModel.dateTime.toLong())
+                tv1.text = chatModel.text + setDateTimeFormatToKorea(chatModel.dateTime)
 
             }
         }
@@ -28,7 +29,7 @@ class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<Recycl
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatModel: ChatModel) {
             with(binding) {
-                tv1.text = chatModel.text
+                tv1.text = chatModel.text + setDateTimeFormatToKorea(chatModel.dateTime)
             }
         }
     }
