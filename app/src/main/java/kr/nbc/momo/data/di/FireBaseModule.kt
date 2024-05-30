@@ -16,25 +16,18 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object FireBaseModule {
     @Provides
-    fun provideFireBaseDataBase(): FirebaseDatabase{
+    fun provideFireBaseDataBase(): FirebaseDatabase {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseDatabase.setPersistenceEnabled(true)
         firebaseDatabase.setPersistenceCacheSizeBytes(5000000)
         return firebaseDatabase
     }
 
-
     @Provides
     fun provideFireBaseFireStore(): FirebaseFirestore {
-        val settings = firestoreSettings {
-            setLocalCacheSettings(memoryCacheSettings {}) //메모리 캐시 설정
-            setLocalCacheSettings(persistentCacheSettings {}) //종료 후에도 캐시 데이터 유지
-//            setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED) //캐시크기 무제한 설정
-        }
-        val firebaseFireStore = FirebaseFirestore.getInstance()
-        firebaseFireStore.firestoreSettings = settings
-        return firebaseFireStore
+        return FirebaseFirestore.getInstance()
     }
+
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
