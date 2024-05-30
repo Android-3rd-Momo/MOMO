@@ -19,14 +19,14 @@ class ChattingRoomFragment : Fragment() {
     private var _binding: FragmentChattingRoomBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ChattingRoomViewModel by viewModels()
-    private val rvAdapter = RVAdapter()
 
     //bundle로 던지든 공유뷰모델에 넣든 리스트에서 선택한 그룹아이디 받아오기
     private val groupId = "group_id"
 
     //공유 뷰모델에서 로그인 정보 받아오기
-    private val userId = "user_id"
+    private val userId = "test_user_id"
     private val userName = "user_name"
+    private val rvAdapter = RVAdapter(userId)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,6 +5,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.LocalCacheSettings
+import com.google.firebase.firestore.firestoreSettings
+import com.google.firebase.firestore.persistentCacheSettings
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
@@ -26,5 +31,13 @@ class MainActivity : AppCompatActivity() {
             add(R.id.flTest, ChattingRoomFragment())
             commit()
         }
+
+        val fireStore = FirebaseFirestore.getInstance()
+        val settings = firestoreSettings {
+            setLocalCacheSettings(persistentCacheSettings { cacheSizeBytes})
+        }
+
+
+
     }
 }

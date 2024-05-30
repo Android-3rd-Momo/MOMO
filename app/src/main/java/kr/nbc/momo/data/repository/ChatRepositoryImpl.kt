@@ -13,6 +13,8 @@ import kr.nbc.momo.data.model.GroupChatResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.repository.ChatRepository
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
@@ -41,12 +43,14 @@ class ChatRepositoryImpl @Inject constructor(
         try {
             val groupSnapshot = chatRef.child(groupId).get().await()
             val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
+            val koreaZoneId = ZoneId.of("Asia/Seoul")
+            val koreaTime = ZonedDateTime.now(koreaZoneId)
 
             val newChatResponse = ChatResponse(
                 userName = userName,
                 userId = userId,
                 text = text,
-                dateTime = System.currentTimeMillis().toString()
+                dateTime = koreaTime.toString()
             )
 
             val updatedChatList = groupChatResponse?.chatList?.toMutableList() ?: mutableListOf()

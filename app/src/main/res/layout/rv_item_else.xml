@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/tv1"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:textSize="60sp"
         android:text="TEST"
         app:layout_constraintEnd_toEndOf="parent"
