@@ -63,7 +63,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation(platform(libs.firebase.bom))
     implementation("com.google.firebase:firebase-database-ktx")
-
+    implementation("com.google.firebase:firebase-firestore")
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)
