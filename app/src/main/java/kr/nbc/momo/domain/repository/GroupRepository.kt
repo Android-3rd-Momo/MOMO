@@ -1,11 +1,11 @@
 package kr.nbc.momo.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import kr.nbc.momo.domain.model.GroupChatEntity
+import kr.nbc.momo.domain.model.GroupEntity
 
 interface GroupRepository {
-    suspend fun createGroup()
-    fun readGroup()
-    fun updateGroup()
-    fun deleteGroup()
+    fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit)
+    fun readGroup(groupId: String): Flow<GroupEntity>
+    fun updateGroup(groupEntity: GroupEntity)
+    fun deleteGroup(groupId: String)
 }
