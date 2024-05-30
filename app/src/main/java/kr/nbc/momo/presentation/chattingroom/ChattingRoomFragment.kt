@@ -56,7 +56,9 @@ class ChattingRoomFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.chatMessages.collect { chatMessages ->
                 when(chatMessages){
-                    is UiState.Loading -> {}
+                    is UiState.Loading -> {
+
+                    }
                     is UiState.Success -> {
                         rvAdapter.itemList = chatMessages.data
                         binding.rvFireBase.scrollToPosition(chatMessages.data.chatList.lastIndex)

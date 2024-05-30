@@ -16,4 +16,5 @@ object FireBaseModule {
         firebaseDatabase.setPersistenceCacheSizeBytes(5000000)
         return firebaseDatabase
     }
+
 }
