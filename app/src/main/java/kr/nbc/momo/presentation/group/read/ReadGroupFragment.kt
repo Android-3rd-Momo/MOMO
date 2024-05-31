@@ -40,7 +40,7 @@ class ReadGroupFragment : Fragment() {
 
     private fun initGroup() {
         lifecycleScope.launch {
-            viewModel.readGroup("HyQA32vl8xLVcnp9gb5U")
+            viewModel.readGroup("Nqcpz10GiEAK10i4qPql")
 
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readGroup.collect { uiState ->

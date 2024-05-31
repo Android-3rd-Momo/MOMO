@@ -41,7 +41,7 @@ class CreateGroupFragment : Fragment() {
         val group = GroupModel(
             binding.groupName.text.toString(),
             binding.groupOneLineDescription.text.toString(),
-            binding.imageView.toString(),
+            binding.ivGroupImage.toString(),
             binding.groupDescription.text.toString(),
             binding.firstDate.text.toString(),
             binding.lastDate.text.toString(),
