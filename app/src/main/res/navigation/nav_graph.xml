@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="kr.nbc.momo.presentation.home.main.HomeFragment"
+        android:name="kr.nbc.momo.presentation.home.HomeFragment"
         android:label="fragment_1"
         tools:layout="@layout/fragment_home" />
     <fragment

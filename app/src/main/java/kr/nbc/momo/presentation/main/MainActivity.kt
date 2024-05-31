@@ -11,9 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
-import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
-import kr.nbc.momo.presentation.group.create.CreateGroupFragment
-import kr.nbc.momo.presentation.home.main.HomeFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

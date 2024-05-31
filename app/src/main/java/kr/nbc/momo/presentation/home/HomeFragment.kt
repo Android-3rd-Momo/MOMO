@@ -1,11 +1,11 @@
-package kr.nbc.momo.presentation.home.main
+package kr.nbc.momo.presentation.home
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,11 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
-import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.read.ReadGroupViewModel
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -38,6 +35,13 @@ class HomeFragment : Fragment() {
         initGroupList()
     }
 
+    private fun initView() {
+        binding.floatingBtnCreateGroup.setOnClickListener {
+
+        }
+
+    }
+
     private fun initGroupList() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -52,7 +56,8 @@ class HomeFragment : Fragment() {
                         is UiState.Success -> {
                             homeAdapter = HomeAdapter(uiState.data)
                             binding.rvGroupList.adapter = homeAdapter
-                            binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
+                            binding.rvGroupList.layoutManager =
+                                LinearLayoutManager(requireContext())
                         }
                     }
                 }

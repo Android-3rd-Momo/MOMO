@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.home.main
+package kr.nbc.momo.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
