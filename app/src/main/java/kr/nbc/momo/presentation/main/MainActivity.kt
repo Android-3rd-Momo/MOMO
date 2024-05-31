@@ -5,6 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
@@ -25,32 +28,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        initNav()
+    }
 
-        supportFragmentManager.beginTransaction().replace(R.id.flTest, HomeFragment()).commit()
-        binding.navigationView.run {
-            setOnNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.homeIcon -> {
-                        // 다른 프래그먼트 화면으로 이동하는 기능
-                        val homeFragment = HomeFragment()
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.flTest, homeFragment).commit()
-                    }
-
-                    R.id.chatIcon -> {
-                        val chattingRoomFragment = ChattingRoomFragment()
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.flTest, chattingRoomFragment).commit()
-                    }
-
-                    R.id.myPageIcon -> {
-                        val createGroupFragment = CreateGroupFragment()
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.flTest, createGroupFragment).commit()
-                    }
-                }
-                true
-            }
-        }
+    private fun initNav() {
+        val navHostFragment = supportFragmentManager.findFragmentById(androidx.navigation.fragment.R.id.nav_host_fragment_container) as NavHostFragment
+        binding.navigationView.setupWithNavController(navHostFragment.findNavController())
     }
 }

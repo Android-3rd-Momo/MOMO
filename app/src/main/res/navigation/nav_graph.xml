@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_navgraph"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="kr.nbc.momo.presentation.home.main.HomeFragment"
+        android:label="fragment_1"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/chat"
+        android:name="kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment"
+        android:label="fragment_1"
+        tools:layout="@layout/fragment_chatting_room" />
+    <fragment
+        android:id="@+id/myPage"
+        android:name="kr.nbc.momo.presentation.group.create.CreateGroupFragment"
+        android:label="fragment_1"
+        tools:layout="@layout/fragment_create_group" />
+</navigation>
