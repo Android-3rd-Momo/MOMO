@@ -8,4 +8,5 @@ interface GroupRepository {
     fun readGroup(groupId: String): Flow<GroupEntity>
     fun updateGroup(groupEntity: GroupEntity)
     fun deleteGroup(groupId: String)
+    fun getGroupList(): Flow<List<GroupEntity>>
 }

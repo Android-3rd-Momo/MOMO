@@ -2,15 +2,9 @@ package kr.nbc.momo.data.repository
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.components.SingletonComponent
+import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -19,16 +13,13 @@ import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
-import kr.nbc.momo.domain.usecase.CreateGroupUseCase
-import kr.nbc.momo.presentation.group.mapper.asGroupEntity
-import kr.nbc.momo.presentation.group.model.GroupModel
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
 ): GroupRepository {
     private val groupResponse = MutableStateFlow<GroupResponse>(GroupResponse())
-
+    private val groupListResponse = MutableStateFlow<List<GroupResponse>>(listOf())
     override fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
         val groupResponse = groupEntity.toGroupResponse()
         fireStore.collection("groups").add(groupResponse)
@@ -62,5 +53,23 @@ class GroupRepositoryImpl @Inject constructor(
 
     override fun deleteGroup(groupId: String) {
         TODO("Not yet implemented")
+    }
+
+    override fun getGroupList(): Flow<List<GroupEntity>> {
+        fireStore.collection("groups")
+            // .whereEqualTo("groupName", "123")
+            .get()
+            .addOnSuccessListener { documents ->
+                groupListResponse.value = documents.toObjects<GroupResponse>()
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
+        return groupListResponse.map { list ->
+            list.map { data ->
+                data.toEntity()
+            }
+        }
     }
 }

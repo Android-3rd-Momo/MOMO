@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.group.read
+package kr.nbc.momo.presentation.home.main
 
 import android.os.Bundle
 import android.util.Log
@@ -12,38 +12,36 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.FragmentCreateGroupBinding
+import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.create.CreateGroupViewModel
+import kr.nbc.momo.presentation.group.read.ReadGroupViewModel
 
 @AndroidEntryPoint
-class ReadGroupFragment : Fragment() {
-    private var _binding: FragmentReadGroupBinding? = null
+class HomeFragment : Fragment() {
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ReadGroupViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var homeAdapter: HomeAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentReadGroupBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initGroup()
+        initGroupList()
     }
 
-    private fun initGroup() {
+    private fun initGroupList() {
         lifecycleScope.launch {
-            viewModel.readGroup("Nqcpz10GiEAK10i4qPql")
-
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.readGroup.collect { uiState ->
+                viewModel.getGroupList.collect { uiState ->
                     when (uiState) {
                         is UiState.Error -> {
                             Log.d("UiState", uiState.message)
@@ -52,14 +50,9 @@ class ReadGroupFragment : Fragment() {
                             // TODO()
                         }
                         is UiState.Success -> {
-                            with(binding) {
-                                groupName.text = uiState.data.groupName
-                                groupOneLineDescription.text = uiState.data.groupOneLineDescription
-                                groupDescription.text = uiState.data.groupDescription
-                                firstDate.text = uiState.data.firstDate
-                                lastDate.text = uiState.data.lastDate
-                                leaderId.text = uiState.data.leaderId
-                            }
+                            homeAdapter = HomeAdapter(uiState.data)
+                            binding.rvGroupList.adapter = homeAdapter
+                            binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
                         }
                     }
                 }

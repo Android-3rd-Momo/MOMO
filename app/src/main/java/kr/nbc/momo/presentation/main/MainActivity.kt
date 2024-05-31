@@ -11,6 +11,7 @@ import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
+import kr.nbc.momo.presentation.home.main.HomeFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
 
 
@@ -30,10 +31,11 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
 
 //            add(R.id.flTest, ChattingRoomFragment())
-            add(R.id.flTest, ReadGroupFragment())
+//            add(R.id.flTest, ReadGroupFragment())
 //            add(R.id.flTest, CreateGroupFragment())
 //            add(R.id.flTest, ChattingRoomFragment())
 //            add(R.id.flTest, SignUpFragment())
+            add(R.id.flTest, HomeFragment())
 
             commit()
         }
