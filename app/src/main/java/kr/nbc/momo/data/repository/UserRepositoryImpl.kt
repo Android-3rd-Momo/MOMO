@@ -16,7 +16,7 @@ class UserRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) : UserRepository {
     override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {
-        if (!isUserIdDuplicate(user.userId)) {
+        if (!isUserIdDuplicate(user.userId)) { //todo
             throw Exception("This id is already in use")
         }
         auth.createUserWithEmailAndPassword(email, password).await()

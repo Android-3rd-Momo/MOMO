@@ -7,9 +7,7 @@ import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(private val userRepository: UserRepository) {
     suspend operator fun invoke(email: String, password: String, user: UserEntity):UserEntity {
-        if (!userRepository.isUserIdDuplicate(user.userId)) {
-            throw Exception("User ID is already in use.")
-        }
+
         return userRepository.signUpUser(email, password, user)
     }
 }

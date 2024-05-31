@@ -41,7 +41,7 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, password: String, user: UserModel) {
         viewModelScope.launch {
             _authState.value = UiState.Loading
-            runCatching {
+            runCatching { //todo
                 signUpUseCase(email, password, user.toEntity())
             }.onSuccess {
                 _authState.value = UiState.Success(it.toModel())
