@@ -5,19 +5,19 @@ import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 import kr.nbc.momo.domain.model.UserEntity
 
-fun ChatResponse.toEntity(): ChatEntity{
+fun ChatResponse.toEntity(): ChatEntity {
     return ChatEntity(
         userName, userId, text, dateTime
     )
 }
 
-fun GroupUserResponse.toEntity(): GroupUserEntity{
+fun GroupUserResponse.toEntity(): GroupUserEntity {
     return GroupUserEntity(
         userId, userName, userProfileUrl
     )
 }
 
-fun GroupChatResponse.toEntity(): GroupChatEntity{
+fun GroupChatResponse.toEntity(): GroupChatEntity {
     return GroupChatEntity(
         this.groupId,
         this.userList.map { it.toEntity() },
@@ -25,10 +25,11 @@ fun GroupChatResponse.toEntity(): GroupChatEntity{
     )
 }
 
-fun UserResponse.toEntity(): UserEntity{
+fun UserResponse.toEntity(): UserEntity {
     return UserEntity(
-        email = this.email,
-        name = this.name,
-        number = this.number
+        userEmail = this.userEmail,
+        userName = this.userName,
+        userNumber = this.userNumber,
+        userId = this.userId
     )
 }

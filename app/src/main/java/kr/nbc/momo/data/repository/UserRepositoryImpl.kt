@@ -16,27 +16,33 @@ class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore
 ) : UserRepository {
-    override fun signUpUser(email: String, password: String, user: UserEntity): Flow<UserEntity> = flow {
+    override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {
         auth.createUserWithEmailAndPassword(email, password).await()
         val currentUser = auth.currentUser ?: throw Exception("SignUp Failed")
-        val userRef = fireStore.collection("userInfo").document(currentUser.uid)
-        userRef.set(user).await()
-        emit(user)
+        val userResponse = UserResponse(
+            userEmail = user.userEmail,
+            userId = user.userId, // 사용자가 입력한 userId
+            userName = user.userName,
+            userNumber = user.userNumber
+        )
+        fireStore.collection("userInfo").document(currentUser.uid).set(userResponse).await()
+        return userResponse.toEntity()
     }
 
-    override fun signInUser(email: String, password: String): Flow<UserEntity> = flow {
+    override suspend fun signInUser(email: String, password: String): UserEntity {
         auth.signInWithEmailAndPassword(email, password).await()
         val currentUser = auth.currentUser ?: throw Exception("SignIn Failed")
-        val userRef = fireStore.collection("userInfo").document(currentUser.uid).get().await()
-        val user = userRef.toObject(UserEntity::class.java) ?: throw Exception("User not found")
-        emit(user)
+        val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
+        val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("User not found")
+        return userResponse.toEntity()
     }
 
     override fun getCurrentUser(): Flow<UserEntity?> = flow {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val userRef = fireStore.collection("userInfo").document(currentUser.uid).get().await()
-            emit(userRef.toObject(UserEntity::class.java))
+            val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
+            val userResponse = snapshot.toObject(UserResponse::class.java)
+            emit(userResponse?.toEntity())
         } else {
             emit(null)
         }

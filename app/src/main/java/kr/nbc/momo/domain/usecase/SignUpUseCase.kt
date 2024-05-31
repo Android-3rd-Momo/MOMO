@@ -6,7 +6,7 @@ import kr.nbc.momo.domain.repository.UserRepository
 import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(private val userRepository: UserRepository) {
-    operator fun invoke(email: String, password: String, user: UserEntity): Flow<UserEntity> {
+    suspend operator fun invoke(email: String, password: String, user: UserEntity):UserEntity {
         return userRepository.signUpUser(email, password, user)
     }
 }

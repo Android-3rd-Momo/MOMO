@@ -1,10 +1,10 @@
 package kr.nbc.momo.data.model
 
 data class UserResponse(
-    val email: String = "",
-//    val id: String = "",
-    val name: String = "",
-    val number: String = ""
+    val userEmail: String = "",
+    val userId: String = "",
+    val userName: String = "",
+    val userNumber: String = ""
 )
 //todo 온보딩 내용 추가
 /*

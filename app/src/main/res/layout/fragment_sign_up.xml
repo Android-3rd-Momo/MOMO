@@ -7,12 +7,19 @@
     tools:context=".presentation.signup.SignUpFragment">
 
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/etId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:hint="email"
+        android:hint="id"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="email"
+        app:layout_constraintTop_toBottomOf="@id/etId"/>
 
     <EditText
         android:id="@+id/etPassWord"

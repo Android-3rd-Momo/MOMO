@@ -4,15 +4,17 @@ import kr.nbc.momo.domain.model.UserEntity
 
 fun UserEntity.toModel(): UserModel {
     return UserModel(
-        email = this.email,
-        name = this.name,
-        number = this.number
+        userEmail = this.userEmail,
+        userName = this.userName,
+        userNumber = this.userNumber,
+        userId = this.userId
     )
 }
 fun UserModel.toEntity(): UserEntity {
     return UserEntity(
-        email = this.email,
-        name = this.name,
-        number = this.number
+        userEmail = this.userEmail,
+        userName = this.userName,
+        userNumber = this.userNumber,
+        userId = this.userId
     )
 }
