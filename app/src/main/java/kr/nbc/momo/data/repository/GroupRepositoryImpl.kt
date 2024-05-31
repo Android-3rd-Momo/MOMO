@@ -39,11 +39,11 @@ class GroupRepositoryImpl @Inject constructor(
     override fun readGroup(groupId: String): Flow<GroupEntity> {
         fireStore.collection("groups").document(groupId).get()
             .addOnSuccessListener { documentSnapshot  ->
-                if (documentSnapshot != null) {
-                    groupResponse.value = documentSnapshot.toObject<GroupResponse>()!!
+                if (documentSnapshot.toObject<GroupResponse>() == null) {
+                    Log.d("ReadGroupSuccess", "No such document")
 
                 } else {
-                    Log.d("ReadGroupSuccess", "No such document")
+                    groupResponse.value = documentSnapshot.toObject<GroupResponse>()!!
                 }
             }
             .addOnFailureListener { exception ->
