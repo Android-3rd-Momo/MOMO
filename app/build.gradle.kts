@@ -66,6 +66,12 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore")
 
+    //viewpager
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    //circleindicator
+    implementation("me.relex:circleindicator:2.1.6")
+
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
