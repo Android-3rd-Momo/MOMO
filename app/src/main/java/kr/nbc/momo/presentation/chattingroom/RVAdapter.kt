@@ -1,14 +1,15 @@
 package kr.nbc.momo.presentation.chattingroom
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemElseBinding
 import kr.nbc.momo.databinding.RvItemUserBinding
 import kr.nbc.momo.presentation.chattingroom.model.ChatModel
 import kr.nbc.momo.presentation.chattingroom.model.GroupChatModel
-import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToKorea
-import java.text.SimpleDateFormat
+import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToYYYYmmDD
+import java.time.ZonedDateTime
 
 class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemList = GroupChatModel()
@@ -16,10 +17,15 @@ class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<Recycl
     class ItemElseViewHolder(
         private val binding: RvItemElseBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatModel: ChatModel) {
+        fun bind(chatModel: ChatModel, isDateChanged: Boolean) {
             with(binding) {
-                tv1.text = chatModel.text + setDateTimeFormatToKorea(chatModel.dateTime)
-
+                tv1.text = chatModel.text
+                if(isDateChanged){
+                    tvDivider.visibility = View.VISIBLE
+                    tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
+                }else{
+                    tvDivider.visibility = View.GONE
+                }
             }
         }
     }
@@ -27,9 +33,15 @@ class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<Recycl
     class ItemUserHolder(
         private val binding: RvItemUserBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatModel: ChatModel) {
+        fun bind(chatModel: ChatModel, isDateChanged: Boolean) {
             with(binding) {
-                tv1.text = chatModel.text + setDateTimeFormatToKorea(chatModel.dateTime)
+                tv1.text = chatModel.text
+                if(isDateChanged){
+                    tvDivider.visibility = View.VISIBLE
+                    tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
+                }else{
+                    tvDivider.visibility = View.GONE
+                }
             }
         }
     }
@@ -60,8 +72,15 @@ class RVAdapter(private val currentUserId: String) : RecyclerView.Adapter<Recycl
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(itemList.chatList[position].userId){
-            currentUserId -> (holder as ItemUserHolder).bind(itemList.chatList[position])
-            else -> (holder as ItemElseViewHolder).bind(itemList.chatList[position])
+            currentUserId -> (holder as ItemUserHolder).bind(itemList.chatList[position], isDateChanged(position))
+            else -> (holder as ItemElseViewHolder).bind(itemList.chatList[position], isDateChanged(position))
         }
+    }
+
+    private fun isDateChanged(position: Int): Boolean{
+        if (position == 0) return true
+        val prevDate = ZonedDateTime.parse(itemList.chatList[position - 1].dateTime).dayOfYear
+        val currentDate = ZonedDateTime.parse(itemList.chatList[position].dateTime).dayOfYear
+        return prevDate != currentDate
     }
 }

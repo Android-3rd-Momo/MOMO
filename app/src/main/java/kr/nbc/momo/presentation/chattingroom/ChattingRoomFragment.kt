@@ -24,7 +24,7 @@ class ChattingRoomFragment : Fragment() {
     private val groupId = "group_id"
 
     //공유 뷰모델에서 로그인 정보 받아오기
-    private val userId = "test_user_id"
+    private val userId = "test_user_id1"
     private val userName = "user_name"
     private val rvAdapter = RVAdapter(userId)
 
