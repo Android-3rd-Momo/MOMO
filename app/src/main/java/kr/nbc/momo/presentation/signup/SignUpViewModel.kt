@@ -25,15 +25,14 @@ class SignUpViewModel @Inject constructor(
     private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val authState: StateFlow<UiState<UserModel>> get() = _authState
 
-    fun signIn(email: String, password: String) { //미구현
+    fun signIn(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = UiState.Loading
-            runCatching {
-                signInUseCase(email, password)
-            }.onSuccess { userEntity ->
+            try {
+                val userEntity = signInUseCase(email, password)
                 _authState.value = UiState.Success(userEntity.toModel())
-            }.onFailure { exception ->
-                _authState.value = UiState.Error(exception.message ?: "Unknown error")
+            } catch (e: Exception) {
+                _authState.value = UiState.Error(e.message ?: "Unknown error")
             }
         }
     }
@@ -41,12 +40,12 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, password: String, user: UserModel) {
         viewModelScope.launch {
             _authState.value = UiState.Loading
-            runCatching { //todo
-                signUpUseCase(email, password, user.toEntity())
-            }.onSuccess {
-                _authState.value = UiState.Success(it.toModel())
-            }.onFailure { exception ->
-                _authState.value = UiState.Error(exception.message ?: "Unknown error")
+            //todo
+            try {
+                val userEntity = signUpUseCase(email, password, user.toEntity())
+                _authState.value = UiState.Success(userEntity.toModel())
+            } catch (e: Exception) {
+                _authState.value = UiState.Error(e.message ?: "Unknown error")
             }
         }
     }
