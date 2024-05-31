@@ -10,10 +10,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.group.create.CreateGroupFragment
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.home.main.HomeFragment
-import kr.nbc.momo.presentation.signup.SignUpFragment
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -28,17 +25,32 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        supportFragmentManager.beginTransaction().apply {
 
-//            add(R.id.flTest, ChattingRoomFragment())
-//            add(R.id.flTest, ReadGroupFragment())
-//            add(R.id.flTest, CreateGroupFragment())
-//            add(R.id.flTest, ChattingRoomFragment())
-//            add(R.id.flTest, SignUpFragment())
-            add(R.id.flTest, HomeFragment())
+        supportFragmentManager.beginTransaction().replace(R.id.flTest, HomeFragment()).commit()
+        binding.navigationView.run {
+            setOnNavigationItemSelectedListener {
+                when (it.itemId) {
+                    R.id.homeIcon -> {
+                        // 다른 프래그먼트 화면으로 이동하는 기능
+                        val homeFragment = HomeFragment()
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.flTest, homeFragment).commit()
+                    }
 
-            commit()
+                    R.id.chatIcon -> {
+                        val chattingRoomFragment = ChattingRoomFragment()
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.flTest, chattingRoomFragment).commit()
+                    }
+
+                    R.id.myPageIcon -> {
+                        val createGroupFragment = CreateGroupFragment()
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.flTest, createGroupFragment).commit()
+                    }
+                }
+                true
+            }
         }
-
     }
 }
