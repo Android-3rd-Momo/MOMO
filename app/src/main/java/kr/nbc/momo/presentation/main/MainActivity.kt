@@ -9,7 +9,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.group.create.CreateGroupFragment
+import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -23,10 +26,17 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         supportFragmentManager.beginTransaction().apply {
+
 //            add(R.id.flTest, ChattingRoomFragment())
-            add(R.id.flTest, SignUpFragment())
+            add(R.id.flTest, ReadGroupFragment())
+//            add(R.id.flTest, CreateGroupFragment())
+//            add(R.id.flTest, ChattingRoomFragment())
+//            add(R.id.flTest, SignUpFragment())
+
             commit()
         }
+
     }
 }
