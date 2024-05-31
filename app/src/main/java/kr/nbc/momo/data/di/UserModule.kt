@@ -9,7 +9,7 @@ import kr.nbc.momo.domain.repository.UserRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class UserModule {
+internal interface UserModule {
     @Binds
-    abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
+    fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
 }

@@ -16,38 +16,27 @@ class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore
 ) : UserRepository {
-    override fun signUpUser(email: String, password: String, user: UserEntity): Flow<Result<Boolean>> = flow {
-        try {
-            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
-            val uid = authResult.user?.uid ?: throw IllegalStateException()
-            val userMap = mapOf(
-                "email" to user.email,
-                "name" to user.name,
-                "number" to user.number
-            )
-            fireStore.collection("userInfo").document(uid).set(userMap).await()
-            emit(Result.success(true))
-        } catch (e: Exception) {
-            emit(Result.failure(e))
-        }
+    override fun signUpUser(email: String, password: String, user: UserEntity): Flow<UserEntity> = flow {
+        auth.createUserWithEmailAndPassword(email, password).await()
+        val currentUser = auth.currentUser ?: throw Exception("User creation failed")
+        val userRef = fireStore.collection("userInfo").document(currentUser.uid)
+        userRef.set(user).await()
+        emit(user)
     }
 
-    override fun signInUser(email: String, password: String): Flow<Result<Boolean>> = flow {
-        try {
-            auth.signInWithEmailAndPassword(email, password).await()
-            emit(Result.success(true))
-        } catch (e: Exception) {
-            emit(Result.failure(e))
-        }
+    override fun signInUser(email: String, password: String): Flow<UserEntity> = flow {
+        auth.signInWithEmailAndPassword(email, password).await()
+        val currentUser = auth.currentUser ?: throw Exception("Authentication failed")
+        val userRef = fireStore.collection("userInfo").document(currentUser.uid).get().await()
+        val user = userRef.toObject(UserEntity::class.java) ?: throw Exception("User not found")
+        emit(user)
     }
 
     override fun getCurrentUser(): Flow<UserEntity?> = flow {
-        val currentUser = auth.currentUser //로그인 된 사용자
+        val currentUser = auth.currentUser
         if (currentUser != null) {
             val userRef = fireStore.collection("userInfo").document(currentUser.uid).get().await()
-            val userResponse = userRef.toObject(UserResponse::class.java)
-            val user = userResponse?.toEntity()
-            emit(user)
+            emit(userRef.toObject(UserEntity::class.java))
         } else {
             emit(null)
         }
