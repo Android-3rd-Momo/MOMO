@@ -10,11 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -33,13 +36,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initGroupList()
+        initView()
     }
 
     private fun initView() {
         binding.floatingBtnCreateGroup.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToCreateGroupFragment2()
+            findNavController().navigate(action)
 
         }
-
     }
 
     private fun initGroupList() {

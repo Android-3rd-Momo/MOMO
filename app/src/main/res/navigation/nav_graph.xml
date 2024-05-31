@@ -3,21 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity_navgraph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/home"
-        android:name="kr.nbc.momo.presentation.home.HomeFragment"
-        android:label="fragment_1"
-        tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/chat"
-        android:name="kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment"
-        android:label="fragment_1"
-        tools:layout="@layout/fragment_chatting_room" />
-    <fragment
-        android:id="@+id/myPage"
+        android:id="@+id/createGroupFragment"
         android:name="kr.nbc.momo.presentation.group.create.CreateGroupFragment"
-        android:label="fragment_1"
+        android:label="fragment_create_group"
         tools:layout="@layout/fragment_create_group" />
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="kr.nbc.momo.presentation.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_createGroupFragment2"
+            app:destination="@id/createGroupFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chattingRoomFragment"
+        android:name="kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment"
+        android:label="fragment_chatting_room"
+        tools:layout="@layout/fragment_chatting_room" />
+
 </navigation>
