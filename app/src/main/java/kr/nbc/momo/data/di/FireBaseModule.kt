@@ -3,10 +3,6 @@ package kr.nbc.momo.data.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.firestoreSettings
-import com.google.firebase.firestore.memoryCacheSettings
-import com.google.firebase.firestore.persistentCacheSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

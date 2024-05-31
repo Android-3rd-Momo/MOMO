@@ -29,17 +29,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         supportFragmentManager.beginTransaction().apply {
-//            add(R.id.flTest, ChattingRoomFragment())
-            add(R.id.flTest, SignUpFragment())
+            add(R.id.flTest, ChattingRoomFragment())
+            //add(R.id.flTest, SignUpFragment())
             commit()
         }
-
-        val fireStore = FirebaseFirestore.getInstance()
-        val settings = firestoreSettings {
-            setLocalCacheSettings(persistentCacheSettings { cacheSizeBytes})
-        }
-
-
 
     }
 }
