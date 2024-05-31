@@ -1,13 +1,13 @@
 package kr.nbc.momo.presentation.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.ActivityMainBinding
+import kr.nbc.momo.databinding.ActivityGetStartedBinding
+import kr.nbc.momo.presentation.main.MainActivity
 import me.relex.circleindicator.CircleIndicator3
 
 class GetStartedActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class GetStartedActivity : AppCompatActivity() {
     private var descList = mutableListOf<String>()
     private var imageList = mutableListOf<Int>()
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val binding by lazy { ActivityGetStartedBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -29,6 +29,11 @@ class GetStartedActivity : AppCompatActivity() {
 
         val indicator = findViewById<CircleIndicator3>(R.id.indicator)
         indicator.setViewPager(viewPager2)
+
+        binding.buttonWithoutLogin.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

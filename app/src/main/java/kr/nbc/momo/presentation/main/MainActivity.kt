@@ -32,20 +32,22 @@ class MainActivity : AppCompatActivity() {
             commit()
         }
 
-        // 앱을 첫번째로 열었을시 온보딩이 나오게 하는 코딩
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val isFirstLaunch = sharedPref.getBoolean("is_first_launch", true)
+        // SharedPreferences를 통해 앱이 처음 실행되었는지 확인
+        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        val isFirstRun = sharedPreferences.getBoolean("isFirstRun", true)
 
-        if (isFirstLaunch) {
+        if (isFirstRun) {
+            // 처음 실행된 경우 GetStartedActivity로 이동
             startActivity(Intent(this, GetStartedActivity::class.java))
             finish()
+
+            // 처음 실행됨을 기록
+            with(sharedPreferences.edit()) {
+                putBoolean("isFirstRun", false)
+                apply()
+            }
         } else {
             setContentView(R.layout.activity_main)
-        }
-
-        with (sharedPref.edit()) {
-            putBoolean("is_first_launch", false)
-            apply()
         }
     }
 }
