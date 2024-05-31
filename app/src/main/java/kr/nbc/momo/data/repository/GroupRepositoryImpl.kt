@@ -31,18 +31,7 @@ class GroupRepositoryImpl @Inject constructor(
 
     override fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
         val groupResponse = groupEntity.toGroupResponse()
-        val group = hashMapOf(
-            "groupName" to groupResponse.groupName,
-            "groupOneLineDescription" to groupResponse.groupOneLineDescription,
-            "groupThumbnail" to groupResponse.groupThumbnail,
-            "groupDescription" to groupResponse.groupDescription,
-            "firstDate" to groupResponse.firstDate,
-            "lastDate" to groupResponse.lastDate,
-            "leaderId" to groupResponse.leaderId,
-            "category" to groupResponse.categoryList,
-            "userList" to groupResponse.userList
-        )
-        fireStore.collection("groups").add(group)
+        fireStore.collection("groups").add(groupResponse)
             .addOnSuccessListener { callback(true, null) }
             .addOnFailureListener { e -> callback(false, e) }
     }
