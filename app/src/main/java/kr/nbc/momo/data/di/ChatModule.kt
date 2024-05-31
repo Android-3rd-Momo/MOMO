@@ -11,5 +11,5 @@ import kr.nbc.momo.domain.repository.ChatRepository
 @InstallIn(SingletonComponent::class)
 internal interface ChatModule {
     @Binds
-    fun bindingChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository
+    fun bindChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository
 }
