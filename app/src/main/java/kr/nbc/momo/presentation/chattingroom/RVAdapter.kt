@@ -1,6 +1,5 @@
 package kr.nbc.momo.presentation.chattingroom
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,10 +67,8 @@ class RVAdapter(private val currentUserId: String) :
             isUserChanged: Boolean
         ) {
             with(binding) {
-                Log.d("tvTimeText" , "${chatModel.dateTime}")
                 tvChat.text = chatModel.text
                 tvTime.text = setDateTimeFormatToMMDD(chatModel.dateTime)
-                Log.d("tvTimeText" , "${tvTime.text} + ${itemId}")
                 tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
                 //유저 바뀌면 이름 보여주기
                 tvUserName.visibility = View.GONE
