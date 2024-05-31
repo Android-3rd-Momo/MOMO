@@ -30,6 +30,5 @@ class ReadGroupViewModel  @Inject constructor(
                     _readGroup.value = UiState.Success(data.toGroupModel())
                 }
         }
-        readGroupUseCase.invoke(groupId)
     }
 }
