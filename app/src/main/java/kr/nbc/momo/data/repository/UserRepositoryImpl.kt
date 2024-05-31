@@ -18,7 +18,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override fun signUpUser(email: String, password: String, user: UserEntity): Flow<UserEntity> = flow {
         auth.createUserWithEmailAndPassword(email, password).await()
-        val currentUser = auth.currentUser ?: throw Exception("User creation failed")
+        val currentUser = auth.currentUser ?: throw Exception("SignUp Failed")
         val userRef = fireStore.collection("userInfo").document(currentUser.uid)
         userRef.set(user).await()
         emit(user)
@@ -26,7 +26,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun signInUser(email: String, password: String): Flow<UserEntity> = flow {
         auth.signInWithEmailAndPassword(email, password).await()
-        val currentUser = auth.currentUser ?: throw Exception("Authentication failed")
+        val currentUser = auth.currentUser ?: throw Exception("SignIn Failed")
         val userRef = fireStore.collection("userInfo").document(currentUser.uid).get().await()
         val user = userRef.toObject(UserEntity::class.java) ?: throw Exception("User not found")
         emit(user)
