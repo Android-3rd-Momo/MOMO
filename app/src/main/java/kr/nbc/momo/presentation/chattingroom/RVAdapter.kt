@@ -1,7 +1,6 @@
 package kr.nbc.momo.presentation.chattingroom
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemElseBinding
@@ -10,6 +9,8 @@ import kr.nbc.momo.presentation.chattingroom.model.ChatModel
 import kr.nbc.momo.presentation.chattingroom.model.GroupChatModel
 import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToMMDD
 import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToYYYYmmDD
+import kr.nbc.momo.presentation.chattingroom.util.setVisibleToGone
+import kr.nbc.momo.presentation.chattingroom.util.setVisibleToVisible
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
@@ -28,30 +29,30 @@ class RVAdapter(private val currentUserId: String) :
         ) {
             with(binding) {
                 tvChat.text = chatModel.text
-                tvTime.text = setDateTimeFormatToMMDD(chatModel.dateTime)
-                tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
+                tvTime.text = chatModel.dateTime.setDateTimeFormatToMMDD()
+                tvDivider.text = chatModel.dateTime.setDateTimeFormatToYYYYmmDD()
                 tvUserName.text = chatModel.userName
                 //유저 바뀌면 이름 보여주기
                 if (isUserChanged) {
-                    tvUserName.visibility = View.VISIBLE
-                    tvTime.visibility = View.VISIBLE
+                    tvUserName.setVisibleToVisible()
+                    tvTime.setVisibleToVisible()
                 } else {
-                    tvUserName.visibility = View.GONE
+                    tvUserName.setVisibleToGone()
                 }
 
                 if (isMinuteChanged) {
-                    tvTime.visibility = View.VISIBLE
-                    tvUserName.visibility = View.VISIBLE
+                    tvTime.setVisibleToVisible()
+                    tvUserName.setVisibleToVisible()
                 } else {
-                    tvTime.visibility = View.GONE
+                    tvTime.setVisibleToGone()
                 }
 
                 //날 바뀌면 divider 보여주기
                 if (isDateChanged) {
-                    tvDivider.visibility = View.VISIBLE
-                    tvUserName.visibility = View.VISIBLE
+                    tvDivider.setVisibleToVisible()
+                    tvUserName.setVisibleToVisible()
                 } else {
-                    tvDivider.visibility = View.GONE
+                    tvDivider.setVisibleToGone()
                 }
             }
         }
@@ -68,25 +69,25 @@ class RVAdapter(private val currentUserId: String) :
         ) {
             with(binding) {
                 tvChat.text = chatModel.text
-                tvTime.text = setDateTimeFormatToMMDD(chatModel.dateTime)
-                tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
+                tvTime.text = chatModel.dateTime.setDateTimeFormatToMMDD()
+                tvDivider.text = chatModel.dateTime.setDateTimeFormatToYYYYmmDD()
                 //유저 바뀌면 이름 보여주기
-                tvUserName.visibility = View.GONE
+                tvUserName.setVisibleToGone()
                 if (isUserChanged) {
-                    tvTime.visibility = View.VISIBLE
+                    tvTime.setVisibleToVisible()
                 }
 
                 if (isMinuteChanged) {
-                    tvTime.visibility = View.VISIBLE
+                    tvTime.setVisibleToVisible()
                 } else {
-                    tvTime.visibility = View.GONE
+                    tvTime.setVisibleToGone()
                 }
 
                 //날 바뀌면 divider 보여주기
                 if (isDateChanged) {
-                    tvDivider.visibility = View.VISIBLE
+                    tvDivider.setVisibleToVisible()
                 } else {
-                    tvDivider.visibility = View.GONE
+                    tvDivider.setVisibleToGone()
                 }
             }
         }
