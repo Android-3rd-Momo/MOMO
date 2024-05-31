@@ -8,7 +8,7 @@ fun setDateTimeFormatToMMDD(string: String): String{
     return try {
         Log.d("stringToDate", string)
         val parsedKoreaTime = ZonedDateTime.parse(string)
-        val formatter = DateTimeFormatter.ofPattern("HH:MM")
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
         formatter.format(parsedKoreaTime)
     }
     catch (e: Exception){

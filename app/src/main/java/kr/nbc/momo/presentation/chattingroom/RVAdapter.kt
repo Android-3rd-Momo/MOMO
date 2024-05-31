@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.chattingroom
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import kr.nbc.momo.presentation.chattingroom.model.GroupChatModel
 import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToMMDD
 import kr.nbc.momo.presentation.chattingroom.util.setDateTimeFormatToYYYYmmDD
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class RVAdapter(private val currentUserId: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -29,16 +31,18 @@ class RVAdapter(private val currentUserId: String) :
                 tvChat.text = chatModel.text
                 tvTime.text = setDateTimeFormatToMMDD(chatModel.dateTime)
                 tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
+                tvUserName.text = chatModel.userName
                 //유저 바뀌면 이름 보여주기
                 if (isUserChanged) {
                     tvUserName.visibility = View.VISIBLE
+                    tvTime.visibility = View.VISIBLE
                 } else {
                     tvUserName.visibility = View.GONE
                 }
 
                 if (isMinuteChanged) {
                     tvTime.visibility = View.VISIBLE
-                    tvUserName.visibility = View.GONE
+                    tvUserName.visibility = View.VISIBLE
                 } else {
                     tvTime.visibility = View.GONE
                 }
@@ -64,21 +68,15 @@ class RVAdapter(private val currentUserId: String) :
             isUserChanged: Boolean
         ) {
             with(binding) {
+                Log.d("tvTimeText" , "${chatModel.dateTime}")
                 tvChat.text = chatModel.text
                 tvTime.text = setDateTimeFormatToMMDD(chatModel.dateTime)
+                Log.d("tvTimeText" , "${tvTime.text} + ${itemId}")
                 tvDivider.text = setDateTimeFormatToYYYYmmDD(chatModel.dateTime)
+                //유저 바뀌면 이름 보여주기
                 tvUserName.visibility = View.GONE
-
-                if (isDateChanged) {
-                    tvDivider.visibility = View.VISIBLE
-                } else {
-                    tvDivider.visibility = View.GONE
-                }
-
-                if (isUserChanged){
+                if (isUserChanged) {
                     tvTime.visibility = View.VISIBLE
-                } else {
-                    tvTime.visibility = View.GONE
                 }
 
                 if (isMinuteChanged) {
@@ -87,6 +85,12 @@ class RVAdapter(private val currentUserId: String) :
                     tvTime.visibility = View.GONE
                 }
 
+                //날 바뀌면 divider 보여주기
+                if (isDateChanged) {
+                    tvDivider.visibility = View.VISIBLE
+                } else {
+                    tvDivider.visibility = View.GONE
+                }
             }
         }
     }
@@ -142,8 +146,10 @@ class RVAdapter(private val currentUserId: String) :
 
     private fun isMinuteChanged(position: Int): Boolean {
         if (position == itemCount - 1) return true
-        val nextMin = ZonedDateTime.parse(itemList.chatList[position + 1].dateTime).minute
-        val currentMin = ZonedDateTime.parse(itemList.chatList[position].dateTime).minute
+        val nextMin = ZonedDateTime.parse(itemList.chatList[position + 1].dateTime)
+            .truncatedTo(ChronoUnit.MINUTES)
+        val currentMin = ZonedDateTime.parse(itemList.chatList[position].dateTime)
+            .truncatedTo(ChronoUnit.MINUTES)
 
         return nextMin != currentMin
     }
