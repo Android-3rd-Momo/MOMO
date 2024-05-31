@@ -24,14 +24,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-//        supportFragmentManager.beginTransaction().apply {
-//            add(R.id.flTest, ChattingRoomFragment())
-//            commit()
-//        }
 
         supportFragmentManager.beginTransaction().apply {
+            //add(R.id.flTest, ChattingRoomFragment())
             add(R.id.flTest, ReadGroupFragment())
+            //add(R.id.flTest, CreateGroupFragment())
             commit()
         }
+
     }
 }

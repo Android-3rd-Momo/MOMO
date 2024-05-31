@@ -40,10 +40,27 @@ class ReadGroupFragment : Fragment() {
 
     private fun initGroup() {
         lifecycleScope.launch {
+            viewModel.readGroup("HyQA32vl8xLVcnp9gb5U")
+
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readGroup.collect { uiState ->
                     when (uiState) {
-
+                        is UiState.Error -> {
+                            Log.d("UiState", uiState.message)
+                        }
+                        UiState.Loading -> {
+                            // TODO()
+                        }
+                        is UiState.Success -> {
+                            binding.apply {
+                                groupName.text = uiState.data.groupName
+                                groupOneLineDescription.text = uiState.data.groupOneLineDescription
+                                groupDescription.text = uiState.data.groupDescription
+                                firstDate.text = uiState.data.firstDate
+                                lastDate.text = uiState.data.lastDate
+                                leaderId.text = uiState.data.leaderId
+                            }
+                        }
                     }
                 }
             }
