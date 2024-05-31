@@ -40,7 +40,7 @@ class ReadGroupFragment : Fragment() {
 
     private fun initGroup() {
         lifecycleScope.launch {
-            viewModel.readGroup("HyQA32vl8xLVcnp9gb5U")
+            viewModel.readGroup("Nqcpz10GiEAK10i4qPql0")
 
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readGroup.collect { uiState ->
@@ -52,7 +52,7 @@ class ReadGroupFragment : Fragment() {
                             // TODO()
                         }
                         is UiState.Success -> {
-                            binding.apply {
+                            with(binding) {
                                 groupName.text = uiState.data.groupName
                                 groupOneLineDescription.text = uiState.data.groupOneLineDescription
                                 groupDescription.text = uiState.data.groupDescription
