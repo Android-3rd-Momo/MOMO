@@ -5,7 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import kr.nbc.momo.data.di.UserModule
 import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.domain.model.UserEntity
@@ -18,7 +17,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {
         if (!isUserIdDuplicate(user.userId)) {
-            throw Exception("User ID is already taken.")
+            throw Exception("This id is already in use")
         }
         auth.createUserWithEmailAndPassword(email, password).await()
         val currentUser = auth.currentUser ?: throw Exception("SignUp Failed")
@@ -42,7 +41,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun isUserIdDuplicate(userId: String): Boolean {
         val querySnapshot = fireStore.collection("userInfo")
-            .whereEqualTo("userId", userId) //query문
+            .whereEqualTo("userId", userId)
             .get()
             .await()
         return querySnapshot.isEmpty
