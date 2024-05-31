@@ -16,3 +16,17 @@ fun GroupModel.asGroupEntity(): GroupEntity {
         userList
     )
 }
+
+fun GroupEntity.toGroupModel(): GroupModel {
+    return GroupModel(
+        groupName,
+        groupOneLineDescription,
+        groupThumbnail,
+        groupDescription,
+        firstDate,
+        lastDate,
+        leaderId,
+        categoryList,
+        userList
+    )
+}

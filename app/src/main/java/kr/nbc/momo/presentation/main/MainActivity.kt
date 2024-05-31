@@ -10,6 +10,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.group.create.CreateGroupFragment
+import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         supportFragmentManager.beginTransaction().apply {
-            add(R.id.flTest, CreateGroupFragment())
+            add(R.id.flTest, ReadGroupFragment())
             commit()
         }
     }
