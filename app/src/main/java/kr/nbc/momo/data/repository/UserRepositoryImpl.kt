@@ -17,6 +17,9 @@ class UserRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) : UserRepository {
     override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {
+        if (!isUserIdDuplicate(user.userId)) {
+            throw Exception("User ID is already taken.")
+        }
         auth.createUserWithEmailAndPassword(email, password).await()
         val currentUser = auth.currentUser ?: throw Exception("SignUp Failed")
         val userResponse = UserResponse(
@@ -35,6 +38,14 @@ class UserRepositoryImpl @Inject constructor(
         val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
         val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("User not found")
         return userResponse.toEntity()
+    }
+
+    override suspend fun isUserIdDuplicate(userId: String): Boolean {
+        val querySnapshot = fireStore.collection("userInfo")
+            .whereEqualTo("userId", userId) //query문
+            .get()
+            .await()
+        return querySnapshot.isEmpty
     }
 
     override fun getCurrentUser(): Flow<UserEntity?> = flow {

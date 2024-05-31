@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
 
 //            add(R.id.flTest, ChattingRoomFragment())
-            add(R.id.flTest, ReadGroupFragment())
+//            add(R.id.flTest, ReadGroupFragment())
 //            add(R.id.flTest, CreateGroupFragment())
 //            add(R.id.flTest, ChattingRoomFragment())
-//            add(R.id.flTest, SignUpFragment())
+            add(R.id.flTest, SignUpFragment())
 
             commit()
         }
