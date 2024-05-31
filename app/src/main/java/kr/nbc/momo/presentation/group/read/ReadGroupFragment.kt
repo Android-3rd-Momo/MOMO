@@ -52,7 +52,7 @@ class ReadGroupFragment : Fragment() {
                             // TODO()
                         }
                         is UiState.Success -> {
-                            binding.apply {
+                            with(binding) {
                                 groupName.text = uiState.data.groupName
                                 groupOneLineDescription.text = uiState.data.groupOneLineDescription
                                 groupDescription.text = uiState.data.groupDescription
