@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/tvDivider"
@@ -10,17 +11,38 @@
         android:layout_height="wrap_content"
         android:text="날짜 바뀜"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv1"
-        android:layout_width="match_parent"
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="60sp"
+        android:text="유저이름"
+        app:layout_constraintTop_toBottomOf="@+id/tvDivider"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chatting_item_else_bg"
+        android:padding="15dp"
         android:text="TEST"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22:22"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvChat"
+        app:layout_constraintStart_toEndOf="@+id/tvChat"
+        app:layout_constraintTop_toTopOf="@+id/tvChat"
+        app:layout_constraintVertical_bias="0.7"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

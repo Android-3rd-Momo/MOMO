@@ -19,7 +19,7 @@ object FireBaseModule {
     fun provideFireBaseDataBase(): FirebaseDatabase {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseDatabase.setPersistenceEnabled(true)
-        firebaseDatabase.setPersistenceCacheSizeBytes(5000000)
+        firebaseDatabase.setPersistenceCacheSizeBytes(1024 * 1024 * 100)
         return firebaseDatabase
     }
 
