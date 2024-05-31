@@ -40,7 +40,6 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, password: String, user: UserModel) {
         viewModelScope.launch {
             _authState.value = UiState.Loading
-            //todo
             try {
                 val userEntity = signUpUseCase(email, password, user.toEntity())
                 _authState.value = UiState.Success(userEntity.toModel())
