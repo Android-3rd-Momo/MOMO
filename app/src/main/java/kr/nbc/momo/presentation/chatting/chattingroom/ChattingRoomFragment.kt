@@ -61,7 +61,7 @@ class ChattingRoomFragment : Fragment() {
                     }
                     is UiState.Success -> {
                         rvAdapter.itemList = chatMessages.data
-                        binding.rvFireBase.scrollToPosition(chatMessages.data.chatList.lastIndex)
+                        binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
                     }
                     is UiState.Error -> {
                         Log.d("error", chatMessages.message)
@@ -73,7 +73,7 @@ class ChattingRoomFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            rvFireBase.apply {
+            rvChatMessage.apply {
                 adapter = rvAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }

@@ -16,25 +16,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/ivGroupName"
+        android:id="@+id/tvGroupName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:maxLines="1"
-        app:layout_constraintBottom_toTopOf="@+id/ivLatestChatText"
+        app:layout_constraintBottom_toTopOf="@+id/tvLatestChatText"
         app:layout_constraintStart_toEndOf="@+id/ivGroupImage"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="유저 이름" />
 
     <TextView
-        android:id="@+id/ivLatestChatText"
+        android:id="@+id/tvLatestChatText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivGroupImage"
-        app:layout_constraintTop_toBottomOf="@+id/ivGroupName"
+        app:layout_constraintTop_toBottomOf="@+id/tvGroupName"
         tool:text="마지막 메세지" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

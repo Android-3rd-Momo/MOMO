@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".presentation.chatting.chattinglist.ChattingListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvChattingList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
