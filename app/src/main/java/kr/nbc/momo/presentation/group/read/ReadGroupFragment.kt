@@ -11,20 +11,28 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.create.CreateGroupViewModel
 
+private const val ARG_GROUP = "group"
 @AndroidEntryPoint
 class ReadGroupFragment : Fragment() {
+    private var groupName: String? = null
     private var _binding: FragmentReadGroupBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ReadGroupViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            // let을 통한 null값 처리
+            groupName = it.getString(ARG_GROUP)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,12 +43,29 @@ class ReadGroupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bottomNavHide()
         initGroup()
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        bottomNavShow()
+    }
+
+    private fun bottomNavHide() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav?.visibility = View.GONE
+    }
+
+    private fun bottomNavShow() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav?.visibility = View.VISIBLE
     }
 
     private fun initGroup() {
         lifecycleScope.launch {
-            viewModel.readGroup("Nqcpz10GiEAK10i4qPql")
+            groupName?.let { viewModel.readGroup(it) }
 
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readGroup.collect { uiState ->
@@ -60,6 +85,11 @@ class ReadGroupFragment : Fragment() {
                                 lastDate.text = uiState.data.lastDate
                                 leaderId.text = uiState.data.leaderId
                             }
+
+                            if (uiState.data.userList.contains("userId").not()) {
+                                binding.button.visibility = View.VISIBLE
+                            }
+
                         }
                     }
                 }
@@ -68,10 +98,13 @@ class ReadGroupFragment : Fragment() {
     }
 
 
-
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
+    companion object {
+        @JvmStatic
+        fun newInstance(groupName: String) =
+            ReadGroupFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_GROUP, groupName)
+                }
+            }
     }
 }
