@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.chattingroom.util
+package kr.nbc.momo.util
 
 import android.view.View
 import java.time.ZonedDateTime

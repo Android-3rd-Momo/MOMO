@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
-import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

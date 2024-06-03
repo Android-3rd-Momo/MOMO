@@ -1,18 +1,19 @@
-package kr.nbc.momo.presentation.chattingroom.model
+package kr.nbc.momo.domain.model
 
-data class GroupChatModel(
+data class GroupChatEntity(
     val groupId: String = "",
-    val userList: List<GroupUserModel> = listOf(),
-    val chatList: List<ChatModel> = listOf()
+    val groupName: String = "",
+    val userList: List<GroupUserEntity> = listOf(),
+    val chatList: List<ChatEntity> = listOf()
 )
 
-data class GroupUserModel(
+data class GroupUserEntity(
     val userId: String = "",
     val userName: String = "",
     val userProfileUrl: String = ""
 )
 
-data class ChatModel(
+data class ChatEntity(
     val userName: String = "",
     val userId: String = "",
     val text: String = "",

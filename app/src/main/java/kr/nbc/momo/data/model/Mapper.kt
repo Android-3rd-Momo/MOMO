@@ -20,9 +20,10 @@ fun GroupUserResponse.toEntity(): GroupUserEntity {
 
 fun GroupChatResponse.toEntity(): GroupChatEntity {
     return GroupChatEntity(
-        this.groupId,
-        this.userList.map { it.toEntity() },
-        this.chatList.map { it.toEntity() }
+        groupId,
+        groupName,
+        userList.map { it.toEntity() },
+        chatList.map { it.toEntity() }
     )
 }
 
