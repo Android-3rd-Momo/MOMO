@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kr.nbc.momo.data.di.UserModule
+import kr.nbc.momo.data.datastore.UserPreferences
 import kr.nbc.momo.domain.repository.UserRepository
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.signup.model.UserModel
@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
@@ -31,6 +32,7 @@ class MyPageViewModel @Inject constructor(
                 .collect { userEntity ->
                     userEntity?.let {
                         _userProfile.value = UiState.Success(it.toModel())
+                        userPreferences.saveUserInfo(it) //dataStore
                     }//
                 }
         }
@@ -41,6 +43,7 @@ class MyPageViewModel @Inject constructor(
             _userProfile.value = UiState.Loading
             try {
                 userRepository.saveUserProfile(user.toEntity())
+                userPreferences.saveUserInfo(user.toEntity())
                 _userProfile.value = UiState.Success(user)
             } catch (e: Exception) {
                 _userProfile.value = UiState.Error(e.toString())

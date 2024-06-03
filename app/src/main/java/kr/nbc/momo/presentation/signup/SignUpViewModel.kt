@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kr.nbc.momo.data.model.UserResponse
-import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
+import kr.nbc.momo.data.datastore.UserPreferences
 import kr.nbc.momo.domain.usecase.SignInUseCase
 import kr.nbc.momo.domain.usecase.SignUpUseCase
 import kr.nbc.momo.presentation.UiState
@@ -21,6 +19,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
     private val signUpUseCase: SignUpUseCase,
+    private val userPreferences: UserPreferences
 ): ViewModel() {
 
     private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
@@ -30,6 +29,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val userEntity = signInUseCase(email, password)
+                userPreferences.saveUserInfo(userEntity) //dataStore
                 _authState.value = UiState.Success(userEntity.toModel())
             } catch (e:Exception) {
                 _authState.value = UiState.Error(e.toString())
@@ -42,6 +42,7 @@ class SignUpViewModel @Inject constructor(
             _authState.value = UiState.Loading
             try {
                 val userEntity = signUpUseCase(email, password, user.toEntity())
+                userPreferences.saveUserInfo(userEntity) //dataStore
                 _authState.value = UiState.Success(userEntity.toModel())
             } catch (e: Exception) {
                 _authState.value = UiState.Error(e.toString())

@@ -3,11 +3,11 @@ package kr.nbc.momo.presentation.mypage
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,10 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
@@ -44,9 +41,10 @@ class MyPageFragment : Fragment() {
         }
         setUpChip()
 
-        viewModel.getUserProfile()
+        viewModel.getUserProfile() //프로필 정보 가져오기
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                //fragment의 수명주기가 해당 상태일 때만 실행되도록
                 viewModel.userProfile.collect{ state ->
                     when(state){
                         is UiState.Loading->{
@@ -59,6 +57,11 @@ class MyPageFragment : Fragment() {
                                 tvUserSelfIntroduction.text = user.userSelfIntroduction
                                 tvStackOfDevelopment.text = user.stackOfDevelopment
                                 tvPortfolio.text = user.portfolio
+                                //편집모드에 값 적용
+                                etUserName.setText(user.userName)
+                                etUserSelfIntroduction.setText(user.userSelfIntroduction)
+                                etStackOfDevelopment.setText(user.stackOfDevelopment)
+                                etPortfolio.setText(user.portfolio)
                             }
                         }
                         is UiState.Error -> {
