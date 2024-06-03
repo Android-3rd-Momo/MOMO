@@ -14,12 +14,12 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object FireBaseModule {
-
+    private val firebaseDatabase = FirebaseDatabase.getInstance().apply {
+        setPersistenceEnabled(true)
+        setPersistenceCacheSizeBytes(1024 * 1024 * 100)
+    }
     @Provides
     fun provideFireBaseDataBase(): FirebaseDatabase {
-        val firebaseDatabase = FirebaseDatabase.getInstance()
-        firebaseDatabase.setPersistenceEnabled(true)
-        firebaseDatabase.setPersistenceCacheSizeBytes(1024 * 1024 * 100)
         return firebaseDatabase
     }
     @Provides

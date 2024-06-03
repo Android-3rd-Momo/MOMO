@@ -7,6 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".presentation.group.create.CreateGroupFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/climageContainer"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <TextView
+            android:id="@+id/tvUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="배경사진 업로드"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/tvCreateProject"
         android:layout_width="wrap_content"
@@ -57,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupOneLineDescription" />
 
-    <EditText
+    <TextView
         android:id="@+id/firstDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,7 +87,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupDescription" />
 
-    <EditText
+    <TextView
         android:id="@+id/lastDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,15 +104,6 @@
         android:hint="leaderId"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lastDate" />
-
-    <ImageView
-        android:id="@+id/ivGroupImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="28dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        tools:src="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/button"

@@ -5,15 +5,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+//import androidx.navigation.fragment.NavHostFragment //todo 수정
+//import androidx.navigation.fragment.findNavController //todo 수정
+//import androidx.navigation.ui.setupWithNavController //todo 수정
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
-import kr.nbc.momo.presentation.group.create.CreateGroupFragment
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,18 +28,49 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        initFirstFragment()
+        setUpBottomNavigation()
+    }
+    private fun initFirstFragment() {
+        //메인화면은 SearchFragment
         supportFragmentManager.beginTransaction().apply {
-
-//            add(R.id.flTest, ChattingRoomFragment())
-//            add(R.id.flTest, ReadGroupFragment())
-//            add(R.id.flTest, CreateGroupFragment())
-//            add(R.id.flTest, ChattingRoomFragment())
-//            add(R.id.flTest, SignUpFragment())
-            add(R.id.flTest, SignUpFragment())
-//            add(R.id.flTest, MyPageFragment())
+            replace(R.id.fragment_container, HomeFragment())
+//            replace(R.id.fragment_container, SignUpFragment())
             commit()
         }
+    }
 
+
+    private fun setUpBottomNavigation() {
+        binding.navigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    val homeFragment = HomeFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, homeFragment)
+                        .commit()
+                    true
+                }
+
+                R.id.chattingRoomFragment -> {
+//                    val chattingRoomFragment = ChattingRoomFragment()
+                    val chattingRoomFragment = SignUpFragment() //todo 임시 추가
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, chattingRoomFragment)
+                        .commit()
+                    true
+                }
+
+                R.id.myPageFragment -> {
+                    val myPageFragment = MyPageFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, myPageFragment)
+                        .commit()
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 }
