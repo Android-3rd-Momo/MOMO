@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
@@ -27,13 +28,11 @@ class SignUpViewModel @Inject constructor(
 
     fun signIn(email: String, password: String) { //미구현
         viewModelScope.launch {
-            _authState.value = UiState.Loading
-            runCatching {
-                signInUseCase(email, password)
-            }.onSuccess { userEntity ->
+            try {
+                val userEntity = signInUseCase(email, password)
                 _authState.value = UiState.Success(userEntity.toModel())
-            }.onFailure { exception ->
-                _authState.value = UiState.Error(exception.message ?: "Unknown error")
+            } catch (e:Exception) {
+                _authState.value = UiState.Error(e.toString())
             }
         }
     }
@@ -41,12 +40,11 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, password: String, user: UserModel) {
         viewModelScope.launch {
             _authState.value = UiState.Loading
-            runCatching {
-                signUpUseCase(email, password, user.toEntity())
-            }.onSuccess {
-                _authState.value = UiState.Success(it.toModel())
-            }.onFailure { exception ->
-                _authState.value = UiState.Error(exception.message ?: "Unknown error")
+            try {
+                val userEntity = signUpUseCase(email, password, user.toEntity())
+                _authState.value = UiState.Success(userEntity.toModel())
+            } catch (e: Exception) {
+                _authState.value = UiState.Error(e.toString())
             }
         }
     }

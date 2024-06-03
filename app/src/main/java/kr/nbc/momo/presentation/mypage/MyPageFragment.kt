@@ -1,23 +1,176 @@
 package kr.nbc.momo.presentation.mypage
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kr.nbc.momo.R
+import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
+import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.signup.model.UserModel
 
 @AndroidEntryPoint
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: MyPageViewModel by viewModels()
 
+    private var isEditMode = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //편집 모드
+        binding.ivEditProfile.setOnClickListener {
+            editMode()
+        }
+        setUpChip()
+
+        viewModel.getUserProfile()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.userProfile.collect{ state ->
+                    when(state){
+                        is UiState.Loading->{
+                            //todo
+                        }
+                        is UiState.Success -> {
+                            val user = state.data
+                            with(binding){
+                                tvUserName.text = user.userName
+                                tvUserSelfIntroduction.text = user.userSelfIntroduction
+                                tvStackOfDevelopment.text = user.stackOfDevelopment
+                                tvPortfolio.text = user.portfolio
+                            }
+                        }
+                        is UiState.Error -> {
+                            Log.d("error", state.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setUpChip(){
+        binding.tvAddTagTypeOfDevelopment.setOnClickListener {
+            showAddTagDialog(binding.cgTypeTag)
+        }
+        binding.tvAddTagProgramOfDevelopment.setOnClickListener {
+            showAddTagDialog(binding.cgProgramTag)
+        }
+    }
+
+    private fun editMode() {
+        isEditMode = !isEditMode
+        //편집모드
+        //visible : tvAddTagTypeOfDevelopment, tvAddTagProgramOfDevelopment,
+        // etUserName, etUserSelfIntroduction,tilStackOfDevelopment,tilPortfolio,btnCompleteEdit
+
+        //gone : ivEditProfile, tvUserName, tvUserSelfIntroduction, tvStackOfDevelopment, tvPortfolio
+
+        setViewVisibility(
+            isEditMode,
+            binding.tvAddTagTypeOfDevelopment,
+            binding.tvAddTagProgramOfDevelopment,
+            binding.etUserName,
+            binding.etUserSelfIntroduction,
+            binding.tilStackOfDevelopment,
+            binding.tilPortfolio,
+            binding.btnCompleteEdit
+        )
+
+        setViewVisibility(
+            !isEditMode,
+            binding.ivEditProfile,
+            binding.tvUserName,
+            binding.tvUserSelfIntroduction,
+            binding.tvStackOfDevelopment,
+            binding.tvPortfolio
+        )
+
+        setCloseIconVisibility(binding.cgTypeTag, isEditMode)
+        setCloseIconVisibility(binding.cgProgramTag, isEditMode)
+
+        //편집완료
+        binding.btnCompleteEdit.setOnClickListener {
+            saveProfileInfo()
+            editMode()
+        }
+    }
+
+
+    private fun setViewVisibility(visible: Boolean, vararg views: View) {
+        val visibility = if (visible) View.VISIBLE else View.GONE
+        views.forEach { it.visibility = visibility }
+    }
+
+    //chip x버튼 제거
+    //todo group설정 불가능?
+    private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
+        chipGroup.children.forEach { child ->
+            (child as? Chip)?.isCloseIconVisible = visible
+        }
+    }
+
+    //Dialog tag용
+    private fun showAddTagDialog(chipGroup: ChipGroup) {
+        val builder = AlertDialog.Builder(requireContext())
+        val dialogBinding = DialogAddTagBinding.inflate(layoutInflater)
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.buttonAdd.setOnClickListener {
+            val tagText = dialogBinding.editTextTag.text.toString()
+            if (tagText.isNotEmpty()) {
+                addChipToGroup(chipGroup, tagText, true)
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+    }
+
+    private fun addChipToGroup(chipGroup: ChipGroup, tagText: String, showCloseIcon: Boolean) {
+        val chip = Chip(requireContext())
+        chip.text = tagText
+
+        chip.isCloseIconVisible = showCloseIcon // x 생성
+        chip.setOnCloseIconClickListener {
+            chipGroup.removeView(chip) // 선택한 아이템 삭제
+        }
+        chipGroup.addView(chip)
+    }
+
+    private fun saveProfileInfo() {
+        val userModel = UserModel(
+            userEmail = "",
+            userName = binding.etUserName.text.toString(),
+            userNumber = "",
+            userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+            stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
+            portfolio = binding.etPortfolio.text.toString()
+        )
+        viewModel.saveUserProfile(userModel)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
