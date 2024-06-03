@@ -9,6 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
 
 @AndroidEntryPoint
@@ -25,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         }
         supportFragmentManager.beginTransaction().apply {
 //            add(R.id.flTest, ChattingRoomFragment())
-            add(R.id.flTest, SignUpFragment())
+//            add(R.id.flTest, SignUpFragment())
+            add(R.id.flTest, MyPageFragment())
             commit()
         }
     }
