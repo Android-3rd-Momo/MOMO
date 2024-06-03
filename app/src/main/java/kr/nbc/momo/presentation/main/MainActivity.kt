@@ -1,18 +1,18 @@
 package kr.nbc.momo.presentation.main
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
-import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.home.HomeFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -26,28 +26,39 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        initFirstFragment()
+        setUpBottomNavigation()
+    }
+    private fun initFirstFragment() {
+        //메인화면은 SearchFragment
         supportFragmentManager.beginTransaction().apply {
-//            add(R.id.flTest, ChattingRoomFragment())
-            add(R.id.flTest, SignUpFragment())
+            replace(R.id.fragment_container, HomeFragment())
             commit()
         }
+    }
 
-        // SharedPreferences를 통해 앱이 처음 실행되었는지 확인
-        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        val isFirstRun = sharedPreferences.getBoolean("isFirstRun", true)
 
-        if (isFirstRun) {
-            // 처음 실행된 경우 GetStartedActivity로 이동
-            startActivity(Intent(this, GetStartedActivity::class.java))
-            finish()
+    private fun setUpBottomNavigation() {
+        binding.navigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    val homeFragment = HomeFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, homeFragment)
+                        .commit()
+                    true
+                }
 
-            // 처음 실행됨을 기록
-            with(sharedPreferences.edit()) {
-                putBoolean("isFirstRun", false)
-                apply()
+                R.id.chattingRoomFragment -> {
+                    val chattingRoomFragment = ChattingRoomFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, chattingRoomFragment)
+                        .commit()
+                    true
+                }
+
+                else -> false
             }
-        } else {
-            setContentView(R.layout.activity_main)
         }
     }
 }
