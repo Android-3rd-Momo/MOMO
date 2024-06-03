@@ -7,6 +7,11 @@ import kr.nbc.momo.databinding.RvHomeItemBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 
 class HomeAdapter(var items: List<GroupModel>): RecyclerView.Adapter<HomeAdapter.Holder>() {
+    interface ItemClick{
+        fun itemClick(position: Int)
+    }
+    var itemClick: ItemClick? = null
+
     class Holder(binding: RvHomeItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.imageView2
         val name = binding.name
@@ -24,6 +29,10 @@ class HomeAdapter(var items: List<GroupModel>): RecyclerView.Adapter<HomeAdapter
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        holder.itemView.setOnClickListener {
+            itemClick?.itemClick(position)
+        }
+
         holder.name.text =items[position].groupName
         holder.description.text =items[position].groupDescription
         holder.category.text =items[position].categoryList.joinToString()

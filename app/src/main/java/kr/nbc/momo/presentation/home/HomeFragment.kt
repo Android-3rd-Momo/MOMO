@@ -18,6 +18,13 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.create.CreateGroupFragment
+import kr.nbc.momo.presentation.group.mapper.asGroupEntity
+import kr.nbc.momo.presentation.group.model.GroupModel
+import kr.nbc.momo.presentation.group.read.ReadGroupFragment
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -41,8 +48,10 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
         binding.floatingBtnCreateGroup.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToCreateGroupFragment2()
-            findNavController().navigate(action)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CreateGroupFragment())
+                .addToBackStack(null)
+                .commit()
 
         }
     }
@@ -59,15 +68,37 @@ class HomeFragment : Fragment() {
                             // TODO()
                         }
                         is UiState.Success -> {
-                            homeAdapter = HomeAdapter(uiState.data)
+                            homeAdapter = HomeAdapter(
+                                uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime()  }
+                            )
                             binding.rvGroupList.adapter = homeAdapter
-                            binding.rvGroupList.layoutManager =
-                                LinearLayoutManager(requireContext())
+                            binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
+                            onClick(uiState.data)
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun onClick(data: List<GroupModel>) {
+        homeAdapter.itemClick = object : HomeAdapter.ItemClick{
+            override fun itemClick(position: Int) {
+                val groupName = data[position].groupName
+                val readGroupFragment = ReadGroupFragment.newInstance(groupName)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, readGroupFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+        }
+    }
+
+    fun getCurrentTime() : String {
+        val format = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+        format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
+        return format.format(Date().time)
     }
 
     override fun onDestroyView() {

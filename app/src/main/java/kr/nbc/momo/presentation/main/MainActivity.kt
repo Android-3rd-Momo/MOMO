@@ -11,6 +11,8 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
+import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.home.HomeFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -24,12 +26,39 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        initNav()
+        initFirstFragment()
+        setUpBottomNavigation()
+    }
+    private fun initFirstFragment() {
+        //메인화면은 SearchFragment
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container, HomeFragment())
+            commit()
+        }
     }
 
-    private fun initNav() {
-        val navHostFragment = supportFragmentManager.findFragmentById(androidx.navigation.fragment.R.id.nav_host_fragment_container) as NavHostFragment
-        binding.navigationView.setupWithNavController(navHostFragment.findNavController())
+
+    private fun setUpBottomNavigation() {
+        binding.navigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    val homeFragment = HomeFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, homeFragment)
+                        .commit()
+                    true
+                }
+
+                R.id.chattingRoomFragment -> {
+                    val chattingRoomFragment = ChattingRoomFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, chattingRoomFragment)
+                        .commit()
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 }
