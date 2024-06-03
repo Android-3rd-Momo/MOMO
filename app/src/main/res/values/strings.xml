@@ -1,5 +1,26 @@
-<resources>
+<>
     <string name="app_name">MOMO</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--OnBoardingPackage 문자모음-->
+
+    //loginFragment
+    <string name="Login">로그인</string>
+    <string name="SignIn">회원가입</string>
+    <string name="Id">아이디</string>
+    <string name="Password">비밀번호</string>
+    <string name="GoogleLogin">구글 로그인</string>
+
+    //termFragment
+    <string name="TermTitle">약관에 동의해주세요</string>
+    <string name="TermMiddleTitle">개인정보 이용 및 서비스 이용관리에 동의해주세요</string>
+    <string name="Agree">모두 동의</string>
+    <string name="AgreeDesc">서비스 이용을 위해 아래 약관에 모두 동의합니다</string>
+    <string name="Term1">(필수) 만 14세 이상입니다</string>
+    <string name="Term2">(필수) 서비스 이용약관 동의</string>
+    <string name="Term3">(필수) 개인정보 처리방침 동의</string>
+    <string name="Term4">(선택) 마케팅 수신 동의</string>
+    <string name="See">보기</string>
+
 </resources>
