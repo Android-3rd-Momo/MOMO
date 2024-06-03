@@ -22,5 +22,6 @@
     <string name="Term3">(필수) 개인정보 처리방침 동의</string>
     <string name="Term4">(선택) 마케팅 수신 동의</string>
     <string name="See">보기</string>
+    <string name="TermComplete">가입완료</string>
 
 </resources>

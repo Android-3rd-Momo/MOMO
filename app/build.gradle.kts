@@ -71,6 +71,12 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
 
+    //viewPager
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
+    //circleIndicator
+    implementation ("me.relex:circleindicator:2.1.6")
+
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
