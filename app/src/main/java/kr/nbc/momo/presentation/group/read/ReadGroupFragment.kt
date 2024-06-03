@@ -54,12 +54,12 @@ class ReadGroupFragment : Fragment() {
     }
 
     private fun bottomNavHide() {
-        val nav = activity?.findViewById<BottomNavigationView>(R.id.navigationView)
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
         nav?.visibility = View.GONE
     }
 
     private fun bottomNavShow() {
-        val nav = activity?.findViewById<BottomNavigationView>(R.id.navigationView)
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
         nav?.visibility = View.VISIBLE
     }
 
