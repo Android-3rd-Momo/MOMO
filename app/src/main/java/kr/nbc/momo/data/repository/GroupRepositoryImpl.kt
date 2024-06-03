@@ -2,33 +2,25 @@ package kr.nbc.momo.data.repository
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.components.SingletonComponent
+import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
+import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
-import kr.nbc.momo.domain.usecase.CreateGroupUseCase
-import kr.nbc.momo.presentation.group.mapper.asGroupEntity
-import kr.nbc.momo.presentation.group.model.GroupModel
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
 ): GroupRepository {
-    private val groupResponse = MutableStateFlow<GroupResponse>(GroupResponse())
-
     override fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
         val groupResponse = groupEntity.toGroupResponse()
         fireStore.collection("groups").add(groupResponse)
@@ -36,31 +28,27 @@ class GroupRepositoryImpl @Inject constructor(
             .addOnFailureListener { e -> callback(false, e) }
     }
 
-    override fun readGroup(groupId: String): Flow<GroupEntity> {
-        fireStore.collection("groups").document(groupId).get()
-            .addOnSuccessListener { documentSnapshot  ->
-                if (documentSnapshot.toObject<GroupResponse>() == null) {
-                    Log.d("ReadGroupSuccess", "No such document")
-
-                } else {
-                    groupResponse.value = documentSnapshot.toObject<GroupResponse>()!!
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-
-        return groupResponse.map { data ->
-            data.toEntity()
-        }
+    override fun readGroup(groupName: String): Flow<GroupEntity> = flow {
+        val snapshot = fireStore.collection("groups").whereEqualTo("groupName", groupName).get().await()
+        val response = snapshot.toObjects<GroupResponse>()
+        emit(response[0].toEntity())
     }
 
     override fun updateGroup(groupEntity: GroupEntity) {
-
         TODO("Not yet implemented")
     }
 
     override fun deleteGroup(groupId: String) {
         TODO("Not yet implemented")
+    }
+
+    override fun getGroupList(): Flow<List<GroupEntity>> = flow {
+        val snapshot = fireStore.collection("groups").get().await()
+        val response = snapshot.toObjects<GroupResponse>()
+        emit(
+            response.map {
+                it.toEntity()
+            }
+        )
     }
 }
