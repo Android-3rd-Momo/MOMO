@@ -1,6 +1,9 @@
 package kr.nbc.momo.util
 
 import android.view.View
+import java.time.Duration
+import java.time.Period
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -17,14 +20,34 @@ fun String.setDateTimeFormatToYYYYmmDD(): String {
     return formatter.format(parsedKoreaTime)
 }
 
-fun View.setVisibleToGone(){
+fun View.setVisibleToGone() {
     this.visibility = View.GONE
 }
 
-fun View.setVisibleToVisible(){
+fun View.setVisibleToVisible() {
     this.visibility = View.VISIBLE
 }
 
-fun View.setVisibleToInvisible(){
+fun View.setVisibleToInvisible() {
     this.visibility = View.INVISIBLE
+}
+
+fun String.getTimeGap(): String {
+    val koreaZoneId = ZoneId.of("Asia/Seoul")
+    val koreaTime = ZonedDateTime.now(koreaZoneId)
+    val stringToTime = ZonedDateTime.parse(this)
+    val duration = Duration.between(koreaTime, stringToTime)
+    val period = Period.between(koreaTime.toLocalDate(), stringToTime.toLocalDate())
+
+    val resultString = when {
+        period.years >= 1 -> "${period.years}년 전"
+        period.months >= 1 -> "${period.months}월 전"
+        period.days >= 1 -> "${period.days}일 전"
+        duration.toHours() >= 1 -> "${duration.toHours()}시간 전"
+        duration.toMinutes() >= 1 -> "${duration.toMinutes()}분 전"
+        duration.seconds >= 1 -> "${duration.seconds}초 전"
+        else -> "방금 전"
+    }
+
+    return resultString
 }

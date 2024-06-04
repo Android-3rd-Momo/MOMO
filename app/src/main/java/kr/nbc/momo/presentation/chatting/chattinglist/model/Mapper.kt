@@ -1,11 +1,13 @@
 package kr.nbc.momo.presentation.chatting.chattinglist.model
 
-import kr.nbc.momo.domain.model.GroupChatEntity
+import kr.nbc.momo.domain.model.ChattingListEntity
 
-/*
-fun GroupChatEntity.toListModel(): ChattingListModel{
+fun ChattingListEntity.toModel(): ChattingListModel{
     return ChattingListModel(
-        gro
+        groupId = groupId,
+        groupName = groupName,
+        groupThumbnailUrl = groupThumbnailUrl,
+        latestChatMessage = latestChatMessage,
+        latestChatTimeGap = latestChatTimeGap
     )
 }
-*/
