@@ -4,17 +4,16 @@ import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
@@ -29,7 +28,7 @@ class CreateGroupFragment : Fragment() {
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
-            binding.ivGroupImage.setImageURI(uri)
+            binding.ivGroupImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }

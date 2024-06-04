@@ -11,7 +11,6 @@ import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
-import kr.nbc.momo.presentation.signup.SignUpFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -32,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         //메인화면은 SearchFragment
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, HomeFragment())
-//            replace(R.id.fragment_container, SignUpFragment())
             commit()
         }
     }
@@ -50,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.chattingRoomFragment -> {
-                    val chattingRoomFragment = SignUpFragment()
+                    val chattingRoomFragment = ChattingRoomFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, chattingRoomFragment)
                         .commit()

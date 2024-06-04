@@ -68,6 +68,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.firebaseui:firebase-ui-storage:7.2.0")
 
 
     //navigation
