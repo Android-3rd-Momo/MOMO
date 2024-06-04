@@ -10,17 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.dummy.groupIdsDummy
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.util.setVisibleToGone
-import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class ChattingListFragment : Fragment() {
@@ -60,6 +58,7 @@ class ChattingListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
     }
+
     private fun initView() {
         with(binding) {
             rvChattingList.apply {
@@ -70,7 +69,7 @@ class ChattingListFragment : Fragment() {
     }
 
     private fun initData() {
-        chattingListViewModel.getChattingList(listOf())
+        chattingListViewModel.getChattingList(groupIdsDummy)
 
         viewLifecycleOwner.lifecycleScope.launch {
             chattingListViewModel.chattingList.collectLatest { chattingList ->
@@ -81,6 +80,8 @@ class ChattingListFragment : Fragment() {
 
                     is UiState.Success -> {
                         chattingListAdapter.itemList = chattingList.data
+                        Log.d("Check UiState", chattingList.data[0].latestChatMessage)
+                        chattingListAdapter.notifyDataSetChanged()
                     }
 
                     is UiState.Error -> {

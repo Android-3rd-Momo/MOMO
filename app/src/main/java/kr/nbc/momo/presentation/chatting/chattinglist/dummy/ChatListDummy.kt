@@ -32,3 +32,7 @@ val chatListDummy = listOf(
         latestChatTimeGap = "latestChatTimeGap4"
     )
 )
+
+val groupIdsDummy = listOf(
+    "7FHiu1ijhyA73cVfs4Yf", "RqhWX3WSXmSs35fWkRMQ"
+)
