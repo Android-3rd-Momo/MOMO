@@ -1,8 +1,10 @@
 package kr.nbc.momo.presentation.home
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import kr.nbc.momo.databinding.RvHomeItemBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 
@@ -33,6 +35,7 @@ class HomeAdapter(var items: List<GroupModel>): RecyclerView.Adapter<HomeAdapter
             itemClick?.itemClick(position)
         }
 
+        holder.image.load(items[position].groupThumbnail)
         holder.name.text =items[position].groupName
         holder.description.text =items[position].groupDescription
         holder.category.text =items[position].categoryList.joinToString()

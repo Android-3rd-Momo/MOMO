@@ -1,12 +1,15 @@
 package kr.nbc.momo.presentation.group.create
 
 import android.app.DatePickerDialog
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,6 +25,15 @@ class CreateGroupFragment : Fragment() {
     private var _binding: FragmentCreateGroupBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CreateGroupViewModel by viewModels()
+    private var imageUri: Uri? = null
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            imageUri = uri
+            binding.ivGroupImage.setImageURI(uri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,18 +114,31 @@ class CreateGroupFragment : Fragment() {
             var picker = DatePickerDialog(requireContext(), listener, year, month, day)
             picker.show()
         }
+
+        binding.tvCategory.setOnClickListener {
+            if (binding.clCheckBoxContainer.visibility == View.GONE) binding.clCheckBoxContainer.visibility = View.VISIBLE
+            else binding.clCheckBoxContainer.visibility = View.GONE
+        }
+
+        binding.ivGroupImage.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        }
     }
 
     private fun createGroup() {
+        val categoryList = listOf(binding.check1, binding.check2, binding.check3)
+            .filter { it.isChecked }
+            .map { it.text.toString() }
+
         val group = GroupModel(
             binding.groupName.text.toString(),
             binding.groupOneLineDescription.text.toString(),
-            "",
+            imageUri.toString(),
             binding.groupDescription.text.toString(),
             binding.firstDate.text.toString(),
             binding.lastDate.text.toString(),
-            binding.leaderId.text.toString(),
-            listOf(""),
+            "",
+            categoryList,
             listOf("")
         )
 

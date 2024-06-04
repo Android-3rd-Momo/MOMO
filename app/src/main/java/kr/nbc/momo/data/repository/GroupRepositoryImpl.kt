@@ -1,10 +1,12 @@
 package kr.nbc.momo.data.repository
 
 import android.content.ContentValues.TAG
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -16,22 +18,34 @@ import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
+import java.io.File
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
-    private val fireStore: FirebaseFirestore
+    private val fireStore: FirebaseFirestore,
+    private val storage: FirebaseStorage
 ): GroupRepository {
     override fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
         val groupResponse = groupEntity.toGroupResponse()
         fireStore.collection("groups").add(groupResponse)
             .addOnSuccessListener { callback(true, null) }
             .addOnFailureListener { e -> callback(false, e) }
+
+        val file = Uri.fromFile(File(groupResponse.groupThumbnail))
+        storage.reference.child("${groupResponse.groupName}.png").putFile(file)
     }
 
     override fun readGroup(groupName: String): Flow<GroupEntity> = flow {
         val snapshot = fireStore.collection("groups").whereEqualTo("groupName", groupName).get().await()
         val response = snapshot.toObjects<GroupResponse>()
         emit(response[0].toEntity())
+
+        storage.reference.child("${groupName}.png").downloadUrl.addOnSuccessListener { uri ->
+            response[0].groupThumbnail = uri.toString()
+            Log.d("uriImage", "${uri.toString()}")
+        }.addOnFailureListener {
+            // Handle any errors
+        }
     }
 
     override fun updateGroup(groupEntity: GroupEntity) {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.group.mapper.asGroupEntity
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
+import kr.nbc.momo.presentation.main.SharedViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -31,6 +33,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var homeAdapter: HomeAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,7 +88,8 @@ class HomeFragment : Fragment() {
         homeAdapter.itemClick = object : HomeAdapter.ItemClick{
             override fun itemClick(position: Int) {
                 val groupName = data[position].groupName
-                val readGroupFragment = ReadGroupFragment.newInstance(groupName)
+                sharedViewModel.getGroupName(groupName)
+                val readGroupFragment = ReadGroupFragment()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, readGroupFragment)
                     .addToBackStack(null)
