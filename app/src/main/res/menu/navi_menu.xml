@@ -6,7 +6,7 @@
         android:icon="@drawable/icon_home"/>
 
     <item
-        android:id="@+id/chattingRoomFragment"
+        android:id="@+id/chattingListFragment"
         android:title="채팅"
         android:icon="@drawable/icon_chat"/>
 

@@ -3,10 +3,10 @@ package kr.nbc.momo.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.presentation.UiState
@@ -48,6 +48,18 @@ class SharedViewModel @Inject constructor(
 
     fun getGroupName(groupName: String) {
         _groupName.value = groupName
+    }
+
+
+
+    private val _groupIdToGroupChat: MutableStateFlow<String?> = MutableStateFlow(null)
+    val groupIdToGroupChat: StateFlow<String?> get() = _groupIdToGroupChat
+
+    fun setGroupIdToGroupChat(groupId: String){
+        _groupIdToGroupChat.value = groupId
+    }
+    fun removeGroupIdToGroupChat(){
+        _groupIdToGroupChat.value = null
     }
 
 }
