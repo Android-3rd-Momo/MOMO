@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -30,6 +32,7 @@ class ChattingListFragment : Fragment() {
     }
 
     private val chattingListViewModel: ChattingListViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +93,7 @@ class ChattingListFragment : Fragment() {
 
     //넘기는 거 미완성(conflict 가능성)
     private fun itemOnClick(groupId: String) {
+        sharedViewModel.setGroupIdToGroupChat(groupId)
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, ChattingRoomFragment())
             addToBackStack(null)
