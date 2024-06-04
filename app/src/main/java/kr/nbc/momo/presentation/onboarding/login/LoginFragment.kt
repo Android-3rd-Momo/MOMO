@@ -27,7 +27,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.btnSignUp).setOnClickListener{
+        binding.btnSignUp.setOnClickListener{
             val fragmentTerm = TermFragment()
             fragmentTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
             fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)

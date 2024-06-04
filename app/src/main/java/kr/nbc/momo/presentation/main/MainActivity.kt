@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         initFirstFragment()
         setUpBottomNavigation()
         onBoardingLaunch()
+
     }
     private fun initFirstFragment() {
         //메인화면은 SearchFragment
@@ -81,7 +82,6 @@ class MainActivity : AppCompatActivity() {
                 setContentView(binding.root)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            e.printStackTrace()        }
     }
 }
