@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -31,8 +32,13 @@ class GroupRepositoryImpl @Inject constructor(
             .addOnSuccessListener { callback(true, null) }
             .addOnFailureListener { e -> callback(false, e) }
 
-        val file = Uri.fromFile(File(groupResponse.groupThumbnail))
-        storage.reference.child("${groupResponse.groupName}.png").putFile(file)
+        storage.reference.child("${groupResponse.groupName}.jpeg").putFile(Uri.parse(groupResponse.groupThumbnail))
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener {
+
+            }
     }
 
     override fun readGroup(groupName: String): Flow<GroupEntity> = flow {
@@ -40,12 +46,12 @@ class GroupRepositoryImpl @Inject constructor(
         val response = snapshot.toObjects<GroupResponse>()
         emit(response[0].toEntity())
 
-        storage.reference.child("${groupName}.png").downloadUrl.addOnSuccessListener { uri ->
-            response[0].groupThumbnail = uri.toString()
-            Log.d("uriImage", "${uri.toString()}")
-        }.addOnFailureListener {
-            // Handle any errors
-        }
+        storage.reference.child("${groupName}.jpeg").getFile(Uri.parse(response.get(0).groupThumbnail))
+            .addOnSuccessListener { uri ->
+                response[0].groupThumbnail = uri.toString()
+            }.addOnFailureListener {
+                // Handle any errors
+            }
     }
 
     override fun updateGroup(groupEntity: GroupEntity) {

@@ -5,14 +5,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
+import kr.nbc.momo.presentation.signup.SignUpFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -53,6 +51,14 @@ class MainActivity : AppCompatActivity() {
                     val chattingRoomFragment = ChattingRoomFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, chattingRoomFragment)
+                        .commit()
+                    true
+                }
+
+                R.id.signUpFragment -> {
+                    val signUpFragment = SignUpFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, signUpFragment)
                         .commit()
                     true
                 }
