@@ -3,7 +3,10 @@ package kr.nbc.momo.presentation.onboarding.term
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kr.nbc.momo.R
+
 
 class TermViewModel : ViewModel() {
     private val _terms = MutableLiveData<List<Term>>()
