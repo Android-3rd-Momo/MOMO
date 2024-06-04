@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -19,7 +18,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.create.CreateGroupFragment
-import kr.nbc.momo.presentation.group.mapper.asGroupEntity
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel

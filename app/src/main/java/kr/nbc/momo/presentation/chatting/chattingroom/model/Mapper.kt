@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.chattingroom.model
+package kr.nbc.momo.presentation.chatting.chattingroom.model
 
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
