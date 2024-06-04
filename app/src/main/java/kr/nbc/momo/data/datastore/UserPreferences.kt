@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.map
 import kr.nbc.momo.domain.model.UserEntity
 import javax.inject.Inject
 
+//todo 자동로그인
 class UserPreferences @Inject constructor(private val dataStore: DataStore<Preferences>){
 
     private object PreferencesKeys{

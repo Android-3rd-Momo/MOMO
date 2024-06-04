@@ -5,13 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-//import androidx.navigation.fragment.NavHostFragment //todo 수정
-//import androidx.navigation.fragment.findNavController //todo 수정
-//import androidx.navigation.ui.setupWithNavController //todo 수정
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
-import kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
@@ -53,8 +49,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.chattingRoomFragment -> {
-//                    val chattingRoomFragment = ChattingRoomFragment()
-                    val chattingRoomFragment = SignUpFragment() //todo 임시 추가
+                    val chattingRoomFragment = SignUpFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, chattingRoomFragment)
                         .commit()

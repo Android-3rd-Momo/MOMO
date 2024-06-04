@@ -1,38 +1,34 @@
 package kr.nbc.momo.presentation.group.read
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.main.SharedViewModel
 
-private const val ARG_GROUP = "group"
 @AndroidEntryPoint
 class ReadGroupFragment : Fragment() {
-    private var groupName: String? = null
     private var _binding: FragmentReadGroupBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ReadGroupViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            // let을 통한 null값 처리
-            groupName = it.getString(ARG_GROUP)
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +61,9 @@ class ReadGroupFragment : Fragment() {
 
     private fun initGroup() {
         lifecycleScope.launch {
-            groupName?.let { viewModel.readGroup(it) }
+            sharedViewModel.groupName.observe(viewLifecycleOwner) {
+                viewModel.readGroup(it)
+            }
 
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readGroup.collect { uiState ->
@@ -78,6 +76,7 @@ class ReadGroupFragment : Fragment() {
                         }
                         is UiState.Success -> {
                             with(binding) {
+                                ivGroupImage.load(uiState.data.groupThumbnail)
                                 groupName.text = uiState.data.groupName
                                 groupOneLineDescription.text = uiState.data.groupOneLineDescription
                                 groupDescription.text = uiState.data.groupDescription
@@ -95,16 +94,5 @@ class ReadGroupFragment : Fragment() {
                 }
             }
         }
-    }
-
-
-    companion object {
-        @JvmStatic
-        fun newInstance(groupName: String) =
-            ReadGroupFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_GROUP, groupName)
-                }
-            }
     }
 }

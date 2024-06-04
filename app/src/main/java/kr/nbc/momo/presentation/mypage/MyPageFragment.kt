@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.signup.model.UserModel
 
 @AndroidEntryPoint
@@ -26,6 +28,7 @@ class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MyPageViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var isEditMode = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,12 +42,10 @@ class MyPageFragment : Fragment() {
         eachEventHandler()
 
         viewModel.getUserProfile() //프로필 정보 가져오기
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 //fragment의 수명주기가 해당 상태일 때만 실행되도록 보장
-                viewModel.userProfile.collect { state ->
+                sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
                             //todo
