@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.chattingroom.ChattingRoomFragment">
+    tools:context=".presentation.chatting.chattingroom.ChattingRoomFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFireBase"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/etText"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/actionMenuView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvChatMessage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/etText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actionMenuView"
+        tools:listitem="@layout/rv_item_else" />
 
     <EditText
         android:id="@+id/etText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
         android:hint="입력하기"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn1"
         app:layout_constraintStart_toStartOf="parent" />

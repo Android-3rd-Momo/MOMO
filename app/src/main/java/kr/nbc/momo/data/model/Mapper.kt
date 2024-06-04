@@ -1,6 +1,7 @@
 package kr.nbc.momo.data.model
 
 import kr.nbc.momo.domain.model.ChatEntity
+import kr.nbc.momo.domain.model.ChattingListEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
@@ -20,9 +21,10 @@ fun GroupUserResponse.toEntity(): GroupUserEntity {
 
 fun GroupChatResponse.toEntity(): GroupChatEntity {
     return GroupChatEntity(
-        this.groupId,
-        this.userList.map { it.toEntity() },
-        this.chatList.map { it.toEntity() }
+        groupId,
+        groupName,
+        userList.map { it.toEntity() },
+        chatList.map { it.toEntity() }
     )
 }
 
@@ -60,5 +62,15 @@ fun UserResponse.toEntity(): UserEntity {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId
+    )
+}
+
+fun ChattingListResponse.toEntity(): ChattingListEntity {
+    return ChattingListEntity(
+        groupName,
+        groupId,
+        groupThumbnailUrl,
+        latestChatMessage,
+        latestChatTimeGap
     )
 }
