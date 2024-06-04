@@ -85,12 +85,12 @@ class LoginFragment : BottomSheetDialogFragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         //파이어베이스 어스 사용인데 null이라서 다시 시도가 뜸
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+        //val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        //    .requestIdToken(getString(R.string.default_web_client_id))
+        //    .requestEmail()
+         //   .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+        //mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         //sign in  intent 호출부분이 없음
 
