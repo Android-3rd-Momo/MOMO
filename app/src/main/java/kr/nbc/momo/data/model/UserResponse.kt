@@ -12,7 +12,4 @@ data class UserResponse(
     val stackOfDevelopment: String = "",
     val portfolio: String = "" //todo (이미지,글)
 )
-//todo
-//포트폴리오 ...
-//깃헙주소 = String
 

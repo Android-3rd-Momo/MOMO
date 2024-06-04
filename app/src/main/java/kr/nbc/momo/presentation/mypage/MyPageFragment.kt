@@ -55,7 +55,7 @@ class MyPageFragment : Fragment() {
                 viewModel.userProfile.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            //todo
+                            //todo 로딩
                         }
 
                         is UiState.Success -> {
@@ -94,7 +94,7 @@ class MyPageFragment : Fragment() {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            //todo
+                            //todo 로딩
                         }
 
                         is UiState.Success -> {
