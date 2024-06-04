@@ -22,6 +22,8 @@ import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.signup.model.UserModel
+import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class MyPageFragment : Fragment() {
@@ -41,7 +43,27 @@ class MyPageFragment : Fragment() {
 
         eachEventHandler()
 
-        viewModel.getUserProfile() //프로필 정보 가져오기
+//        viewModel.getUserProfile() //프로필 정보 가져오기
+        observeUserProfile()
+    }
+
+    private fun initView(user: UserModel) {
+        with(binding) {
+            tvUserName.text = user.userName
+            tvUserSelfIntroduction.text = user.userSelfIntroduction
+            tvStackOfDevelopment.text = user.stackOfDevelopment
+            tvPortfolio.text = user.portfolio
+            //편집모드에 값 적용
+            etUserName.setText(user.userName)
+            etUserSelfIntroduction.setText(user.userSelfIntroduction)
+            etStackOfDevelopment.setText(user.stackOfDevelopment)
+            etPortfolio.setText(user.portfolio)
+            setChipList(binding.cgTypeTag, user.typeOfDevelopment)
+            setChipList(binding.cgProgramTag, user.programOfDevelopment)
+        }
+    }
+
+    private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 //fragment의 수명주기가 해당 상태일 때만 실행되도록 보장
@@ -52,20 +74,7 @@ class MyPageFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            val user = state.data
-                            with(binding) {
-                                tvUserName.text = user.userName
-                                tvUserSelfIntroduction.text = user.userSelfIntroduction
-                                tvStackOfDevelopment.text = user.stackOfDevelopment
-                                tvPortfolio.text = user.portfolio
-                                //편집모드에 값 적용
-                                etUserName.setText(user.userName)
-                                etUserSelfIntroduction.setText(user.userSelfIntroduction)
-                                etStackOfDevelopment.setText(user.stackOfDevelopment)
-                                etPortfolio.setText(user.portfolio)
-                                setChipList(binding.cgTypeTag, user.typeOfDevelopment)
-                                setChipList(binding.cgProgramTag, user.programOfDevelopment)
-                            }
+                            initView(state.data)
                         }
 
                         is UiState.Error -> {
@@ -79,7 +88,7 @@ class MyPageFragment : Fragment() {
 
     private fun eachEventHandler() {
         binding.ivEditProfile.setOnClickListener {
-            editMode()
+            setChangeMode()
         }
         binding.tvAddTagTypeOfDevelopment.setOnClickListener {
             showAddTagDialog(binding.cgTypeTag)
@@ -89,14 +98,14 @@ class MyPageFragment : Fragment() {
         }
         binding.btnCompleteEdit.setOnClickListener {
             saveProfileInfo()
-            editMode()
+            setChangeMode()
         }
     }
 
-    private fun editMode() {
+    private fun setChangeMode() {
         isEditMode = !isEditMode
-        setViewVisibility(
-            isEditMode,
+
+        val editMode = arrayOf(
             binding.tvAddTagTypeOfDevelopment,
             binding.tvAddTagProgramOfDevelopment,
             binding.etUserName,
@@ -105,9 +114,7 @@ class MyPageFragment : Fragment() {
             binding.tilPortfolio,
             binding.btnCompleteEdit
         )
-
-        setViewVisibility(
-            !isEditMode,
+        val viewMode = arrayOf(
             binding.ivEditProfile,
             binding.tvUserName,
             binding.tvUserSelfIntroduction,
@@ -115,14 +122,10 @@ class MyPageFragment : Fragment() {
             binding.tvPortfolio
         )
 
+        editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
+        viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         setCloseIconVisibility(binding.cgTypeTag, isEditMode)
         setCloseIconVisibility(binding.cgProgramTag, isEditMode)
-    }
-
-
-    private fun setViewVisibility(visible: Boolean, vararg views: View) {
-        val visibility = if (visible) View.VISIBLE else View.GONE
-        views.forEach { it.visibility = visibility }
     }
 
     private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
@@ -131,6 +134,7 @@ class MyPageFragment : Fragment() {
             child.isClickable = false
         }
     }
+
     private fun createChip(text: String, isCloseIcon: Boolean): Chip {
         return Chip(requireContext()).apply {
             this.text = text

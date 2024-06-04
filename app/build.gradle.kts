@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.gson)
     implementation(libs.logging.interceptor)
+    implementation(libs.firebase.storage.ktx)
     ksp(libs.room.compiler)
 
     //retrofit
