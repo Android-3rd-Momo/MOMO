@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.databinding.FragmentSignUpBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.signup.model.UserModel
 
 @AndroidEntryPoint
@@ -20,6 +22,7 @@ class SignUpFragment : Fragment() {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SignUpViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
@@ -60,6 +63,7 @@ class SignUpFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
+                        sharedViewModel.updateUser(state.data)
                         Snackbar.make(binding.root, "회원가입에 성공하였습니다.", Snackbar.LENGTH_SHORT).show()
                     }
 

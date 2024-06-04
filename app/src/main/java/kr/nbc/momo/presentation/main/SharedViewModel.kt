@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.presentation.UiState
@@ -21,7 +22,7 @@ class SharedViewModel @Inject constructor(
     val groupName: LiveData<String> get() = _groupName
 
     private val _currentUser = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
-    val currentUser get() = _currentUser
+    val currentUser: StateFlow<UiState<UserModel>> get() = _currentUser
 
     init {
         getCurrentUser()
@@ -36,8 +37,13 @@ class SharedViewModel @Inject constructor(
                 } else {
                     UiState.Error("User not found")
                 }
+
             }
         }
+    }
+
+    fun updateUser(user: UserModel){
+        _currentUser.value = UiState.Success(user)
     }
 
     fun getGroupName(groupName: String) {

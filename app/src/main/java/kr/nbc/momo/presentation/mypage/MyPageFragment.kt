@@ -125,8 +125,6 @@ class MyPageFragment : Fragment() {
         views.forEach { it.visibility = visibility }
     }
 
-    //chip x버튼 제거
-    //todo group설정 불가능?
     private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
         chipGroup.children.forEach { child ->
             (child as? Chip)?.isCloseIconVisible = visible
