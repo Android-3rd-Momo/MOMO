@@ -66,5 +66,12 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        binding.navigationView.setOnItemReselectedListener {
+            when (it.itemId){
+                R.id.homeFragment -> {}
+                R.id.chattingRoomFragment -> {}
+                R.id.myPageFragment -> {}
+            }
+        }
     }
 }
