@@ -74,7 +74,11 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
 
+    //dataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.firebase.storage.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
