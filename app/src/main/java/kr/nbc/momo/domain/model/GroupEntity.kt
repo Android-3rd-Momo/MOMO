@@ -9,4 +9,6 @@ data class GroupEntity(
     val leaderId: String = "",
     val categoryList: List<String> = listOf(),
     val userList: List<String> = listOf(),
+//    val categoryList: List<String> = emptyList(),
+//    val userList: List<String> = emptyList(),
 )

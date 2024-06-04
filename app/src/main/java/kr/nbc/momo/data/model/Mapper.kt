@@ -30,6 +30,7 @@ fun GroupChatResponse.toEntity(): GroupChatEntity {
     )
 }
 
+
 fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
     return GroupResponse(
         groupName,
@@ -63,7 +64,26 @@ fun UserResponse.toEntity(): UserEntity {
         userEmail = this.userEmail,
         userName = this.userName,
         userNumber = this.userNumber,
-        userId = this.userId
+        userId = this.userId,
+        userSelfIntroduction = this.userSelfIntroduction,
+        typeOfDevelopment = this.typeOfDevelopment ?: emptyList(),
+        programOfDevelopment = this.programOfDevelopment ?: emptyList(),
+        stackOfDevelopment = this.stackOfDevelopment,
+        portfolio = this.portfolio
+    )
+}
+
+fun UserEntity.toUserResponse(): UserResponse {
+    return UserResponse(
+        userEmail = this.userEmail,
+        userName = this.userName,
+        userNumber = this.userNumber,
+        userId = this.userId,
+        userSelfIntroduction = this.userSelfIntroduction,
+        typeOfDevelopment = this.typeOfDevelopment,
+        programOfDevelopment = this.programOfDevelopment,
+        stackOfDevelopment = this.stackOfDevelopment,
+        portfolio = this.portfolio
     )
 }
 

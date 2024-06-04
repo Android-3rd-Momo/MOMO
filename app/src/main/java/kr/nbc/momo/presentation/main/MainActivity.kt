@@ -10,7 +10,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
-import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.mypage.MyPageFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -55,15 +55,22 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.signUpFragment -> {
-                    val signUpFragment = SignUpFragment()
+                R.id.myPageFragment -> {
+                    val myPageFragment = MyPageFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, signUpFragment)
+                        .replace(R.id.fragment_container, myPageFragment)
                         .commit()
                     true
                 }
 
                 else -> false
+            }
+        }
+        binding.navigationView.setOnItemReselectedListener {
+            when (it.itemId){
+                R.id.homeFragment -> {}
+                R.id.chattingRoomFragment -> {}
+                R.id.myPageFragment -> {}
             }
         }
     }

@@ -4,15 +4,12 @@ data class UserResponse(
     val userEmail: String = "",
     val userId: String = "",
     val userName: String = "",
-    val userNumber: String = ""
+    val userNumber: String = "",
+
+    val userSelfIntroduction: String = "",
+    val typeOfDevelopment: List<String> = emptyList(),
+    val programOfDevelopment: List<String> = emptyList(),
+    val stackOfDevelopment: String = "",
+    val portfolio: String = "" //todo (이미지,글)
 )
-//todo 온보딩 내용 추가
-/*
-data class UserData
-1.사용언어 = List<String>
-2.사용프로그램 = List<String>
-3.기술 스택내용 = String
-my.포트폴리오 ...
-my.깃헙주소 = String
-*/
 
