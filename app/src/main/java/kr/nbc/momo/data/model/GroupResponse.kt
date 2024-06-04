@@ -2,7 +2,7 @@ package kr.nbc.momo.data.model
 data class GroupResponse(
     val groupName: String = "",
     val groupOneLineDescription : String = "",
-    var groupThumbnail: String = "",
+    val groupThumbnail: String? = "",
     val groupDescription : String = "",
     val firstDate: String = "",
     val lastDate: String = "",
