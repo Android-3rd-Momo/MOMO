@@ -28,21 +28,21 @@ class SharedViewModel @Inject constructor(
         getCurrentUser()
     }
 
-    private fun getCurrentUser() { //로그인된 정보
+    fun getCurrentUser() { //로그인된 정보
         viewModelScope.launch {
             _currentUser.value = UiState.Loading
             getCurrentUserUseCase().collect { userEntity ->
                 _currentUser.value = if (userEntity != null) {
                     UiState.Success(userEntity.toModel())
                 } else {
-                    UiState.Error("User not found")
+                    UiState.Error("Do not log in")
                 }
 
             }
         }
     }
 
-    fun updateUser(user: UserModel){
+    fun updateUser(user: UserModel) {
         _currentUser.value = UiState.Success(user)
     }
 

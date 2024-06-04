@@ -6,44 +6,29 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.signup.model.UserModel
 import kr.nbc.momo.presentation.signup.model.toEntity
-import kr.nbc.momo.presentation.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val saveUserProfileUseCase: SaveUserProfileUseCase
 ) : ViewModel() {
 
-    private val _userProfile = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
-    val userProfile: StateFlow<UiState<UserModel>> get() = _userProfile
+    private val _userProfileUpdate = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
+    val userProfile: StateFlow<UiState<UserModel>> get() = _userProfileUpdate
 
-    fun getUserProfile() {
+    fun saveUserProfile(updatedUser: UserModel) {
         viewModelScope.launch {
-            _userProfile.value = UiState.Loading
-            getCurrentUserUseCase().collect { userEntity ->
-                _userProfile.value = if (userEntity != null) {
-                    UiState.Success(userEntity.toModel())
-                } else {
-                    UiState.Error("User not found")
-                }
-            }
-        }
-    }
-
-    fun saveUserProfile(user: UserModel) {
-        viewModelScope.launch {
-            _userProfile.value = UiState.Loading
+            _userProfileUpdate.value = UiState.Loading
             try {
-                saveUserProfileUseCase(user.toEntity())
-                _userProfile.value = UiState.Success(user)
+                saveUserProfileUseCase(updatedUser.toEntity())
+                _userProfileUpdate.value = UiState.Success(updatedUser)
+//                currentUser = updatedUser
             } catch (e: Exception) {
-                _userProfile.value = UiState.Error(e.toString())
+                _userProfileUpdate.value = UiState.Error(e.toString())
             }
         }
     }

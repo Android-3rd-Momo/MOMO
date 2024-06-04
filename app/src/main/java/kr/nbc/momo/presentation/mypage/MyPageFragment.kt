@@ -33,6 +33,7 @@ class MyPageFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var isEditMode = false
+    private var currentUser: UserModel? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
@@ -42,9 +43,32 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         eachEventHandler()
-
-//        viewModel.getUserProfile() //프로필 정보 가져오기
+//        sharedViewModel.getCurrentUser()
+        observeUserProfileUpdate()
         observeUserProfile()
+
+    }
+
+    private fun observeUserProfileUpdate() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userProfile.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            //todo
+                        }
+
+                        is UiState.Success -> {
+                            sharedViewModel.getCurrentUser()
+                        }
+
+                        is UiState.Error -> {
+                            Log.d("error", state.message)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initView(user: UserModel) {
@@ -74,6 +98,7 @@ class MyPageFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
+                            currentUser = state.data
                             initView(state.data)
                         }
 
@@ -180,20 +205,31 @@ class MyPageFragment : Fragment() {
     }
 
     private fun saveProfileInfo() {
-        val userModel = UserModel(
-            userEmail = "",
-            userName = binding.etUserName.text.toString(),
-            userNumber = "",
-            userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
-            stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-            portfolio = binding.etPortfolio.text.toString(),
-            typeOfDevelopment = getChipText(binding.cgTypeTag),
-            programOfDevelopment = getChipText(binding.cgProgramTag)
-
-        )
-        viewModel.saveUserProfile(userModel)
+        currentUser?.let { currentUser ->
+            val updatedUserModel = currentUser.copy(
+                userName = binding.etUserName.text.toString(),
+                userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+                stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
+                portfolio = binding.etPortfolio.text.toString(),
+                typeOfDevelopment = getChipText(binding.cgTypeTag),
+                programOfDevelopment = getChipText(binding.cgProgramTag)
+            )
+            viewModel.saveUserProfile(updatedUserModel)
+        }
     }
 
+    //    private fun saveProfileInfo() {
+//        val currentUser = viewModel.getCurrentUser()
+//        val updatedUserModel = currentUser.copy(
+//            userName = binding.etUserName.text.toString(),
+//            userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+//            stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
+//            portfolio = binding.etPortfolio.text.toString(),
+//            typeOfDevelopment = getChipText(binding.cgTypeTag),
+//            programOfDevelopment = getChipText(binding.cgProgramTag)
+//        )
+//        viewModel.saveUserProfile(updatedUserModel)
+//    }
     //text를 list에 추가
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()
