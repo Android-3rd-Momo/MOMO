@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattinglist.dummy.chatListDummy
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattinglist.model.toModel
 import javax.inject.Inject

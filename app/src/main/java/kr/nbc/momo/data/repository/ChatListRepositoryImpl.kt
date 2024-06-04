@@ -1,12 +1,8 @@
 package kr.nbc.momo.data.repository
 
-import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.ChatResponse
 import kr.nbc.momo.data.model.ChattingListResponse
@@ -26,11 +22,7 @@ class ChatListRepositoryImpl @Inject constructor(
         val newGroupList = mutableListOf<ChattingListResponse>()
 
         for (i in list) {
-            val storeSnapshot = fireStore.collection("groups").document(i).get().addOnFailureListener{
-                Log.d("error", it.toString())
-            }.addOnSuccessListener {
-                if (it.data == null) Log.d("error", "${it.id}")
-            }.await()
+            val storeSnapshot = fireStore.collection("groups").document(i).get().await()
 
             val storeResponse = storeSnapshot.toObject<GroupResponse>() ?: GroupResponse(
                 groupName = "Error"
@@ -39,7 +31,6 @@ class ChatListRepositoryImpl @Inject constructor(
             val databaseSnapshot = fireStoreDatabase.getReference("Chatting").child(i).get().await()
             val databaseResponse =
                 (databaseSnapshot.getValue(GroupChatResponse::class.java) ?: GroupChatResponse())
-            Log.d("asd", "${databaseResponse}")
             val latestChatting = databaseResponse.chatList.lastOrNull() ?: ChatResponse(
                 text = "그룹 채팅을 시작해보세요!"
             )
