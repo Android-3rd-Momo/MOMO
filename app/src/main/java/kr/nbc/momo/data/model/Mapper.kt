@@ -34,7 +34,6 @@ fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
     return GroupResponse(
         groupName,
         groupOneLineDescription,
-        groupThumbnail,
         downloadUri,
         groupDescription,
         firstDate,
@@ -50,7 +49,6 @@ fun GroupResponse.toEntity(): GroupEntity {
         groupName,
         groupOneLineDescription,
         groupThumbnail,
-        downloadUri,
         groupDescription,
         firstDate,
         lastDate,

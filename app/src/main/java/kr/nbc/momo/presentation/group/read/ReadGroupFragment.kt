@@ -1,20 +1,15 @@
 package kr.nbc.momo.presentation.group.read
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,6 +17,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class ReadGroupFragment : Fragment() {
@@ -80,18 +76,18 @@ class ReadGroupFragment : Fragment() {
 
                     is UiState.Success -> {
                         with(binding) {
-                            Log.d("uiState", "${uiState.data.downloadUri}")
-                            ivGroupImage.load(uiState.data.downloadUri)
-                            groupName.text = uiState.data.groupName
-                            groupOneLineDescription.text = uiState.data.groupOneLineDescription
-                            groupDescription.text = uiState.data.groupDescription
-                            firstDate.text = uiState.data.firstDate
-                            lastDate.text = uiState.data.lastDate
-                            leaderId.text = uiState.data.leaderId
+                            ivGroupImage.load(uiState.data.groupThumbnail)
+                            tvGroupName.text = uiState.data.groupName
+                            tvGroupOneLineDescription.text = uiState.data.groupOneLineDescription
+                            tvGroupDescription.text = uiState.data.groupDescription
+                            tvFirstDate.text = uiState.data.firstDate
+                            tvLastDate.text = uiState.data.lastDate
+                            tvLeaderId.text = uiState.data.leaderId
+
                         }
 
                         if (uiState.data.userList.contains("userId").not()) {
-                            binding.button.visibility = View.VISIBLE
+                            binding.btnJoinProject.setVisibleToVisible()
                         }
                     }
                 }
