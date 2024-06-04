@@ -11,6 +11,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
@@ -27,7 +28,7 @@ class CreateGroupFragment : Fragment() {
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
-            binding.ivGroupImage.setImageURI(uri)
+            binding.ivGroupImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }

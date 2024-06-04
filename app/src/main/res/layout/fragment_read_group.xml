@@ -38,37 +38,39 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvGroupOneLineDescription"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tvGroupName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
+            android:layout_width="76dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
             android:text="groupName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvLeaderId" />
 
         <TextView
             android:id="@+id/tvGroupOneLineDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="groupOneLineDescription"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
             app:layout_constraintTop_toBottomOf="@+id/tvGroupName" />
+
 
         <TextView
             android:id="@+id/tvLeaderId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="leaderId"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
             app:layout_constraintTop_toBottomOf="@+id/ivGroupImage" />
+
 
 
 
