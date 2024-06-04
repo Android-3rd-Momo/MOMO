@@ -7,73 +7,104 @@
     android:layout_height="match_parent"
     tools:context=".presentation.group.create.CreateGroupFragment">
 
-
-    <TextView
-        android:id="@+id/groupName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="36dp"
-        android:text="groupName"
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/groupOneLineDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:text="groupOneLineDescription"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clSimpleDescriptionContainer"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="25dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupName" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/ivGroupImage"
+            android:layout_width="72dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvGroupName"
+            android:layout_width="76dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
+            android:text="groupName"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvLeaderId" />
+
+        <TextView
+            android:id="@+id/tvGroupOneLineDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="groupOneLineDescription"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupName" />
+
+
+        <TextView
+            android:id="@+id/tvLeaderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="leaderId"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
+            app:layout_constraintTop_toBottomOf="@+id/ivGroupImage" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/groupDescription"
+        android:id="@+id/tvGroupDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
         android:text="groupDescription"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupOneLineDescription" />
+        app:layout_constraintStart_toStartOf="@+id/tvProject"
+        app:layout_constraintTop_toBottomOf="@+id/tvProject" />
 
     <TextView
-        android:id="@+id/firstDate"
+        android:id="@+id/tvFirstDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginTop="36dp"
         android:text="firstDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupDescription" />
+        app:layout_constraintStart_toStartOf="@+id/tvSchedule"
+        app:layout_constraintTop_toBottomOf="@+id/tvSchedule" />
 
     <TextView
-        android:id="@+id/lastDate"
+        android:id="@+id/tvLastDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:text="lastDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstDate" />
-
-    <TextView
-        android:id="@+id/leaderId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:text="leaderId"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastDate" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_marginStart="24dp"
+        android:text="tvLastDate"
+        app:layout_constraintStart_toEndOf="@+id/tvFirstDate"
+        app:layout_constraintTop_toTopOf="@+id/tvFirstDate" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnJoinProject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="140dp"
@@ -83,15 +114,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivGroupImage"
+    <TextView
+        android:id="@+id/tvProject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="프로젝트 소개"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/clSimpleDescriptionContainer" />
+
+    <TextView
+        android:id="@+id/tvSchedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="모집일정"
+        app:layout_constraintStart_toStartOf="@+id/tvGroupDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvGroupDescription" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
