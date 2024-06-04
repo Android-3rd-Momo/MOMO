@@ -14,8 +14,8 @@
 
     <fragment
         android:id="@+id/chattingRoomFragment"
-        android:name="kr.nbc.momo.presentation.chattingroom.ChattingRoomFragment"
-        android:label="fragment_chatting_room"
-        tools:layout="@layout/fragment_chatting_room" />
+        android:name="kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment"
+        android:label="fragment_chatting_list"
+        tools:layout="@layout/fragment_chatting_list" />
 
 </navigation>

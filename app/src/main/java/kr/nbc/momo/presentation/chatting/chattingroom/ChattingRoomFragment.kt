@@ -9,10 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingRoomBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class ChattingRoomFragment : Fragment() {
@@ -43,12 +47,14 @@ class ChattingRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideNav()
         initData()
         observeChatList()
         initView()
     }
 
     override fun onDestroyView() {
+        showNav()
         _binding = null
         super.onDestroyView()
     }
@@ -90,5 +96,16 @@ class ChattingRoomFragment : Fragment() {
 
     private fun initData() {
         viewModel.getChatMessages(groupId)
+    }
+
+
+    private fun showNav() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav.setVisibleToVisible()
+    }
+
+    private fun hideNav() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav.setVisibleToGone()
     }
 }

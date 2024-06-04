@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
 
@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.chattingRoomFragment -> {
-                    val chattingRoomFragment = ChattingRoomFragment()
+                R.id.chattingListFragment -> {
+                    val chattingListFragment = ChattingListFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, chattingRoomFragment)
+                        .replace(R.id.fragment_container, chattingListFragment)
                         .commit()
                     true
                 }

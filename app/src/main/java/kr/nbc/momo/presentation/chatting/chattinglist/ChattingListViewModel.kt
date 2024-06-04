@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListUseCase
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.dummy.chatListDummy
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattinglist.model.toModel
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class ChattingListViewModel @Inject constructor(
     val chattingList: StateFlow<UiState<List<ChattingListModel>>> get() = _chattingList
 
     fun getChattingList(list: List<String>) {
-        viewModelScope.launch {
+/*        viewModelScope.launch {
             try {
                 _chattingList.value =
                     UiState.Success(chattingListUseCase.invoke(list).map { it.toModel() })
@@ -29,6 +30,7 @@ class ChattingListViewModel @Inject constructor(
                 Log.e("Chatting List Error", e.toString(), e)
                 _chattingList.value = UiState.Error(e.toString())
             }
-        }
+        }*/
+        _chattingList.value = UiState.Success(chatListDummy)
     }
 }

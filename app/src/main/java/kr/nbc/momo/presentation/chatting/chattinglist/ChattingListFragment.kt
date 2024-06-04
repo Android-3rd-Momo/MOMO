@@ -50,11 +50,13 @@ class ChattingListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        showNav()
         _binding = null
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
     private fun initView() {
         with(binding) {
             rvChattingList.apply {
@@ -93,16 +95,7 @@ class ChattingListFragment : Fragment() {
             addToBackStack(null)
             commit()
         }
-        hideNav()
+
     }
 
-    private fun showNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToVisible()
-    }
-
-    private fun hideNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToGone()
-    }
 }
