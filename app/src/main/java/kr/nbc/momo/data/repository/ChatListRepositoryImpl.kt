@@ -36,7 +36,7 @@ class ChatListRepositoryImpl @Inject constructor(
                 groupName = "Error"
             )
 
-            val databaseSnapshot = fireStoreDatabase.getReference(i).get().await()
+            val databaseSnapshot = fireStoreDatabase.getReference("Chatting").child(i).get().await()
             val databaseResponse =
                 (databaseSnapshot.getValue(GroupChatResponse::class.java) ?: GroupChatResponse())
             Log.d("asd", "${databaseResponse}")
