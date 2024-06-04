@@ -33,7 +33,7 @@ class MyPageViewModel @Inject constructor(
                     userEntity?.let {
                         _userProfile.value = UiState.Success(it.toModel())
                         userPreferences.saveUserInfo(it) //dataStore
-                    }//
+                    }
                 }
         }
     }
@@ -43,7 +43,7 @@ class MyPageViewModel @Inject constructor(
             _userProfile.value = UiState.Loading
             try {
                 userRepository.saveUserProfile(user.toEntity())
-                userPreferences.saveUserInfo(user.toEntity())
+                userPreferences.saveUserInfo(user.toEntity()) //dataStore
                 _userProfile.value = UiState.Success(user)
             } catch (e: Exception) {
                 _userProfile.value = UiState.Error(e.toString())

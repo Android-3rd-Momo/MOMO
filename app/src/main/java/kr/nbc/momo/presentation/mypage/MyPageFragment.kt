@@ -32,27 +32,27 @@ class MyPageFragment : Fragment() {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //편집 모드
-        binding.ivEditProfile.setOnClickListener {
-            editMode()
-        }
-        setUpChip()
+        eachEventHandler()
 
         viewModel.getUserProfile() //프로필 정보 가져오기
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                //fragment의 수명주기가 해당 상태일 때만 실행되도록
-                viewModel.userProfile.collect{ state ->
-                    when(state){
-                        is UiState.Loading->{
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                //fragment의 수명주기가 해당 상태일 때만 실행되도록 보장
+                viewModel.userProfile.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
                             //todo
                         }
+
                         is UiState.Success -> {
                             val user = state.data
-                            with(binding){
+                            with(binding) {
                                 tvUserName.text = user.userName
                                 tvUserSelfIntroduction.text = user.userSelfIntroduction
                                 tvStackOfDevelopment.text = user.stackOfDevelopment
@@ -62,8 +62,11 @@ class MyPageFragment : Fragment() {
                                 etUserSelfIntroduction.setText(user.userSelfIntroduction)
                                 etStackOfDevelopment.setText(user.stackOfDevelopment)
                                 etPortfolio.setText(user.portfolio)
+                                setChipList(binding.cgTypeTag, user.typeOfDevelopment)
+                                setChipList(binding.cgProgramTag, user.programOfDevelopment)
                             }
                         }
+
                         is UiState.Error -> {
                             Log.d("error", state.message)
                         }
@@ -73,23 +76,24 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun setUpChip(){
+    private fun eachEventHandler() {
+        binding.ivEditProfile.setOnClickListener {
+            editMode()
+        }
         binding.tvAddTagTypeOfDevelopment.setOnClickListener {
             showAddTagDialog(binding.cgTypeTag)
         }
         binding.tvAddTagProgramOfDevelopment.setOnClickListener {
             showAddTagDialog(binding.cgProgramTag)
         }
+        binding.btnCompleteEdit.setOnClickListener {
+            saveProfileInfo()
+            editMode()
+        }
     }
 
     private fun editMode() {
         isEditMode = !isEditMode
-        //편집모드
-        //visible : tvAddTagTypeOfDevelopment, tvAddTagProgramOfDevelopment,
-        // etUserName, etUserSelfIntroduction,tilStackOfDevelopment,tilPortfolio,btnCompleteEdit
-
-        //gone : ivEditProfile, tvUserName, tvUserSelfIntroduction, tvStackOfDevelopment, tvPortfolio
-
         setViewVisibility(
             isEditMode,
             binding.tvAddTagTypeOfDevelopment,
@@ -112,12 +116,6 @@ class MyPageFragment : Fragment() {
 
         setCloseIconVisibility(binding.cgTypeTag, isEditMode)
         setCloseIconVisibility(binding.cgProgramTag, isEditMode)
-
-        //편집완료
-        binding.btnCompleteEdit.setOnClickListener {
-            saveProfileInfo()
-            editMode()
-        }
     }
 
 
@@ -131,10 +129,26 @@ class MyPageFragment : Fragment() {
     private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
         chipGroup.children.forEach { child ->
             (child as? Chip)?.isCloseIconVisible = visible
+            child.isClickable = false
+        }
+    }
+    private fun createChip(text: String, isCloseIcon: Boolean): Chip {
+        return Chip(requireContext()).apply {
+            this.text = text
+            this.isCloseIconVisible = isCloseIcon
+            setOnCloseIconClickListener {
+                (parent as? ChipGroup)?.removeView(this)
+            }
         }
     }
 
-    //Dialog tag용
+    private fun setChipList(chipGroup: ChipGroup, chipList: List<String>) {
+        chipGroup.removeAllViews()
+        chipList.forEach {
+            chipGroup.addView(createChip(it, isEditMode))
+        }
+    }
+
     private fun showAddTagDialog(chipGroup: ChipGroup) {
         val builder = AlertDialog.Builder(requireContext())
         val dialogBinding = DialogAddTagBinding.inflate(layoutInflater)
@@ -154,7 +168,7 @@ class MyPageFragment : Fragment() {
     private fun addChipToGroup(chipGroup: ChipGroup, tagText: String, showCloseIcon: Boolean) {
         val chip = Chip(requireContext())
         chip.text = tagText
-
+        chip.isClickable = false
         chip.isCloseIconVisible = showCloseIcon // x 생성
         chip.setOnCloseIconClickListener {
             chipGroup.removeView(chip) // 선택한 아이템 삭제
@@ -169,11 +183,23 @@ class MyPageFragment : Fragment() {
             userNumber = "",
             userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
             stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-            portfolio = binding.etPortfolio.text.toString()
+            portfolio = binding.etPortfolio.text.toString(),
+            typeOfDevelopment = getChipText(binding.cgTypeTag),
+            programOfDevelopment = getChipText(binding.cgProgramTag)
+
         )
         viewModel.saveUserProfile(userModel)
     }
 
+    //text를 list에 추가
+    private fun getChipText(chipGroup: ChipGroup): List<String> {
+        val textList = mutableListOf<String>()
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as Chip
+            textList.add(chip.text.toString())
+        }
+        return textList
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
