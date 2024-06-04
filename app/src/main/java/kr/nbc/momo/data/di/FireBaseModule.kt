@@ -36,6 +36,6 @@ object FireBaseModule {
 
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage {
-        return Firebase.storage
+        return Firebase.storage("gs://moigae.appspot.com")
     }
 }

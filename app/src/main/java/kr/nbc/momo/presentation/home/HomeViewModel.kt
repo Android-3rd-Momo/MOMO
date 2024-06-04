@@ -19,7 +19,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _getGroupList = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
     val getGroupList: StateFlow<UiState<List<GroupModel>>> get() = _getGroupList
-
     init {
         getGroupList()
     }

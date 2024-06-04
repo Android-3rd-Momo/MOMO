@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -64,31 +65,33 @@ class ReadGroupFragment : Fragment() {
             sharedViewModel.groupName.observe(viewLifecycleOwner) {
                 viewModel.readGroup(it)
             }
+        }
 
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.readGroup.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Error -> {
-                            Log.d("UiState", uiState.message)
+        lifecycleScope.launch {
+            viewModel.readGroup.collect { uiState ->
+                when (uiState) {
+                    is UiState.Error -> {
+                        Log.d("UiState", uiState.message)
+                    }
+
+                    UiState.Loading -> {
+                        // TODO()
+                    }
+
+                    is UiState.Success -> {
+                        with(binding) {
+                            Log.d("uiState", "${uiState.data.downloadUri}")
+                            ivGroupImage.load(uiState.data.downloadUri)
+                            groupName.text = uiState.data.groupName
+                            groupOneLineDescription.text = uiState.data.groupOneLineDescription
+                            groupDescription.text = uiState.data.groupDescription
+                            firstDate.text = uiState.data.firstDate
+                            lastDate.text = uiState.data.lastDate
+                            leaderId.text = uiState.data.leaderId
                         }
-                        UiState.Loading -> {
-                            // TODO()
-                        }
-                        is UiState.Success -> {
-                            with(binding) {
-                                ivGroupImage.load(uiState.data.groupThumbnail)
-                                groupName.text = uiState.data.groupName
-                                groupOneLineDescription.text = uiState.data.groupOneLineDescription
-                                groupDescription.text = uiState.data.groupDescription
-                                firstDate.text = uiState.data.firstDate
-                                lastDate.text = uiState.data.lastDate
-                                leaderId.text = uiState.data.leaderId
-                            }
 
-                            if (uiState.data.userList.contains("userId").not()) {
-                                binding.button.visibility = View.VISIBLE
-                            }
-
+                        if (uiState.data.userList.contains("userId").not()) {
+                            binding.button.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -96,3 +99,4 @@ class ReadGroupFragment : Fragment() {
         }
     }
 }
+

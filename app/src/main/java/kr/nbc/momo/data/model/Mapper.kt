@@ -1,10 +1,12 @@
 package kr.nbc.momo.data.model
 
+import android.net.Uri
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 import kr.nbc.momo.domain.model.UserEntity
+import java.net.URI
 
 fun ChatResponse.toEntity(): ChatEntity {
     return ChatEntity(
@@ -26,11 +28,12 @@ fun GroupChatResponse.toEntity(): GroupChatEntity {
     )
 }
 
-fun GroupEntity.toGroupResponse(): GroupResponse{
+fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
     return GroupResponse(
         groupName,
         groupOneLineDescription,
         groupThumbnail,
+        downloadUri,
         groupDescription,
         firstDate,
         lastDate,
@@ -45,6 +48,7 @@ fun GroupResponse.toEntity(): GroupEntity {
         groupName,
         groupOneLineDescription,
         groupThumbnail,
+        downloadUri,
         groupDescription,
         firstDate,
         lastDate,

@@ -134,6 +134,7 @@ class CreateGroupFragment : Fragment() {
             binding.groupName.text.toString(),
             binding.groupOneLineDescription.text.toString(),
             imageUri.toString(),
+            null,
             binding.groupDescription.text.toString(),
             binding.firstDate.text.toString(),
             binding.lastDate.text.toString(),
