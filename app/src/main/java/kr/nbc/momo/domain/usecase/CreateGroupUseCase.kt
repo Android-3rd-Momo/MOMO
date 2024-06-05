@@ -8,7 +8,7 @@ import javax.inject.Inject
 class CreateGroupUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    fun invoke(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
-        groupRepository.createGroup(groupEntity, callback)
+    fun invoke(groupEntity: GroupEntity) {
+        groupRepository.createGroup(groupEntity)
     }
 }

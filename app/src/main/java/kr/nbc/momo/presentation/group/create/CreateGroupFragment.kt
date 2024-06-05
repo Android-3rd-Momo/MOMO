@@ -144,16 +144,7 @@ class CreateGroupFragment : Fragment() {
             categoryList,
             listOf("")
         )
-
-        viewModel.createGroup(group) { success, exception ->
-            if (success) {
-                Log.d("CreateGroup", "success")
-
-            } else {
-                Log.d("CreateGroupException", exception.toString())
-            }
-        }
-
+        viewModel.createGroup(group)
     }
 
 }

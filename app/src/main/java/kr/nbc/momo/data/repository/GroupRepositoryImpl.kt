@@ -20,40 +20,31 @@ class GroupRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : GroupRepository {
-    override fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
-        val refGroupImage = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+    override fun createGroup(groupEntity: GroupEntity) {
+        val refGroupImage =
+            storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
 
-        if (groupEntity.groupThumbnail != null) {
-            // 썸네일 있을때
-            val uploadTask = refGroupImage.putFile(Uri.parse(groupEntity.groupThumbnail))
-            uploadTask
-                .continueWithTask { task ->
-                    // 이미지 업로드 실패
-                    if (!task.isSuccessful) {
-                        callback(false, task.exception?.let { throw it })
-                    }
-                    refGroupImage.downloadUrl
-                }
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
+        try {
+            if (groupEntity.groupThumbnail != null) {
+                // 썸네일 있을 때
+                val uploadTask = refGroupImage.putFile(Uri.parse(groupEntity.groupThumbnail))
+                uploadTask.continueWithTask { refGroupImage.downloadUrl }
+                    .addOnCompleteListener { task ->
                         val downloadUri = task.result
                         val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
                         fireStore.collection("groups")
                             .document(groupResponse.gorupId)
                             .set(groupResponse)
-                            .addOnSuccessListener { callback(true, null) }
-                            .addOnFailureListener { e -> callback(false, e) }
                     }
-                }
-
-        } else {
-            // 썸네일 없을때
-            val groupResponse = groupEntity.toGroupResponse(null)
-            fireStore.collection("groups")
-                .document(groupResponse.gorupId)
-                .set(groupResponse)
-                .addOnSuccessListener { callback(true, null) }
-                .addOnFailureListener { e -> callback(false, e) }
+            } else {
+                // 썸네일 없을 때
+                val groupResponse = groupEntity.toGroupResponse(null)
+                fireStore.collection("groups")
+                    .document(groupResponse.gorupId)
+                    .set(groupResponse)
+            }
+        } catch (e: Exception) {
+            throw e
         }
     }
 
@@ -66,21 +57,16 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override fun updateGroup(groupEntity: GroupEntity) {
-        val snapshot = fireStore.collection("groups").whereEqualTo("groupName", groupEntity.groupName).get()
+
     }
 
     override fun deleteGroup(groupId: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getGroupList(): Flow<List<GroupEntity>> = flow {
         val snapshot = fireStore.collection("groups").get().await()
         val response = snapshot.toObjects<GroupResponse>()
-
-        emit(
-            response.map {
-                it.toEntity()
-            }
-        )
+        emit(response.map { it.toEntity() })
     }
 }
