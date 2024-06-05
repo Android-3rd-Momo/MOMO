@@ -218,18 +218,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    //    private fun saveProfileInfo() {
-//        val currentUser = viewModel.getCurrentUser()
-//        val updatedUserModel = currentUser.copy(
-//            userName = binding.etUserName.text.toString(),
-//            userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
-//            stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-//            portfolio = binding.etPortfolio.text.toString(),
-//            typeOfDevelopment = getChipText(binding.cgTypeTag),
-//            programOfDevelopment = getChipText(binding.cgProgramTag)
-//        )
-//        viewModel.saveUserProfile(updatedUserModel)
-//    }
     //text를 list에 추가
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()

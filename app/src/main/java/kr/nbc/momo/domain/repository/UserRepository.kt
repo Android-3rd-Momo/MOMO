@@ -1,5 +1,6 @@
 package kr.nbc.momo.domain.repository
 
+import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 import kr.nbc.momo.domain.model.UserEntity
 

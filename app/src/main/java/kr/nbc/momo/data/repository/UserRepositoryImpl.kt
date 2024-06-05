@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val storage: FirebaseStorage,
     private val userPreferences: UserPreferences
 ) : UserRepository {
     override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {

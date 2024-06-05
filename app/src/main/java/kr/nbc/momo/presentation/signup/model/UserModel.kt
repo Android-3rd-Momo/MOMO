@@ -5,7 +5,7 @@ data class UserModel(
     val userName: String = "",
     val userNumber: String = "",
     val userId: String = "",
-
+    val userProfileThumbnailUrl: String = "",
     val userSelfIntroduction: String = "",
     val typeOfDevelopment: List<String> = emptyList(),
     val programOfDevelopment: List<String> = emptyList(),

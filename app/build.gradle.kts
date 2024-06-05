@@ -78,7 +78,6 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.firebase.storage.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
