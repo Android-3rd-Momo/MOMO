@@ -40,7 +40,7 @@ class CreateGroupFragment : Fragment() {
     private val viewModel: CreateGroupViewModel by viewModels()
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private var currentUser : String? = null
+    private lateinit var currentUser : String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -169,9 +169,9 @@ class CreateGroupFragment : Fragment() {
             binding.groupDescription.text.toString(),
             binding.firstDate.text.toString(),
             binding.lastDate.text.toString(),
-            currentUser!!,
+            currentUser,
             categoryList,
-            listOf(currentUser!!)
+            listOf(currentUser)
         )
         viewModel.createGroup(group)
     }
