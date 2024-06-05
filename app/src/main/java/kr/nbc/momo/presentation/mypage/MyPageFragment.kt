@@ -278,9 +278,9 @@ class MyPageFragment : Fragment() {
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = profileImageUri.toString() ?: currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = backgroundImageUri.toString() ?: currentUser.userBackgroundThumbnailUrl,
-                userPortfolioImageUrl = portfolioImageUri.toString() ?: currentUser.userPortfolioImageUrl,
+                userProfileThumbnailUrl = profileImageUri?.toString() ?: currentUser.userProfileThumbnailUrl,
+                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: currentUser.userBackgroundThumbnailUrl,
+                userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl,
             )
             viewModel.saveUserProfile(updatedUserModel)
         }

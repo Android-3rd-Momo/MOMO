@@ -54,25 +54,28 @@ class UserRepositoryImpl @Inject constructor(
             val currentUser = auth.currentUser ?: throw Exception("saveProfile Failed")
 
             val profileImageUrl = if (user.userProfileThumbnailUrl.isNotEmpty()) {
+                val uri = Uri.parse(user.userProfileThumbnailUrl)
                 val refProfileImage = storage.reference.child("userProfile/profile/${user.userId}.jpeg")
-                refProfileImage.putFile(Uri.parse(user.userProfileThumbnailUrl)).await()
+                refProfileImage.putFile(uri).await()
                 refProfileImage.downloadUrl.await().toString()
             } else {
                 user.userProfileThumbnailUrl
             }
 
             val backgroundImageUrl = if (user.userBackgroundThumbnailUrl.isNotEmpty()) {
-                val ref = storage.reference.child("userProfile/background/${user.userId}.jpeg")
-                ref.putFile(Uri.parse(user.userBackgroundThumbnailUrl)).await()
-                ref.downloadUrl.await().toString()
+                val uri = Uri.parse(user.userBackgroundThumbnailUrl)
+                val refBackgroundImage = storage.reference.child("userProfile/background/${user.userId}.jpeg")
+                refBackgroundImage.putFile(uri).await()
+                refBackgroundImage.downloadUrl.await().toString()
             } else {
                 user.userBackgroundThumbnailUrl
             }
 
             val portfolioImageUrl = if (user.userPortfolioImageUrl.isNotEmpty()) {
-                val ref = storage.reference.child("userProfile/portfolio/${user.userId}.jpeg")
-                ref.putFile(Uri.parse(user.userPortfolioImageUrl)).await()
-                ref.downloadUrl.await().toString()
+                val uri = Uri.parse(user.userPortfolioImageUrl)
+                val refPortfolioImage = storage.reference.child("userProfile/portfolio/${user.userId}.jpeg")
+                refPortfolioImage.putFile(uri).await()
+                refPortfolioImage.downloadUrl.await().toString()
             } else {
                 user.userPortfolioImageUrl
             }
@@ -86,7 +89,7 @@ class UserRepositoryImpl @Inject constructor(
 
             val userResponse = updateUser.toUserResponse()
             fireStore.collection("userInfo").document(currentUser.uid).set(userResponse).await()
-//            userPreferences.saveUserInfo(user) //dataStore
+            userPreferences.saveUserInfo(user) //dataStore
         } catch (e: Exception) {
             throw e
         }
