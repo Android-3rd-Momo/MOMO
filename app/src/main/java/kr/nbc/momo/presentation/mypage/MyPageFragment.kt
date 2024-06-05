@@ -39,14 +39,13 @@ class MyPageFragment : Fragment() {
 
     private var isEditMode = false
     private var currentUser: UserModel? = null
-
-    private var profileImageUri: String? = null
-    private var backgroundImageUri: String? = null
-    private var portfolioImageUri: String? = null
+    private var profileImageUri: Uri? = null
+    private var backgroundImageUri: Uri? = null
+    private var portfolioImageUri: Uri? = null
 
     private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
-            profileImageUri = uri.toString()
+            profileImageUri = uri
             binding.ivUserProfileImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -55,7 +54,7 @@ class MyPageFragment : Fragment() {
 
     private val pickBackgroundImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
-            backgroundImageUri = uri.toString()
+            backgroundImageUri = uri
             binding.ivBackProfileThumbnail.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -64,7 +63,7 @@ class MyPageFragment : Fragment() {
 
     private val pickPortfolioImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
-            portfolioImageUri = uri.toString()
+            portfolioImageUri = uri
             binding.ivPortfolioImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -84,6 +83,18 @@ class MyPageFragment : Fragment() {
         observeUserProfile()
 
     }
+
+//    //이미지 추가
+//    private fun setUpPhotoPicker(onImagePicked: (Uri) -> Unit) {
+//        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+//            if (uri != null) {
+//                onImagePicked(uri)
+//            } else {
+//                Log.d("PhotoPicker", "No media selected")
+//            }
+//        }
+//        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+//    }
 
     private fun observeUserProfileUpdate() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -122,9 +133,9 @@ class MyPageFragment : Fragment() {
             setChipList(binding.cgProgramTag, user.programOfDevelopment)
 
             //이미지
-            user.userProfileThumbnailUrl.let { url -> binding.ivUserProfileImage.load(url) }
-            user.userBackgroundThumbnailUrl.let { url -> binding.ivBackProfileThumbnail.load(url) }
-            user.userPortfolioImageUrl.let { url -> binding.ivPortfolioImage.load(url) }
+            ivUserProfileImage.load(user.userProfileThumbnailUrl)
+            ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
+            ivPortfolioImage.load(user.userPortfolioImageUrl)
         }
     }
 
@@ -167,15 +178,15 @@ class MyPageFragment : Fragment() {
             setChangeMode()
         }
         binding.ivEditProfileImage.setOnClickListener {
-            pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
         binding.ivEditBackProfileThumbnail.setOnClickListener {
-            pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
         binding.ivPortfolioImage.setOnClickListener {
-            pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
     }
 
@@ -267,9 +278,9 @@ class MyPageFragment : Fragment() {
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = profileImageUri ?: currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = backgroundImageUri ?: currentUser.userProfileThumbnailUrl,
-                userPortfolioImageUrl = portfolioImageUri ?: currentUser.userProfileThumbnailUrl,
+                userProfileThumbnailUrl = profileImageUri.toString() ?: currentUser.userProfileThumbnailUrl,
+                userBackgroundThumbnailUrl = backgroundImageUri.toString() ?: currentUser.userBackgroundThumbnailUrl,
+                userPortfolioImageUrl = portfolioImageUri.toString() ?: currentUser.userPortfolioImageUrl,
             )
             viewModel.saveUserProfile(updatedUserModel)
         }

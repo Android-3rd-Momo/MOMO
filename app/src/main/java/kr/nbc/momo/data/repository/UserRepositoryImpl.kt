@@ -48,31 +48,36 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    //    override suspend fun saveUserProfile(user: UserEntity,imageUriMap: Map<String, Uri>) { //저장
     override suspend fun saveUserProfile(user: UserEntity) { //저장
         try {
             val currentUser = auth.currentUser ?: throw Exception("saveProfile Failed")
 
-            //todo 코드 정리 필요
-            val profileImageUrl = user.userPortfolioImageUrl.let {
+            val profileImageUrl = if (user.userProfileThumbnailUrl.isNotEmpty()) {
                 val refProfileImage = storage.reference.child("userProfile/profile/${user.userId}.jpeg")
-                refProfileImage.putFile(Uri.parse(it)).await()
+                refProfileImage.putFile(Uri.parse(user.userProfileThumbnailUrl)).await()
                 refProfileImage.downloadUrl.await().toString()
+            } else {
+                user.userProfileThumbnailUrl
             }
 
-            val backgroundImageUrl = user.userBackgroundThumbnailUrl.let {
+            val backgroundImageUrl = if (user.userBackgroundThumbnailUrl.isNotEmpty()) {
                 val ref = storage.reference.child("userProfile/background/${user.userId}.jpeg")
-                ref.putFile(Uri.parse(it)).await()
+                ref.putFile(Uri.parse(user.userBackgroundThumbnailUrl)).await()
                 ref.downloadUrl.await().toString()
+            } else {
+                user.userBackgroundThumbnailUrl
             }
 
-            val portfolioImageUrl = user.userPortfolioImageUrl.let {
+            val portfolioImageUrl = if (user.userPortfolioImageUrl.isNotEmpty()) {
                 val ref = storage.reference.child("userProfile/portfolio/${user.userId}.jpeg")
-                ref.putFile(Uri.parse(it)).await()
+                ref.putFile(Uri.parse(user.userPortfolioImageUrl)).await()
                 ref.downloadUrl.await().toString()
+            } else {
+                user.userPortfolioImageUrl
             }
 
             val updateUser = user.copy(
-//                userProfileThumbnailUrl = profileImageUrl ?: user.userProfileThumbnailUrl, todo 수정
                 userProfileThumbnailUrl = profileImageUrl,
                 userBackgroundThumbnailUrl = backgroundImageUrl,
                 userPortfolioImageUrl = portfolioImageUrl
