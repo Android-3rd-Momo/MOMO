@@ -41,6 +41,7 @@ android {
     viewBinding {
         enable = true
     }
+
 }
 
 dependencies {
@@ -69,9 +70,9 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
 
     //googlelogin
-    implementation (platform("com.google.firebase:firebase-bom:31.5.0"))
     implementation ("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.android.gms:play-services-auth:20.5.0")
+    implementation ("com.google.android.gms:play-services-auth:20.1.0")
 
 
     //navigation
@@ -83,6 +84,9 @@ dependencies {
 
     //circleIndicator
     implementation ("me.relex:circleindicator:2.1.6")
+
+    //data store
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)

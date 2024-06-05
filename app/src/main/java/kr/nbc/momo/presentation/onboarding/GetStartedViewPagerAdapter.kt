@@ -14,22 +14,12 @@ class GetStartedViewPagerAdapter(
     private var desc: List<String>,
     private var image: List<Int>
 ) : RecyclerView.Adapter<GetStartedViewPagerAdapter.Pager2ViewHolder>(){
-    inner class Pager2ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class Pager2ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val itemTitle: TextView = itemView.findViewById(R.id.TextView_title)
         val itemDesc: TextView = itemView.findViewById(R.id.TextView_desc)
         val itemillust: ImageView = itemView.findViewById(R.id.ImageView_illust)
 
-        init {
-            itemillust.setOnClickListener { v: View ->
-                val position = adapterPosition
-                Toast.makeText(
-                    itemView.context,
-                    "You clicked on item = ${position}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     override fun onCreateViewHolder(
