@@ -70,10 +70,7 @@ dependencies {
     implementation("com.firebaseui:firebase-ui-storage:7.2.0")
 
     //googlelogin
-    implementation ("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.android.gms:play-services-auth:20.5.0")
-    implementation ("com.google.android.gms:play-services-auth:20.1.0")
-
 
     //navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
@@ -88,8 +85,6 @@ dependencies {
     //circleIndicator
     implementation ("me.relex:circleindicator:2.1.6")
 
-    //data store
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)

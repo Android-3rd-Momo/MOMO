@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.chattingRoomFragment -> {
-                    val chattingRoomFragment = ChattingRoomFragment()
+                R.id.chattingListFragment -> {
+                    val chattingListFragment = ChattingListFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, chattingRoomFragment)
+                        .replace(R.id.fragment_container, chattingListFragment)
                         .commit()
                     true
                 }
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         binding.navigationView.setOnItemReselectedListener {
             when (it.itemId){
                 R.id.homeFragment -> {}
-                R.id.chattingRoomFragment -> {}
+                R.id.chattingListFragment -> {}
                 R.id.myPageFragment -> {}
             }
         }
