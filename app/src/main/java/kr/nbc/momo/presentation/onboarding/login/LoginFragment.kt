@@ -23,6 +23,7 @@ import kr.nbc.momo.presentation.onboarding.User
 import kr.nbc.momo.presentation.onboarding.UserViewModel
 import kr.nbc.momo.presentation.onboarding.term.TermFragment
 import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.signup.SignUpViewModel
 
 
 @AndroidEntryPoint
@@ -30,6 +31,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val userViewModel: UserViewModel by viewModels()
+
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -50,10 +52,9 @@ class LoginFragment : BottomSheetDialogFragment() {
             login()
         }
 
-        binding.btnGoogleSignUp.setOnClickListener {
-            googleLogin()
-            userViewModel.updateUser { it.copy(isLoggedIn = true) }
-        }
+        //binding.btnGoogleSignUp.setOnClickListener {
+         //   googleLogin()
+        //}
 
         binding.tvWithoutSignin.setOnClickListener {
             val fragmentSignUp = SignUpFragment()
@@ -64,8 +65,6 @@ class LoginFragment : BottomSheetDialogFragment() {
                 .commit()
             dismiss()
         }
-
-        userViewModel.updateUser { it.copy(isFirstLaunch = true) }
 
     }
 
@@ -95,10 +94,8 @@ class LoginFragment : BottomSheetDialogFragment() {
     }
 
 
-    private fun googleLogin() {
-        Log.i("loginFragment", "dkanrjdsk")
-
-        firebaseAuth = FirebaseAuth.getInstance()
+    //private fun googleLogin() {
+        //firebaseAuth = FirebaseAuth.getInstance()
         //파이어베이스 어스 사용인데 null이라서 다시 시도가 뜸
 
         //val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -110,20 +107,20 @@ class LoginFragment : BottomSheetDialogFragment() {
 
         //sign in  intent 호출부분이 없음
 
-        val auth = Firebase.auth
-        val user = auth.currentUser
+        //val auth = Firebase.auth
+        //val user = auth.currentUser
 
-        if (user != null) {
-            val fragmentTerm = TermFragment()
-            fragmentTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-            fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
-            dismiss()
+        //if (user != null) {
+            //val fragmentTerm = TermFragment()
+            //fragmentTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
+            //fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
+            //dismiss()
 
-        } else {
-            Toast.makeText(requireContext(), "다시시도해주세요", Toast.LENGTH_SHORT).show()
-        }
+        //} else {
+           // Toast.makeText(requireContext(), "다시시도해주세요", Toast.LENGTH_SHORT).show()
+        //}
 
-    }
+    //}
 
     override fun onDestroyView() {
         super.onDestroyView()
