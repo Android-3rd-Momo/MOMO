@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigation()
         onBoardingLaunch()
 
-        val intent = Intent(this, GetStartedActivity::class.java)
-        startActivity(intent)
     }
     private fun initFirstFragment() {
         //메인화면은 SearchFragment
