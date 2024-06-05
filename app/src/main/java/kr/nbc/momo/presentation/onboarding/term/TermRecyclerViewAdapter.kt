@@ -1,3 +1,4 @@
+/*
 package kr.nbc.momo.presentation.onboarding.term
 
 import android.view.LayoutInflater
@@ -27,4 +28,4 @@ class TermRecyclerViewAdapter(private val terms: List<Term>) : RecyclerView.Adap
     }
 
     override fun getItemCount() = terms.size
-}
+}*/
