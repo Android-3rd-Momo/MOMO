@@ -85,6 +85,10 @@ dependencies {
     //circleIndicator
     implementation ("me.relex:circleindicator:2.1.6")
 
+    //viewmodel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)

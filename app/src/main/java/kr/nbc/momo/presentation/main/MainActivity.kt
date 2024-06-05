@@ -4,9 +4,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
@@ -16,10 +19,13 @@ import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.signup.SignUpFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
+import kr.nbc.momo.presentation.onboarding.UserViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val userViewModel : UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,6 +39,17 @@ class MainActivity : AppCompatActivity() {
         initFirstFragment()
         setUpBottomNavigation()
         onBoardingLaunch()
+
+        userViewModel.user.observe(this, Observer{user ->
+            val test = userViewModel.test(user)
+            if(test){
+                val intent = Intent(this, GetStartedActivity::class.java)
+                startActivity(intent)
+                userViewModel.updateUser { it.copy(test = false) }
+            } else {
+                setContentView(binding.root)
+            }
+        })
 
     }
     private fun initFirstFragment() {

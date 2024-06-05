@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -39,6 +41,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,18 +74,17 @@ class LoginFragment : BottomSheetDialogFragment() {
     private fun login() {
         firebaseAuth = FirebaseAuth.getInstance()
 
-        val id = binding.etId.text.toString()
+        val email = binding.etId.text.toString()
         val password = binding.etPassWord.text.toString()
 
-        if (id.isNotEmpty() && password.isNotEmpty()) {
-            firebaseAuth.signInWithEmailAndPassword(id, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    userViewModel.user.observe(viewLifecycleOwner, { user ->
-                        if (user.termsAccepted) {
-                            userViewModel.updateUser { it.copy(isLoggedIn = true) }
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    userViewModel.user.observe(viewLifecycleOwner, Observer { user ->
+                        val termAccepted = userViewModel.checkUserTermsAccepted(user)
+                        if (termAccepted) {
                             val intent = Intent(activity, MainActivity::class.java)
                             startActivity(intent)
-
                         } else {
                             val fragmentTerm = TermFragment()
                             fragmentTerm.setStyle(
@@ -90,9 +92,9 @@ class LoginFragment : BottomSheetDialogFragment() {
                                 R.style.AppBottomSheetDialogBorder20WhiteTheme
                             )
                             fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
+                            userViewModel.updateUser { it.copy(isLoggedIn = true) }
                         }
                     })
-
                 } else {
                     Toast.makeText(
                         requireContext(),

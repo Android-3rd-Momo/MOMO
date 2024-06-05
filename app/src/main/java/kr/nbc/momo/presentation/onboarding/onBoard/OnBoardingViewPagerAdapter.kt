@@ -19,7 +19,6 @@ class OnBoardingViewPagerAdapter(
 
     inner class Pager2ViewHolder(private val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-
             binding.ImageViewIllust.setOnClickListener {
                 val position = adapterPosition
                 Toast.makeText(
