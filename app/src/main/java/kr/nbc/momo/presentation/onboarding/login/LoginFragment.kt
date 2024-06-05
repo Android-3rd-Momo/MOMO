@@ -41,7 +41,6 @@ class LoginFragment : BottomSheetDialogFragment() {
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +48,6 @@ class LoginFragment : BottomSheetDialogFragment() {
 
         binding.btnSignUp.setOnClickListener {
             login()
-            userViewModel.updateUser { it.copy(isLoggedIn = true) }
         }
 
         binding.btnGoogleSignUp.setOnClickListener {
@@ -78,23 +76,11 @@ class LoginFragment : BottomSheetDialogFragment() {
         val password = binding.etPassWord.text.toString()
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    userViewModel.user.observe(viewLifecycleOwner, Observer { user ->
-                        val termAccepted = userViewModel.checkUserTermsAccepted(user)
-                        if (termAccepted) {
-                            val intent = Intent(activity, MainActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            val fragmentTerm = TermFragment()
-                            fragmentTerm.setStyle(
-                                STYLE_NORMAL,
-                                R.style.AppBottomSheetDialogBorder20WhiteTheme
-                            )
-                            fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
-                            userViewModel.updateUser { it.copy(isLoggedIn = true) }
-                        }
-                    })
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {task->
+                if (task.isSuccessful) {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
+                    userViewModel.updateUser { it.copy(isLoggedIn = true) }
                 } else {
                     Toast.makeText(
                         requireContext(),

@@ -16,6 +16,10 @@ class UserViewModel : ViewModel() {
         return _user.value?.termsAccepted == user.termsAccepted
     }
 
+    fun setUser(user: User) {
+        _user.value = user
+    }
+
     fun test (user  : User) : Boolean{
         return _user.value?.test == user.test
     }

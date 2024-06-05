@@ -44,59 +44,63 @@ android {
 }
 
 dependencies {
-    //room
+    // Room
     implementation(libs.room.runtime)
-    implementation(libs.converter.gson)
-    implementation(libs.gson)
-    implementation(libs.logging.interceptor)
     ksp(libs.room.compiler)
 
-    //retrofit
+    // Retrofit
     implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
 
-    //hilt
+    // Gson
+    implementation(libs.gson)
+
+    // Hilt
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
-    //coil
+
+    // Coil
     implementation(libs.coil)
 
-    //fireBase
-    implementation("com.google.firebase:firebase-analytics")
+    // Firebase
     implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.firebaseui:firebase-ui-storage:7.2.0")
 
-    //googlelogin
-    implementation ("com.google.android.gms:play-services-auth:20.5.0")
+    // Google Login
+    implementation("com.google.android.gms:play-services-auth:20.5.0")
 
-    //navigation
-    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    //dataStore
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    //viewPager
-    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    // ViewPager
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
-    //circleIndicator
-    implementation ("me.relex:circleindicator:2.1.6")
+    // CircleIndicator
+    implementation("me.relex:circleindicator:2.1.6")
 
-    //viewmodel
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    // ViewModel and LiveData
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
 
-
+    // AndroidX
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -19,6 +19,7 @@ import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.signup.SignUpFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
+import kr.nbc.momo.presentation.onboarding.User
 import kr.nbc.momo.presentation.onboarding.UserViewModel
 
 @AndroidEntryPoint
@@ -39,17 +40,6 @@ class MainActivity : AppCompatActivity() {
         initFirstFragment()
         setUpBottomNavigation()
         onBoardingLaunch()
-
-        userViewModel.user.observe(this, Observer{user ->
-            val test = userViewModel.test(user)
-            if(test){
-                val intent = Intent(this, GetStartedActivity::class.java)
-                startActivity(intent)
-                userViewModel.updateUser { it.copy(test = false) }
-            } else {
-                setContentView(binding.root)
-            }
-        })
 
     }
     private fun initFirstFragment() {
