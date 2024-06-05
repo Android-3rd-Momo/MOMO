@@ -1,5 +1,6 @@
 package kr.nbc.momo.data.repository
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -19,7 +20,7 @@ class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage,
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences //todo 보류
 ) : UserRepository {
     override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {
         return try {
@@ -50,23 +51,51 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun saveUserProfile(user: UserEntity) { //저장
         try {
             val currentUser = auth.currentUser ?: throw Exception("saveProfile Failed")
-            val userResponse = user.toUserResponse()
+
+            //todo 코드 정리 필요
+            val profileImageUrl = user.userPortfolioImageUrl.let {
+                val refProfileImage = storage.reference.child("userProfile/profile/${user.userId}.jpeg")
+                refProfileImage.putFile(Uri.parse(it)).await()
+                refProfileImage.downloadUrl.await().toString()
+            }
+
+            val backgroundImageUrl = user.userBackgroundThumbnailUrl.let {
+                val ref = storage.reference.child("userProfile/background/${user.userId}.jpeg")
+                ref.putFile(Uri.parse(it)).await()
+                ref.downloadUrl.await().toString()
+            }
+
+            val portfolioImageUrl = user.userPortfolioImageUrl.let {
+                val ref = storage.reference.child("userProfile/portfolio/${user.userId}.jpeg")
+                ref.putFile(Uri.parse(it)).await()
+                ref.downloadUrl.await().toString()
+            }
+
+            val updateUser = user.copy(
+//                userProfileThumbnailUrl = profileImageUrl ?: user.userProfileThumbnailUrl, todo 수정
+                userProfileThumbnailUrl = profileImageUrl,
+                userBackgroundThumbnailUrl = backgroundImageUrl,
+                userPortfolioImageUrl = portfolioImageUrl
+            )
+
+
+            val userResponse = updateUser.toUserResponse()
             fireStore.collection("userInfo").document(currentUser.uid).set(userResponse).await()
-            userPreferences.saveUserInfo(user) //dataStore
+//            userPreferences.saveUserInfo(user) //dataStore
         } catch (e: Exception) {
             throw e
         }
     }
 
-    override suspend fun getUserProfile(): UserEntity? { //불러오기
-        return try {
-            val currentUser = auth.currentUser ?: throw Exception("getProfile Failed")
-            val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
-            snapshot.toObject(UserResponse::class.java)?.toEntity()
-        } catch (e: Exception) {
-            throw e
-        }
-    }
+//    override suspend fun getUserProfile(): UserEntity? { //불러오기 //todo 사용하는게 있나?
+//        return try {
+//            val currentUser = auth.currentUser ?: throw Exception("getProfile Failed")
+//            val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
+//            snapshot.toObject(UserResponse::class.java)?.toEntity()
+//        } catch (e: Exception) {
+//            throw e
+//        }
+//    }
 
     override suspend fun isUserIdDuplicate(userId: String): Boolean {
         return try {

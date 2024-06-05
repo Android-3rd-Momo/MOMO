@@ -1,11 +1,15 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.app.AlertDialog
+import android.app.Instrumentation.ActivityResult
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import coil.api.load
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +39,38 @@ class MyPageFragment : Fragment() {
 
     private var isEditMode = false
     private var currentUser: UserModel? = null
+
+    private var profileImageUri: String? = null
+    private var backgroundImageUri: String? = null
+    private var portfolioImageUri: String? = null
+
+    private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            profileImageUri = uri.toString()
+            binding.ivUserProfileImage.load(uri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
+    private val pickBackgroundImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            backgroundImageUri = uri.toString()
+            binding.ivBackProfileThumbnail.load(uri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
+    private val pickPortfolioImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            portfolioImageUri = uri.toString()
+            binding.ivPortfolioImage.load(uri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
@@ -43,7 +80,6 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         eachEventHandler()
-//        sharedViewModel.getCurrentUser()
         observeUserProfileUpdate()
         observeUserProfile()
 
@@ -76,14 +112,19 @@ class MyPageFragment : Fragment() {
             tvUserName.text = user.userName
             tvUserSelfIntroduction.text = user.userSelfIntroduction
             tvStackOfDevelopment.text = user.stackOfDevelopment
-            tvPortfolio.text = user.portfolio
+            tvPortfolio.text = user.userPortfolioText
             //편집모드에 값 적용
             etUserName.setText(user.userName)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
-            etPortfolio.setText(user.portfolio)
+            etPortfolio.setText(user.userPortfolioText)
             setChipList(binding.cgTypeTag, user.typeOfDevelopment)
             setChipList(binding.cgProgramTag, user.programOfDevelopment)
+
+            //이미지
+            user.userProfileThumbnailUrl.let { url -> binding.ivUserProfileImage.load(url) }
+            user.userBackgroundThumbnailUrl.let { url -> binding.ivBackProfileThumbnail.load(url) }
+            user.userPortfolioImageUrl.let { url -> binding.ivPortfolioImage.load(url) }
         }
     }
 
@@ -125,6 +166,17 @@ class MyPageFragment : Fragment() {
             saveProfileInfo()
             setChangeMode()
         }
+        binding.ivEditProfileImage.setOnClickListener {
+            pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        binding.ivEditBackProfileThumbnail.setOnClickListener {
+            pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        binding.ivPortfolioImage.setOnClickListener {
+            pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
     }
 
     private fun setChangeMode() {
@@ -137,7 +189,9 @@ class MyPageFragment : Fragment() {
             binding.etUserSelfIntroduction,
             binding.tilStackOfDevelopment,
             binding.tilPortfolio,
-            binding.btnCompleteEdit
+            binding.btnCompleteEdit,
+            binding.ivEditProfileImage,
+            binding.ivEditBackProfileThumbnail,
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -210,9 +264,12 @@ class MyPageFragment : Fragment() {
                 userName = binding.etUserName.text.toString(),
                 userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
                 stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-                portfolio = binding.etPortfolio.text.toString(),
+                userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
-                programOfDevelopment = getChipText(binding.cgProgramTag)
+                programOfDevelopment = getChipText(binding.cgProgramTag),
+                userProfileThumbnailUrl = profileImageUri ?: currentUser.userProfileThumbnailUrl,
+                userBackgroundThumbnailUrl = backgroundImageUri ?: currentUser.userProfileThumbnailUrl,
+                userPortfolioImageUrl = portfolioImageUri ?: currentUser.userProfileThumbnailUrl,
             )
             viewModel.saveUserProfile(updatedUserModel)
         }

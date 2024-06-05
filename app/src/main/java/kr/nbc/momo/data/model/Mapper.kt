@@ -66,11 +66,13 @@ fun UserResponse.toEntity(): UserEntity {
         userNumber = this.userNumber,
         userId = this.userId,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
-        typeOfDevelopment = this.typeOfDevelopment ?: emptyList(),
-        programOfDevelopment = this.programOfDevelopment ?: emptyList(),
+        typeOfDevelopment = this.typeOfDevelopment,
+        programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userPortfolioText = this.userPortfolioText
     )
 }
 
@@ -81,11 +83,13 @@ fun UserEntity.toUserResponse(): UserResponse {
         userNumber = this.userNumber,
         userId = this.userId,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userPortfolioText = this.userPortfolioText
     )
 }
 

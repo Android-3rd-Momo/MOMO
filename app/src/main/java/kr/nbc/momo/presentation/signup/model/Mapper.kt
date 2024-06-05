@@ -1,6 +1,5 @@
 package kr.nbc.momo.presentation.signup.model
 
-import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.domain.model.UserEntity
 
 fun UserEntity.toModel(): UserModel {
@@ -10,11 +9,13 @@ fun UserEntity.toModel(): UserModel {
         userNumber = this.userNumber,
         userId = this.userId,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userPortfolioText = this.userPortfolioText
     )
 }
 fun UserModel.toEntity(): UserEntity {
@@ -24,10 +25,12 @@ fun UserModel.toEntity(): UserEntity {
         userNumber = this.userNumber,
         userId = this.userId,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
         typeOfDevelopment = this.typeOfDevelopment ,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userPortfolioText = this.userPortfolioText
     )
 }
