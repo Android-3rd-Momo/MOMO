@@ -6,4 +6,17 @@
     </style>
 
     <style name="Theme.MOMO" parent="Base.Theme.MOMO" />
+
+    <!--Login bottom sheet Fragment 스타일 -->
+    <style name="AppBottomSheetDialogBorder20WhiteTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalBorder20WhiteStyle</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppModalBorder20WhiteStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/dialog_login_background</item>
+    </style>
+
 </resources>
