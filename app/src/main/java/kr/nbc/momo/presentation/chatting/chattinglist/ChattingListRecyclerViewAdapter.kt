@@ -22,7 +22,9 @@ class ChattingListRecyclerViewAdapter(
                 tvGroupName.text = chattingListModel.groupName
                 tvLatestChatText.text = chattingListModel.latestChatMessage
             }
-            chattingListModel.apply { onClick(groupId) }
+            itemView.setOnClickListener {
+                onClick(chattingListModel.groupId)
+            }
         }
     }
 

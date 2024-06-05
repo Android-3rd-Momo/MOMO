@@ -6,19 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.dummy.groupIdsDummy
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
-import kr.nbc.momo.util.setVisibleToGone
-import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.presentation.main.SharedViewModel
 
 @AndroidEntryPoint
 class ChattingListFragment : Fragment() {
@@ -30,6 +30,7 @@ class ChattingListFragment : Fragment() {
     }
 
     private val chattingListViewModel: ChattingListViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +51,12 @@ class ChattingListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        showNav()
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun initView() {
@@ -65,7 +69,7 @@ class ChattingListFragment : Fragment() {
     }
 
     private fun initData() {
-        chattingListViewModel.getChattingList(listOf())
+        chattingListViewModel.getChattingList(groupIdsDummy)
 
         viewLifecycleOwner.lifecycleScope.launch {
             chattingListViewModel.chattingList.collectLatest { chattingList ->
@@ -76,6 +80,8 @@ class ChattingListFragment : Fragment() {
 
                     is UiState.Success -> {
                         chattingListAdapter.itemList = chattingList.data
+                        Log.d("Check UiState", chattingList.data[0].latestChatMessage)
+                        chattingListAdapter.notifyDataSetChanged()
                     }
 
                     is UiState.Error -> {
@@ -88,21 +94,13 @@ class ChattingListFragment : Fragment() {
 
     //넘기는 거 미완성(conflict 가능성)
     private fun itemOnClick(groupId: String) {
+        sharedViewModel.setGroupIdToGroupChat(groupId)
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, ChattingRoomFragment())
             addToBackStack(null)
             commit()
         }
-        hideNav()
+
     }
 
-    private fun showNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToVisible()
-    }
-
-    private fun hideNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToGone()
-    }
 }

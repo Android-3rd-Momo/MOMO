@@ -41,7 +41,6 @@ android {
     viewBinding {
         enable = true
     }
-
 }
 
 dependencies {
@@ -68,6 +67,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.firebaseui:firebase-ui-storage:7.2.0")
 
     //googlelogin
     implementation ("com.google.firebase:firebase-auth-ktx")
@@ -78,6 +78,9 @@ dependencies {
     //navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    //dataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     //viewPager
     implementation ("androidx.viewpager2:viewpager2:1.0.0")

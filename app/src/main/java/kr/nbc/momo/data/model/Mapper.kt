@@ -1,11 +1,13 @@
 package kr.nbc.momo.data.model
 
+import android.net.Uri
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.ChattingListEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 import kr.nbc.momo.domain.model.UserEntity
+import java.net.URI
 
 fun ChatResponse.toEntity(): ChatEntity {
     return ChatEntity(
@@ -28,11 +30,12 @@ fun GroupChatResponse.toEntity(): GroupChatEntity {
     )
 }
 
-fun GroupEntity.toGroupResponse(): GroupResponse{
+
+fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
     return GroupResponse(
         groupName,
         groupOneLineDescription,
-        groupThumbnail,
+        downloadUri,
         groupDescription,
         firstDate,
         lastDate,
@@ -61,7 +64,26 @@ fun UserResponse.toEntity(): UserEntity {
         userEmail = this.userEmail,
         userName = this.userName,
         userNumber = this.userNumber,
-        userId = this.userId
+        userId = this.userId,
+        userSelfIntroduction = this.userSelfIntroduction,
+        typeOfDevelopment = this.typeOfDevelopment ?: emptyList(),
+        programOfDevelopment = this.programOfDevelopment ?: emptyList(),
+        stackOfDevelopment = this.stackOfDevelopment,
+        portfolio = this.portfolio
+    )
+}
+
+fun UserEntity.toUserResponse(): UserResponse {
+    return UserResponse(
+        userEmail = this.userEmail,
+        userName = this.userName,
+        userNumber = this.userNumber,
+        userId = this.userId,
+        userSelfIntroduction = this.userSelfIntroduction,
+        typeOfDevelopment = this.typeOfDevelopment,
+        programOfDevelopment = this.programOfDevelopment,
+        stackOfDevelopment = this.stackOfDevelopment,
+        portfolio = this.portfolio
     )
 }
 

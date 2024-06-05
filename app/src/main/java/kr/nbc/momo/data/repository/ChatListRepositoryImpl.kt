@@ -2,7 +2,9 @@ package kr.nbc.momo.data.repository
 
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
+import kr.nbc.momo.data.model.ChatResponse
 import kr.nbc.momo.data.model.ChattingListResponse
 import kr.nbc.momo.data.model.GroupChatResponse
 import kr.nbc.momo.data.model.GroupResponse
@@ -18,14 +20,20 @@ class ChatListRepositoryImpl @Inject constructor(
 ) : ChatListRepository {
     override suspend fun getChattingListByGroupIdList(list: List<String>): List<ChattingListEntity> {
         val newGroupList = mutableListOf<ChattingListResponse>()
+
         for (i in list) {
             val storeSnapshot = fireStore.collection("groups").document(i).get().await()
-            val storeResponse =
-                (storeSnapshot.toObject(GroupResponse::class.java) ?: GroupResponse())
-            val databaseSnapshot = fireStoreDatabase.getReference(i).get().await()
+
+            val storeResponse = storeSnapshot.toObject<GroupResponse>() ?: GroupResponse(
+                groupName = "Error"
+            )
+
+            val databaseSnapshot = fireStoreDatabase.getReference("Chatting").child(i).get().await()
             val databaseResponse =
                 (databaseSnapshot.getValue(GroupChatResponse::class.java) ?: GroupChatResponse())
-            val latestChatting = databaseResponse.chatList.last()
+            val latestChatting = databaseResponse.chatList.lastOrNull() ?: ChatResponse(
+                text = "그룹 채팅을 시작해보세요!"
+            )
 
             val chattingListResponse = ChattingListResponse(
                 groupName = storeResponse.groupName,

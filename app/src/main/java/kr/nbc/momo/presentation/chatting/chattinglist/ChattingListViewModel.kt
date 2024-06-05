@@ -30,5 +30,9 @@ class ChattingListViewModel @Inject constructor(
                 _chattingList.value = UiState.Error(e.toString())
             }
         }
+
+/*
+        _chattingList.value = UiState.Success(chatListDummy)
+*/
     }
 }
