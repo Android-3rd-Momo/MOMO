@@ -16,13 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ReadGroupViewModel  @Inject constructor(
     private val readGroupUseCase: ReadGroupUseCase,
-//    private val getGroupUriUseCase: GetGroupUriUseCase
 ) : ViewModel() {
     private val _readGroup =  MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val readGroup: StateFlow<UiState<GroupModel>> get() = _readGroup
-
-//    private val _getImage =  MutableStateFlow<UiState<Uri>>(UiState.Loading)
-//    val getImage: StateFlow<UiState<Uri>> get() = _getImage
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -37,18 +33,4 @@ class ReadGroupViewModel  @Inject constructor(
                 }
         }
     }
-//
-//    fun getImage(groupName: String) {
-//        viewModelScope.launch {
-//            _getImage.value = UiState.Loading
-//
-//            getGroupUriUseCase.invoke(groupName)
-//                .catch { e ->
-//                    _getImage.value = UiState.Error(e.toString())
-//                }
-//                .collect { data ->
-//                    _getImage.value = UiState.Success(data)
-//                }
-//        }
-//    }
 }

@@ -86,8 +86,8 @@ class HomeFragment : Fragment() {
     private fun onClick(data: List<GroupModel>) {
         homeAdapter.itemClick = object : HomeAdapter.ItemClick{
             override fun itemClick(position: Int) {
-                val groupName = data[position].groupName
-                sharedViewModel.getGroupName(groupName)
+                val groupId = data[position].groupId
+                sharedViewModel.getGroupId(groupId)
                 val readGroupFragment = ReadGroupFragment()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, readGroupFragment)

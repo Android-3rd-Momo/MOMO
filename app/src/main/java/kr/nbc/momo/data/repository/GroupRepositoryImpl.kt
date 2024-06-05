@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
@@ -12,52 +13,60 @@ import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
+import kr.nbc.momo.util.toHashCode
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage
-): GroupRepository {
+) : GroupRepository {
     override fun createGroup(groupEntity: GroupEntity, callback: (Boolean, Exception?) -> Unit) {
-        var downloadUri : Uri? = null
-        val refGroupImage = storage.reference.child("groupImage").child("${groupEntity.groupName}.jpeg")
+        val refGroupImage = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+
         if (groupEntity.groupThumbnail != null) {
+            // 썸네일 있을때
             val uploadTask = refGroupImage.putFile(Uri.parse(groupEntity.groupThumbnail))
-            uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
+            uploadTask
+                .continueWithTask { task ->
+                    // 이미지 업로드 실패
+                    if (!task.isSuccessful) {
+                        callback(false, task.exception?.let { throw it })
+                    }
+                    refGroupImage.downloadUrl
+                }
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result
+                        val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                        fireStore.collection("groups")
+                            .document(groupResponse.gorupId)
+                            .set(groupResponse)
+                            .addOnSuccessListener { callback(true, null) }
+                            .addOnFailureListener { e -> callback(false, e) }
                     }
                 }
-                refGroupImage.downloadUrl
-            }.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    downloadUri = task.result
-                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-                    fireStore.collection("groups").add(groupResponse)
-                        .addOnSuccessListener { callback(true, null) }
-                        .addOnFailureListener { e -> callback(false, e) }
 
-                } else {
-                    // Handle failures
-                }
-            }
         } else {
-            val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-            fireStore.collection("groups").add(groupResponse)
+            // 썸네일 없을때
+            val groupResponse = groupEntity.toGroupResponse(null)
+            fireStore.collection("groups")
+                .document(groupResponse.gorupId)
+                .set(groupResponse)
                 .addOnSuccessListener { callback(true, null) }
                 .addOnFailureListener { e -> callback(false, e) }
         }
     }
 
-    override fun readGroup(groupName: String): Flow<GroupEntity> = flow {
-        val snapshot = fireStore.collection("groups").whereEqualTo("groupName", groupName).get().await()
-        val response = snapshot.toObjects<GroupResponse>()
-        emit(response[0].toEntity())
+    override fun readGroup(groupId: String): Flow<GroupEntity> = flow {
+        val snapshot = fireStore.collection("groups").document(groupId).get().await()
+        val response = snapshot.toObject<GroupResponse>()
+        if (response != null) {
+            emit(response.toEntity())
+        }
     }
 
     override fun updateGroup(groupEntity: GroupEntity) {
-        TODO("Not yet implemented")
+        val snapshot = fireStore.collection("groups").whereEqualTo("groupName", groupEntity.groupName).get()
     }
 
     override fun deleteGroup(groupId: String) {

@@ -15,7 +15,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
@@ -91,7 +90,7 @@ class ReadGroupFragment : Fragment() {
 
     private fun initGroup() {
         lifecycleScope.launch {
-            sharedViewModel.groupName.observe(viewLifecycleOwner) {
+            sharedViewModel.groupId.observe(viewLifecycleOwner) {
                 if (it != null) {
                     viewModel.readGroup(it)
                 }
@@ -127,31 +126,34 @@ class ReadGroupFragment : Fragment() {
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
 
-            if (data.userList.contains(currentUser).not() || currentUser == null) {
-                btnJoinProject.setVisibleToVisible()
-            }
             if (data.categoryList.contains(categoryBack.text)) categoryBack.setVisibleToVisible()
             if (data.categoryList.contains(categoryFront.text)) categoryFront.setVisibleToVisible()
             if (data.categoryList.contains(categoryPull.text)) categoryPull.setVisibleToVisible()
 
-            btnClickListener(currentUser)
+            btnClickListener(currentUser, data)
         }
 
     }
 
-    private fun btnClickListener(currentUser: String?) {
+    private fun btnClickListener(currentUser: String?, data: GroupModel) {
         if (currentUser == null) {
             binding.btnJoinProject.setOnClickListener {
-                showDialog(false)
+                showDialog(false, false)
             }
         } else {
-            binding.btnJoinProject.setOnClickListener {
-                showDialog(true)
+            if (data.userList.contains(currentUser)) {
+                binding.btnJoinProject.setOnClickListener {
+                    showDialog(true, true)
+                }
+            } else {
+                binding.btnJoinProject.setOnClickListener {
+                    showDialog(true, false)
+                }
             }
         }
     }
 
-    private fun showDialog(loginBoolean: Boolean) {
+    private fun showDialog(loginBoolean: Boolean, containUserList: Boolean) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -159,10 +161,15 @@ class ReadGroupFragment : Fragment() {
             .create()
 
         if (loginBoolean) {
-            dialogBinding.btnConfirm.setOnClickListener {
-                dialog.dismiss()
-                // TODO 그룹의 유저리스트의 현재 유저정보 추가
+            if (containUserList) {
+                // TODO 채팅룸 이동
+            } else {
+                dialogBinding.btnConfirm.setOnClickListener {
+                    dialog.dismiss()
+                    // TODO 그룹의 유저리스트의 현재 유저정보 추가
+                }
             }
+
         } else {
             dialogBinding.tvClose.text = "로그인페이지로 이동합니다."
             dialogBinding.btnConfirm.setOnClickListener {

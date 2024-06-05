@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
+import kr.nbc.momo.util.toHashCode
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -129,10 +130,13 @@ class CreateGroupFragment : Fragment() {
             .filter { it.isChecked }
             .map { it.text.toString() }
 
+        val image = if (imageUri != null) imageUri.toString() else null
+
         val group = GroupModel(
+            binding.groupName.text.toString().toHashCode(),
             binding.groupName.text.toString(),
             binding.groupOneLineDescription.text.toString(),
-            imageUri.toString(),
+            image,
             binding.groupDescription.text.toString(),
             binding.firstDate.text.toString(),
             binding.lastDate.text.toString(),
