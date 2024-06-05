@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -138,22 +139,22 @@ class ReadGroupFragment : Fragment() {
     private fun btnClickListener(currentUser: String?, data: GroupModel) {
         if (currentUser == null) {
             binding.btnJoinProject.setOnClickListener {
-                showDialog(false, false)
+                showDialog(false, false, data, currentUser)
             }
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    showDialog(true, true)
+                    showDialog(true, true, data, currentUser)
                 }
             } else {
                 binding.btnJoinProject.setOnClickListener {
-                    showDialog(true, false)
+                    showDialog(true, false, data, currentUser)
                 }
             }
         }
     }
 
-    private fun showDialog(loginBoolean: Boolean, containUserList: Boolean) {
+    private fun showDialog(loginBoolean: Boolean, containUserList: Boolean, data: GroupModel, currentUser: String?) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -166,7 +167,11 @@ class ReadGroupFragment : Fragment() {
             } else {
                 dialogBinding.btnConfirm.setOnClickListener {
                     dialog.dismiss()
-                    // TODO 그룹의 유저리스트의 현재 유저정보 추가
+                    lifecycleScope.launch {
+                        val list = data.userList.toMutableList()
+                        list.add(currentUser!!)
+                        viewModel.addUser(list, data.groupId)
+                    }
                 }
             }
 

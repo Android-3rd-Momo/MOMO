@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.getField
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
@@ -21,14 +22,12 @@ class GroupRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage
 ) : GroupRepository {
     override fun createGroup(groupEntity: GroupEntity) {
-        val refGroupImage =
-            storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-
         try {
+            val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
             if (groupEntity.groupThumbnail != null) {
                 // 썸네일 있을 때
-                val uploadTask = refGroupImage.putFile(Uri.parse(groupEntity.groupThumbnail))
-                uploadTask.continueWithTask { refGroupImage.downloadUrl }
+                val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
+                uploadTask.continueWithTask { ref.downloadUrl }
                     .addOnCompleteListener { task ->
                         val downloadUri = task.result
                         val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
@@ -57,7 +56,25 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override fun updateGroup(groupEntity: GroupEntity) {
+        try {
+            fireStore.collection("groups")
+                .document(groupEntity.groupId)
+                .set(groupEntity)
+        } catch (e: Exception) {
+            throw e
+        }
+    }
 
+    override fun addUser(userList: List<String>, groupId: String) {
+        try {
+            val ref = fireStore.collection("groups").document(groupId)
+            fireStore.runTransaction { transaction ->
+                transaction.update(ref, "userList", userList)
+                null
+            }
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     override fun deleteGroup(groupId: String) {
