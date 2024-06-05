@@ -65,10 +65,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.signUpFragment -> {
-                    val signUpFragment = SignUpFragment()
+                R.id.myPageFragment -> {
+                    val myPageFragment = MyPageFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, signUpFragment)
+                        .replace(R.id.fragment_container, myPageFragment)
                         .commit()
                     true
                 }
@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         binding.navigationView.setOnItemReselectedListener {
             when (it.itemId){
                 R.id.homeFragment -> {}
