@@ -69,12 +69,13 @@ class HomeFragment : Fragment() {
                             // TODO()
                         }
                         is UiState.Success -> {
+                            val filterData = uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                             homeAdapter = HomeAdapter(
-                                uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime()  }
+                                filterData
                             )
                             binding.rvGroupList.adapter = homeAdapter
                             binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
-                            onClick(uiState.data)
+                            onClick(filterData)
                         }
                     }
                 }
@@ -93,7 +94,6 @@ class HomeFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
-
         }
     }
 

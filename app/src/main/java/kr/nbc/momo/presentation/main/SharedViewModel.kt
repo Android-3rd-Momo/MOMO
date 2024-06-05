@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,8 +19,8 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) : ViewModel() {
-    private val _groupName: MutableLiveData<String> = MutableLiveData()
-    val groupName: LiveData<String> get() = _groupName
+    private val _groupName: MutableLiveData<String?> = MutableLiveData()
+    val groupName: MutableLiveData<String?> get() = _groupName
 
     private val _currentUser = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel>> get() = _currentUser

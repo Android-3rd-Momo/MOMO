@@ -1,11 +1,9 @@
 package kr.nbc.momo.presentation.home
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
-import com.google.firebase.storage.StorageReference
 import kr.nbc.momo.databinding.RvHomeItemBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 
@@ -17,9 +15,9 @@ class HomeAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<Hom
 
     class Holder(binding: RvHomeItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivGroupImage
-        val name = binding.name
-        val description = binding.description
-        val category = binding.category
+        val name = binding.tvName
+        val description = binding.tvDescription
+        val category = binding.tvCategory
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -37,9 +35,9 @@ class HomeAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<Hom
         }
 
         holder.image.load(items[position].groupThumbnail)
-        holder.name.text =items[position].groupName
-        holder.description.text =items[position].groupDescription
-        holder.category.text =items[position].categoryList.joinToString()
+        holder.name.text = items[position].groupName
+        holder.description.text = items[position].groupDescription
+        holder.category.text = items[position].categoryList.joinToString()
     }
 
 }
