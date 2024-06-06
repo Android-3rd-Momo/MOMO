@@ -34,5 +34,5 @@ val chatListDummy = listOf(
 )
 
 val groupIdsDummy = listOf(
-    "7FHiu1ijhyA73cVfs4Yf", "RqhWX3WSXmSs35fWkRMQ"
+    "7FHiu1ijhyA73cVfs4Yf", "RqhWX3WSXmSs35fWkRMQ", "Test_Group_Chat_1"
 )

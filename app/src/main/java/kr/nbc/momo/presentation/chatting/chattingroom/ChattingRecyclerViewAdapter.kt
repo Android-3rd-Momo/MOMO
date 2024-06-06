@@ -16,10 +16,10 @@ import kr.nbc.momo.util.setVisibleToVisible
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-class ChattingRecyclerViewAdapter(private val currentUserId: String) :
+class ChattingRecyclerViewAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemList = GroupChatModel()
-
+    var currentUserId = ""
 
     override fun getItemViewType(position: Int): Int {
         return when (itemList.chatList[position].userId == currentUserId) {
