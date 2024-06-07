@@ -69,7 +69,8 @@ fun UserResponse.toEntity(): UserEntity {
         typeOfDevelopment = this.typeOfDevelopment ?: emptyList(),
         programOfDevelopment = this.programOfDevelopment ?: emptyList(),
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        portfolio = this.portfolio,
+        userGroup = this.userGroup
     )
 }
 
@@ -83,7 +84,8 @@ fun UserEntity.toUserResponse(): UserResponse {
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        portfolio = this.portfolio,
+        userGroup = this.userGroup
     )
 }
 

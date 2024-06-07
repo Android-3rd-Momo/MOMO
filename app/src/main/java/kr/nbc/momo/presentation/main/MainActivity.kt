@@ -11,6 +11,7 @@ import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
+import kr.nbc.momo.presentation.signup.SignUpFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -48,7 +49,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.chattingListFragment -> {
-                    val chattingListFragment = ChattingListFragment()
+//                    val chattingListFragment = ChattingListFragment()
+                    val chattingListFragment = SignUpFragment() //todo 임시ㅅ
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, chattingListFragment)
                         .commit()

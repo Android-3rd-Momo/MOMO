@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -26,6 +28,7 @@ class ReadGroupFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private var currentUser: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +41,7 @@ class ReadGroupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bottomNavHide()
-        initGroup()
+        observeUserProfile()
     }
 
     override fun onDestroyView() {
@@ -55,6 +58,31 @@ class ReadGroupFragment : Fragment() {
     private fun bottomNavShow() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
         nav?.visibility = View.VISIBLE
+    }
+
+    private fun observeUserProfile() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentUser.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            // TODO: Show loading state
+                        }
+
+                        is UiState.Success -> {
+                            Log.d("currentUser", state.data.userId)
+                            currentUser = state.data.userId
+                            initGroup()
+                        }
+
+                        is UiState.Error -> {
+                            Log.d("error", state.message)
+                            parentFragmentManager.popBackStack()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initGroup() {
@@ -84,43 +112,25 @@ class ReadGroupFragment : Fragment() {
                             tvFirstDate.text = uiState.data.firstDate
                             tvLastDate.text = uiState.data.lastDate
                             tvLeaderId.text = uiState.data.leaderId
-
                         }
 
                         if (uiState.data.userList.contains("userId").not()) {
                             binding.btnJoinProject.setVisibleToVisible()
                         }
+                        setupJoinGroup(uiState.data.groupName)
                     }
                 }
             }
         }
     }
-//todo groupId 추가 후 진행
 
-/*    private fun setupJoinGroup(){
+    //todo groupId 추가 후 진행
+    private fun setupJoinGroup(groupId: String) {
         binding.btnJoinProject.setOnClickListener {
-            viewModel.readGroup.collect { uiState ->
-                if(uiState is UiState.Success){
-                    viewModel.joinGroup(uiState.data.groupId)
-                }
+            currentUser?.let { userId ->
+                viewModel.joinGroup(userId, groupId)
             }
         }
-        lifecycleScope.launch {
-            viewModel.joinGroupStatus.collect{ status->
-                when (status){
-                    is UiState.Loading -> {
-
-                    }
-                    is UiState.Success ->{
-                        Snackbar.make(binding.root, "프로젝트 참가에 성공했습니다.", Snackbar.LENGTH_SHORT).show()
-                    }
-                    is UiState.Error -> {
-                        Snackbar.make(binding.root, "참가 실패", Snackbar.LENGTH_SHORT).show()
-                    }
-                }
-
-            }
-        }
-    }*/
+    }
 }
 

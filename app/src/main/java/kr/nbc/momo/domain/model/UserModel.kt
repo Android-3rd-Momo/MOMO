@@ -10,6 +10,7 @@ data class UserEntity(
     val typeOfDevelopment: List<String> = emptyList(),
     val programOfDevelopment: List<String> = emptyList(),
     val stackOfDevelopment: String = "",
-    val portfolio: String = "" //todo 포트폴리오
+    val portfolio: String = "",
+    val userGroup: List<String> = emptyList()
 )
 

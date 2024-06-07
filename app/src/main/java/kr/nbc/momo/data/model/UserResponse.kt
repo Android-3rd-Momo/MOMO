@@ -10,6 +10,7 @@ data class UserResponse(
     val typeOfDevelopment: List<String> = emptyList(),
     val programOfDevelopment: List<String> = emptyList(),
     val stackOfDevelopment: String = "",
-    val portfolio: String = "" //todo (이미지,글)
+    val portfolio: String = "", //todo (이미지,글)
+    val userGroup: List<String> = emptyList()
 )
 

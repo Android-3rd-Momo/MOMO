@@ -26,9 +26,6 @@ class ReadGroupViewModel  @Inject constructor(
 //    private val _getImage =  MutableStateFlow<UiState<Uri>>(UiState.Loading)
 //    val getImage: StateFlow<UiState<Uri>> get() = _getImage
 
-    private val _joinGroupStatus = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val joinGroupStatus: StateFlow<UiState<Boolean>> get() = _joinGroupStatus
-
     fun readGroup(groupId: String) {
         viewModelScope.launch {
             _readGroup.value = UiState.Loading
@@ -57,14 +54,12 @@ class ReadGroupViewModel  @Inject constructor(
 //        }
 //    }
 
-    fun joinGroup(groupId: String){
+    fun joinGroup(userId:String,groupId: String){ //todo 미완
         viewModelScope.launch {
-            _joinGroupStatus.value = UiState.Loading
-            try{
-                joinGroupUseCase(groupId)
-                _joinGroupStatus.value = UiState.Success(true)
-            }catch (e:Exception){
-                _joinGroupStatus.value = UiState.Error(e.message ?: "UnKnown error")
+            try {
+                joinGroupUseCase.invoke(userId,groupId)
+            }catch (e: Exception){
+
             }
         }
     }

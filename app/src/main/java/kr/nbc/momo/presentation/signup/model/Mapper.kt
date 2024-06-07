@@ -13,7 +13,8 @@ fun UserEntity.toModel(): UserModel {
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        portfolio = this.portfolio,
+        userGroup = this.userGroup
     )
 }
 fun UserModel.toEntity(): UserEntity {
@@ -26,6 +27,7 @@ fun UserModel.toEntity(): UserEntity {
         typeOfDevelopment = this.typeOfDevelopment ,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        portfolio = this.portfolio,
+        userGroup = this.userGroup
     )
 }

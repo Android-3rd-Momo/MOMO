@@ -6,7 +6,7 @@ import javax.inject.Inject
 class JoinGroupUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(groupId: String) {
-        userRepository.joinGroup(groupId)
+    suspend fun invoke(userId: String, groupId: String) {
+        userRepository.joinGroup(userId, groupId)
     }
 }

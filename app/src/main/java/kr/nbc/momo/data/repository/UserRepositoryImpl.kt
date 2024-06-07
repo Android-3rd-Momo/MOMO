@@ -79,10 +79,19 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun joinGroup(groupId: String) { //UserInfo에 GroupId 추가
-        val currentUser = auth.currentUser ?: throw Exception("Not Login")
-        val snapshot = fireStore.collection("userInfo").document(currentUser.uid)
-        snapshot.update("groupIds",FieldValue.arrayUnion(groupId)).await()
+    override suspend fun joinGroup(userId: String, groupId: String) {
+        try {
+            val currentUser = auth.currentUser ?: throw Exception("User not logged in")
+            val userSnapshot = fireStore.collection("userInfo").document(currentUser.uid)
+            fireStore.runTransaction { transaction ->
+                val snapshot = transaction.get(userSnapshot)
+                val currentGroupIds = snapshot.get("userGroup") as? List<String> ?: emptyList()
+                val updatedGroupIds = currentGroupIds + groupId
+                transaction.update(userSnapshot, "userGroup", updatedGroupIds)
+            }.await()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     override fun getCurrentUser(): Flow<UserEntity?> = callbackFlow {
