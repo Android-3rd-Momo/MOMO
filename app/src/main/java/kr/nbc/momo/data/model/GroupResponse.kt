@@ -1,5 +1,6 @@
 package kr.nbc.momo.data.model
 data class GroupResponse(
+    val gorupId: String = "",
     val groupName: String = "",
     val groupOneLineDescription : String = "",
     val groupThumbnail: String? = "",

@@ -1,14 +1,12 @@
 package kr.nbc.momo.domain.usecase
 
-import kotlinx.coroutines.flow.Flow
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
 import javax.inject.Inject
-
-class CreateGroupUseCase @Inject constructor(
+class UpdateGroupUserListUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    fun invoke(groupEntity: GroupEntity) {
-        groupRepository.createGroup(groupEntity)
+    fun invoke(userList : List<String>, groupId: String) {
+        groupRepository.addUser(userList, groupId)
     }
 }

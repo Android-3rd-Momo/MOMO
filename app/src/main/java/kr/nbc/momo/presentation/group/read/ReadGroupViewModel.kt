@@ -7,8 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kr.nbc.momo.domain.usecase.DeleteGroupUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
+import kr.nbc.momo.domain.usecase.UpdateGroupUseCase
+import kr.nbc.momo.domain.usecase.UpdateGroupUserListUseCase
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.mapper.asGroupEntity
 import kr.nbc.momo.presentation.group.mapper.toGroupModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import javax.inject.Inject
@@ -16,13 +20,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ReadGroupViewModel  @Inject constructor(
     private val readGroupUseCase: ReadGroupUseCase,
-//    private val getGroupUriUseCase: GetGroupUriUseCase
+    private val updateGroupUserListUseCase: UpdateGroupUserListUseCase,
+    private val updateGroupUseCase: UpdateGroupUseCase,
+    private val deleteGroupUseCase: DeleteGroupUseCase
 ) : ViewModel() {
     private val _readGroup =  MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val readGroup: StateFlow<UiState<GroupModel>> get() = _readGroup
-
-//    private val _getImage =  MutableStateFlow<UiState<Uri>>(UiState.Loading)
-//    val getImage: StateFlow<UiState<Uri>> get() = _getImage
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -37,18 +40,17 @@ class ReadGroupViewModel  @Inject constructor(
                 }
         }
     }
-//
-//    fun getImage(groupName: String) {
-//        viewModelScope.launch {
-//            _getImage.value = UiState.Loading
-//
-//            getGroupUriUseCase.invoke(groupName)
-//                .catch { e ->
-//                    _getImage.value = UiState.Error(e.toString())
-//                }
-//                .collect { data ->
-//                    _getImage.value = UiState.Success(data)
-//                }
-//        }
-//    }
+
+    fun addUser(userList : List<String>, groupId: String) {
+        updateGroupUserListUseCase.invoke(userList, groupId)
+    }
+
+    fun updateGroup(groupModel: GroupModel) {
+        updateGroupUseCase.invoke(groupModel.asGroupEntity())
+    }
+
+    fun deleteGroup(groupId: String) {
+        deleteGroupUseCase.invoke(groupId)
+    }
+
 }

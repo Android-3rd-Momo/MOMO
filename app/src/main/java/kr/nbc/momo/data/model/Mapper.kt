@@ -7,6 +7,7 @@ import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 import kr.nbc.momo.domain.model.UserEntity
+import kr.nbc.momo.util.toHashCode
 import java.net.URI
 
 fun ChatResponse.toEntity(): ChatEntity {
@@ -31,8 +32,9 @@ fun GroupChatResponse.toEntity(): GroupChatEntity {
 }
 
 
-fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
+fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
     return GroupResponse(
+        groupId,
         groupName,
         groupOneLineDescription,
         downloadUri,
@@ -47,6 +49,7 @@ fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
 
 fun GroupResponse.toEntity(): GroupEntity {
     return GroupEntity(
+        gorupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,

@@ -3,6 +3,7 @@ package kr.nbc.momo.presentation.group.model
 import android.net.Uri
 
 data class GroupModel(
+    val groupId: String,
     val groupName: String,
     val groupOneLineDescription: String,
     val groupThumbnail: String?,
