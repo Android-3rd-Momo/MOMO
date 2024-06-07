@@ -7,7 +7,7 @@ import kr.nbc.momo.domain.repository.SignInRepository
 import javax.inject.Inject
 
 class SignInRepositoryImpl @Inject constructor(
-    private val auth: FirebaseAuth,
+    private val auth: FirebaseAuth
 ) : SignInRepository {
 
     override suspend fun login(email: String, password: String): SignInEntity {
@@ -19,8 +19,6 @@ class SignInRepositoryImpl @Inject constructor(
                 userPassword = password,
                 userName = currentUser.displayName ?: "",
                 userEmail = currentUser.email ?: "",
-                isFirstLaunch = true, // Set to default or fetch from a data source
-                isLoggedIn = true // Mark user as logged in
             )
         } catch (e: Exception) {
             throw e
