@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +33,7 @@ class ReadGroupFragment : Fragment() {
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser : String? = null
+    private var isEditMode = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -133,25 +134,28 @@ class ReadGroupFragment : Fragment() {
             if (data.categoryList.contains(categoryFront.text)) categoryFront.setVisibleToVisible()
             if (data.categoryList.contains(categoryPull.text)) categoryPull.setVisibleToVisible()
 
+            val adapter = UserListAdapter(data.userList)
+            binding.gvUserList.adapter = adapter
+            binding.gvUserList.layoutManager = GridLayoutManager(requireContext(), 5)
+
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
         }
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
-        // TODO 리더일때 참가자일때 로그인만 되어있을때 로그인도 안되어있을때
         if (currentUser == null) {
             binding.btnJoinProject.setOnClickListener {
-                showDialog(false, false, data, currentUser)
+                showDialog(false, data, currentUser)
             }
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    showDialog(true, true, data, currentUser)
+                    // TODO() 채팅방 이동
                 }
             } else {
                 binding.btnJoinProject.setOnClickListener {
-                    showDialog(true, false, data, currentUser)
+                    showDialog(true, data, currentUser)
                 }
             }
         }
@@ -159,11 +163,17 @@ class ReadGroupFragment : Fragment() {
 
     private fun btnEditClickListener() {
         binding.btnEdit.setOnClickListener {
-
+            setChangeMode()
         }
     }
+    private fun setChangeMode() {
+        // TODO() MyPage EditMode
+        isEditMode = !isEditMode
 
-    private fun showDialog(loginBoolean: Boolean, containUserList: Boolean, data: GroupModel, currentUser: String?) {
+    }
+
+
+    private fun showDialog(loginBoolean: Boolean, data: GroupModel, currentUser: String?) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -171,19 +181,14 @@ class ReadGroupFragment : Fragment() {
             .create()
 
         if (loginBoolean) {
-            if (containUserList) {
-                // TODO 채팅방 이동
-            } else {
-                dialogBinding.btnConfirm.setOnClickListener {
-                    dialog.dismiss()
-                    lifecycleScope.launch {
-                        val list = data.userList.toMutableList()
-                        list.add(currentUser!!)
-                        viewModel.addUser(list, data.groupId)
-                    }
+            dialogBinding.btnConfirm.setOnClickListener {
+                dialog.dismiss()
+                lifecycleScope.launch {
+                    val list = data.userList.toMutableList()
+                    list.add(currentUser!!)
+                    viewModel.addUser(list, data.groupId)
                 }
             }
-
         } else {
             dialogBinding.tvClose.text = "로그인페이지로 이동합니다."
             dialogBinding.btnConfirm.setOnClickListener {

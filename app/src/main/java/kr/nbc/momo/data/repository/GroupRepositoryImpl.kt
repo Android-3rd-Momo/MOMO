@@ -2,7 +2,6 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.getField
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
@@ -14,7 +13,6 @@ import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
-import kr.nbc.momo.util.toHashCode
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
@@ -57,9 +55,25 @@ class GroupRepositoryImpl @Inject constructor(
 
     override fun updateGroup(groupEntity: GroupEntity) {
         try {
-            fireStore.collection("groups")
-                .document(groupEntity.groupId)
-                .set(groupEntity)
+            val storageRef =
+                storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+            val uploadTask = storageRef.putFile(Uri.parse(groupEntity.groupThumbnail))
+            uploadTask.continueWithTask { storageRef.downloadUrl }
+                .addOnCompleteListener { task ->
+                    val downloadUri = task.result
+                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                    val ref = fireStore.collection("groups").document(groupResponse.gorupId)
+                    fireStore.runTransaction { transaction ->
+                        transaction.update(ref, "groupName", groupResponse.groupName)
+                        transaction.update(ref, "groupOneLineDescription", groupResponse.groupOneLineDescription)
+                        transaction.update(ref, "groupDescription", groupResponse.groupDescription)
+                        transaction.update(ref, "firstDate", groupResponse.firstDate)
+                        transaction.update(ref, "lastDate", groupResponse.lastDate)
+                        transaction.update(ref, "categoryList", groupResponse.categoryList)
+                        transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                        null
+                    }
+                }
         } catch (e: Exception) {
             throw e
         }
@@ -78,7 +92,13 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override fun deleteGroup(groupId: String) {
-
+        try {
+            fireStore.collection("groups")
+                .document(groupId)
+                .delete()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     override fun getGroupList(): Flow<List<GroupEntity>> = flow {
