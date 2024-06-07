@@ -9,9 +9,6 @@ fun SignInEntity.toModel() : SignInModel {
         userName = this.userName,
         userPassword = this.userPassword,
         userEmail = this.userEmail,
-
-        isLoggedIn = this.isLoggedIn,
-        isFirstLaunch = this.isFirstLaunch
     )
 }
 
@@ -21,9 +18,6 @@ fun SignInModel.toEntity() : SignInEntity {
         userName = this.userName,
         userPassword = this.userPassword,
         userEmail = this.userEmail,
-
-        isLoggedIn = this.isLoggedIn,
-        isFirstLaunch = this.isFirstLaunch
     )
 }
 
