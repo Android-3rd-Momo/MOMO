@@ -121,7 +121,6 @@ class MyPageFragment : Fragment() {
 
             //이미지
             ivUserProfileImage.load(user.userProfileThumbnailUrl)
-            Log.d("dddddddd","${user.userProfileThumbnailUrl}")
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.load(user.userPortfolioImageUrl)
         }

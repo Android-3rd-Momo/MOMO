@@ -9,7 +9,6 @@ class SaveUserProfileUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(user: UserEntity ){
-//    suspend operator fun invoke(user: UserEntity, imageUriMap: Map<String, Uri> ){
         userRepository.saveUserProfile(user)
     }
 }

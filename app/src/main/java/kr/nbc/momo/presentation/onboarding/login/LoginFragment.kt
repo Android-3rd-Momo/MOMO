@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-//import com.google.android.gms.auth.api.signin.GoogleSignInClient todo 임시로 지움
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -30,7 +30,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
-//    private lateinit var mGoogleSignInClient: GoogleSignInClient todo 임시로 지움
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
