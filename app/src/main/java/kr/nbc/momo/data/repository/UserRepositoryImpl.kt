@@ -32,16 +32,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signInUser(email: String, password: String): UserEntity {
-        return try {
+    override suspend fun signInUser(email: String, password: String) {
+        try {
             auth.signInWithEmailAndPassword(email, password).await()
-            val currentUser = auth.currentUser ?: throw Exception("SignIn Failed")
-            val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
-            val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
-            userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
-            userResponse.toEntity()
         } catch (e: Exception) {
             throw e
+
         }
     }
 

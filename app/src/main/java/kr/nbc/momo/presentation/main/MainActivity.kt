@@ -4,23 +4,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
-import kr.nbc.momo.presentation.signup.SignUpFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
-import kr.nbc.momo.presentation.onboarding.User
-import kr.nbc.momo.presentation.onboarding.UserViewModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

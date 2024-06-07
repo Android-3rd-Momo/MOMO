@@ -2,32 +2,36 @@ package kr.nbc.momo.presentation.onboarding.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.auth.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kr.nbc.momo.data.repository.UserRepositoryImpl
+import kr.nbc.momo.domain.model.UserEntity
+import kr.nbc.momo.domain.repository.UserRepository
 import kr.nbc.momo.domain.usecase.SignInUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.onboarding.login.model.SignInModel
-import kr.nbc.momo.presentation.onboarding.login.model.toModel
+import kr.nbc.momo.presentation.signup.model.UserModel
+import kr.nbc.momo.presentation.signup.model.toEntity
+import kr.nbc.momo.presentation.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
-    private val _authState = MutableStateFlow<UiState<SignInModel>>(UiState.Loading)
-    val authState: StateFlow<UiState<SignInModel>> get() = _authState
+    private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
+    val authState: StateFlow<UiState<UserModel>>get() = _authState
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = UiState.Loading
             try {
-                val signInEntity = signInUseCase(email, password)
-                _authState.value = UiState.Success(signInEntity.toModel())
+                signInUseCase(email, password)
+                _authState.value = UiState.Success(UserModel(email, password))
             } catch (e:Exception) {
-                _authState.value = UiState.Error(e.toString())
-            }
+                _authState.value = UiState.Error(e.toString())            }
         }
     }
 

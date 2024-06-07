@@ -21,7 +21,6 @@ class SignUpViewModel @Inject constructor(
 
     private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val authState: StateFlow<UiState<UserModel>> get() = _authState
-
 //==    fun signIn(email: String, password: String) {
 //        viewModelScope.launch {
 //            _authState.value = UiState.Loading
