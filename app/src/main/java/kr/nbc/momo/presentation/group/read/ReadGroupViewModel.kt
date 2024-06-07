@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kr.nbc.momo.domain.usecase.JoinGroupUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.mapper.toGroupModel
@@ -17,12 +18,16 @@ import javax.inject.Inject
 class ReadGroupViewModel  @Inject constructor(
     private val readGroupUseCase: ReadGroupUseCase,
 //    private val getGroupUriUseCase: GetGroupUriUseCase
+    private val joinGroupUseCase: JoinGroupUseCase
 ) : ViewModel() {
     private val _readGroup =  MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val readGroup: StateFlow<UiState<GroupModel>> get() = _readGroup
 
 //    private val _getImage =  MutableStateFlow<UiState<Uri>>(UiState.Loading)
 //    val getImage: StateFlow<UiState<Uri>> get() = _getImage
+
+    private val _joinGroupStatus = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
+    val joinGroupStatus: StateFlow<UiState<Boolean>> get() = _joinGroupStatus
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -51,4 +56,16 @@ class ReadGroupViewModel  @Inject constructor(
 //                }
 //        }
 //    }
+
+    fun joinGroup(groupId: String){
+        viewModelScope.launch {
+            _joinGroupStatus.value = UiState.Loading
+            try{
+                joinGroupUseCase(groupId)
+                _joinGroupStatus.value = UiState.Success(true)
+            }catch (e:Exception){
+                _joinGroupStatus.value = UiState.Error(e.message ?: "UnKnown error")
+            }
+        }
+    }
 }

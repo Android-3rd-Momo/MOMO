@@ -1,6 +1,7 @@
 package kr.nbc.momo.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -76,6 +77,12 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    override suspend fun joinGroup(groupId: String) { //UserInfo에 GroupId 추가
+        val currentUser = auth.currentUser ?: throw Exception("Not Login")
+        val snapshot = fireStore.collection("userInfo").document(currentUser.uid)
+        snapshot.update("groupIds",FieldValue.arrayUnion(groupId)).await()
     }
 
     override fun getCurrentUser(): Flow<UserEntity?> = callbackFlow {

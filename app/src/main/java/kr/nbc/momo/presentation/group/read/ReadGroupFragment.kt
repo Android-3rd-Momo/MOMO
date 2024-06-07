@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.api.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
@@ -94,5 +95,32 @@ class ReadGroupFragment : Fragment() {
             }
         }
     }
+//todo groupId 추가 후 진행
+
+/*    private fun setupJoinGroup(){
+        binding.btnJoinProject.setOnClickListener {
+            viewModel.readGroup.collect { uiState ->
+                if(uiState is UiState.Success){
+                    viewModel.joinGroup(uiState.data.groupId)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.joinGroupStatus.collect{ status->
+                when (status){
+                    is UiState.Loading -> {
+
+                    }
+                    is UiState.Success ->{
+                        Snackbar.make(binding.root, "프로젝트 참가에 성공했습니다.", Snackbar.LENGTH_SHORT).show()
+                    }
+                    is UiState.Error -> {
+                        Snackbar.make(binding.root, "참가 실패", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+        }
+    }*/
 }
 
