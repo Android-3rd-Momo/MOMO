@@ -1,12 +1,11 @@
 package kr.nbc.momo.domain.usecase
 
-import kotlinx.coroutines.flow.Flow
-import kr.nbc.momo.domain.model.UserEntity
-import kr.nbc.momo.domain.repository.UserRepository
+import kr.nbc.momo.domain.model.SignInEntity
+import kr.nbc.momo.domain.repository.SignInRepository
 import javax.inject.Inject
 
-class SignInUseCase @Inject constructor(private val userRepository: UserRepository) {
-    suspend operator fun invoke(email: String, password: String): UserEntity {
-        return userRepository.signInUser(email, password)
+class SignInUseCase @Inject constructor(private val signInRepository: SignInRepository) {
+    suspend operator fun invoke(email: String, password: String): SignInEntity {
+        return signInRepository.login(email, password)
     }
 }
