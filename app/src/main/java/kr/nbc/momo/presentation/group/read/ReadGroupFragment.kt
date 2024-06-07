@@ -24,6 +24,7 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
@@ -57,12 +58,12 @@ class ReadGroupFragment : Fragment() {
 
     private fun bottomNavHide() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.GONE
+        nav?.setVisibleToGone()
     }
 
     private fun bottomNavShow() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.VISIBLE
+        nav?.setVisibleToVisible()
     }
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
