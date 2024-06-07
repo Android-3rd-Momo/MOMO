@@ -2,7 +2,7 @@ package kr.nbc.momo.util
 
 import android.view.View
 import android.widget.ImageView
-import coil.api.load
+import coil.load
 import kr.nbc.momo.R
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
