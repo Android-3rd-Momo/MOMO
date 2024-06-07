@@ -233,8 +233,8 @@
                 android:background="@drawable/bg_layout_corners"
                 app:layout_constraintTop_toBottomOf="@id/stackOfDevelopment">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_StackOfDevelopment"
+                <EditText
+                    android:id="@+id/etStackOfDevelopment"
                     android:layout_width="match_parent"
                     android:layout_height="95dp"
                     android:layout_marginStart="12dp"
@@ -244,14 +244,7 @@
                     android:visibility="gone"
                     app:counterEnabled="true"
                     app:counterMaxLength="500"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etStackOfDevelopment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_layout_corners" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/tvStackOfDevelopment"
@@ -297,8 +290,8 @@
                 android:background="@drawable/bg_layout_corners"
                 app:layout_constraintTop_toBottomOf="@id/ivPortfolioImage">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_Portfolio"
+                <EditText
+                    android:id="@+id/etPortfolio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="12dp"
@@ -306,16 +299,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="10dp"
                     android:visibility="gone"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="500"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPortfolio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_layout_corners" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/tvPortfolio"

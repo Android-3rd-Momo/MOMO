@@ -1,9 +1,11 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -53,29 +55,23 @@ class UserRepositoryImpl @Inject constructor(
         try {
             val currentUser = auth.currentUser ?: throw Exception("saveProfile Failed")
 
-            val profileImageUrl = if (user.userProfileThumbnailUrl.isNotEmpty()) {
+            val profileImageUrl = if (user.userProfileThumbnailUrl.startsWith("content://")) {
                 val uri = Uri.parse(user.userProfileThumbnailUrl)
-                val refProfileImage = storage.reference.child("userProfile/profile/${user.userId}.jpeg")
-                refProfileImage.putFile(uri).await()
-                refProfileImage.downloadUrl.await().toString()
+                uploadStorage(storage.reference.child("userProfile/profile/${user.userId}.jpeg"), uri)
             } else {
                 user.userProfileThumbnailUrl
             }
 
-            val backgroundImageUrl = if (user.userBackgroundThumbnailUrl.isNotEmpty()) {
+            val backgroundImageUrl = if (user.userBackgroundThumbnailUrl.startsWith("content://")) {
                 val uri = Uri.parse(user.userBackgroundThumbnailUrl)
-                val refBackgroundImage = storage.reference.child("userProfile/background/${user.userId}.jpeg")
-                refBackgroundImage.putFile(uri).await()
-                refBackgroundImage.downloadUrl.await().toString()
+                uploadStorage(storage.reference.child("userProfile/background/${user.userId}.jpeg"), uri)
             } else {
                 user.userBackgroundThumbnailUrl
             }
 
-            val portfolioImageUrl = if (user.userPortfolioImageUrl.isNotEmpty()) {
+            val portfolioImageUrl = if (user.userPortfolioImageUrl.startsWith("content://")) {
                 val uri = Uri.parse(user.userPortfolioImageUrl)
-                val refPortfolioImage = storage.reference.child("userProfile/portfolio/${user.userId}.jpeg")
-                refPortfolioImage.putFile(uri).await()
-                refPortfolioImage.downloadUrl.await().toString()
+                uploadStorage(storage.reference.child("userProfile/portfolio/${user.userId}.jpeg"), uri)
             } else {
                 user.userPortfolioImageUrl
             }
@@ -86,7 +82,6 @@ class UserRepositoryImpl @Inject constructor(
                 userPortfolioImageUrl = portfolioImageUrl
             )
 
-
             val userResponse = updateUser.toUserResponse()
             fireStore.collection("userInfo").document(currentUser.uid).set(userResponse).await()
             userPreferences.saveUserInfo(user) //dataStore
@@ -95,7 +90,25 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-//    override suspend fun getUserProfile(): UserEntity? { //불러오기 //todo 사용하는게 있나?
+    private suspend fun uploadStorage(ref: StorageReference, uri: Uri): String {
+        return try {
+            val uploadTask = ref.putFile(uri)
+            val urlTask = uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref.downloadUrl
+            }.await()
+            urlTask.toString()
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+
+//    override suspend fun getUserProfile(): UserEntity? { //불러오기 //todo 확인하고 지우기
 //        return try {
 //            val currentUser = auth.currentUser ?: throw Exception("getProfile Failed")
 //            val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()

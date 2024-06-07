@@ -47,6 +47,7 @@ class MyPageFragment : Fragment() {
         if (uri != null) {
             profileImageUri = uri
             binding.ivUserProfileImage.load(uri)
+            Log.d("MyPage_ProfileImage", "$uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -56,6 +57,7 @@ class MyPageFragment : Fragment() {
         if (uri != null) {
             backgroundImageUri = uri
             binding.ivBackProfileThumbnail.load(uri)
+            Log.d("MyPage_BackgroundImage", "$uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -65,6 +67,7 @@ class MyPageFragment : Fragment() {
         if (uri != null) {
             portfolioImageUri = uri
             binding.ivPortfolioImage.load(uri)
+            Log.d("MyPage_PortfolioImage", "$uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -78,8 +81,8 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        eachEventHandler()
         observeUserProfileUpdate()
+        eachEventHandler()
         observeUserProfile()
 
     }
@@ -198,8 +201,8 @@ class MyPageFragment : Fragment() {
             binding.tvAddTagProgramOfDevelopment,
             binding.etUserName,
             binding.etUserSelfIntroduction,
-            binding.tilStackOfDevelopment,
-            binding.tilPortfolio,
+            binding.etStackOfDevelopment,
+            binding.etPortfolio,
             binding.btnCompleteEdit,
             binding.ivEditProfileImage,
             binding.ivEditBackProfileThumbnail,
