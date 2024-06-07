@@ -1,7 +1,6 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.app.AlertDialog
-import android.app.Instrumentation.ActivityResult
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -47,7 +46,6 @@ class MyPageFragment : Fragment() {
         if (uri != null) {
             profileImageUri = uri
             binding.ivUserProfileImage.load(uri)
-            Log.d("MyPage_ProfileImage", "$uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -57,7 +55,6 @@ class MyPageFragment : Fragment() {
         if (uri != null) {
             backgroundImageUri = uri
             binding.ivBackProfileThumbnail.load(uri)
-            Log.d("MyPage_BackgroundImage", "$uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -67,7 +64,6 @@ class MyPageFragment : Fragment() {
         if (uri != null) {
             portfolioImageUri = uri
             binding.ivPortfolioImage.load(uri)
-            Log.d("MyPage_PortfolioImage", "$uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -86,18 +82,6 @@ class MyPageFragment : Fragment() {
         observeUserProfile()
 
     }
-
-//    //이미지 추가
-//    private fun setUpPhotoPicker(onImagePicked: (Uri) -> Unit) {
-//        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-//            if (uri != null) {
-//                onImagePicked(uri)
-//            } else {
-//                Log.d("PhotoPicker", "No media selected")
-//            }
-//        }
-//        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-//    }
 
     private fun observeUserProfileUpdate() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -137,6 +121,7 @@ class MyPageFragment : Fragment() {
 
             //이미지
             ivUserProfileImage.load(user.userProfileThumbnailUrl)
+            Log.d("dddddddd","${user.userProfileThumbnailUrl}")
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.load(user.userPortfolioImageUrl)
         }

@@ -1,7 +1,6 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -50,7 +49,6 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    //    override suspend fun saveUserProfile(user: UserEntity,imageUriMap: Map<String, Uri>) { //저장
     override suspend fun saveUserProfile(user: UserEntity) { //저장
         try {
             val currentUser = auth.currentUser ?: throw Exception("saveProfile Failed")
@@ -106,17 +104,6 @@ class UserRepositoryImpl @Inject constructor(
             throw e
         }
     }
-
-
-//    override suspend fun getUserProfile(): UserEntity? { //불러오기 //todo 확인하고 지우기
-//        return try {
-//            val currentUser = auth.currentUser ?: throw Exception("getProfile Failed")
-//            val snapshot = fireStore.collection("userInfo").document(currentUser.uid).get().await()
-//            snapshot.toObject(UserResponse::class.java)?.toEntity()
-//        } catch (e: Exception) {
-//            throw e
-//        }
-//    }
 
     override suspend fun isUserIdDuplicate(userId: String): Boolean {
         return try {
