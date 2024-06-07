@@ -1,14 +1,11 @@
 package kr.nbc.momo.data.model
 
-import android.net.Uri
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.ChattingListEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 import kr.nbc.momo.domain.model.UserEntity
-import kr.nbc.momo.util.toHashCode
-import java.net.URI
 
 fun ChatResponse.toEntity(): ChatEntity {
     return ChatEntity(
@@ -49,7 +46,7 @@ fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
 
 fun GroupResponse.toEntity(): GroupEntity {
     return GroupEntity(
-        gorupId,
+        groupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,
