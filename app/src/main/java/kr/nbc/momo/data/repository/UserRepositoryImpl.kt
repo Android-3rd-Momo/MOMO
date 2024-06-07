@@ -23,12 +23,7 @@ class UserRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val userPreferences: UserPreferences //todo 보류
 ) : UserRepository {
-
-    //todo 중복으로 로그인 된 유저를 호출하는 부분 메서드 생성
-    //auth.currentUser.uid
-
-    //todo signUp, save 부분 줄이기 -> 메서드 생성
-    private suspend fun getCurrentUserUid(): String {
+    private fun getCurrentUserUid(): String {
         return auth.currentUser?.uid ?: throw Exception("User not login")
     }
 
