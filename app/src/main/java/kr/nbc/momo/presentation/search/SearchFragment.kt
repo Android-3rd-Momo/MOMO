@@ -105,7 +105,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchItemOnClick(groupModel: GroupModel) {
-        sharedViewModel.getGroupName(groupModel.groupName)
+        sharedViewModel.getGroupId(groupModel.groupId)
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, ReadGroupFragment())
             addToBackStack(null)

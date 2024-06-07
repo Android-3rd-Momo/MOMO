@@ -19,9 +19,9 @@ class SearchAdapter(
         fun bind(groupModel: GroupModel) {
             with(binding) {
                 ivGroupImage.setThumbnailByUrlOrDefault(groupModel.groupThumbnail)
-                name.text = groupModel.groupName
-                description.text = groupModel.groupDescription
-                category.text = groupModel.categoryList.joinToString()
+                tvName.text = groupModel.groupName
+                tvDescription.text = groupModel.groupDescription
+                tvCategory.text = groupModel.categoryList.joinToString()
             }
             itemView.setOnClickListener {
                 onClick(groupModel)
