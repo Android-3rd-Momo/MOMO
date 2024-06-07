@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.gson)
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.datastore.core.android)
     ksp(libs.room.compiler)
 
     //retrofit
