@@ -127,16 +127,19 @@ class ReadGroupFragment : Fragment() {
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
 
+            if (data.userList.contains(currentUser)) binding.btnJoinProject.text = "채팅방 이동"
+            if (data.leaderId == currentUser) binding.btnEdit.visibility = View.VISIBLE
             if (data.categoryList.contains(categoryBack.text)) categoryBack.setVisibleToVisible()
             if (data.categoryList.contains(categoryFront.text)) categoryFront.setVisibleToVisible()
             if (data.categoryList.contains(categoryPull.text)) categoryPull.setVisibleToVisible()
 
-            btnClickListener(currentUser, data)
+            btnJoinProjectClickListener(currentUser, data)
+            btnEditClickListener()
         }
-
     }
 
-    private fun btnClickListener(currentUser: String?, data: GroupModel) {
+    private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
+        // TODO 리더일때 참가자일때 로그인만 되어있을때 로그인도 안되어있을때
         if (currentUser == null) {
             binding.btnJoinProject.setOnClickListener {
                 showDialog(false, false, data, currentUser)
@@ -154,6 +157,12 @@ class ReadGroupFragment : Fragment() {
         }
     }
 
+    private fun btnEditClickListener() {
+        binding.btnEdit.setOnClickListener {
+
+        }
+    }
+
     private fun showDialog(loginBoolean: Boolean, containUserList: Boolean, data: GroupModel, currentUser: String?) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialog = AlertDialog.Builder(requireContext())
@@ -163,7 +172,7 @@ class ReadGroupFragment : Fragment() {
 
         if (loginBoolean) {
             if (containUserList) {
-                // TODO 채팅룸 이동
+                // TODO 채팅방 이동
             } else {
                 dialogBinding.btnConfirm.setOnClickListener {
                     dialog.dismiss()
