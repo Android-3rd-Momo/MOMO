@@ -77,6 +77,7 @@ class ChattingRoomFragment : Fragment() {
                     is UiState.Success -> {
                         rvAdapter.itemList = chatMessages.data
                         binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
+                        rvAdapter.notifyDataSetChanged()
                     }
 
                     is UiState.Error -> {
@@ -106,14 +107,12 @@ class ChattingRoomFragment : Fragment() {
     }
 
     private fun initData() {
-        groupId = chattingListModel.groupId
-        groupName = chattingListModel.groupName
-        viewModel.getChatMessages(groupId)
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.groupIdToGroupChat.collectLatest {
                 chattingListModel = it ?: ChattingListModel()
                 groupId = chattingListModel.groupId
                 groupName = chattingListModel.groupName
+                viewModel.getChatMessages(groupId)
             }
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
