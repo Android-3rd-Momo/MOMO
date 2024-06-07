@@ -125,7 +125,7 @@ class ChattingRecyclerViewAdapter() :
                     tvTime.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
                 } else {
-                    tvTime.setVisibleToGone()
+                    if (!isUserChanged) tvTime.setVisibleToGone()
                 }
 
                 //날 바뀌면 divider 보여주기

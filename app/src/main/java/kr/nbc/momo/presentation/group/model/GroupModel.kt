@@ -1,7 +1,5 @@
 package kr.nbc.momo.presentation.group.model
 
-import android.net.Uri
-
 data class GroupModel(
     val groupName: String,
     val groupOneLineDescription: String,
