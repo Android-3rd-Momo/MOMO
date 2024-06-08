@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,6 +34,14 @@ class SearchFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val searchViewModel: SearchViewModel by viewModels()
+
+    private val categorySpinnerAdapter by lazy{
+        SearchSpinnerAdapter(requireActivity(), listOf()) // 카테고리 리스트 넣기
+    }
+
+    private val worksSpinnerAdapter by lazy{
+        SearchSpinnerAdapter(requireActivity(), listOf()) // 직무 리스트 넣기
+    }
 
     private var searchCategory: String = ""
     private var searchWorks: String = ""
@@ -83,7 +92,51 @@ class SearchFragment : Fragment() {
                     return true
                 }
             })
+
+            spCategory.apply {
+                adapter = categorySpinnerAdapter
+                onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val item = (parent?.adapter?.getItem(position) as? String) ?: ""
+                        searchCategory = item
+                        searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        searchCategory = ""
+                        searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                    }
+                }
+            }
+            spWorks.apply {
+                adapter = worksSpinnerAdapter
+                onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val item = (parent?.adapter?.getItem(position) as? String) ?: ""
+                            searchWorks = item
+                            searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            searchWorks = ""
+                            searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                        }
+                    }
+            }
         }
+
     }
     private fun initFlow(){
         lifecycleScope.launch {
