@@ -1,12 +1,14 @@
 package kr.nbc.momo.domain.usecase
 
+import android.net.Uri
+import kotlinx.coroutines.flow.Flow
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.repository.GroupRepository
 import javax.inject.Inject
 class UpdateGroupUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    fun invoke(groupEntity: GroupEntity) {
-        groupRepository.updateGroup(groupEntity)
+    suspend fun invoke(groupEntity: GroupEntity, imageUri: Uri?): Flow<GroupEntity> {
+        return groupRepository.updateGroup(groupEntity, imageUri)
     }
 }

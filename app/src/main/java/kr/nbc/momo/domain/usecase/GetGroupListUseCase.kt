@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetGroupListUseCase@Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    fun invoke(): Flow<List<GroupEntity>> {
+    suspend fun invoke(): Flow<List<GroupEntity>> {
         return groupRepository.getGroupList()
     }
 }
