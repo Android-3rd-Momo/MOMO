@@ -10,4 +10,5 @@ interface UserRepository {
     fun getCurrentUser(): Flow<UserEntity?>
     suspend fun saveUserProfile(user: UserEntity)
     suspend fun isUserIdDuplicate(userId: String): Boolean
+    suspend fun isUserNumberDuplicate(userNumber:String):Boolean
 }

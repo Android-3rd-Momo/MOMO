@@ -22,6 +22,7 @@ class UserRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val userPreferences: UserPreferences //todo 보류
 ) : UserRepository {
+
     private val _currentUser = MutableStateFlow<UserEntity?>(null)
     val currentUser: StateFlow<UserEntity?> = _currentUser
 
@@ -110,11 +111,23 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun isUserIdDuplicate(userId: String): Boolean {
         return try {
-            val querySnapshot = fireStore.collection("userInfo")
+            val querySnapshotId = fireStore.collection("userInfo")
                 .whereEqualTo("userId", userId)
                 .get()
                 .await()
-            !querySnapshot.isEmpty
+            !querySnapshotId.isEmpty
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    override suspend fun isUserNumberDuplicate(userNumber: String): Boolean {
+        return try {
+            val querySnapshotNumber = fireStore.collection("userInfo")
+                .whereEqualTo("userNumber", userNumber)
+                .get()
+                .await()
+            !querySnapshotNumber.isEmpty
         } catch (e: Exception) {
             throw e
         }
