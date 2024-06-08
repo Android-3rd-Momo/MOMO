@@ -33,7 +33,7 @@ class ReadGroupFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private var currentUser : String? = null
+    private var currentUser: String? = null
     private var isEditMode = false
 
     override fun onCreateView(
@@ -65,6 +65,7 @@ class ReadGroupFragment : Fragment() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
         nav?.setVisibleToVisible()
     }
+
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -113,20 +114,12 @@ class ReadGroupFragment : Fragment() {
 
                     is UiState.Success -> {
                         initView(uiState.data)
-                        setupJoinGroup(uiState.data.groupId)
                     }
                 }
             }
         }
     }
 
-    private fun setupJoinGroup(groupId: String) {
-        binding.btnJoinProject.setOnClickListener {
-            currentUser?.let { userId ->
-                viewModel.joinGroup(userId, groupId)
-            }
-        }
-    }
     private fun initView(data: GroupModel) {
         with(binding) {
             ivGroupImage.load(data.groupThumbnail)
@@ -175,6 +168,7 @@ class ReadGroupFragment : Fragment() {
             setChangeMode()
         }
     }
+
     private fun setChangeMode() {
         // TODO() MyPage EditMode
         isEditMode = !isEditMode
@@ -196,6 +190,7 @@ class ReadGroupFragment : Fragment() {
                     val list = data.userList.toMutableList()
                     list.add(currentUser!!)
                     viewModel.addUser(list, data.groupId)
+                    viewModel.joinGroup(data.groupId)
                 }
             }
         } else {

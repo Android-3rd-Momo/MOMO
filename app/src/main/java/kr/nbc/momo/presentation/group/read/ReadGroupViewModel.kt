@@ -19,14 +19,14 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ReadGroupViewModel  @Inject constructor(
+class ReadGroupViewModel @Inject constructor(
     private val readGroupUseCase: ReadGroupUseCase,
     private val joinGroupUseCase: JoinGroupUseCase,
     private val updateGroupUserListUseCase: UpdateGroupUserListUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
     private val deleteGroupUseCase: DeleteGroupUseCase
 ) : ViewModel() {
-    private val _readGroup =  MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
+    private val _readGroup = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val readGroup: StateFlow<UiState<GroupModel>> get() = _readGroup
 
     fun readGroup(groupId: String) {
@@ -43,17 +43,17 @@ class ReadGroupViewModel  @Inject constructor(
         }
     }
 
-    fun joinGroup(userId:String,groupId: String){
+    fun joinGroup(groupId: String) {
         viewModelScope.launch {
             try {
-                joinGroupUseCase.invoke(userId,groupId)
-            }catch (e: Exception){
-
+                joinGroupUseCase.invoke(groupId)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }
 
-    fun addUser(userList : List<String>, groupId: String) {
+    fun addUser(userList: List<String>, groupId: String) {
         updateGroupUserListUseCase.invoke(userList, groupId)
     }
 
