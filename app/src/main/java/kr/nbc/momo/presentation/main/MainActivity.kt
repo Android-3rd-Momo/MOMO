@@ -1,5 +1,7 @@
 package kr.nbc.momo.presentation.main
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +11,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
+import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
-import kr.nbc.momo.presentation.mypage.MyPageFragment
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.mypage.MyPageFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -25,8 +29,11 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         initFirstFragment()
         setUpBottomNavigation()
+        onBoardingLaunch()
+
     }
     private fun initFirstFragment() {
         //메인화면은 SearchFragment
@@ -68,12 +75,33 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         binding.navigationView.setOnItemReselectedListener {
             when (it.itemId){
                 R.id.homeFragment -> {}
-                R.id.chattingRoomFragment -> {}
+                R.id.chattingListFragment -> {}
                 R.id.myPageFragment -> {}
             }
         }
+    }
+
+    private fun onBoardingLaunch(){
+        try {
+            val sharedPreferences: SharedPreferences = getSharedPreferences("onBoarding", MODE_PRIVATE)
+            val isFirstLaunch = sharedPreferences.getBoolean("firstLaunch", true)
+
+            if (isFirstLaunch) {
+                val editor = sharedPreferences.edit()
+                editor.putBoolean("firstLaunch", false)
+                editor.apply()
+
+                val intent = Intent(this, GetStartedActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                setContentView(binding.root)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()        }
     }
 }

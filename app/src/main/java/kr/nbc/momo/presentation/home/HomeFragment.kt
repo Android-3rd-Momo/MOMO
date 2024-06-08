@@ -69,12 +69,13 @@ class HomeFragment : Fragment() {
                             // TODO()
                         }
                         is UiState.Success -> {
+                            val filterData = uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                             homeAdapter = HomeAdapter(
-                                uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime()  }
+                                filterData
                             )
                             binding.rvGroupList.adapter = homeAdapter
                             binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
-                            onClick(uiState.data)
+                            onClick(filterData)
                         }
                     }
                 }
@@ -85,15 +86,14 @@ class HomeFragment : Fragment() {
     private fun onClick(data: List<GroupModel>) {
         homeAdapter.itemClick = object : HomeAdapter.ItemClick{
             override fun itemClick(position: Int) {
-                val groupName = data[position].groupName
-                sharedViewModel.getGroupName(groupName)
+                val groupId = data[position].groupId
+                sharedViewModel.getGroupId(groupId)
                 val readGroupFragment = ReadGroupFragment()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, readGroupFragment)
                     .addToBackStack(null)
                     .commit()
             }
-
         }
     }
 
