@@ -175,15 +175,15 @@ class CreateGroupFragment : Fragment() {
         )
         lifecycleScope.launch {
             viewModel.createGroup(group)
-        }
+            sharedViewModel.getGroupId(groupId)
 
-        sharedViewModel.getGroupId(groupId)
-        val readGroupFragment = ReadGroupFragment()
-        parentFragmentManager.popBackStack()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, readGroupFragment)
-            .addToBackStack(null)
-            .commit()
+            parentFragmentManager.popBackStack()
+            val readGroupFragment = ReadGroupFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, readGroupFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun showDialog() {

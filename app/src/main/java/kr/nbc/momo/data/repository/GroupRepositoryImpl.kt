@@ -32,14 +32,14 @@ class GroupRepositoryImpl @Inject constructor(
                     val downloadUri = task.result
                     val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
                     fireStore.collection("groups")
-                        .document(groupResponse.gorupId)
+                        .document(groupResponse.groupId)
                         .set(groupResponse)
                 }
         } else {
             // 썸네일 없을 때
             val groupResponse = groupEntity.toGroupResponse(null)
             fireStore.collection("groups")
-                .document(groupResponse.gorupId)
+                .document(groupResponse.groupId)
                 .set(groupResponse)
         }
 
@@ -56,7 +56,7 @@ class GroupRepositoryImpl @Inject constructor(
     override suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?): Flow<GroupEntity> = callbackFlow {
         if (imageUri == null) {
             val groupResponse = groupEntity.toGroupResponse(groupEntity.groupThumbnail.toString())
-            val ref = fireStore.collection("groups").document(groupResponse.gorupId)
+            val ref = fireStore.collection("groups").document(groupResponse.groupId)
             val listener = fireStore.runTransaction { transaction ->
                 transaction.update(ref, "groupName", groupResponse.groupName)
                 transaction.update(ref, "groupOneLineDescription", groupResponse.groupOneLineDescription)
@@ -75,7 +75,7 @@ class GroupRepositoryImpl @Inject constructor(
                 .addOnCompleteListener { task ->
                     val downloadUri = task.result
                     val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-                    val ref = fireStore.collection("groups").document(groupResponse.gorupId)
+                    val ref = fireStore.collection("groups").document(groupResponse.groupId)
                     fireStore.runTransaction { transaction ->
                         transaction.update(ref, "groupName", groupResponse.groupName)
                         transaction.update(ref, "groupOneLineDescription", groupResponse.groupOneLineDescription)

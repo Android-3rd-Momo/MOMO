@@ -6,10 +6,14 @@ data class UserResponse(
     val userName: String = "",
     val userNumber: String = "",
 
+    val userProfileThumbnailUrl: String = "",
+    val userBackgroundThumbnailUrl: String = "",
+    val userPortfolioImageUrl: String = "",
+
     val userSelfIntroduction: String = "",
     val typeOfDevelopment: List<String> = emptyList(),
     val programOfDevelopment: List<String> = emptyList(),
     val stackOfDevelopment: String = "",
-    val portfolio: String = "" //todo (이미지,글)
+    val userPortfolioText: String = ""
 )
 
