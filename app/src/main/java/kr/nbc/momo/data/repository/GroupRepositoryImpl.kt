@@ -23,26 +23,29 @@ class GroupRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage
 ) : GroupRepository {
     override suspend fun createGroup(groupEntity: GroupEntity) {
-        val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-        if (groupEntity.groupThumbnail != null) {
-            // 썸네일 있을 때
-            val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
-            uploadTask.continueWithTask { ref.downloadUrl }
-                .addOnCompleteListener { task ->
-                    val downloadUri = task.result
-                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-                    fireStore.collection("groups")
-                        .document(groupResponse.groupId)
-                        .set(groupResponse)
-                }
-        } else {
-            // 썸네일 없을 때
-            val groupResponse = groupEntity.toGroupResponse(null)
-            fireStore.collection("groups")
-                .document(groupResponse.groupId)
-                .set(groupResponse)
+        try {
+            val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+            if (groupEntity.groupThumbnail != null) {
+                // 썸네일 있을 때
+                val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
+                uploadTask.continueWithTask { ref.downloadUrl }
+                    .addOnCompleteListener { task ->
+                        val downloadUri = task.result
+                        val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                        fireStore.collection("groups")
+                            .document(groupResponse.groupId)
+                            .set(groupResponse)
+                    }
+            } else {
+                // 썸네일 없을 때
+                val groupResponse = groupEntity.toGroupResponse(null)
+                fireStore.collection("groups")
+                    .document(groupResponse.groupId)
+                    .set(groupResponse)
+            }
+        } catch (e: Exception) {
+            throw e
         }
-
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = flow {
