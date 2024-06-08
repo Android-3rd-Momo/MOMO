@@ -4,10 +4,9 @@ import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.datastore.UserPreferences
 import kr.nbc.momo.data.model.UserResponse
@@ -23,6 +22,28 @@ class UserRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val userPreferences: UserPreferences //todo 보류
 ) : UserRepository {
+    private val _currentUser = MutableStateFlow<UserEntity?>(null)
+    val currentUser: StateFlow<UserEntity?> = _currentUser
+
+    init {
+        setUserListener()
+    }
+
+    private fun setUserListener() {
+        auth.currentUser?.let { it ->
+            fireStore.collection("userInfo").document(it.uid)
+                .addSnapshotListener { snapshot, e -> //실시간 업데이트
+                    if (e != null) {
+                        _currentUser.value = null
+                        return@addSnapshotListener
+                    }
+                    snapshot?.toObject(UserResponse::class.java)?.toEntity()?.let {
+                        _currentUser.value = it
+                    }
+                }
+        }
+    }
+
     private fun getCurrentUserUid(): String {
         return auth.currentUser?.uid ?: throw Exception("User not login")
     }
@@ -32,13 +53,14 @@ class UserRepositoryImpl @Inject constructor(
         val userResponse = user.toUserResponse()
         fireStore.collection("userInfo").document(currentUserUid).set(userResponse).await()
         userPreferences.saveUserInfo(user)
+        _currentUser.value = user
     }
 
     override suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity {
         return try {
             auth.createUserWithEmailAndPassword(email, password).await()
             saveUserInfo(user)
-            user
+            user  //useEntity 반환
         } catch (e: Exception) {
             throw e
         }
@@ -51,6 +73,7 @@ class UserRepositoryImpl @Inject constructor(
             val snapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
             val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
             userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
+            _currentUser.value = userResponse.toEntity()
             userResponse.toEntity()
         } catch (e: Exception) {
             throw e
@@ -60,8 +83,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun saveUserProfile(user: UserEntity) { //저장
         try {
             val updateUser = user.copy(
-                userProfileThumbnailUrl = uploadImageToStorage(user.userProfileThumbnailUrl,"profile"),
-                userBackgroundThumbnailUrl = uploadImageToStorage(user.userBackgroundThumbnailUrl,"background"),
+                userProfileThumbnailUrl = uploadImageToStorage(user.userProfileThumbnailUrl, "profile"),
+                userBackgroundThumbnailUrl = uploadImageToStorage(user.userBackgroundThumbnailUrl, "background"),
                 userPortfolioImageUrl = uploadImageToStorage(user.userPortfolioImageUrl, "portfolio")
             )
             saveUserInfo(updateUser)
@@ -80,39 +103,24 @@ class UserRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 throw e
             }
-        } else{
+        } else {
             imageUrl
         }
     }
 
-        override suspend fun isUserIdDuplicate(userId: String): Boolean {
-            return try {
-                val querySnapshot = fireStore.collection("userInfo")
-                    .whereEqualTo("userId", userId)
-                    .get()
-                    .await()
-                !querySnapshot.isEmpty
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-
-        override fun getCurrentUser(): Flow<UserEntity?> = callbackFlow {
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
-                val listenerRegistration = fireStore.collection("userInfo").document(currentUser.uid)
-                    .addSnapshotListener { snapshot, e -> //실시간 업데이트
-                        if (e != null) {
-                            close(e)
-                            return@addSnapshotListener
-                        }
-                        val userEntity = snapshot?.toObject(UserResponse::class.java)?.toEntity()
-                        trySend(userEntity).isSuccess
-                    }
-                awaitClose { listenerRegistration.remove() }
-            } else {
-                trySend(null).isSuccess
-                close()
-            }
+    override suspend fun isUserIdDuplicate(userId: String): Boolean {
+        return try {
+            val querySnapshot = fireStore.collection("userInfo")
+                .whereEqualTo("userId", userId)
+                .get()
+                .await()
+            !querySnapshot.isEmpty
+        } catch (e: Exception) {
+            throw e
         }
     }
+
+    override fun getCurrentUser(): Flow<UserEntity?> {
+        return currentUser
+    }
+}

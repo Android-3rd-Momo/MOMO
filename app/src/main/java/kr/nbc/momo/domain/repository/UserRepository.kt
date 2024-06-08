@@ -8,9 +8,6 @@ interface UserRepository {
     suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity
     suspend fun signInUser(email: String, password: String): UserEntity
     fun getCurrentUser(): Flow<UserEntity?>
-//    suspend fun saveUserProfile(user: UserEntity,imageUriMap: Map<String, Uri>)
     suspend fun saveUserProfile(user: UserEntity)
-//    suspend fun getUserProfile(): UserEntity?
     suspend fun isUserIdDuplicate(userId: String): Boolean
-
 }
