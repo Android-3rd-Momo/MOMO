@@ -1,17 +1,15 @@
 package kr.nbc.momo.presentation.onboarding.term
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentTermBinding
-import kr.nbc.momo.presentation.main.MainActivity
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentProgramFragment
 
 @AndroidEntryPoint
 class TermFragment : BottomSheetDialogFragment() {
@@ -50,8 +48,9 @@ class TermFragment : BottomSheetDialogFragment() {
     private fun termAceppt() {
         binding.btnAccept.setOnClickListener {
             if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked) {
-                val intent = Intent(activity, MainActivity::class.java)
-                startActivity(intent)
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, DevelopmentProgramFragment())
+                    .commit()
                 dismiss()
             } else {
                 Toast.makeText(requireContext(), "사용약관에 동의해주세요", Toast.LENGTH_SHORT).show()

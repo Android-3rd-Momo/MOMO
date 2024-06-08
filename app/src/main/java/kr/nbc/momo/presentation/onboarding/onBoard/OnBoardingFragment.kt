@@ -10,7 +10,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentOnBoardingBinding
+import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.main.MainActivity
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentProgramFragment
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentTypeFragment
 import kr.nbc.momo.presentation.onboarding.login.SignInFragment
 
 class OnBoardingFragment : Fragment() {
@@ -39,6 +43,12 @@ class OnBoardingFragment : Fragment() {
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
             activity?.finish()
+        }
+
+        binding.buttonGoogleLogin.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, DevelopmentTypeFragment())
+                .commit()
         }
 
         postToList()
