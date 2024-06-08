@@ -35,12 +35,16 @@ class SearchFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
+    private val testList: List<String> = listOf(
+        "test1", "test2", "test3"
+    )
+
     private val categorySpinnerAdapter by lazy{
-        SearchSpinnerAdapter(requireActivity(), listOf()) // 카테고리 리스트 넣기
+        SearchSpinnerAdapter(requireActivity(), testList) // 카테고리 리스트 넣기
     }
 
     private val worksSpinnerAdapter by lazy{
-        SearchSpinnerAdapter(requireActivity(), listOf()) // 직무 리스트 넣기
+        SearchSpinnerAdapter(requireActivity(), testList) // 직무 리스트 넣기
     }
 
     private var searchCategory: String = ""
@@ -106,11 +110,13 @@ class SearchFragment : Fragment() {
                         val item = (parent?.adapter?.getItem(position) as? String) ?: ""
                         searchCategory = item
                         searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                        Log.d("test", "$searchCategory, $searchWorks")
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                         searchCategory = ""
                         searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                        Log.d("test", "$searchCategory, $searchWorks")
                     }
                 }
             }
@@ -127,11 +133,13 @@ class SearchFragment : Fragment() {
                             val item = (parent?.adapter?.getItem(position) as? String) ?: ""
                             searchWorks = item
                             searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                            Log.d("test", "$searchCategory, $searchWorks")
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             searchWorks = ""
                             searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                            Log.d("test", "$searchCategory, $searchWorks")
                         }
                     }
             }
@@ -145,6 +153,7 @@ class SearchFragment : Fragment() {
                     is UiState.Success -> {
                         searchAdapter.itemList = it.data
                         searchAdapter.notifyDataSetChanged()
+                        Log.d("test", it.data.toString())
                     }
                     is UiState.Loading -> {
 
