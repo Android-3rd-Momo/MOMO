@@ -16,10 +16,10 @@ import kr.nbc.momo.util.setVisibleToVisible
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-class ChattingRecyclerViewAdapter(private val currentUserId: String) :
+class ChattingRecyclerViewAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemList = GroupChatModel()
-
+    var currentUserId = ""
 
     override fun getItemViewType(position: Int): Int {
         return when (itemList.chatList[position].userId == currentUserId) {
@@ -125,7 +125,7 @@ class ChattingRecyclerViewAdapter(private val currentUserId: String) :
                     tvTime.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
                 } else {
-                    tvTime.setVisibleToGone()
+                    if (!isUserChanged) tvTime.setVisibleToGone()
                 }
 
                 //날 바뀌면 divider 보여주기
