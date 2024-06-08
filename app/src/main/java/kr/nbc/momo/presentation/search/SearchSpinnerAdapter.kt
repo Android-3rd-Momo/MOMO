@@ -14,7 +14,7 @@ class SearchSpinnerAdapter(
 ): ArrayAdapter<String>(context, 0, items) {
     private var itemList = items
 
-    override fun getItem(position: Int): String? {
+    override fun getItem(position: Int): String {
         return itemList[position]
     }
 
