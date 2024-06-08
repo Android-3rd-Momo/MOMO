@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.group.create.CreateGroupFragment">
+
 
     <View
         android:id="@+id/view"
@@ -19,7 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clSimpleDescriptionContainer"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="25dp"
@@ -50,6 +50,17 @@
             app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
             app:layout_constraintTop_toBottomOf="@+id/tvLeaderId" />
 
+        <EditText
+            android:id="@+id/etGroupName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="groupName"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvLeaderId" />
+
         <TextView
             android:id="@+id/tvGroupOneLineDescription"
             android:layout_width="wrap_content"
@@ -58,6 +69,16 @@
             app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
             app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
             app:layout_constraintTop_toBottomOf="@+id/tvGroupName" />
+
+        <EditText
+            android:id="@+id/etGroupOneLineDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="groupOneLineDescription"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
+            app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
+            app:layout_constraintTop_toBottomOf="@+id/etGroupName" />
 
 
         <TextView
@@ -112,11 +133,20 @@
         app:layout_constraintStart_toStartOf="@+id/tvProject"
         app:layout_constraintTop_toBottomOf="@+id/tvProject" />
 
+    <EditText
+        android:id="@+id/etGroupDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="groupDescription"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/tvProject"
+        app:layout_constraintTop_toBottomOf="@+id/tvProject" />
+
     <TextView
         android:id="@+id/tvFirstDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="10dp"
         android:text="firstDate"
         app:layout_constraintStart_toStartOf="@+id/tvSchedule"
         app:layout_constraintTop_toBottomOf="@+id/tvSchedule" />
@@ -138,7 +168,17 @@
         android:text="프로젝트 참여하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnCompleteEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:text="편집 완료"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -166,16 +206,64 @@
         android:layout_height="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_edit"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/icon_edit" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete"
+        android:textColor="#FD3C3C"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipgroup"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstDate">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPull"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="풀스택"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="백엔드"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFront"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="프론트엔드"/>
+
+    </com.google.android.material.chip.ChipGroup>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gvUserList"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="8dp"
         android:columnWidth="50dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
@@ -184,7 +272,6 @@
         android:verticalSpacing="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFirstDate" />
-
+        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

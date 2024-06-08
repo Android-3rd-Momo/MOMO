@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,6 +45,15 @@ class HomeFragment : Fragment() {
         initView()
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("backStackEntryCount", "${parentFragmentManager.backStackEntryCount}")
+        if (parentFragmentManager.backStackEntryCount == 0) {
+            viewModel.getGroupList()
+        }
+        initGroupList()
+    }
+
     private fun initView() {
         binding.floatingBtnCreateGroup.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -59,26 +66,25 @@ class HomeFragment : Fragment() {
 
     private fun initGroupList() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getGroupList.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Error -> {
-                            Log.d("UiState", uiState.message)
-                        }
-                        UiState.Loading -> {
-                            // TODO()
-                        }
-                        is UiState.Success -> {
-                            val filterData = uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
-                            homeAdapter = HomeAdapter(
-                                filterData
-                            )
-                            binding.rvGroupList.adapter = homeAdapter
-                            binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
-                            onClick(filterData)
-                        }
+            viewModel.getGroupList.collect { uiState ->
+                when (uiState) {
+                    is UiState.Error -> {
+                        Log.d("UiState", uiState.message)
+                    }
+
+                    UiState.Loading -> {
+                        // TODO()
+                    }
+
+                    is UiState.Success -> {
+                        val filterData = uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                        homeAdapter = HomeAdapter(filterData)
+                        binding.rvGroupList.adapter = homeAdapter
+                        binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
+                        onClick(filterData)
                     }
                 }
+
             }
         }
     }
@@ -104,7 +110,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        _binding = null
         super.onDestroyView()
+        _binding = null
     }
 }
