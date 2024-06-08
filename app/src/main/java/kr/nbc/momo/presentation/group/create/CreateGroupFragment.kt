@@ -118,8 +118,8 @@ class CreateGroupFragment : Fragment() {
         }
 
         binding.tvCategory.setOnClickListener {
-            if (binding.clCheckBoxContainer.visibility == View.GONE) binding.clCheckBoxContainer.visibility = View.VISIBLE
-            else binding.clCheckBoxContainer.visibility = View.GONE
+            if (binding.chipgroup.visibility == View.GONE) binding.chipgroup.visibility = View.VISIBLE
+            else binding.chipgroup.visibility = View.GONE
         }
 
         binding.ivGroupImage.setOnClickListener {
@@ -155,7 +155,7 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun createGroup(){
-        val categoryList = listOf(binding.check1, binding.check2, binding.check3)
+        val categoryList = listOf(binding.chipBack, binding.chipFront, binding.chipPull)
             .filter { it.isChecked }
             .map { it.text.toString() }
 
@@ -173,7 +173,17 @@ class CreateGroupFragment : Fragment() {
             categoryList,
             listOf(currentUser)
         )
-        viewModel.createGroup(group)
+        lifecycleScope.launch {
+            viewModel.createGroup(group)
+        }
+
+        sharedViewModel.getGroupId(groupId)
+        val readGroupFragment = ReadGroupFragment()
+        parentFragmentManager.popBackStack()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, readGroupFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun showDialog() {

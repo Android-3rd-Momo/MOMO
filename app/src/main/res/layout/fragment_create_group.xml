@@ -17,8 +17,6 @@
         app:layout_constraintTop_toBottomOf="@+id/view">
     </ImageView>
 
-
-
     <TextView
         android:id="@+id/tvCreateProject"
         android:layout_width="wrap_content"
@@ -77,7 +75,7 @@
         android:layout_marginTop="32dp"
         android:hint="firstDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clCheckBoxContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
 
     <TextView
         android:id="@+id/lastDate"
@@ -109,41 +107,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupDescription" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clCheckBoxContainer"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="28dp"
-        android:visibility="gone"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipgroup"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCategory" >
+        app:layout_constraintTop_toBottomOf="@+id/tvCategory">
 
-        <CheckBox
-            android:id="@+id/check1"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPull"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="백엔드"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="풀스택" />
 
-        <CheckBox
-            android:id="@+id/check2"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipBack"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="프론트엔드"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/check1" />
+            android:text="백엔드" />
 
-        <CheckBox
-            android:id="@+id/check3"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFront"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="풀스택"
-            app:layout_constraintStart_toEndOf="@+id/check1"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="프론트엔드" />
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.chip.ChipGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

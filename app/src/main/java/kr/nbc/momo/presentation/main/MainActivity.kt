@@ -10,12 +10,10 @@ import androidx.core.view.WindowInsetsCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
-import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.home.HomeFragment
+import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.signup.SignUpFragment
-import kr.nbc.momo.presentation.mypage.MyPageFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -35,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         onBoardingLaunch()
 
     }
+
     private fun initFirstFragment() {
         //메인화면은 SearchFragment
         supportFragmentManager.beginTransaction().apply {
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.chattingListFragment -> {
-                    val chattingListFragment = ChattingListFragment()
+                    val chattingListFragment = SignUpFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, chattingListFragment)
                         .commit()
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.navigationView.setOnItemReselectedListener {
-            when (it.itemId){
+            when (it.itemId) {
                 R.id.homeFragment -> {}
                 R.id.chattingListFragment -> {}
                 R.id.myPageFragment -> {}
@@ -84,9 +83,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onBoardingLaunch(){
+    private fun onBoardingLaunch() {
         try {
-            val sharedPreferences: SharedPreferences = getSharedPreferences("onBoarding", MODE_PRIVATE)
+            val sharedPreferences: SharedPreferences =
+                getSharedPreferences("onBoarding", MODE_PRIVATE)
             val isFirstLaunch = sharedPreferences.getBoolean("firstLaunch", true)
 
             if (isFirstLaunch) {
@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 setContentView(binding.root)
             }
         } catch (e: Exception) {
-            e.printStackTrace()        }
+            e.printStackTrace()
+        }
     }
 }
