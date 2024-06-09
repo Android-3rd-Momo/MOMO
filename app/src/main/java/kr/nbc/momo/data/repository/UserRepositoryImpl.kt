@@ -78,6 +78,14 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun signOutUser() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun signWithdrawalUser() {
+        TODO("Not yet implemented")
+    }
+
     override fun getCurrentUser(): Flow<UserEntity?> = callbackFlow {
         val currentUser = auth.currentUser
         if (currentUser != null) {

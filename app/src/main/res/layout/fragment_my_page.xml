@@ -21,6 +21,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/ivSetUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/icon_mypage"
+                    android:layout_marginEnd="15dp"/>
+
+                <ImageView
                     android:id="@+id/ivEditProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

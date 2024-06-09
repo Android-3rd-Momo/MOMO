@@ -17,10 +17,13 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.presentation.signup.model.UserModel
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -34,7 +37,7 @@ class MyPageFragment : Fragment() {
 
     private var isEditMode = false
     private var currentUser: UserModel? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,7 +46,6 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         eachEventHandler()
-//        sharedViewModel.getCurrentUser()
         observeUserProfileUpdate()
         observeUserProfile()
 
@@ -124,6 +126,12 @@ class MyPageFragment : Fragment() {
         binding.btnCompleteEdit.setOnClickListener {
             saveProfileInfo()
             setChangeMode()
+        }
+        binding.ivSetUp.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SetUpFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -218,18 +226,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    //    private fun saveProfileInfo() {
-//        val currentUser = viewModel.getCurrentUser()
-//        val updatedUserModel = currentUser.copy(
-//            userName = binding.etUserName.text.toString(),
-//            userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
-//            stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-//            portfolio = binding.etPortfolio.text.toString(),
-//            typeOfDevelopment = getChipText(binding.cgTypeTag),
-//            programOfDevelopment = getChipText(binding.cgProgramTag)
-//        )
-//        viewModel.saveUserProfile(updatedUserModel)
-//    }
     //text를 list에 추가
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()

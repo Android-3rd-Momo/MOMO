@@ -10,5 +10,7 @@ interface UserRepository {
     suspend fun saveUserProfile(user:UserEntity)
     suspend fun getUserProfile(): UserEntity?
     suspend fun isUserIdDuplicate(userId: String): Boolean
+    suspend fun signOutUser()
+    suspend fun signWithdrawalUser()
 
 }
