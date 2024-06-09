@@ -21,7 +21,7 @@ import kr.nbc.momo.presentation.main.MainActivity
 class DevelopmentStackFragment : Fragment() {
     private var _binding: FragmentDevelopmentStackBinding? = null
     private val binding get() = _binding!!
-    private val onBoardingSharedViewModel : OnBoardingSharedViewModel by viewModels()
+    private val onBoardingSharedViewModel: OnBoardingSharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,31 +34,32 @@ class DevelopmentStackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClickListner()
-        getDevelopmentStack()
-
+        setOnClickListener()
+        observeDevelopmentStack()
+        setupTextWatcher()
     }
 
-    private fun setOnClickListner() {
-        binding.btnPrevious.setOnClickListener{
+    private fun setOnClickListener() {
+        binding.btnPrevious.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, DevelopmentProgramFragment())
                 .commit()
         }
-        binding.btnNext.setOnClickListener{
+
+        binding.btnNext.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
-            saveDevelopmentStack()
             onBoardingSharedViewModel.saveUserProfile()
         }
-        binding.tvSkip.setOnClickListener{
+
+        binding.tvSkip.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
             onBoardingSharedViewModel.clearChipData()
         }
     }
 
-    private fun saveDevelopmentStack(){
+    private fun setupTextWatcher() {
         binding.etStack.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -70,10 +71,10 @@ class DevelopmentStackFragment : Fragment() {
         })
     }
 
-    private fun getDevelopmentStack() {
+    private fun observeDevelopmentStack() {
         lifecycleScope.launch {
-            onBoardingSharedViewModel.stackOfDevelopment.collect{ stack ->
-                if(stack.isNotEmpty()){
+            onBoardingSharedViewModel.stackOfDevelopment.collect { stack ->
+                if (stack.isNotEmpty() && binding.etStack.text.toString() != stack) {
                     binding.etStack.setText(stack)
                 }
             }
@@ -84,8 +85,5 @@ class DevelopmentStackFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
-
 

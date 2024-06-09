@@ -36,42 +36,53 @@ class DevelopmentTypeFragment : Fragment() {
         setOnClickListeners()
         observeSelectedChips()
         getSelectedChips()
-        saveSelectedChips()
     }
 
     private fun setOnClickListeners() {
+        // Navigate to the next fragment when the next button is clicked
         binding.btnNext.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, DevelopmentProgramFragment())
+                .addToBackStack(null)
                 .commit()
         }
 
+        // Skip to the main activity when the skip text is clicked
         binding.tvSkip.setOnClickListener {
             startActivity(Intent(requireActivity(), MainActivity::class.java))
         }
+
+        // Save selected chips when any chip is clicked
+        binding.chipGroup.setOnCheckedChangeListener { _, _ -> saveSelectedChips() }
     }
 
     private fun saveSelectedChips() {
         val selectedChipTexts = mutableListOf<String>()
+        val selectedChipIds = mutableListOf<String>()
+
+        // Iterate over each chip and update the selected state in the ViewModel
         for (i in 0 until binding.chipGroup.childCount) {
             val chip = binding.chipGroup.getChildAt(i) as Chip
+            val chipId = "chip_${i + 1}"
+
             if (chip.isChecked) {
-                val chipId = "chip_${i+1}"
-                onBoardingSharedViewModel.addSelectedTypeChipId(chipId)
                 selectedChipTexts.add(chip.text.toString())
-            } else {
-                onBoardingSharedViewModel.removeSelectedTypeChipId("chip_${i+1}")
+                selectedChipIds.add(chipId)
             }
         }
+
+        // Update the ViewModel with selected chips
         onBoardingSharedViewModel.updateTypeOfDevelopment(selectedChipTexts)
+        onBoardingSharedViewModel.updateSelectedTypeChipIds(selectedChipIds)
     }
 
     private fun observeSelectedChips() {
         lifecycleScope.launchWhenStarted {
+            // Observe the selected chip IDs from the ViewModel and update the UI
             onBoardingSharedViewModel.selectedTypeChipIds.collect { selectedChipIds ->
                 for (i in 0 until binding.chipGroup.childCount) {
                     val chip = binding.chipGroup.getChildAt(i) as Chip
-                    val chipId = resources.getResourceEntryName(chip.id)
+                    val chipId = "chip_${i + 1}"
                     chip.isChecked = selectedChipIds.contains(chipId)
                 }
             }
@@ -79,10 +90,13 @@ class DevelopmentTypeFragment : Fragment() {
     }
 
     private fun getSelectedChips() {
+        // Get the selected chip IDs from the ViewModel and update the chip group
         val selectedChipIds = onBoardingSharedViewModel.selectedTypeChipIds.value
         for (chipId in selectedChipIds) {
-            val chip = binding.chipGroup.findViewById<Chip>(resources.getIdentifier(chipId, "id", requireContext().packageName))
-            chip.isChecked = true
+            val chip = binding.chipGroup.findViewById<Chip>(
+                resources.getIdentifier(chipId, "id", requireContext().packageName)
+            )
+            chip?.isChecked = true
         }
     }
 

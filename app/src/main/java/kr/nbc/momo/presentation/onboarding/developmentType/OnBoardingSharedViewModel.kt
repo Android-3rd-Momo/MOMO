@@ -20,6 +20,7 @@ class OnBoardingSharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val saveUserProfileUseCase: SaveUserProfileUseCase
 ) : ViewModel() {
+
     private val _typeOfDevelopment = MutableStateFlow<List<String>>(emptyList())
     val typeOfDevelopment: StateFlow<List<String>> get() = _typeOfDevelopment
 
@@ -38,49 +39,77 @@ class OnBoardingSharedViewModel @Inject constructor(
     private val _selectedTypeChipIds = MutableStateFlow<List<String>>(emptyList())
     val selectedTypeChipIds: StateFlow<List<String>> get() = _selectedTypeChipIds
 
+    private val _selectedProgramChipIds = MutableStateFlow<List<String>>(emptyList())
+    val selectedTypeProgramIds: StateFlow<List<String>> get() = _selectedTypeChipIds
+
+    // Adds a chip ID to the selected list
     fun addSelectedTypeChipId(chipId: String) {
         _selectedTypeChipIds.value = _selectedTypeChipIds.value + chipId
     }
 
+    // Removes a chip ID from the selected list
     fun removeSelectedTypeChipId(chipId: String) {
         _selectedTypeChipIds.value = _selectedTypeChipIds.value - chipId
     }
 
+    fun updateSelectedTypeChipIds(chipIds: List<String>) {
+        _selectedTypeChipIds.value = chipIds
+    }
+
+    fun addSelectedProgramChipId(chipId: String) {
+        _selectedTypeChipIds.value = _selectedTypeChipIds.value + chipId
+    }
+
+    // Removes a chip ID from the selected list
+    fun removeSelectedPregramChipId(chipId: String) {
+        _selectedTypeChipIds.value = _selectedTypeChipIds.value - chipId
+    }
+
+    fun updateSelectedProgramchips(chipIds: List<String>) {
+        _selectedTypeChipIds.value = chipIds
+    }
+
+    // Initializes the ViewModel by fetching the current user
     init {
         getCurrentUser()
     }
 
+    // Fetches the current user using the use case
     private fun getCurrentUser() {
         viewModelScope.launch {
             getCurrentUserUseCase().collect { user ->
-                if (user != null) {
-                    _currentUser.value = UiState.Success(user.toModel())
+                _currentUser.value = if (user != null) {
+                    UiState.Success(user.toModel())
                 } else {
-                    _currentUser.value = UiState.Error("")
+                    UiState.Error("User not found")
                 }
             }
         }
     }
 
-    fun updateTypeOfDevelopment(types:List<String>){
+    // Updates the type of development
+    fun updateTypeOfDevelopment(types: List<String>) {
         _typeOfDevelopment.value = types
     }
 
-    fun updateProgramOfDevelopment(programs: List<String>){
+    // Updates the program of development
+    fun updateProgramOfDevelopment(programs: List<String>) {
         _programOfDevelopment.value = programs
     }
 
+    // Updates the stack of development
     fun updateStackOfDevelopment(stack: String) {
         _stackOfDevelopment.value = stack
     }
 
-    fun saveUserProfile(){
-        viewModelScope.launch{
+    // Saves the user profile with updated details
+    fun saveUserProfile() {
+        viewModelScope.launch {
             _authState.value = UiState.Loading
 
-            try{
+            try {
                 val currentUser = (_currentUser.value as? UiState.Success)?.data
-                if(currentUser != null){
+                if (currentUser != null) {
                     val updatedUser = currentUser.copy(
                         typeOfDevelopment = _typeOfDevelopment.value,
                         programOfDevelopment = _programOfDevelopment.value,
@@ -90,18 +119,20 @@ class OnBoardingSharedViewModel @Inject constructor(
                     _authState.value = UiState.Success(updatedUser)
                     updateUser(updatedUser)
                 } else {
-                    _authState.value = UiState.Error("")
+                    _authState.value = UiState.Error("User not found")
                 }
             } catch (e: Exception) {
-                _authState.value = UiState.Error("")
+                _authState.value = UiState.Error("Failed to save user profile: ${e.message}")
             }
         }
     }
 
+    // Updates the current user state
     fun updateUser(user: UserModel) {
         _currentUser.value = UiState.Success(user)
     }
 
+    // Clears all chip data
     fun clearChipData() {
         _typeOfDevelopment.value = emptyList()
         _programOfDevelopment.value = emptyList()

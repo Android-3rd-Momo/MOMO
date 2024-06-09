@@ -18,9 +18,9 @@ import kr.nbc.momo.databinding.FragmentDevelopmentProgramBinding
 import kr.nbc.momo.presentation.main.MainActivity
 @AndroidEntryPoint
 class DevelopmentProgramFragment : Fragment() {
-    private var _binding : FragmentDevelopmentProgramBinding? = null
+    private var _binding: FragmentDevelopmentProgramBinding? = null
     private val binding get() = _binding!!
-    private val onBoardingSharedViewModel : OnBoardingSharedViewModel by viewModels()
+    private val onBoardingSharedViewModel: OnBoardingSharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,23 +32,21 @@ class DevelopmentProgramFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClickListner()
-        getDevelopmentOfProgramList()
+        setOnClickListeners()
+        saveDevelopmentOfProgramList()
+        observeDevelopmentOfProgramList()
     }
 
-    private fun setOnClickListner() {
-        binding.btnPrevious.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, DevelopmentTypeFragment())
-                .commit()
+    private fun setOnClickListeners() {
+        binding.btnPrevious.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
-        binding.btnNext.setOnClickListener{
+        binding.btnNext.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, DevelopmentStackFragment())
                 .commit()
         }
-
-        binding.tvSkip.setOnClickListener{
+        binding.tvSkip.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
             onBoardingSharedViewModel.clearChipData()
@@ -64,10 +62,10 @@ class DevelopmentProgramFragment : Fragment() {
         }
     }
 
-    private fun getDevelopmentOfProgramList() {
-        lifecycleScope.launch{
+    private fun observeDevelopmentOfProgramList() {
+        lifecycleScope.launch {
             onBoardingSharedViewModel.programOfDevelopment.collect { programs ->
-                if (programs.isNotEmpty()){
+                if (programs.isNotEmpty()) {
                     for (i in 0 until binding.chipGroup.childCount) {
                         val chip = binding.chipGroup.getChildAt(i) as Chip
                         chip.isChecked = programs.contains(chip.text.toString())
@@ -76,7 +74,6 @@ class DevelopmentProgramFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
