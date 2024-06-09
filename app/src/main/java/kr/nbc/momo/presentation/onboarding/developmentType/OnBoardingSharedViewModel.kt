@@ -40,14 +40,12 @@ class OnBoardingSharedViewModel @Inject constructor(
     val selectedTypeChipIds: StateFlow<List<String>> get() = _selectedTypeChipIds
 
     private val _selectedProgramChipIds = MutableStateFlow<List<String>>(emptyList())
-    val selectedTypeProgramIds: StateFlow<List<String>> get() = _selectedTypeChipIds
+    val selectedProgramChipIds: StateFlow<List<String>> get() = _selectedProgramChipIds
 
-    // Adds a chip ID to the selected list
     fun addSelectedTypeChipId(chipId: String) {
         _selectedTypeChipIds.value = _selectedTypeChipIds.value + chipId
     }
 
-    // Removes a chip ID from the selected list
     fun removeSelectedTypeChipId(chipId: String) {
         _selectedTypeChipIds.value = _selectedTypeChipIds.value - chipId
     }
@@ -57,24 +55,21 @@ class OnBoardingSharedViewModel @Inject constructor(
     }
 
     fun addSelectedProgramChipId(chipId: String) {
-        _selectedTypeChipIds.value = _selectedTypeChipIds.value + chipId
+        _selectedProgramChipIds.value = _selectedProgramChipIds.value + chipId
     }
 
-    // Removes a chip ID from the selected list
-    fun removeSelectedPregramChipId(chipId: String) {
-        _selectedTypeChipIds.value = _selectedTypeChipIds.value - chipId
+    fun removeSelectedProgramChipId(chipId: String) {
+        _selectedProgramChipIds.value = _selectedProgramChipIds.value - chipId
     }
 
-    fun updateSelectedProgramchips(chipIds: List<String>) {
-        _selectedTypeChipIds.value = chipIds
+    fun updateSelectedProgramChipIds(chipIds: List<String>) {
+        _selectedProgramChipIds.value = chipIds
     }
 
-    // Initializes the ViewModel by fetching the current user
     init {
         getCurrentUser()
     }
 
-    // Fetches the current user using the use case
     private fun getCurrentUser() {
         viewModelScope.launch {
             getCurrentUserUseCase().collect { user ->
@@ -87,22 +82,18 @@ class OnBoardingSharedViewModel @Inject constructor(
         }
     }
 
-    // Updates the type of development
     fun updateTypeOfDevelopment(types: List<String>) {
         _typeOfDevelopment.value = types
     }
 
-    // Updates the program of development
     fun updateProgramOfDevelopment(programs: List<String>) {
         _programOfDevelopment.value = programs
     }
 
-    // Updates the stack of development
     fun updateStackOfDevelopment(stack: String) {
         _stackOfDevelopment.value = stack
     }
 
-    // Saves the user profile with updated details
     fun saveUserProfile() {
         viewModelScope.launch {
             _authState.value = UiState.Loading
@@ -127,16 +118,15 @@ class OnBoardingSharedViewModel @Inject constructor(
         }
     }
 
-    // Updates the current user state
     fun updateUser(user: UserModel) {
         _currentUser.value = UiState.Success(user)
     }
 
-    // Clears all chip data
     fun clearChipData() {
         _typeOfDevelopment.value = emptyList()
         _programOfDevelopment.value = emptyList()
         _stackOfDevelopment.value = ""
+        _selectedTypeChipIds.value = emptyList()
+        _selectedProgramChipIds.value = emptyList()
     }
-
 }

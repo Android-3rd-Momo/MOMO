@@ -34,24 +34,20 @@ class DevelopmentStackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClickListener()
-        observeDevelopmentStack()
-        setupTextWatcher()
+        setOnClickListeners()
+        getDevelopmentStack()
     }
 
-    private fun setOnClickListener() {
+    private fun setOnClickListeners() {
         binding.btnPrevious.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, DevelopmentProgramFragment())
-                .commit()
+            (activity as DevelopmentActivity).binding.viewPager.currentItem -= 1
         }
-
         binding.btnNext.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
+            saveDevelopmentStack()
             onBoardingSharedViewModel.saveUserProfile()
         }
-
         binding.tvSkip.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
@@ -59,22 +55,15 @@ class DevelopmentStackFragment : Fragment() {
         }
     }
 
-    private fun setupTextWatcher() {
-        binding.etStack.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                onBoardingSharedViewModel.updateStackOfDevelopment(s.toString())
-            }
-        })
+    private fun saveDevelopmentStack() {
+        val stack = binding.etStack.text.toString()
+        onBoardingSharedViewModel.updateStackOfDevelopment(stack)
     }
 
-    private fun observeDevelopmentStack() {
-        lifecycleScope.launch {
+    private fun getDevelopmentStack() {
+        lifecycleScope.launchWhenStarted {
             onBoardingSharedViewModel.stackOfDevelopment.collect { stack ->
-                if (stack.isNotEmpty() && binding.etStack.text.toString() != stack) {
+                if (stack.isNotEmpty()) {
                     binding.etStack.setText(stack)
                 }
             }
@@ -86,4 +75,3 @@ class DevelopmentStackFragment : Fragment() {
         _binding = null
     }
 }
-

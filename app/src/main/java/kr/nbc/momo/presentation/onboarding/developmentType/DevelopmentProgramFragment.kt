@@ -34,17 +34,14 @@ class DevelopmentProgramFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
         saveDevelopmentOfProgramList()
-        observeDevelopmentOfProgramList()
     }
 
     private fun setOnClickListeners() {
         binding.btnPrevious.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (activity as DevelopmentActivity).binding.viewPager.currentItem -= 1
         }
         binding.btnNext.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, DevelopmentStackFragment())
-                .commit()
+            (activity as DevelopmentActivity).binding.viewPager.currentItem += 1
         }
         binding.tvSkip.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
@@ -59,20 +56,29 @@ class DevelopmentProgramFragment : Fragment() {
                 group.findViewById<Chip>(id).text.toString()
             }
             onBoardingSharedViewModel.updateProgramOfDevelopment(selectedChips)
+
+            checkedIds.forEach { id ->
+                val chip = group.findViewById<Chip>(id)
+                if (chip.isChecked) {
+                    onBoardingSharedViewModel.addSelectedProgramChipId(resources.getResourceEntryName(chip.id))
+                } else {
+                    onBoardingSharedViewModel.removeSelectedProgramChipId(resources.getResourceEntryName(chip.id))
+                }
+            }
         }
     }
 
     private fun observeDevelopmentOfProgramList() {
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             onBoardingSharedViewModel.programOfDevelopment.collect { programs ->
-                if (programs.isNotEmpty()) {
-                    for (i in 0 until binding.chipGroup.childCount) {
-                        val chip = binding.chipGroup.getChildAt(i) as Chip
-                        chip.isChecked = programs.contains(chip.text.toString())
-                    }
+                for (i in 0 until binding.chipGroup.childCount) {
+                    val chip = binding.chipGroup.getChildAt(i) as Chip
+                    chip.isChecked = programs.contains(chip.text.toString())
                 }
             }
         }
+
+
     }
 
     override fun onDestroyView() {
