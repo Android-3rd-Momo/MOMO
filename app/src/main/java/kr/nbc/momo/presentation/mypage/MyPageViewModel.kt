@@ -19,7 +19,7 @@ class MyPageViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _userProfileUpdate = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
-    val userProfile: StateFlow<UiState<UserModel>> get() = _userProfileUpdate
+    val userProfileUpdate: StateFlow<UiState<UserModel>> get() = _userProfileUpdate
 
     fun saveUserProfile(updatedUser: UserModel) {
         viewModelScope.launch {

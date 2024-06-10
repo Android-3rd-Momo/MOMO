@@ -11,4 +11,6 @@ interface UserRepository {
     suspend fun isUserIdDuplicate(userId: String): Boolean
     suspend fun isUserNumberDuplicate(userNumber:String):Boolean
     suspend fun joinGroup(groupId: String)
+    suspend fun signOutUser()
+    suspend fun signWithdrawalUser()
 }

@@ -15,23 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-//    private val signInUseCase: SignInUseCase,
     private val signUpUseCase: SignUpUseCase,
 ): ViewModel() {
 
     private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val authState: StateFlow<UiState<UserModel>> get() = _authState
-//==    fun signIn(email: String, password: String) {
-//        viewModelScope.launch {
-//            _authState.value = UiState.Loading
-//            try {
-//                val userEntity = signInUseCase(email, password)
-//                _authState.value = UiState.Success(userEntity.toModel())
-//            } catch (e:Exception) {
-//                _authState.value = UiState.Error(e.toString())
-//            }
-//        }
-//    }
 
     fun signUp(email: String, password: String, user: UserModel) {
         viewModelScope.launch {

@@ -7,6 +7,7 @@
     android:background="#F9F9F9">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,6 +20,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivSetUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/icon_mypage"
+                    android:layout_marginEnd="15dp"/>
 
                 <ImageView
                     android:id="@+id/ivEditProfile"
@@ -50,7 +59,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clUserInfo"
                 android:layout_width="match_parent"
-                android:layout_height="95dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="53dp"
                 android:layout_marginEnd="20dp"
@@ -92,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="21dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/cardView"
@@ -104,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="21dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
                     android:hint="이름"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -118,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="23dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="7dp"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@id/cardView"
                     app:layout_constraintTop_toBottomOf="@id/tvUserName"
@@ -137,6 +146,20 @@
                     app:layout_constraintStart_toStartOf="@id/tvUserName"
                     app:layout_constraintTop_toBottomOf="@id/etUserName" />
 
+                <EditText
+                    android:id="@+id/etUserGithub"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="3dp"
+                    android:text="https://github.com/"
+                    android:hint="깃허브 링크"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@id/ivGitHub"
+                    app:layout_constraintStart_toStartOf="@id/tvUserName"
+                    app:layout_constraintTop_toBottomOf="@id/etUserSelfIntroduction" />
+
                 <ImageView
                     android:id="@+id/ivGitHub"
                     android:layout_width="30dp"
@@ -148,17 +171,36 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnGoOnBoarding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="로그인 하기"
+                android:visibility="gone"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintTop_toBottomOf="@id/clUserInfo"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clUserDetailInfo"
+                android:visibility="visible"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/clUserInfo"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
+
             <TextView
                 android:id="@+id/typeOfDevelopment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
                 android:text="개발직군"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clUserInfo" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/tvAddTagTypeOfDevelopment"
@@ -174,9 +216,7 @@
                 android:id="@+id/cgTypeTag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
                 app:chipSpacing="8dp"
                 app:layout_constraintTop_toBottomOf="@id/typeOfDevelopment" />
 
@@ -184,7 +224,6 @@
                 android:id="@+id/programOfDevelopment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:text="프로그램"
                 android:textSize="17sp"
@@ -196,7 +235,6 @@
                 android:id="@+id/tvAddTagProgramOfDevelopment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="21dp"
                 android:text="+ 태그 추가"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -206,16 +244,13 @@
                 android:id="@+id/cgProgramTag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
                 app:layout_constraintTop_toBottomOf="@id/programOfDevelopment" />
 
             <TextView
                 android:id="@+id/stackOfDevelopment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:text="기술 스택"
                 android:textSize="17sp"
@@ -227,7 +262,6 @@
                 android:id="@+id/clStackOfDevelopment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corners"
@@ -261,7 +295,6 @@
                 android:id="@+id/portfolio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:text="포트폴리오"
                 android:textSize="17sp"
@@ -274,7 +307,6 @@
                 android:layout_width="89dp"
                 android:layout_height="82dp"
                 android:background="@drawable/bg_layout_corners"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:scaleType="fitXY"
                 app:layout_constraintTop_toBottomOf="@id/portfolio"
@@ -284,9 +316,7 @@
                 android:id="@+id/clPortfolio"
                 android:layout_width="match_parent"
                 android:layout_height="95dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corners"
                 app:layout_constraintTop_toBottomOf="@id/ivPortfolioImage">
 
@@ -310,6 +340,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="10dp"
                     app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

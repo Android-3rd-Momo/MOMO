@@ -28,8 +28,8 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = UiState.Loading
             try {
-                signInUseCase(email, password)
-                _authState.value = UiState.Success(UserModel(email, password))
+                val user = signInUseCase(email, password)
+                _authState.value = UiState.Success(user.toModel())
             } catch (e: Exception) {
                 _authState.value = UiState.Error(e.toString())
             }
