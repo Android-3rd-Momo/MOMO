@@ -21,7 +21,7 @@ class SearchAdapter(
                 ivGroupImage.setThumbnailByUrlOrDefault(groupModel.groupThumbnail)
                 tvName.text = groupModel.groupName
                 tvDescription.text = groupModel.groupDescription
-                tvCategory.text = groupModel.categoryList.joinToString()
+                tvCategory.text = groupModel.category.developmentOccupations.joinToString()
             }
             itemView.setOnClickListener {
                 onClick(groupModel)
