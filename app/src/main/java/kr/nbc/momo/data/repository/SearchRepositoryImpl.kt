@@ -1,5 +1,6 @@
 package kr.nbc.momo.data.repository
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
@@ -28,7 +29,7 @@ class SearchRepositoryImpl @Inject constructor(
             //아래 코드로 검색어 필터링
             //it.category.programingLanguage.any{ it in query3List }
         }
-
+        Log.d("test", "$response")
         return response.map { it.toEntity() }
     }
 
