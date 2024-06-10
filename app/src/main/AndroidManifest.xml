@@ -16,6 +16,9 @@
         android:theme="@style/Theme.MOMO"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.onboarding.developmentType.DevelopmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.onboarding.GetStartedActivity"
             android:exported="false" />
         <activity

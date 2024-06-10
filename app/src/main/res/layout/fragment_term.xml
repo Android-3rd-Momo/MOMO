@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="495dp"
     tools:context=".presentation.onboarding.term.TermFragment">
@@ -15,51 +15,43 @@
         android:textStyle="bold"
         android:layout_marginTop="40dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tv_termSubTitle"
         android:layout_width="245dp"
         android:layout_height="45dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
         android:text="@string/TermMiddleTitle"
         android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_termTitle" />
-
-    <ImageView
-        android:id="@+id/iv_checkbox_allAccept"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/checkbox"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_termSubTitle"
-        android:alpha="0.3"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_termTitle"/>
 
-    <TextView
-        android:id="@+id/tv_allAccept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <CheckBox
+        android:id="@+id/cb_allAccept"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:button="@drawable/checkbox_skyblue"
+        android:paddingStart="10dp"
         android:text="@string/Agree"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/iv_checkbox_allAccept"
-        app:layout_constraintBottom_toBottomOf="@id/iv_checkbox_allAccept"
-        app:layout_constraintStart_toEndOf="@id/iv_checkbox_allAccept"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_termSubTitle" />
 
     <TextView
         android:id="@+id/tv_allAcceptDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/AgreeDesc"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_allAccept"
-        app:layout_constraintStart_toStartOf="@id/tv_allAccept"/>
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="55dp"
+        app:layout_constraintTop_toBottomOf="@id/cb_allAccept"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
         android:id="@+id/iv_line"
@@ -71,51 +63,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
-        android:id="@+id/iv_checkbox_accept1"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/checkbox"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_line"
-        android:alpha="0.3"/>
-
-    <TextView
-        android:id="@+id/tv_accept1"
+    <CheckBox
+        android:id="@+id/cb_term1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:button="@drawable/term_checkbox"
+        android:paddingStart="10dp"
         android:text="@string/Term1"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/iv_checkbox_accept1"
-        app:layout_constraintBottom_toBottomOf="@id/iv_checkbox_accept1"
-        app:layout_constraintStart_toEndOf="@id/iv_checkbox_accept1"/>
-
-    <ImageView
-        android:id="@+id/iv_checkbox_accept2"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/checkbox"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_checkbox_accept1"
-        android:alpha="0.3"/>
+        app:layout_constraintTop_toBottomOf="@id/iv_line" />
 
-    <TextView
-        android:id="@+id/tv_accept2"
+    <CheckBox
+        android:id="@+id/cb_term2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:button="@drawable/term_checkbox"
+        android:paddingStart="10dp"
         android:text="@string/Term2"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/iv_checkbox_accept2"
-        app:layout_constraintBottom_toBottomOf="@id/iv_checkbox_accept2"
-        app:layout_constraintStart_toEndOf="@id/iv_checkbox_accept2"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/cb_term1"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
     <TextView
         android:id="@+id/tv_accept2_desc"
@@ -124,32 +99,23 @@
         android:text="@string/See"
         android:textSize="14dp"
         android:layout_marginEnd="40dp"
-        app:layout_constraintTop_toTopOf="@id/tv_accept2"
-        app:layout_constraintBottom_toBottomOf="@id/tv_accept2"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@+id/cb_term2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cb_term2" />
 
-    <ImageView
-        android:id="@+id/iv_checkbox_accept3"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/checkbox"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_checkbox_accept2"
-        android:alpha="0.3"/>
-
-    <TextView
-        android:id="@+id/tv_accept3"
+    <CheckBox
+        android:id="@+id/cb_term3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:button="@drawable/term_checkbox"
+        android:paddingStart="10dp"
         android:text="@string/Term3"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/iv_checkbox_accept3"
-        app:layout_constraintBottom_toBottomOf="@id/iv_checkbox_accept3"
-        app:layout_constraintStart_toEndOf="@id/iv_checkbox_accept3"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/cb_term2"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/tv_accept3_desc"
@@ -158,57 +124,45 @@
         android:text="@string/See"
         android:textSize="14dp"
         android:layout_marginEnd="40dp"
-        app:layout_constraintTop_toTopOf="@id/tv_accept3"
-        app:layout_constraintBottom_toBottomOf="@id/tv_accept3"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@+id/cb_term3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cb_term3" />
 
-    <ImageView
-        android:id="@+id/iv_checkbox_accept4"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/checkbox"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_checkbox_accept3"
-        android:alpha="0.3"/>
-
-    <TextView
-        android:id="@+id/tv_accept4"
+    <CheckBox
+        android:id="@+id/cb_term4"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:button="@drawable/term_checkbox"
+        android:paddingStart="10dp"
         android:text="@string/Term4"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/iv_checkbox_accept4"
-        app:layout_constraintBottom_toBottomOf="@id/iv_checkbox_accept4"
-        app:layout_constraintStart_toEndOf="@id/iv_checkbox_accept4"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/cb_term3"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
         android:id="@+id/btn_accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="30dp"
+        android:backgroundTint="@color/blue"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:text="@string/TermComplete"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:backgroundTint="@color/blue"
         app:cornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_checkbox_accept4" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/cb_term4" />
 
     <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="415dp"
-        android:layout_height="31dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_accept"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_width="412dp"
+        android:layout_height="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_accept">
 
     </FrameLayout>
 

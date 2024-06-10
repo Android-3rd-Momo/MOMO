@@ -43,7 +43,7 @@ class ReadGroupFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private var currentUser : String? = null
+    private var currentUser: String? = null
     private var isEditMode = false
     private var imageUri: Uri? = null
     private var image: String? = null
@@ -434,6 +434,7 @@ class ReadGroupFragment : Fragment() {
                     val list = data.userList.toMutableList()
                     list.add(currentUser!!)
                     viewModel.addUser(list, data.groupId)
+                    viewModel.joinGroup(data.groupId)
                     initView(data.copy(userList = list))
                 }
             }
