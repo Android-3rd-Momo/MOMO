@@ -7,6 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -26,6 +29,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
@@ -40,6 +44,7 @@ class CreateGroupFragment : Fragment() {
     private val viewModel: CreateGroupViewModel by viewModels()
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private var categoryText : String = "공모전"
     private lateinit var currentUser : String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -117,9 +122,11 @@ class CreateGroupFragment : Fragment() {
             showDialog(binding.lastDate)
         }
 
-        binding.tvCategory.setOnClickListener {
-            if (binding.chipgroup.visibility == View.GONE) binding.chipgroup.visibility = View.VISIBLE
-            else binding.chipgroup.visibility = View.GONE
+        binding.clCategoryDetail.setOnClickListener {
+            if (binding.chipGroupDevelopmentOccupations.visibility == View.GONE) binding.chipGroupDevelopmentOccupations.visibility = View.VISIBLE
+            else binding.chipGroupDevelopmentOccupations.visibility = View.GONE
+            if (binding.chipProgramingLanguage.visibility == View.GONE) binding.chipProgramingLanguage.visibility = View.VISIBLE
+            else binding.chipProgramingLanguage.visibility = View.GONE
         }
 
         binding.ivGroupImage.setOnClickListener {
@@ -129,6 +136,32 @@ class CreateGroupFragment : Fragment() {
         binding.button.setOnClickListener {
             showDialog()
         }
+
+        initSpinner()
+    }
+
+    private fun initSpinner() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.classification,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.categorySpinner.adapter = adapter
+        }
+
+        binding.categorySpinner.onItemSelectedListener =
+            object: AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    return
+                }
+            }
     }
 
     private fun showDialog(dateType: TextView) {
@@ -155,9 +188,16 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun createGroup(){
-        val categoryList = listOf(binding.chipBack, binding.chipFront, binding.chipPull)
-            .filter { it.isChecked }
-            .map { it.text.toString() }
+        val categoryList = CategoryModel(
+            categoryText,
+            listOf(binding.chipBack, binding.chipFront, binding.chipServer, binding.chipGame,
+                binding.chipAI, binding.chipIOS, binding.chipWeb, binding.chipUIUX, binding.chipEtc)
+                .filter { it.isChecked }
+                .map { it.text.toString() },
+            listOf(binding.chipFrontLang, binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp)
+                .filter { it.isChecked }
+                .map { it.text.toString() }
+        )
 
         val image = if (imageUri != null) imageUri.toString() else null
         val groupId = binding.groupName.text.toString().toHashCode()

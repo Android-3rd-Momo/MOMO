@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="classification">
+    <item>공모전</item>
+    <item>프로젝트</item>
+    <item>스터디</item>
+    <item>레슨</item>
+    <item>아웃소싱</item>
+</string-array>
+</resources>

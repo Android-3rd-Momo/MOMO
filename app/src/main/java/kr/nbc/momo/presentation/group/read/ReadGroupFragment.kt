@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +29,7 @@ import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
+import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.signup.SignUpFragment
@@ -44,6 +47,7 @@ class ReadGroupFragment : Fragment() {
     private var isEditMode = false
     private var imageUri: Uri? = null
     private var image: String? = null
+    private var categoryText : String = "공모전"
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -217,23 +221,23 @@ class ReadGroupFragment : Fragment() {
 
     private fun initView(data: GroupModel) {
         with(binding) {
+            tvCategoryClassification.text = data.category.classification
             tvGroupName.text = data.groupName
             tvGroupOneLineDescription.text = data.groupOneLineDescription
             tvGroupDescription.text = data.groupDescription
             tvFirstDate.text = data.firstDate
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
+            tvDetailCategoryList.text = data.category.developmentOccupations.joinToString().plus(", " + data.category.programingLanguage.joinToString())
 
             if (data.userList.contains(currentUser)) binding.btnJoinProject.text = "채팅방 이동"
             if (data.leaderId == currentUser) binding.btnEdit.visibility = View.VISIBLE
-            if (data.categoryList.contains(categoryBack.text)) categoryBack.setVisibleToVisible()
-            if (data.categoryList.contains(categoryFront.text)) categoryFront.setVisibleToVisible()
-            if (data.categoryList.contains(categoryPull.text)) categoryPull.setVisibleToVisible()
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener(data)
         }
+        initSpinner()
     }
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
@@ -242,8 +246,8 @@ class ReadGroupFragment : Fragment() {
 
     private fun initUserList(userList: List<String>) {
         val adapter = UserListAdapter(userList)
-        binding.gvUserList.adapter = adapter
-        binding.gvUserList.layoutManager = GridLayoutManager(requireContext(), 5)
+        binding.rvUserList.adapter = adapter
+        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 5)
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
@@ -279,33 +283,39 @@ class ReadGroupFragment : Fragment() {
         binding.etGroupName.setText(data.groupName)
         binding.etGroupDescription.setText(data.groupDescription)
         binding.etGroupOneLineDescription.setText(data.groupOneLineDescription)
-        if (data.categoryList.contains(binding.chipBack.text)) {
-            binding.chipBack.isChecked = true
-        }
-        if (data.categoryList.contains(binding.chipFront.text)) {
-            binding.chipFront.isChecked = true
-        }
-        if (data.categoryList.contains(binding.chipPull.text)) {
-            binding.chipPull.isChecked = true
+
+        val categoryList = data.category.programingLanguage + data.category.developmentOccupations
+
+        val chips = listOf(binding.chipFront, binding.chipBack, binding.chipServer, binding.chipGame, binding.chipAI,
+            binding.chipAOS, binding.chipIOS, binding.chipUIUX, binding.chipEtc, binding.chipFrontLang,
+            binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp, binding.chipKotlin
+        )
+
+        chips.forEach { chip ->
+            chip.isChecked = categoryList.contains(chip.text)
         }
 
         val editMode = arrayOf(
             binding.etGroupName,
             binding.etGroupDescription,
             binding.etGroupOneLineDescription,
-            binding.chipgroup,
+            binding.tvCategory,
+            binding.clCategoryDetail,
+            binding.categorySpinner,
             binding.btnCompleteEdit,
-            binding.btnDelete
+            binding.btnDelete,
         )
         val viewMode = arrayOf(
+            binding.tvCategoryClassification,
             binding.tvGroupName,
             binding.tvGroupDescription,
             binding.tvGroupOneLineDescription,
             binding.btnJoinProject,
-            binding.btnEdit
+            binding.btnEdit,
+            binding.tvDetailCategoryList,
+            binding.tvDetailCategory,
+            binding.rvUserList
         )
-
-        setChangeMode(editMode, viewMode)
 
         binding.ivGroupImage.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
@@ -322,6 +332,35 @@ class ReadGroupFragment : Fragment() {
         binding.btnDelete.setOnClickListener {
             viewModel.deleteGroup(data.groupId)
         }
+        binding.btnDelete.setOnClickListener {
+            viewModel.deleteGroup(data.groupId)
+        }
+
+        setChangeMode(editMode, viewMode)
+    }
+
+    private fun initSpinner() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.classification,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.categorySpinner.adapter = adapter
+        }
+
+        binding.categorySpinner.onItemSelectedListener =
+            object: AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    return
+                }
+            }
     }
 
     private fun setChangeMode(editMode: Array<View>, viewMode: Array<View>) {
@@ -331,9 +370,16 @@ class ReadGroupFragment : Fragment() {
     }
 
     private fun btnCompleteEditOnClickListener(data: GroupModel, editMode: Array<View>, viewMode: Array<View>) {
-        val categoryList = listOf(binding.chipBack, binding.chipFront, binding.chipPull)
-            .filter { it.isChecked }
-            .map { it.text.toString() }
+        val categoryList = CategoryModel(
+            categoryText,
+            listOf(binding.chipBack, binding.chipFront, binding.chipServer, binding.chipGame,
+                binding.chipAI, binding.chipIOS, binding.chipWeb, binding.chipUIUX, binding.chipEtc)
+                .filter { it.isChecked }
+                .map { it.text.toString() },
+            listOf(binding.chipFrontLang, binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp)
+                .filter { it.isChecked }
+                .map { it.text.toString() }
+        )
 
 
         image = data.groupThumbnail
@@ -344,7 +390,7 @@ class ReadGroupFragment : Fragment() {
                 groupDescription = binding.etGroupDescription.text.toString(),
                 firstDate = binding.tvFirstDate.text.toString(),
                 lastDate = binding.tvLastDate.text.toString(),
-                categoryList = categoryList
+                category = categoryList
             ), imageUri
         )
         setChangeMode(editMode, viewMode)

@@ -37,7 +37,7 @@ class HomeAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<Hom
         holder.image.load(items[position].groupThumbnail)
         holder.name.text = items[position].groupName
         holder.description.text = items[position].groupOneLineDescription
-        holder.category.text = items[position].categoryList.joinToString()
+        holder.category.text = items[position].category.classification
     }
 
 }
