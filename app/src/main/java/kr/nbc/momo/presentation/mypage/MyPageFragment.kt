@@ -200,7 +200,7 @@ class MyPageFragment : Fragment() {
             }
         }
         binding.btnGoOnBoarding.setOnClickListener {
-            val intent = Intent(activity, GetStartedActivity::class.java)
+            val intent = Intent(requireContext(), GetStartedActivity::class.java)
             startActivity(intent)
             activity?.finish()
         }
