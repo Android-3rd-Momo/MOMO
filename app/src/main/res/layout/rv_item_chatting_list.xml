@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/ivGroupImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:scaleType="centerCrop"
         android:background="@drawable/circle_bg"
         android:clipToOutline="true"
