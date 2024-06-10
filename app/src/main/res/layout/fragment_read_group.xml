@@ -29,15 +29,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
+        <TextView
+            android:id="@+id/tvCategoryClassification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카테고리"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/ivGroupImage"
             android:layout_width="72dp"
             android:layout_height="65dp"
-            android:layout_marginTop="60dp"
             android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvCategoryClassification"
+            app:layout_constraintStart_toStartOf="@+id/tvCategoryClassification"
+            app:layout_constraintTop_toBottomOf="@+id/tvCategoryClassification"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -89,38 +97,6 @@
             app:layout_constraintEnd_toEndOf="@+id/ivGroupImage"
             app:layout_constraintStart_toStartOf="@+id/ivGroupImage"
             app:layout_constraintTop_toBottomOf="@+id/ivGroupImage" />
-
-        <TextView
-            android:id="@+id/categoryBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="백엔드"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/categoryPull"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/categoryPull"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="풀스택"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/categoryFront"
-            app:layout_constraintStart_toEndOf="@+id/categoryBack"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/categoryFront"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="프론트엔드"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/categoryPull"
-            app:layout_constraintTop_toTopOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -192,6 +168,23 @@
         app:layout_constraintTop_toBottomOf="@+id/clSimpleDescriptionContainer" />
 
     <TextView
+        android:id="@+id/tvDetailCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="모집직군"
+        app:layout_constraintStart_toStartOf="@+id/tvFirstDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstDate" />
+
+    <TextView
+        android:id="@+id/tvDetailCategoryList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="모집직군"
+        app:layout_constraintStart_toStartOf="@+id/tvDetailCategory"
+        app:layout_constraintTop_toBottomOf="@+id/tvDetailCategory" />
+
+    <TextView
         android:id="@+id/tvSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -224,44 +217,184 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipgroup"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="20dp"
+
+    <TextView
+        android:id="@+id/tvCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="4dp"
+        android:text="카테고리"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFirstDate">
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstDate" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipPull"
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/tvCategory"
+        app:layout_constraintTop_toBottomOf="@+id/tvCategory" />
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clCategoryDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/categorySpinner">
+
+        <TextView
+            android:id="@+id/tvCategoryDetailEditMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="풀스택"/>
+            android:text="카테고리 상세"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="백엔드"/>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipFront"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:text="프론트엔드"/>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipProgramingLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupDevelopmentOccupations">
 
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFrontLang"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HTML, CSS, JavaScript" />
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipJava"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Java" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPython"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Python" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCSharp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C#" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCpp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C++" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipKotlin"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kotlin" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupDevelopmentOccupations"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCategoryDetailEditMode">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBack"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BackEnd" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFront"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FrontEnd" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipServer"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Server" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipGame"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Game" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAI"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AI" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAOS"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AOS" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipIOS"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IOS" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipWeb"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Web" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipUIUX"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UI/UX" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEtc"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ETC" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/gvUserList"
+        android:id="@+id/rvUserList"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:columnWidth="50dp"
@@ -271,7 +404,8 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipgroup" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDetailCategoryList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,5 +42,5 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clSpinner"
-        tools:listitem="@layout/rv_home_item"/>
+        tools:listitem="@layout/rv_item_home_vertical"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

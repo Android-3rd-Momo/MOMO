@@ -6,10 +6,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.home.HomeFragment">
 
+    <TextView
+        android:id="@+id/tvUserGroupList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="유저님의 가입모임"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvGroupList"
+        android:id="@+id/rvMyGroupList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
+
+    <TextView
+        android:id="@+id/tvRecommendGroupList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추천모임"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvMyGroupList" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecommendGroupList"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
+
+    <TextView
+        android:id="@+id/tvLatestGroupList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="모이개의 최신모임"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvRecommendGroupList" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLatestGroupList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floatingBtnCreateGroup"
