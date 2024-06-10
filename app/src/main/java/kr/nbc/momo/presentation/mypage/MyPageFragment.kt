@@ -181,16 +181,15 @@ class MyPageFragment : Fragment() {
         binding.ivGitHub.setOnClickListener {
             val githubUrl = currentUser?.userGithub
 
-//            val pattern = Patterns.WEB_URL.matcher(githubUrl).matches() //todo 일치한 깃헙 주소인지 확인
+//            val pattern = Patterns.WEB_URL.matcher(githubUrl).matches() //todo 일치한 깃헙 주소인지 확인 해야함!!
             if (!githubUrl.isNullOrEmpty()) {
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
-//                    startActivity(intent)
-                Snackbar.make(binding.root, "$githubUrl", Snackbar.LENGTH_SHORT).show()
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
+                startActivity(intent)
             } else { //todo github 추가
                 Snackbar.make(binding.root, "설정한 Github 주소가 없습니다.", Snackbar.LENGTH_SHORT).show()
             }
         }
-        binding.ivSetUp.setOnClickListener{
+        binding.ivSetUp.setOnClickListener {
             if (currentUser != null) {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SetUpFragment())
@@ -200,7 +199,7 @@ class MyPageFragment : Fragment() {
                 Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
             }
         }
-        binding.btnGoOnBoarding.setOnClickListener{
+        binding.btnGoOnBoarding.setOnClickListener {
             val intent = Intent(activity, GetStartedActivity::class.java)
             startActivity(intent)
             activity?.finish()

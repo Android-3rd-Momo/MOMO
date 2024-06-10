@@ -59,7 +59,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clUserInfo"
                 android:layout_width="match_parent"
-                android:layout_height="95dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="53dp"
                 android:layout_marginEnd="20dp"
