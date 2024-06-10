@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.mypage
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +27,6 @@ class MyPageViewModel @Inject constructor(
             try {
                 saveUserProfileUseCase(updatedUser.toEntity())
                 _userProfileUpdate.value = UiState.Success(updatedUser)
-//                currentUser = updatedUser
             } catch (e: Exception) {
                 _userProfileUpdate.value = UiState.Error(e.toString())
             }

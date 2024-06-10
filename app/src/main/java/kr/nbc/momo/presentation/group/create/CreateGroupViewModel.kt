@@ -11,10 +11,7 @@ import javax.inject.Inject
 class CreateGroupViewModel  @Inject constructor(
     private val createGroupUseCase: CreateGroupUseCase
 ) : ViewModel() {
-    fun createGroup(groupModel: GroupModel, callback: (Boolean, Exception?) -> Unit) {
-        createGroupUseCase.invoke(groupModel.asGroupEntity()) { success, exception ->
-            callback(success, exception)
-        }
+    suspend fun createGroup(groupModel: GroupModel) {
+        createGroupUseCase.invoke(groupModel.asGroupEntity())
     }
-
 }

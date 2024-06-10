@@ -69,6 +69,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.firebaseui:firebase-ui-storage:7.2.0")
 
+    //googlelogin
+    implementation ("com.google.android.gms:play-services-auth:20.5.0")
 
     //navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
@@ -77,8 +79,14 @@ dependencies {
     //dataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
+    //viewPager
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
+    //circleIndicator
+    implementation ("me.relex:circleindicator:2.1.6")
+
+
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.firebase.storage.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
