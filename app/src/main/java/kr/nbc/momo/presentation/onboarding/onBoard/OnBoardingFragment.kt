@@ -10,9 +10,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentOnBoardingBinding
+import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.main.MainActivity
-import kr.nbc.momo.presentation.onboarding.login.LoginFragment
-import me.relex.circleindicator.CircleIndicator3
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentProgramFragment
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentTypeFragment
+import kr.nbc.momo.presentation.onboarding.login.SignInFragment
 
 class OnBoardingFragment : Fragment() {
     private var _binding: FragmentOnBoardingBinding? = null
@@ -31,15 +34,21 @@ class OnBoardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonLogin.setOnClickListener{
-            val fragmentLogin = LoginFragment()
-            fragmentLogin.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-            fragmentLogin.show(parentFragmentManager, fragmentLogin.tag)
+            val fragmentSignIn = SignInFragment()
+            fragmentSignIn.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
+            fragmentSignIn.show(parentFragmentManager, fragmentSignIn.tag)
         }
 
         binding.buttonWithoutLogin.setOnClickListener{
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
             activity?.finish()
+        }
+
+        binding.buttonGoogleLogin.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, DevelopmentTypeFragment())
+                .commit()
         }
 
         postToList()

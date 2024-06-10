@@ -23,6 +23,9 @@ class GetStartedActivity : AppCompatActivity() {
                 .commit()
         }
 
+/*        val viewPager: ViewPager2 = findViewById(R.id.view_pager2)
+        viewPager.adapter = DevelopmentViewPagerAdapter(this)*/
+
     }
 
 }
