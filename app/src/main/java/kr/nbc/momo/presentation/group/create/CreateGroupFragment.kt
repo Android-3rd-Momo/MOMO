@@ -22,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -35,8 +34,7 @@ import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.term.TermFragment
-import kr.nbc.momo.util.toHashCode
+import kr.nbc.momo.util.encryptECB
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -207,7 +205,7 @@ class CreateGroupFragment : Fragment() {
         )
 
         val image = if (imageUri != null) imageUri.toString() else null
-        val groupId = binding.groupName.text.toString().toHashCode()
+        val groupId = binding.groupName.text.toString().encryptECB()
         val group = GroupModel(
             groupId,
             binding.groupName.text.toString(),
