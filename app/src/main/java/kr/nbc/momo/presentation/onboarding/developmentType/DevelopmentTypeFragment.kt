@@ -2,22 +2,18 @@ package kr.nbc.momo.presentation.onboarding.developmentType
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.FragmentDevelopmentStackBinding
 import kr.nbc.momo.databinding.FragmentDevelopmentTypeBinding
 import kr.nbc.momo.presentation.main.MainActivity
+
 class DevelopmentTypeFragment : Fragment() {
     private var _binding: FragmentDevelopmentTypeBinding? = null
     private val binding get() = _binding!!

@@ -2,23 +2,19 @@ package kr.nbc.momo.presentation.onboarding.developmentType
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentDevelopmentStackBinding
 import kr.nbc.momo.presentation.main.MainActivity
+
 @AndroidEntryPoint
 class DevelopmentStackFragment : Fragment() {
     private var _binding: FragmentDevelopmentStackBinding? = null
@@ -29,7 +25,7 @@ class DevelopmentStackFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDevelopmentStackBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -64,7 +60,7 @@ class DevelopmentStackFragment : Fragment() {
     }
 
     private fun getDevelopmentStack() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             onBoardingSharedViewModel.stackOfDevelopment.collect { stack ->
                 if (stack.isNotEmpty()) {
                     binding.etStack.setText(stack)

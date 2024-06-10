@@ -2,11 +2,9 @@ package kr.nbc.momo.presentation.onboarding
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityGetStartedBinding
-import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentViewPagerAdapter
 import kr.nbc.momo.presentation.onboarding.onBoard.OnBoardingFragment
 
 
