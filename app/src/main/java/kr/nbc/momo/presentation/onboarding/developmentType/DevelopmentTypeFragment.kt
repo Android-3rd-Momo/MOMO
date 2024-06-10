@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import kr.nbc.momo.R
@@ -63,18 +62,6 @@ class DevelopmentTypeFragment : Fragment() {
             }
         }
 
-    }
-
-    private fun observeSelectedChips() {
-        lifecycleScope.launchWhenStarted {
-            onBoardingSharedViewModel.selectedTypeChipIds.collect { selectedChipIds ->
-                for (i in 0 until binding.chipGroup.childCount) {
-                    val chip = binding.chipGroup.getChildAt(i) as Chip
-                    val chipId = resources.getResourceEntryName(chip.id)
-                    chip.isChecked = selectedChipIds.contains(chipId)
-                }
-            }
-        }
     }
 
     override fun onDestroyView() {
