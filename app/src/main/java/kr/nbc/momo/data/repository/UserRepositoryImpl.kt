@@ -20,7 +20,7 @@ class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage,
-    private val userPreferences: UserPreferences //todo 보류
+//    private val userPreferences: UserPreferences //todo 보류
 ) : UserRepository {
 
     private val _currentUser = MutableStateFlow<UserEntity?>(null)
