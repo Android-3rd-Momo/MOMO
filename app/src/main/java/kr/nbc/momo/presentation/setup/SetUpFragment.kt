@@ -1,6 +1,7 @@
 package kr.nbc.momo.presentation.setup
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.signup.SignUpFragment
 
 @AndroidEntryPoint
@@ -90,11 +92,9 @@ class SetUpFragment : Fragment() {
     }
 
     private fun goOnboarding(){
-        val onboardingFragment = SignUpFragment() //todo 온보딩으로 바꾸기
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, onboardingFragment) // Replace with your container ID
-            .addToBackStack(null)
-            .commit()
+        val intent = Intent(activity, GetStartedActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
     }
 
 

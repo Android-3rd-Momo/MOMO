@@ -16,11 +16,6 @@ class SetUpViewModel @Inject constructor(
     private val signOutUserUseCase: SignOutUserCase,
     private val signWithdrawalUserUseCase: SignWithdrawalUserUseCase
 ) : ViewModel() {
-//    private val _signOutState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
-//    val signOutState: StateFlow<UiState<Unit>> get() = _signOutState
-//
-//    private val _withdrawalState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
-//    val withdrawalState: StateFlow<UiState<Unit>> get() = _withdrawalState
 
     fun signOut(){
         viewModelScope.launch {

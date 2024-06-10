@@ -1,6 +1,7 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,9 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.presentation.signup.model.UserModel
 import kr.nbc.momo.util.setVisibleToGone
@@ -40,6 +43,7 @@ class MyPageFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var isEditMode = false
+    private var isLogin = false
     private var currentUser: UserModel? = null
     private var profileImageUri: Uri? = null
     private var backgroundImageUri: Uri? = null
@@ -91,12 +95,16 @@ class MyPageFragment : Fragment() {
                         is UiState.Loading -> {
                             // Handle loading state
                         }
+
                         is UiState.Success -> {
+                            isLogin()
                             currentUser = state.data
                             initView(state.data)
                         }
+
                         is UiState.Error -> {
                             clearUserInfo()
+                            isLogOut()
                             Log.d("error", state.message)
                         }
                     }
@@ -111,15 +119,12 @@ class MyPageFragment : Fragment() {
             tvUserSelfIntroduction.text = user.userSelfIntroduction
             tvStackOfDevelopment.text = user.stackOfDevelopment
             tvPortfolio.text = user.userPortfolioText
-            // 편집모드에 값 적용
             etUserName.setText(user.userName)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
             setChipList(binding.cgTypeTag, user.typeOfDevelopment)
             setChipList(binding.cgProgramTag, user.programOfDevelopment)
-
-            // 이미지
             ivUserProfileImage.load(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.load(user.userPortfolioImageUrl)
@@ -129,12 +134,12 @@ class MyPageFragment : Fragment() {
     private fun clearUserInfo() {
         with(binding) {
             tvUserName.text = ""
-            tvUserSelfIntroduction.text = ""
-            tvStackOfDevelopment.text = ""
-            tvPortfolio.text = ""
             etUserName.setText("")
+            tvUserSelfIntroduction.text = ""
             etUserSelfIntroduction.setText("")
+            tvStackOfDevelopment.text = ""
             etStackOfDevelopment.setText("")
+            tvPortfolio.text = ""
             etPortfolio.setText("")
             cgTypeTag.removeAllViews()
             cgProgramTag.removeAllViews()
@@ -181,6 +186,11 @@ class MyPageFragment : Fragment() {
                 Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
             }
         }
+        binding.btnGoOnBoarding.setOnClickListener {
+            val intent = Intent(activity, GetStartedActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
     }
 
     private fun setChangeMode() {
@@ -190,6 +200,7 @@ class MyPageFragment : Fragment() {
             binding.tvAddTagTypeOfDevelopment,
             binding.tvAddTagProgramOfDevelopment,
             binding.etUserName,
+            binding.etUserGithub,
             binding.etUserSelfIntroduction,
             binding.etStackOfDevelopment,
             binding.etPortfolio,
@@ -200,6 +211,7 @@ class MyPageFragment : Fragment() {
         val viewMode = arrayOf(
             binding.ivEditProfile,
             binding.tvUserName,
+            binding.tvUserGithub,
             binding.tvUserSelfIntroduction,
             binding.tvStackOfDevelopment,
             binding.tvPortfolio
@@ -209,6 +221,16 @@ class MyPageFragment : Fragment() {
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         setCloseIconVisibility(binding.cgTypeTag, isEditMode)
         setCloseIconVisibility(binding.cgProgramTag, isEditMode)
+    }
+
+    private fun isLogin() { //todo 코드 간결화 필요
+        binding.clUserDetailInfo.setVisibleToVisible()
+        binding.btnGoOnBoarding.setVisibleToGone()
+    }
+
+    private fun isLogOut() { //todo 코드 간결화 필요
+        binding.clUserDetailInfo.setVisibleToGone()
+        binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
     private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
@@ -267,6 +289,7 @@ class MyPageFragment : Fragment() {
             val updatedUserModel = currentUser.copy(
                 userName = binding.etUserName.text.toString(),
                 userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+                userGithub = binding.etUserGithub.text.toString(),
                 stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
