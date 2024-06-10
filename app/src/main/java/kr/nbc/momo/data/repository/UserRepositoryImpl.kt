@@ -53,7 +53,7 @@ class UserRepositoryImpl @Inject constructor(
         val currentUserUid = getCurrentUserUid()
         val userResponse = user.toUserResponse()
         fireStore.collection("userInfo").document(currentUserUid).set(userResponse).await()
-        userPreferences.saveUserInfo(user)
+//        userPreferences.saveUserInfo(user)
         _currentUser.value = user
     }
 
@@ -73,7 +73,7 @@ class UserRepositoryImpl @Inject constructor(
             val currentUserUid = getCurrentUserUid()
             val snapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
             val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
-            userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
+//            userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
             _currentUser.value = userResponse.toEntity()
             userResponse.toEntity()
         } catch (e: Exception) {
@@ -157,7 +157,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun signWithdrawalUser() {
         try {
             val currentUserUid = getCurrentUserUid()
-            //userGroup을 가져와서 속한 그룹을 돌면서 아이디 삭제하기ㅅ
+            //userGroup을 가져와서 속한 그룹을 돌면서 아이디 삭제하기
             val userSnapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
             val userGroupIdList = userSnapshot.get("userGroup") as? List<String> ?: emptyList()
 
