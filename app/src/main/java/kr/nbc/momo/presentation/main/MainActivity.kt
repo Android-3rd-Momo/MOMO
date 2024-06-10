@@ -14,6 +14,8 @@ import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.login.SignInFragment
+import kr.nbc.momo.presentation.signup.SignUpFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

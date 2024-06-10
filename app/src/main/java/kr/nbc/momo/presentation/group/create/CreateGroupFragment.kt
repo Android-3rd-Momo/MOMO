@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -23,7 +22,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
@@ -33,7 +35,7 @@ import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.onboarding.term.TermFragment
 import kr.nbc.momo.util.toHashCode
 import java.util.Calendar
 
@@ -114,29 +116,34 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun initView() {
-        binding.firstDate.setOnClickListener {
-            showDialog(binding.firstDate)
-        }
+        with(binding) {
+            firstDate.setOnClickListener {
+                showDialog(firstDate)
+            }
 
-        binding.lastDate.setOnClickListener {
-            showDialog(binding.lastDate)
-        }
+            lastDate.setOnClickListener {
+                showDialog(lastDate)
+            }
 
-        binding.clCategoryDetail.setOnClickListener {
-            if (binding.chipGroupDevelopmentOccupations.visibility == View.GONE) binding.chipGroupDevelopmentOccupations.visibility = View.VISIBLE
-            else binding.chipGroupDevelopmentOccupations.visibility = View.GONE
-            if (binding.chipProgramingLanguage.visibility == View.GONE) binding.chipProgramingLanguage.visibility = View.VISIBLE
-            else binding.chipProgramingLanguage.visibility = View.GONE
-        }
+            clCategoryDetail.setOnClickListener {
+                if (chipGroupDevelopmentOccupations.visibility == View.GONE) chipGroupDevelopmentOccupations.visibility = View.VISIBLE
+                else chipGroupDevelopmentOccupations.visibility = View.GONE
+                if (chipProgramingLanguage.visibility == View.GONE) chipProgramingLanguage.visibility = View.VISIBLE
+                else chipProgramingLanguage.visibility = View.GONE
+            }
 
-        binding.ivGroupImage.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
+            ivGroupImage.setOnClickListener {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            }
 
-        binding.button.setOnClickListener {
-            showDialog()
+            btnCreateProject.setOnClickListener {
+                if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() || groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()) {
+                    Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    showDialog()
+                }
+            }
         }
-
         initSpinner()
     }
 
@@ -216,7 +223,7 @@ class CreateGroupFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.createGroup(group)
             sharedViewModel.getGroupId(groupId)
-
+            delay(1500)
             parentFragmentManager.popBackStack()
             val readGroupFragment = ReadGroupFragment()
             parentFragmentManager.beginTransaction()
