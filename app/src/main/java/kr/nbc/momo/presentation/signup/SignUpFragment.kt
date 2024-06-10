@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.databinding.FragmentSignUpBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.signup.model.UserModel
 
 @AndroidEntryPoint
@@ -44,7 +47,6 @@ class SignUpFragment : Fragment() {
             val number = binding.etNumber.text.toString()
             val id = binding.etId.text.toString()
 
-            //todo id 추가 및 중복 예외처리
             if (email.isEmpty() || password.isEmpty() || name.isEmpty() || number.isEmpty() || id.isEmpty()) {
                 Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener

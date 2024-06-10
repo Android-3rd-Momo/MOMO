@@ -59,7 +59,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clUserInfo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="95dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="53dp"
                 android:layout_marginEnd="20dp"
@@ -127,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="23dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="7dp"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@id/cardView"
                     app:layout_constraintTop_toBottomOf="@id/tvUserName"
@@ -146,23 +146,13 @@
                     app:layout_constraintStart_toStartOf="@id/tvUserName"
                     app:layout_constraintTop_toBottomOf="@id/etUserName" />
 
-                <TextView
-                    android:id="@+id/tvUserGithub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="12dp"
-                    android:textSize="11sp"
-                    app:layout_constraintStart_toEndOf="@id/cardView"
-                    app:layout_constraintTop_toBottomOf="@id/tvUserSelfIntroduction"
-                    tools:text="깃허브 링크" />
-
                 <EditText
                     android:id="@+id/etUserGithub"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="3dp"
+                    android:text="https://github.com/"
                     android:hint="깃허브 링크"
                     android:textSize="11sp"
                     android:visibility="gone"

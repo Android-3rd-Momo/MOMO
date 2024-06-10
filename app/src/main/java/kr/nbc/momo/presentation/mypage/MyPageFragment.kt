@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,11 +28,11 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.presentation.signup.model.UserModel
+import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -43,7 +44,6 @@ class MyPageFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var isEditMode = false
-    private var isLogin = false
     private var currentUser: UserModel? = null
     private var profileImageUri: Uri? = null
     private var backgroundImageUri: Uri? = null
@@ -120,12 +120,13 @@ class MyPageFragment : Fragment() {
             tvStackOfDevelopment.text = user.stackOfDevelopment
             tvPortfolio.text = user.userPortfolioText
             etUserName.setText(user.userName)
+            etUserGithub.setText(user.userGithub)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
             setChipList(binding.cgTypeTag, user.typeOfDevelopment)
             setChipList(binding.cgProgramTag, user.programOfDevelopment)
-            ivUserProfileImage.load(user.userProfileThumbnailUrl)
+            ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.load(user.userPortfolioImageUrl)
         }
@@ -137,13 +138,14 @@ class MyPageFragment : Fragment() {
             etUserName.setText("")
             tvUserSelfIntroduction.text = ""
             etUserSelfIntroduction.setText("")
+            etUserGithub.setText("")
             tvStackOfDevelopment.text = ""
             etStackOfDevelopment.setText("")
             tvPortfolio.text = ""
             etPortfolio.setText("")
             cgTypeTag.removeAllViews()
             cgProgramTag.removeAllViews()
-            ivUserProfileImage.setImageDrawable(null)
+            ivUserProfileImage.setThumbnailByUrlOrDefault(null)
             ivBackProfileThumbnail.setImageDrawable(null)
             ivPortfolioImage.setImageDrawable(null)
         }
@@ -176,7 +178,19 @@ class MyPageFragment : Fragment() {
         binding.ivPortfolioImage.setOnClickListener {
             pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-        binding.ivSetUp.setOnClickListener {
+        binding.ivGitHub.setOnClickListener {
+            val githubUrl = currentUser?.userGithub
+
+//            val pattern = Patterns.WEB_URL.matcher(githubUrl).matches() //todo 일치한 깃헙 주소인지 확인
+            if (!githubUrl.isNullOrEmpty()) {
+//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
+//                    startActivity(intent)
+                Snackbar.make(binding.root, "$githubUrl", Snackbar.LENGTH_SHORT).show()
+            } else { //todo github 추가
+                Snackbar.make(binding.root, "설정한 Github 주소가 없습니다.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        binding.ivSetUp.setOnClickListener{
             if (currentUser != null) {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SetUpFragment())
@@ -186,7 +200,7 @@ class MyPageFragment : Fragment() {
                 Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
             }
         }
-        binding.btnGoOnBoarding.setOnClickListener {
+        binding.btnGoOnBoarding.setOnClickListener{
             val intent = Intent(activity, GetStartedActivity::class.java)
             startActivity(intent)
             activity?.finish()
@@ -211,7 +225,6 @@ class MyPageFragment : Fragment() {
         val viewMode = arrayOf(
             binding.ivEditProfile,
             binding.tvUserName,
-            binding.tvUserGithub,
             binding.tvUserSelfIntroduction,
             binding.tvStackOfDevelopment,
             binding.tvPortfolio
@@ -225,11 +238,15 @@ class MyPageFragment : Fragment() {
 
     private fun isLogin() { //todo 코드 간결화 필요
         binding.clUserDetailInfo.setVisibleToVisible()
+        binding.ivSetUp.setVisibleToVisible()
+        binding.ivEditProfile.setVisibleToVisible()
         binding.btnGoOnBoarding.setVisibleToGone()
     }
 
     private fun isLogOut() { //todo 코드 간결화 필요
         binding.clUserDetailInfo.setVisibleToGone()
+        binding.ivSetUp.setVisibleToGone()
+        binding.ivEditProfile.setVisibleToGone()
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 

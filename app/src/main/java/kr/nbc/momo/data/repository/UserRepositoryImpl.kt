@@ -157,9 +157,31 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun signWithdrawalUser() {
         try {
             val currentUserUid = getCurrentUserUid()
-            fireStore.collection("userInfo").document(currentUserUid).delete().await() //firestore 삭제
-            auth.currentUser?.delete()?.await() //auth 삭제
+            //userGroup을 가져와서 속한 그룹을 돌면서 아이디 삭제하기ㅅ
+            val userSnapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
+            val userGroupIdList = userSnapshot.get("userGroup") as? List<String> ?: emptyList()
+
+            //groups에서 userId 삭제
+            for(groupId in userGroupIdList){
+                val groupRef = fireStore.collection("groups").document(groupId)
+                fireStore.runTransaction { transaction ->
+                    val groupSnapshot = transaction.get(groupRef)
+                    val userList = groupSnapshot.get("userList") as? MutableList<String> ?: mutableListOf()
+                    val userId = userSnapshot.getString("userId") ?: ""
+
+                    if(userList.contains(userId)){
+                        userList.remove(userId)
+                        transaction.update(groupRef, "userList", userList)
+                    }
+                }.await()
+            }
+
+            //firestore 삭제
+            fireStore.collection("userInfo").document(currentUserUid).delete().await()
+            //auth 삭제
+            auth.currentUser?.delete()?.await()
             signOut()
+
         } catch (e: Exception) {
             throw e
         }
