@@ -5,6 +5,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 
 fun GroupModel.asGroupEntity(): GroupEntity {
     return GroupEntity(
+        groupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,
@@ -19,6 +20,7 @@ fun GroupModel.asGroupEntity(): GroupEntity {
 
 fun GroupEntity.toGroupModel(): GroupModel {
     return GroupModel(
+        groupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,

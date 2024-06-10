@@ -6,10 +6,16 @@ data class UserEntity(
     val userNumber: String = "",
     val userId: String = "",
 
+    //이미지
+    val userProfileThumbnailUrl: String = "",
+    val userBackgroundThumbnailUrl: String = "",
+    val userPortfolioImageUrl: String = "",
+
     val userSelfIntroduction: String = "",
     val typeOfDevelopment: List<String> = emptyList(),
     val programOfDevelopment: List<String> = emptyList(),
     val stackOfDevelopment: String = "",
-    val portfolio: String = "" //todo 포트폴리오
+    val userGroup: List<String> = emptyList(),
+    val userPortfolioText: String = ""
 )
 
