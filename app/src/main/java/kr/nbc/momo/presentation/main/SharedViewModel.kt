@@ -1,24 +1,25 @@
 package kr.nbc.momo.presentation.main
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
+import kr.nbc.momo.presentation.chatting.chattinglist.model.toModel
 import kr.nbc.momo.presentation.signup.model.UserModel
 import kr.nbc.momo.presentation.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val getChattingListByIdUseCase: GetChattingListByIdUseCase
 ) : ViewModel() {
     private val _groupId: MutableLiveData<String?> = MutableLiveData()
     val groupId: MutableLiveData<String?> get() = _groupId
@@ -62,6 +63,13 @@ class SharedViewModel @Inject constructor(
     }
     fun removeGroupIdToGroupChat(){
         _groupIdToGroupChat.value = null
+    }
+
+    fun getChattingListById(string: String){
+        viewModelScope.launch {
+            _groupIdToGroupChat.value = getChattingListByIdUseCase(string).toModel()
+        }
+
     }
 
 }

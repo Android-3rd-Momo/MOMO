@@ -259,6 +259,7 @@ class ReadGroupFragment : Fragment() {
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
+                    sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
                     val chattingRoomFragment = ChattingRoomFragment()
                     parentFragmentManager.popBackStack()
                     parentFragmentManager.beginTransaction()

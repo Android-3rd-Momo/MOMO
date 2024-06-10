@@ -35,16 +35,20 @@ class SearchFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
-    private val testList: List<String> = listOf(
-        "test1", "test2", "test3"
+    private val categoryList: List<String> = listOf(
+        "선택 안함" , "공모전", "스터디", "토이 프로젝트", "기타"
+    )
+
+    private val worksList: List<String> = listOf(
+        "선택 안함", "프론트엔드", "백엔드", "서버", "AI", "게임", "AOS", "IOS", "웹", "UI/UX", "기타"
     )
 
     private val categorySpinnerAdapter by lazy{
-        SearchSpinnerAdapter(requireActivity(), testList) // 카테고리 리스트 넣기
+        SearchSpinnerAdapter(requireActivity(), categoryList) // 카테고리 리스트 넣기
     }
 
     private val worksSpinnerAdapter by lazy{
-        SearchSpinnerAdapter(requireActivity(), testList) // 직무 리스트 넣기
+        SearchSpinnerAdapter(requireActivity(), worksList) // 직무 리스트 넣기
     }
 
     private var searchCategory: String = ""
@@ -97,6 +101,8 @@ class SearchFragment : Fragment() {
                 }
             })
 
+            searchView.queryHint = """개발 언어를 입력해주세요.(공백 또는 반점으로 구분)"""
+
             spCategory.apply {
                 adapter = categorySpinnerAdapter
                 onItemSelectedListener =
@@ -108,15 +114,12 @@ class SearchFragment : Fragment() {
                         id: Long
                     ) {
                         val item = (parent?.adapter?.getItem(position) as? String) ?: ""
-                        searchCategory = item
-                        searchViewModel.getSearchResult(searchCategory, searchWorks, "")
-                        Log.d("test", "$searchCategory, $searchWorks")
+                        searchCategory = if (item == "선택 안함" ) "" else item
+                        Log.d("test", searchCategory)
+                        searchViewModel.getSearchResult(searchCategory, searchWorks, searchView.toString())
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
-                        searchCategory = ""
-                        searchViewModel.getSearchResult(searchCategory, searchWorks, "")
-                        Log.d("test", "$searchCategory, $searchWorks")
                     }
                 }
             }
@@ -131,15 +134,12 @@ class SearchFragment : Fragment() {
                             id: Long
                         ) {
                             val item = (parent?.adapter?.getItem(position) as? String) ?: ""
-                            searchWorks = item
+                            searchWorks = if (item == "선택 안함" ) "" else item
+                            Log.d("test", searchWorks)
                             searchViewModel.getSearchResult(searchCategory, searchWorks, "")
-                            Log.d("test", "$searchCategory, $searchWorks")
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
-                            searchWorks = ""
-                            searchViewModel.getSearchResult(searchCategory, searchWorks, "")
-                            Log.d("test", "$searchCategory, $searchWorks")
                         }
                     }
             }
@@ -153,7 +153,7 @@ class SearchFragment : Fragment() {
                     is UiState.Success -> {
                         searchAdapter.itemList = it.data
                         searchAdapter.notifyDataSetChanged()
-                        Log.d("test", it.data.toString())
+                        Log.d("test", "${it.data}")
                     }
                     is UiState.Loading -> {
 
