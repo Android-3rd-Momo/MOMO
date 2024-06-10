@@ -15,7 +15,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentLoginBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.MainActivity
-import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 
 
 @AndroidEntryPoint

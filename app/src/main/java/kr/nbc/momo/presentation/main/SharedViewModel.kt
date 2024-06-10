@@ -11,9 +11,9 @@ import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
+import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import kr.nbc.momo.presentation.chatting.chattinglist.model.toModel
-import kr.nbc.momo.presentation.signup.model.UserModel
-import kr.nbc.momo.presentation.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +40,6 @@ class SharedViewModel @Inject constructor(
                 } else {
                     UiState.Error("Do not log in")
                 }
-
             }
         }
     }

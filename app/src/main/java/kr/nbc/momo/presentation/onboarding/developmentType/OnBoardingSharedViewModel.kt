@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.signup.model.UserModel
-import kr.nbc.momo.presentation.signup.model.toEntity
-import kr.nbc.momo.presentation.signup.model.toModel
+import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.toEntity
+import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +32,8 @@ class OnBoardingSharedViewModel @Inject constructor(
 
     private val _currentUser = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel>> get() = _currentUser
+    private val _saveProfileState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    val saveProfileState: StateFlow<UiState<Unit>> get() = _saveProfileState
 
     private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val authState: StateFlow<UiState<UserModel>> get() = _authState
@@ -89,7 +91,7 @@ class OnBoardingSharedViewModel @Inject constructor(
 
     fun saveUserProfile() {
         viewModelScope.launch {
-            _authState.value = UiState.Loading
+            _saveProfileState.value = UiState.Loading
 
             try {
                 val currentUser = (_currentUser.value as? UiState.Success)?.data
@@ -100,21 +102,19 @@ class OnBoardingSharedViewModel @Inject constructor(
                         stackOfDevelopment = _stackOfDevelopment.value
                     )
                     saveUserProfileUseCase(updatedUser.toEntity())
-                    _authState.value = UiState.Success(updatedUser)
+                    _saveProfileState.value = UiState.Success(Unit)
                     updateUser(updatedUser)
-                    Log.d("User", "$updatedUser")
-                    clearTemporaryData()
                 } else {
-                    _authState.value = UiState.Error("User not found")
+                    _saveProfileState.value = UiState.Error("User not found")
                 }
             } catch (e: Exception) {
-                _authState.value = UiState.Error("Failed to save user profile: ${e.message}")
+                _saveProfileState.value = UiState.Error("Failed to save user profile: ${e.message}")
             }
         }
     }
 
     private fun updateUser(user: UserModel) {
-        Log.d("User", "$user")
+        Log.d("onBoardingSharedViewModel UserInfo", "$user")
         _currentUser.value = UiState.Success(user)
     }
 
