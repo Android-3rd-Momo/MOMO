@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.onboarding.developmentType.DevelopmentActivity">
 
-    <kr.nbc.momo.presentation.onboarding.developmentType.NonSwipableViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

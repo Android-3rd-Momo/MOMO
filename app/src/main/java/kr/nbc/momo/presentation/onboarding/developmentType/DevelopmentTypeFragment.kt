@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.toList
@@ -19,7 +21,7 @@ import kr.nbc.momo.presentation.main.MainActivity
 class DevelopmentTypeFragment : Fragment() {
     private var _binding: FragmentDevelopmentTypeBinding? = null
     private val binding get() = _binding!!
-    private val onBoardingSharedViewModel: OnBoardingSharedViewModel by viewModels()
+    private val onBoardingSharedViewModel: OnBoardingSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +40,8 @@ class DevelopmentTypeFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.btnNext.setOnClickListener {
-            (activity as DevelopmentActivity).binding.viewPager.currentItem += 1
+            val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
+            viewPager.currentItem += 1
         }
 
         binding.tvSkip.setOnClickListener {

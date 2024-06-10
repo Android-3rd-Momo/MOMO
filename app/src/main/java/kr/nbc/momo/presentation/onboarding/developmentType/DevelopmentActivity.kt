@@ -25,6 +25,9 @@ class DevelopmentActivity : AppCompatActivity() {
         viewPagerAdapter.addFragment(DevelopmentProgramFragment())
         viewPagerAdapter.addFragment(DevelopmentStackFragment())
 
-        viewPagerAdapter.notifyDataSetChanged()
+        binding.viewPager.apply {
+            adapter = viewPagerAdapter
+            isUserInputEnabled = false
+        }
     }
 }

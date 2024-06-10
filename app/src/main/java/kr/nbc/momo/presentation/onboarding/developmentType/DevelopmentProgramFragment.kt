@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.observeOn
@@ -20,7 +22,7 @@ import kr.nbc.momo.presentation.main.MainActivity
 class DevelopmentProgramFragment : Fragment() {
     private var _binding: FragmentDevelopmentProgramBinding? = null
     private val binding get() = _binding!!
-    private val onBoardingSharedViewModel: OnBoardingSharedViewModel by viewModels()
+    private val onBoardingSharedViewModel: OnBoardingSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +40,12 @@ class DevelopmentProgramFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.btnPrevious.setOnClickListener {
-            (activity as DevelopmentActivity).binding.viewPager.currentItem -= 1
+            val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
+            viewPager.currentItem -= 1
         }
         binding.btnNext.setOnClickListener {
-            (activity as DevelopmentActivity).binding.viewPager.currentItem += 1
-        }
+            val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
+            viewPager.currentItem += 1        }
         binding.tvSkip.setOnClickListener {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)

@@ -5,7 +5,7 @@ import kr.nbc.momo.domain.model.UserEntity
 
 interface UserRepository {
     suspend fun signUpUser(email: String, password: String, user: UserEntity): UserEntity
-    suspend fun signInUser(email: String, password: String)
+    suspend fun signInUser(email: String, password: String): UserEntity
     fun getCurrentUser(): Flow<UserEntity?>
     suspend fun saveUserProfile(user: UserEntity)
     suspend fun isUserIdDuplicate(userId: String): Boolean
