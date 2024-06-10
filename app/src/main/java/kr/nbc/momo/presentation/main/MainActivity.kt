@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.chattingListFragment -> {
-                    val chattingListFragment = SignUpFragment()
+                    val chattingListFragment = ChattingListFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, chattingListFragment)
                         .commit()
