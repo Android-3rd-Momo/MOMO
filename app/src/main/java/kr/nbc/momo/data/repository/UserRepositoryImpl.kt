@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
@@ -116,6 +117,25 @@ class UserRepositoryImpl @Inject constructor(
                 .get()
                 .await()
             !querySnapshotId.isEmpty
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    override suspend fun joinGroup(groupId: String) {
+        try {
+            val currentUserUid = getCurrentUserUid()
+            val userSnapshot = fireStore.collection("userInfo").document(currentUserUid)
+            fireStore.runTransaction { transaction ->
+                val snapshot = transaction.get(userSnapshot)
+                val currentGroupId = snapshot.get("userGroup") as? List<String> ?: emptyList()
+                val updateUserGroup = mutableListOf<String>().apply {
+                    addAll(currentGroupId)
+                    add(groupId)
+                }
+                transaction.update(userSnapshot, "userGroup", updateUserGroup)
+                null
+            }
         } catch (e: Exception) {
             throw e
         }

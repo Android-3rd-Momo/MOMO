@@ -14,6 +14,6 @@ data class UserModel(
     val typeOfDevelopment: List<String> = emptyList(),
     val programOfDevelopment: List<String> = emptyList(),
     val stackOfDevelopment: String = "",
+    val userGroup: List<String> = emptyList(),
     val userPortfolioText: String = ""
 )
-//온보딩 정보 추가
