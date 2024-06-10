@@ -44,59 +44,55 @@ android {
 }
 
 dependencies {
-    // Room
+    //room
     implementation(libs.room.runtime)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.logging.interceptor)
     ksp(libs.room.compiler)
 
-    // Retrofit
+    //retrofit
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.logging.interceptor)
 
-    // Gson
-    implementation(libs.gson)
-
-    // Hilt
+    //hilt
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
-
-    // Coil
+    //coil
     implementation(libs.coil)
 
-    // Firebase
-    implementation(platform(libs.firebase.bom))
+    //fireBase
     implementation("com.google.firebase:firebase-analytics")
+    implementation(platform(libs.firebase.bom))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-    implementation("com.firebaseui:firebase-ui-storage:7.2.0")
+    implementation(libs.firebase.ui.storage)
 
-    // Google Login
-    implementation("com.google.android.gms:play-services-auth:20.5.0")
+    //googlelogin
+    implementation (libs.play.services.auth)
 
-    // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    //navigation
+    implementation (libs.androidx.navigation.fragment.ktx)
+    implementation (libs.androidx.navigation.ui.ktx)
 
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    //dataStore
+    implementation (libs.androidx.datastore.preferences)
 
-    // ViewPager
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    //viewPager
+    implementation (libs.androidx.viewpager2)
 
-    // CircleIndicator
-    implementation("me.relex:circleindicator:2.1.6")
+    //circleIndicator
+    implementation (libs.circleindicator)
 
-    // AndroidX
+
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-
-    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

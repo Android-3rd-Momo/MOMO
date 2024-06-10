@@ -1,5 +1,6 @@
 package kr.nbc.momo.domain.model
 data class GroupEntity(
+    val groupId: String = "",
     val groupName: String = "",
     val groupOneLineDescription : String = "",
     val groupThumbnail: String? = "",

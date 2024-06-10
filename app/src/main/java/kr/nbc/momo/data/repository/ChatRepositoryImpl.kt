@@ -65,6 +65,7 @@ class ChatRepositoryImpl @Inject constructor(
                 ?: GroupChatResponse(groupId = groupId, groupName = groupName, chatList = updatedChatList)
 
             chatRef.child(groupId).setValue(updatedGroupChatResponse).await()
+
         } catch (e: Exception) {
             Log.e("repository", "Failed to send message", e)
         }

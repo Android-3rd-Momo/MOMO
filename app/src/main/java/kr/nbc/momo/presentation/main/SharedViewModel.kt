@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.signup.model.UserModel
 import kr.nbc.momo.presentation.signup.model.toModel
 import javax.inject.Inject
@@ -18,8 +20,8 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) : ViewModel() {
-    private val _groupName: MutableLiveData<String> = MutableLiveData()
-    val groupName: LiveData<String> get() = _groupName
+    private val _groupId: MutableLiveData<String?> = MutableLiveData()
+    val groupId: MutableLiveData<String?> get() = _groupId
 
     private val _currentUser = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel>> get() = _currentUser
@@ -46,17 +48,17 @@ class SharedViewModel @Inject constructor(
         _currentUser.value = UiState.Success(user)
     }
 
-    fun getGroupName(groupName: String) {
-        _groupName.value = groupName
+    fun getGroupId(groupId: String) {
+        _groupId.value = groupId
     }
 
 
 
-    private val _groupIdToGroupChat: MutableStateFlow<String?> = MutableStateFlow(null)
-    val groupIdToGroupChat: StateFlow<String?> get() = _groupIdToGroupChat
+    private val _groupIdToGroupChat: MutableStateFlow<ChattingListModel?> = MutableStateFlow(null)
+    val groupIdToGroupChat: StateFlow<ChattingListModel?> get() = _groupIdToGroupChat
 
-    fun setGroupIdToGroupChat(groupId: String){
-        _groupIdToGroupChat.value = groupId
+    fun setGroupIdToGroupChat(chattingListModel: ChattingListModel){
+        _groupIdToGroupChat.value = chattingListModel
     }
     fun removeGroupIdToGroupChat(){
         _groupIdToGroupChat.value = null
