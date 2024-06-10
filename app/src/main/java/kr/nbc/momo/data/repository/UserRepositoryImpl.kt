@@ -2,7 +2,6 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +20,7 @@ class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage,
-    private val userPreferences: UserPreferences //todo 보류
+//    private val userPreferences: UserPreferences //todo 보류
 ) : UserRepository {
 
     private val _currentUser = MutableStateFlow<UserEntity?>(null)
@@ -54,7 +53,7 @@ class UserRepositoryImpl @Inject constructor(
         val currentUserUid = getCurrentUserUid()
         val userResponse = user.toUserResponse()
         fireStore.collection("userInfo").document(currentUserUid).set(userResponse).await()
-        userPreferences.saveUserInfo(user)
+//        userPreferences.saveUserInfo(user)
         _currentUser.value = user
     }
 
@@ -74,7 +73,7 @@ class UserRepositoryImpl @Inject constructor(
             val currentUserUid = getCurrentUserUid()
             val snapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
             val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
-            userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
+//            userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
             _currentUser.value = userResponse.toEntity()
             userResponse.toEntity()
         } catch (e: Exception) {
@@ -122,6 +121,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+
     override suspend fun joinGroup(groupId: String) {
         try {
             val currentUserUid = getCurrentUserUid()
@@ -139,6 +139,53 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    private fun signOut() {
+        auth.signOut()
+        _currentUser.value = null
+    }
+
+    override suspend fun signOutUser() {
+        try {
+            signOut()
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    override suspend fun signWithdrawalUser() {
+        try {
+            val currentUserUid = getCurrentUserUid()
+            //userGroup을 가져와서 속한 그룹을 돌면서 아이디 삭제하기
+            val userSnapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
+            val userGroupIdList = userSnapshot.get("userGroup") as? List<String> ?: emptyList()
+
+            //groups에서 userId 삭제
+            for(groupId in userGroupIdList){
+                val groupRef = fireStore.collection("groups").document(groupId)
+                fireStore.runTransaction { transaction ->
+                    val groupSnapshot = transaction.get(groupRef)
+                    val userList = groupSnapshot.get("userList") as? MutableList<String> ?: mutableListOf()
+                    val userId = userSnapshot.getString("userId") ?: ""
+
+                    if(userList.contains(userId)){
+                        userList.remove(userId)
+                        transaction.update(groupRef, "userList", userList)
+                    }
+                }.await()
+            }
+
+            //firestore 삭제
+            fireStore.collection("userInfo").document(currentUserUid).delete().await()
+            //auth 삭제
+            auth.currentUser?.delete()?.await()
+            signOut()
+
+        } catch (e: Exception) {
+            throw e
+        }
+
     }
 
     override suspend fun isUserNumberDuplicate(userNumber: String): Boolean {
