@@ -228,7 +228,8 @@ class ReadGroupFragment : Fragment() {
             tvFirstDate.text = data.firstDate
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
-            tvDetailCategoryList.text = data.category.developmentOccupations.joinToString().plus(", " + data.category.programingLanguage.joinToString())
+            val categoryList = data.category.developmentOccupations + data.category.programingLanguage
+            tvDetailCategoryList.text = categoryList.joinToString()
 
             if (data.userList.contains(currentUser)) binding.btnJoinProject.text = "채팅방 이동"
             if (data.leaderId == currentUser) binding.btnEdit.visibility = View.VISIBLE

@@ -19,6 +19,7 @@ import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.decryptECB
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -78,6 +79,11 @@ class HomeFragment : Fragment() {
 
                     is UiState.Success -> {
                         val filterData = uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                            .sortedBy {
+                                val decrypt = it.groupId.decryptECB()
+                                val dateTimeIndex = decrypt.lastIndexOf(" ")
+                                decrypt.substring(dateTimeIndex)
+                            }
                         homeAdapter = HomeAdapter(filterData)
                         binding.rvGroupList.adapter = homeAdapter
                         binding.rvGroupList.layoutManager = LinearLayoutManager(requireContext())
