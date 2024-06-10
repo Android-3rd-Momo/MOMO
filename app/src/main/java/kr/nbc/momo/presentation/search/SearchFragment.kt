@@ -115,6 +115,7 @@ class SearchFragment : Fragment() {
                     ) {
                         val item = (parent?.adapter?.getItem(position) as? String) ?: ""
                         searchCategory = if (item == "선택 안함" ) "" else item
+                        Log.d("test", searchCategory)
                         searchViewModel.getSearchResult(searchCategory, searchWorks, searchView.toString())
                     }
 
@@ -133,7 +134,8 @@ class SearchFragment : Fragment() {
                             id: Long
                         ) {
                             val item = (parent?.adapter?.getItem(position) as? String) ?: ""
-                            searchCategory = if (item == "선택 안함" ) "" else item
+                            searchWorks = if (item == "선택 안함" ) "" else item
+                            Log.d("test", searchWorks)
                             searchViewModel.getSearchResult(searchCategory, searchWorks, "")
                         }
 
