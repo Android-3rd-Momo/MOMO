@@ -89,31 +89,6 @@ class OnBoardingSharedViewModel @Inject constructor(
         _stackOfDevelopment.value = stack
     }
 
-    /*    fun saveUserProfile() {
-            viewModelScope.launch {
-                _authState.value = UiState.Loading
-
-                try {
-                    val currentUser = (_currentUser.value as? UiState.Success)?.data
-                    if (currentUser != null) {
-                        val updatedUser = currentUser.copy(
-                            typeOfDevelopment = _typeOfDevelopment.value,
-                            programOfDevelopment = _programOfDevelopment.value,
-                            stackOfDevelopment = _stackOfDevelopment.value
-                        )
-                        saveUserProfileUseCase(updatedUser.toEntity())
-                        _authState.value = UiState.Success(updatedUser)
-                        updateUser(updatedUser)
-                        Log.d("User", "$updatedUser")
-                        clearTemporaryData()
-                    } else {
-                        _authState.value = UiState.Error("User not found")
-                    }
-                } catch (e: Exception) {
-                    _authState.value = UiState.Error("Failed to save user profile: ${e.message}")
-                }
-            }
-        }*/
     fun saveUserProfile() {
         viewModelScope.launch {
             _saveProfileState.value = UiState.Loading

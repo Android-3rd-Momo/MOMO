@@ -51,13 +51,10 @@ class SignUpFragment : Fragment() {
                 Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
-                val fragmentTerm = TermFragment()
-                fragmentTerm.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-                fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
+                val user = UserModel(email, name, number, id)
+                viewModel.signUp(email, password, user)
             }
 
-            val user = UserModel(email, name, number, id)
-            viewModel.signUp(email, password, user)
         }
     }
 
@@ -72,6 +69,13 @@ class SignUpFragment : Fragment() {
                     is UiState.Success -> {
                         sharedViewModel.updateUser(state.data)
                         Snackbar.make(binding.root, "회원가입에 성공하였습니다.", Snackbar.LENGTH_SHORT).show()
+
+                        val fragmentTerm = TermFragment()
+                        fragmentTerm.setStyle(
+                            BottomSheetDialogFragment.STYLE_NORMAL,
+                            R.style.AppBottomSheetDialogBorder20WhiteTheme
+                        )
+                        fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
 
                     }
 
