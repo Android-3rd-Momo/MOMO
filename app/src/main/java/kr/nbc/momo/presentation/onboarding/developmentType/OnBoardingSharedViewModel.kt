@@ -114,6 +114,7 @@ class OnBoardingSharedViewModel @Inject constructor(
     }
 
     private fun updateUser(user: UserModel) {
+        Log.d("User", "$user")
         _currentUser.value = UiState.Success(user)
     }
 

@@ -55,6 +55,7 @@ class DevelopmentActivity : AppCompatActivity() {
             btnConfirm.apply {
                 setVisibleToGone()
                 setOnClickListener {
+
                     val intent = Intent(this@DevelopmentActivity, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)
