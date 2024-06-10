@@ -1,6 +1,9 @@
 package kr.nbc.momo.util
 
 import android.view.View
+import android.widget.ImageView
+import coil.load
+import kr.nbc.momo.R
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.time.Duration
@@ -41,8 +44,8 @@ fun String.getTimeGap(): String {
         val koreaZoneId = ZoneId.of("Asia/Seoul")
         val koreaTime = ZonedDateTime.now(koreaZoneId)
         val stringToTime = ZonedDateTime.parse(this)
-        val duration = Duration.between(koreaTime, stringToTime)
-        val period = Period.between(koreaTime.toLocalDate(), stringToTime.toLocalDate())
+        val duration = Duration.between(stringToTime, koreaTime)
+        val period = Period.between(stringToTime.toLocalDate(), koreaTime.toLocalDate())
 
         resultString = when {
             period.years >= 1 -> "${period.years}년 전"
@@ -84,4 +87,12 @@ fun String.toHashCode(): String {
         "" //오류 뜰경우 stirng은 blank값임
     }
     return digest
+}
+
+fun ImageView.setThumbnailByUrlOrDefault(url: String?){
+    if (url.isNullOrEmpty()){
+        this.load(R.drawable.icon_profile)
+    }else {
+        this.load(url)
+    }
 }

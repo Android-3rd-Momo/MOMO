@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.signup.model.UserModel
 import kr.nbc.momo.presentation.signup.model.toModel
 import javax.inject.Inject
@@ -53,11 +54,11 @@ class SharedViewModel @Inject constructor(
 
 
 
-    private val _groupIdToGroupChat: MutableStateFlow<String?> = MutableStateFlow(null)
-    val groupIdToGroupChat: StateFlow<String?> get() = _groupIdToGroupChat
+    private val _groupIdToGroupChat: MutableStateFlow<ChattingListModel?> = MutableStateFlow(null)
+    val groupIdToGroupChat: StateFlow<ChattingListModel?> get() = _groupIdToGroupChat
 
-    fun setGroupIdToGroupChat(groupId: String){
-        _groupIdToGroupChat.value = groupId
+    fun setGroupIdToGroupChat(chattingListModel: ChattingListModel){
+        _groupIdToGroupChat.value = chattingListModel
     }
     fun removeGroupIdToGroupChat(){
         _groupIdToGroupChat.value = null
