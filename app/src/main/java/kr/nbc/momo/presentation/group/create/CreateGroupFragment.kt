@@ -220,10 +220,12 @@ class CreateGroupFragment : Fragment() {
             categoryList,
             listOf(currentUser)
         )
+
         lifecycleScope.launch {
             viewModel.createGroup(group)
             sharedViewModel.getGroupId(groupId)
             delay(1500)
+
             parentFragmentManager.popBackStack()
             val readGroupFragment = ReadGroupFragment()
             parentFragmentManager.beginTransaction()
