@@ -1,6 +1,7 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
@@ -52,6 +53,7 @@ class GroupRepositoryImpl @Inject constructor(
         val response = snapshot.toObject<GroupResponse>()
         if (response != null) {
             emit(response.toEntity())
+            Log.d("categoryList", "${response.category.programingLanguage}")
         }
     }
 

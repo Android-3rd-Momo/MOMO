@@ -11,7 +11,7 @@ data class GroupResponse(
     val firstDate: String = "",
     val lastDate: String = "",
     val leaderId: String = "",
-    val category: CategoryResponse = CategoryResponse(),
+    val category: CategoryResponse = CategoryResponse("", listOf(), listOf()),
     val userList: List<String> = listOf(),
 )
 
