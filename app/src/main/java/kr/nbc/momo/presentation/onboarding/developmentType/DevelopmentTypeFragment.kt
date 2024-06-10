@@ -1,17 +1,13 @@
 package kr.nbc.momo.presentation.onboarding.developmentType
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentDevelopmentTypeBinding
-import kr.nbc.momo.presentation.main.MainActivity
 
 class DevelopmentTypeFragment : Fragment() {
     private var _binding: FragmentDevelopmentTypeBinding? = null
@@ -29,20 +25,7 @@ class DevelopmentTypeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClickListeners()
         saveSelectedChips()
-    }
-
-    private fun setOnClickListeners() {
-        binding.btnNext.setOnClickListener {
-            val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-            viewPager.currentItem += 1
-        }
-
-        binding.tvSkip.setOnClickListener {
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            onBoardingSharedViewModel.clearChipData()
-        }
     }
 
     private fun saveSelectedChips() {

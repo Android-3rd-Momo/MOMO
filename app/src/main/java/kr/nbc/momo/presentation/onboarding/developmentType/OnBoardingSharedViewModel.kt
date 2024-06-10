@@ -1,12 +1,12 @@
 package kr.nbc.momo.presentation.onboarding.developmentType
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kr.nbc.momo.domain.model.UserEntity
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
 import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.presentation.UiState
@@ -50,10 +50,6 @@ class OnBoardingSharedViewModel @Inject constructor(
         _selectedTypeChipIds.value = _selectedTypeChipIds.value - chipId
     }
 
-    fun updateSelectedTypeChipIds(chipIds: List<String>) {
-        _selectedTypeChipIds.value = chipIds
-    }
-
     fun addSelectedProgramChipId(chipId: String) {
         _selectedProgramChipIds.value = _selectedProgramChipIds.value + chipId
     }
@@ -62,9 +58,6 @@ class OnBoardingSharedViewModel @Inject constructor(
         _selectedProgramChipIds.value = _selectedProgramChipIds.value - chipId
     }
 
-    fun updateSelectedProgramChipIds(chipIds: List<String>) {
-        _selectedProgramChipIds.value = chipIds
-    }
 
     init {
         getCurrentUser()
@@ -109,6 +102,8 @@ class OnBoardingSharedViewModel @Inject constructor(
                     saveUserProfileUseCase(updatedUser.toEntity())
                     _authState.value = UiState.Success(updatedUser)
                     updateUser(updatedUser)
+                    Log.d("User", "$updatedUser")
+                    clearTemporaryData()
                 } else {
                     _authState.value = UiState.Error("User not found")
                 }
@@ -118,11 +113,11 @@ class OnBoardingSharedViewModel @Inject constructor(
         }
     }
 
-    fun updateUser(user: UserModel) {
+    private fun updateUser(user: UserModel) {
         _currentUser.value = UiState.Success(user)
     }
 
-    fun clearChipData() {
+    fun clearTemporaryData() {
         _typeOfDevelopment.value = emptyList()
         _programOfDevelopment.value = emptyList()
         _stackOfDevelopment.value = ""

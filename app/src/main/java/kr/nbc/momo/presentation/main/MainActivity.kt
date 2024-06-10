@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun initFirstFragment() {
-        //메인화면은 SearchFragment
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, HomeFragment())
             commit()
@@ -95,7 +94,6 @@ class MainActivity : AppCompatActivity() {
 
                 val intent = Intent(this, GetStartedActivity::class.java)
                 startActivity(intent)
-                finish()
             } else {
                 setContentView(binding.root)
             }

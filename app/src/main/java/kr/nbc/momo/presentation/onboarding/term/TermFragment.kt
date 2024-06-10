@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentTermBinding
 import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
-import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentProgramFragment
 
 @AndroidEntryPoint
 class TermFragment : BottomSheetDialogFragment() {
@@ -31,7 +30,7 @@ class TermFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         allTermCheck()
-        termAceppt()
+        termAccept()
         intentTermDesc()
 
         //선택약관 동의시에 카카오톡 알람을 주게 하는 메소드 만들기
@@ -47,11 +46,12 @@ class TermFragment : BottomSheetDialogFragment() {
     }
 
     //필수부분들이 전부체크되야지만 위에가 파랗게하기
-    private fun termAceppt() {
+    private fun termAccept() {
         binding.btnAccept.setOnClickListener {
             if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked) {
                 val intent = Intent (requireActivity(), DevelopmentActivity::class.java)
                 startActivity(intent)
+                dismiss()
             } else {
                 Toast.makeText(requireContext(), "사용약관에 동의해주세요", Toast.LENGTH_SHORT).show()
             }
