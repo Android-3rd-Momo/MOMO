@@ -3,7 +3,7 @@ package kr.nbc.momo.presentation.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.nbc.momo.databinding.RvHomeItemBinding
+import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 
@@ -14,7 +14,7 @@ class SearchAdapter(
 
     class SearchViewHolder(
         private val onClick: (GroupModel) -> Unit,
-        private val binding: RvHomeItemBinding
+        private val binding: RvItemHomeVerticalBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(groupModel: GroupModel) {
             with(binding) {
@@ -30,7 +30,7 @@ class SearchAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val binding = RvHomeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RvItemHomeVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchViewHolder(onClick, binding)
     }
 

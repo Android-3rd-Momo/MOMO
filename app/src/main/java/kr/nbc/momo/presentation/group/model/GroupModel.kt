@@ -14,7 +14,7 @@ data class GroupModel(
 )
 
 data class CategoryModel(
-    val classification: String = "",
-    val developmentOccupations: List<String> = listOf(),
-    val programingLanguage: List<String> = listOf()
+    val classification: String,
+    val developmentOccupations: List<String>,
+    val programingLanguage: List<String>
 )
