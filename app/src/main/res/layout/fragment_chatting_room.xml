@@ -67,12 +67,12 @@
             android:paddingTop="8dp"
             android:paddingBottom="10dp"
             android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="@id/btnSend"
-            app:layout_constraintEnd_toStartOf="@+id/btnSend"
-            app:layout_constraintTop_toTopOf="@id/btnSend" />
+            app:layout_constraintBottom_toBottomOf="@id/ivSend"
+            app:layout_constraintEnd_toStartOf="@+id/ivSend"
+            app:layout_constraintTop_toTopOf="@id/ivSend" />
 
         <ImageView
-            android:id="@+id/btnSend"
+            android:id="@+id/ivSend"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"

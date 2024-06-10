@@ -94,7 +94,7 @@ class ChattingRoomFragment : Fragment() {
                 adapter = rvAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
-            btnSend.setOnClickListener {
+            ivSend.setOnClickListener {
                 val text = binding.etText.text.toString()
                 viewModel.sendChat(groupId, userId, text, userName, groupName)
                 binding.etText.text.clear()
