@@ -15,7 +15,7 @@ fun ChatResponse.toEntity(): ChatEntity {
 
 fun GroupUserResponse.toEntity(): GroupUserEntity {
     return GroupUserEntity(
-        userId, userName, userProfileUrl
+        userId, userName, userProfileUrl, lastViewedChat.toEntity()
     )
 }
 

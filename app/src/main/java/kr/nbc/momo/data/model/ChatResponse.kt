@@ -10,7 +10,8 @@ data class GroupChatResponse(
 data class GroupUserResponse(
     val userId: String = "",
     val userName: String = "",
-    val userProfileUrl: String = ""
+    val userProfileUrl: String = "",
+    val lastViewedChat: ChatResponse = ChatResponse()
 )
 
 data class ChatResponse(
