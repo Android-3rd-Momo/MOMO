@@ -1,6 +1,5 @@
 package kr.nbc.momo.domain.repository
 
-import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 import kr.nbc.momo.domain.model.UserEntity
 
@@ -11,4 +10,5 @@ interface UserRepository {
     suspend fun saveUserProfile(user: UserEntity)
     suspend fun isUserIdDuplicate(userId: String): Boolean
     suspend fun isUserNumberDuplicate(userNumber:String):Boolean
+    suspend fun joinGroup(groupId: String)
 }
