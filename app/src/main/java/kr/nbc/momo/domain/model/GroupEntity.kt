@@ -8,8 +8,15 @@ data class GroupEntity(
     val firstDate: String = "",
     val lastDate: String = "",
     val leaderId: String = "",
-    val categoryList: List<String> = listOf(),
+    val category: CategoryEntity = CategoryEntity(),
     val userList: List<String> = listOf(),
 //    val categoryList: List<String> = emptyList(),
 //    val userList: List<String> = emptyList(),
+)
+
+
+data class CategoryEntity(
+    val classification: String = "",
+    val developmentOccupations: List<String> = listOf(),
+    val programingLanguage: List<String> = listOf()
 )

@@ -1,5 +1,6 @@
 package kr.nbc.momo.data.model
 
+import kr.nbc.momo.domain.model.CategoryEntity
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.ChattingListEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
@@ -39,8 +40,25 @@ fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toResponse(),
         userList
+    )
+}
+
+fun CategoryEntity.toResponse(): CategoryResponse{
+    return CategoryResponse(
+        classification,
+        developmentOccupations,
+        programingLanguage
+    )
+}
+
+
+fun CategoryResponse.toEntity(): CategoryEntity{
+    return CategoryEntity(
+        classification,
+        developmentOccupations,
+        programingLanguage
     )
 }
 
@@ -54,7 +72,7 @@ fun GroupResponse.toEntity(): GroupEntity {
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toEntity(),
         userList
     )
 }

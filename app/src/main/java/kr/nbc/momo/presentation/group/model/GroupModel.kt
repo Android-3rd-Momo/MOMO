@@ -9,6 +9,12 @@ data class GroupModel(
     val firstDate: String,
     val lastDate: String,
     val leaderId: String,
-    val categoryList: List<String>,
+    val category: CategoryModel,
     val userList: List<String>
+)
+
+data class CategoryModel(
+    val classification: String = "",
+    val developmentOccupations: List<String> = listOf(),
+    val programingLanguage: List<String> = listOf()
 )

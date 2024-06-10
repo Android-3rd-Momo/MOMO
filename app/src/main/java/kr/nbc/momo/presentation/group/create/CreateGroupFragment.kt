@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -20,16 +22,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.signup.SignUpFragment
+import kr.nbc.momo.presentation.onboarding.term.TermFragment
 import kr.nbc.momo.util.toHashCode
 import java.util.Calendar
 
@@ -40,6 +46,7 @@ class CreateGroupFragment : Fragment() {
     private val viewModel: CreateGroupViewModel by viewModels()
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private var categoryText : String = "공모전"
     private lateinit var currentUser : String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -109,26 +116,59 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun initView() {
-        binding.firstDate.setOnClickListener {
-            showDialog(binding.firstDate)
+        with(binding) {
+            firstDate.setOnClickListener {
+                showDialog(firstDate)
+            }
+
+            lastDate.setOnClickListener {
+                showDialog(lastDate)
+            }
+
+            clCategoryDetail.setOnClickListener {
+                if (chipGroupDevelopmentOccupations.visibility == View.GONE) chipGroupDevelopmentOccupations.visibility = View.VISIBLE
+                else chipGroupDevelopmentOccupations.visibility = View.GONE
+                if (chipProgramingLanguage.visibility == View.GONE) chipProgramingLanguage.visibility = View.VISIBLE
+                else chipProgramingLanguage.visibility = View.GONE
+            }
+
+            ivGroupImage.setOnClickListener {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            }
+
+            btnCreateProject.setOnClickListener {
+                if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() || groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()) {
+                    Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    showDialog()
+                }
+            }
+        }
+        initSpinner()
+    }
+
+    private fun initSpinner() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.classification,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.categorySpinner.adapter = adapter
         }
 
-        binding.lastDate.setOnClickListener {
-            showDialog(binding.lastDate)
-        }
+        binding.categorySpinner.onItemSelectedListener =
+            object: AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }
+                }
 
-        binding.tvCategory.setOnClickListener {
-            if (binding.chipgroup.visibility == View.GONE) binding.chipgroup.visibility = View.VISIBLE
-            else binding.chipgroup.visibility = View.GONE
-        }
-
-        binding.ivGroupImage.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
-
-        binding.button.setOnClickListener {
-            showDialog()
-        }
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    return
+                }
+            }
     }
 
     private fun showDialog(dateType: TextView) {
@@ -155,9 +195,16 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun createGroup(){
-        val categoryList = listOf(binding.chipBack, binding.chipFront, binding.chipPull)
-            .filter { it.isChecked }
-            .map { it.text.toString() }
+        val categoryList = CategoryModel(
+            categoryText,
+            listOf(binding.chipBack, binding.chipFront, binding.chipServer, binding.chipGame,
+                binding.chipAI, binding.chipIOS, binding.chipWeb, binding.chipUIUX, binding.chipEtc)
+                .filter { it.isChecked }
+                .map { it.text.toString() },
+            listOf(binding.chipFrontLang, binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp)
+                .filter { it.isChecked }
+                .map { it.text.toString() }
+        )
 
         val image = if (imageUri != null) imageUri.toString() else null
         val groupId = binding.groupName.text.toString().toHashCode()
@@ -173,9 +220,11 @@ class CreateGroupFragment : Fragment() {
             categoryList,
             listOf(currentUser)
         )
+
         lifecycleScope.launch {
             viewModel.createGroup(group)
             sharedViewModel.getGroupId(groupId)
+            delay(1500)
 
             parentFragmentManager.popBackStack()
             val readGroupFragment = ReadGroupFragment()
