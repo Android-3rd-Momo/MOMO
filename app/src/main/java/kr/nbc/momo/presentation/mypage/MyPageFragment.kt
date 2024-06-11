@@ -328,6 +328,11 @@ class MyPageFragment : Fragment() {
         return textList
     }
 
+    private fun isValidId(username: String): Boolean {
+        val usernamePattern = "^[A-Za-z가-힣0-9]{3,20}$"
+        return username.matches(usernamePattern.toRegex())
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
