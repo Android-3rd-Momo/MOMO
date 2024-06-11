@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -125,8 +126,8 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            binding.categorySpinner.clipToOutline = true
-            binding.ivGroupImage.clipToOutline = true
+            categorySpinner.clipToOutline = true
+            ivGroupImage.clipToOutline = true
 
             val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
             val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
@@ -312,6 +313,7 @@ class CreateGroupFragment : Fragment() {
                 tag = i
                 text = i
                 isCheckable = true
+                setTextAppearance(context, R.style.Widget_Chip)
             })
         }
     }

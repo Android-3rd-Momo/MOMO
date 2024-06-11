@@ -10,4 +10,4 @@
     android:paddingVertical="10dp"
     android:gravity="center_vertical"
     android:textColor="@color/black"
-    android:textSize="15sp"/>
+    android:textSize="16dp"/>
