@@ -119,3 +119,10 @@ fun ImageView.setThumbnailByUrlOrDefault(url: String?){
         this.load(url)
     }
 }
+fun ImageView.setUploadImageByUrlOrDefault(url: String?){
+    if (url.isNullOrEmpty()){
+        this.load(R.drawable.image_default_upload)
+    }else {
+        this.load(url)
+    }
+}
