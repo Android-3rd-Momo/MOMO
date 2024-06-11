@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.signup.model
+package kr.nbc.momo.presentation.onboarding.signup.model
 
 data class UserModel(
     val userEmail: String = "",

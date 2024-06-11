@@ -38,10 +38,27 @@ class TermFragment : BottomSheetDialogFragment() {
 
     private fun allTermCheck() {
         binding.cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
-            binding.cbTerm1.isChecked = isChecked
-            binding.cbTerm2.isChecked = isChecked
-            binding.cbTerm3.isChecked = isChecked
-            binding.cbTerm4.isChecked = isChecked
+            setAllCheckbox(isChecked)
+        }
+
+        binding.cbTerm1.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+        binding.cbTerm2.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+        binding.cbTerm3.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+        binding.cbTerm4.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+    }
+
+    private fun setAllCheckbox(isChecked: Boolean) {
+        binding.cbTerm1.isChecked = isChecked
+        binding.cbTerm2.isChecked = isChecked
+        binding.cbTerm3.isChecked = isChecked
+        binding.cbTerm4.isChecked = isChecked
+    }
+
+    private fun updateAllAcceptCheckbox() {
+        binding.cbAllAccept.setOnCheckedChangeListener(null)
+        binding.cbAllAccept.isChecked = binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked
+        binding.cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
+            setAllCheckbox(isChecked)
         }
     }
 
