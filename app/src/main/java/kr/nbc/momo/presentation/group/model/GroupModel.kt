@@ -1,8 +1,7 @@
 package kr.nbc.momo.presentation.group.model
 
-import android.net.Uri
-
 data class GroupModel(
+    val groupId: String,
     val groupName: String,
     val groupOneLineDescription: String,
     val groupThumbnail: String?,
@@ -10,6 +9,12 @@ data class GroupModel(
     val firstDate: String,
     val lastDate: String,
     val leaderId: String,
-    val categoryList: List<String>,
+    val category: CategoryModel,
     val userList: List<String>
+)
+
+data class CategoryModel(
+    val classification: String,
+    val developmentOccupations: List<String>,
+    val programingLanguage: List<String>
 )

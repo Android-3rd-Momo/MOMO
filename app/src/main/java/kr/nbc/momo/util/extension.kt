@@ -1,11 +1,20 @@
 package kr.nbc.momo.util
 
+import android.util.Base64
 import android.view.View
+import android.widget.ImageView
+import coil.load
+import kr.nbc.momo.R
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.time.Duration
+import java.time.LocalDateTime
 import java.time.Period
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 fun String.setDateTimeFormatToMMDD(): String {
     val parsedKoreaTime = ZonedDateTime.parse(this)
@@ -38,8 +47,8 @@ fun String.getTimeGap(): String {
         val koreaZoneId = ZoneId.of("Asia/Seoul")
         val koreaTime = ZonedDateTime.now(koreaZoneId)
         val stringToTime = ZonedDateTime.parse(this)
-        val duration = Duration.between(koreaTime, stringToTime)
-        val period = Period.between(koreaTime.toLocalDate(), stringToTime.toLocalDate())
+        val duration = Duration.between(stringToTime, koreaTime)
+        val period = Period.between(stringToTime.toLocalDate(), koreaTime.toLocalDate())
 
         resultString = when {
             period.years >= 1 -> "${period.years}년 전"
@@ -55,4 +64,58 @@ fun String.getTimeGap(): String {
     }
 
     return resultString
+}
+
+//fun String.toHashCode(): String {
+//    val digest = try {
+//        val str = this.plus(LocalDateTime.now())
+//        val sh = MessageDigest.getInstance("SHA-256") // SHA-256 해시함수를 사용
+//        sh.update(str.toByteArray()) // str의 문자열을 해싱하여 sh에 저장
+//        val byteData = sh.digest() // sh 객체의 다이제스트를 얻는다.
+//
+//
+//        //얻은 결과를 hex string으로 변환
+//        val hexChars = "0123456789ABCDEF"
+//        val hex = CharArray(byteData.size * 2)
+//        for (i in byteData.indices) {
+//            val v = byteData[i].toInt() and 0xff
+//            hex[i * 2] = hexChars[v shr 4]
+//            hex[i * 2 + 1] = hexChars[v and 0xf]
+//        }
+//
+//        String(hex) //최종 결과를 String 으로 변환
+//
+//    } catch (e: NoSuchAlgorithmException) {
+//        e.printStackTrace()
+//        "" //오류 뜰경우 stirng은 blank값임
+//    }
+//    return digest
+//}
+
+const val SECRET_KEY = "ABCDEFGH12345678"
+fun String.encryptECB(): String {
+    val keySpec = SecretKeySpec(SECRET_KEY.toByteArray(), "AES")
+    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+    cipher.init(Cipher.ENCRYPT_MODE, keySpec)
+    val ciphertext = cipher.doFinal(this.plus(" " + LocalDateTime.now()).toByteArray())
+    val encodedByte = Base64.encode(ciphertext, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
+    return String(encodedByte)
+}
+
+fun String.decryptECB(): String {
+    val keySpec = SecretKeySpec(SECRET_KEY.toByteArray(), "AES")
+    val decodedByte: ByteArray = Base64.decode(this, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
+    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+    cipher.init(Cipher.DECRYPT_MODE, keySpec)
+    val output = cipher.doFinal(decodedByte)
+    return String(output)
+}
+
+
+fun ImageView.setThumbnailByUrlOrDefault(url: String?){
+    if (url.isNullOrEmpty()){
+        this.load(R.drawable.icon_profile)
+    }else {
+        this.load(url)
+    }
 }

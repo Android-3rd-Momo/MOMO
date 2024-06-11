@@ -1,13 +1,12 @@
 package kr.nbc.momo.data.model
 
-import android.net.Uri
+import kr.nbc.momo.domain.model.CategoryEntity
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.ChattingListEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 import kr.nbc.momo.domain.model.UserEntity
-import java.net.URI
 
 fun ChatResponse.toEntity(): ChatEntity {
     return ChatEntity(
@@ -31,8 +30,9 @@ fun GroupChatResponse.toEntity(): GroupChatEntity {
 }
 
 
-fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
+fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
     return GroupResponse(
+        groupId,
         groupName,
         groupOneLineDescription,
         downloadUri,
@@ -40,13 +40,31 @@ fun GroupEntity.toGroupResponse(downloadUri: String): GroupResponse{
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toResponse(),
         userList
+    )
+}
+
+fun CategoryEntity.toResponse(): CategoryResponse{
+    return CategoryResponse(
+        classification,
+        developmentOccupations,
+        programingLanguage
+    )
+}
+
+
+fun CategoryResponse.toEntity(): CategoryEntity{
+    return CategoryEntity(
+        classification,
+        developmentOccupations,
+        programingLanguage
     )
 }
 
 fun GroupResponse.toEntity(): GroupEntity {
     return GroupEntity(
+        groupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,
@@ -54,7 +72,7 @@ fun GroupResponse.toEntity(): GroupEntity {
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toEntity(),
         userList
     )
 }
@@ -65,11 +83,16 @@ fun UserResponse.toEntity(): UserEntity {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
+        userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
-        typeOfDevelopment = this.typeOfDevelopment ?: emptyList(),
-        programOfDevelopment = this.programOfDevelopment ?: emptyList(),
+        typeOfDevelopment = this.typeOfDevelopment,
+        programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userGroup = this.userGroup,
+        userPortfolioText = this.userPortfolioText
     )
 }
 
@@ -79,11 +102,16 @@ fun UserEntity.toUserResponse(): UserResponse {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
+        userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userGroup = this.userGroup,
+        userPortfolioText = this.userPortfolioText
     )
 }
 

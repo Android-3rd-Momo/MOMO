@@ -1,6 +1,5 @@
-package kr.nbc.momo.presentation.signup.model
+package kr.nbc.momo.presentation.onboarding.signup.model
 
-import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.domain.model.UserEntity
 
 fun UserEntity.toModel(): UserModel {
@@ -9,11 +8,16 @@ fun UserEntity.toModel(): UserModel {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
+        userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userGroup = this.userGroup,
+        userPortfolioText = this.userPortfolioText
     )
 }
 fun UserModel.toEntity(): UserEntity {
@@ -22,10 +26,15 @@ fun UserModel.toEntity(): UserEntity {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
+        userProfileThumbnailUrl = this.userProfileThumbnailUrl,
+        userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
+        userPortfolioImageUrl = this.userPortfolioImageUrl,
         userSelfIntroduction = this.userSelfIntroduction,
         typeOfDevelopment = this.typeOfDevelopment ,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
-        portfolio = this.portfolio
+        userGroup = this.userGroup,
+        userPortfolioText = this.userPortfolioText
     )
 }
