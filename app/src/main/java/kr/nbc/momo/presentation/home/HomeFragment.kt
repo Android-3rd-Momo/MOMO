@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
@@ -77,7 +78,7 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 //fragment의 수명주기가 해당 상태일 때만 실행되도록 보장
-                sharedViewModel.currentUser.collect { state ->
+                sharedViewModel.currentUser.collectLatest { state ->
                     when (state) {
                         is UiState.Loading -> {
                             //todo 로딩
@@ -90,7 +91,7 @@ class HomeFragment : Fragment() {
                         }
 
                         is UiState.Error -> {
-                            Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
+                            Log.d("Error", state.message)
                             currentUser = ""
                             currentUserCategory = listOf()
                         }
