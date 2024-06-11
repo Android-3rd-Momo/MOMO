@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.signup.model
+package kr.nbc.momo.presentation.onboarding.signup.model
 
 import kr.nbc.momo.domain.model.UserEntity
 
@@ -8,6 +8,7 @@ fun UserEntity.toModel(): UserModel {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
         userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
         userPortfolioImageUrl = this.userPortfolioImageUrl,
@@ -15,6 +16,7 @@ fun UserEntity.toModel(): UserModel {
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
+        userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText
     )
 }
@@ -24,6 +26,7 @@ fun UserModel.toEntity(): UserEntity {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
         userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
         userPortfolioImageUrl = this.userPortfolioImageUrl,
@@ -31,6 +34,7 @@ fun UserModel.toEntity(): UserEntity {
         typeOfDevelopment = this.typeOfDevelopment ,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
+        userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText
     )
 }

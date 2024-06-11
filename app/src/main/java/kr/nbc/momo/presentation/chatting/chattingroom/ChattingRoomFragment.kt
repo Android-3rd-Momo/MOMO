@@ -109,6 +109,7 @@ class ChattingRoomFragment : Fragment() {
     private fun initData() {
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.groupIdToGroupChat.collectLatest {
+                Log.d("group", "$it")
                 chattingListModel = it ?: ChattingListModel()
                 groupId = chattingListModel.groupId
                 groupName = chattingListModel.groupName
@@ -120,6 +121,7 @@ class ChattingRoomFragment : Fragment() {
                         userId = it.data.userId
                         userName = it.data.userName
                         rvAdapter.currentUserId = it.data.userId
+                        rvAdapter.notifyDataSetChanged()
                     }
 
                     is UiState.Loading -> {}

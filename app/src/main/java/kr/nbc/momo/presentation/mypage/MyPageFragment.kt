@@ -1,6 +1,7 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -19,13 +20,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -76,27 +82,28 @@ class MyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        observeUserProfileUpdate()
-        eachEventHandler()
         observeUserProfile()
-
+        eachEventHandler()
     }
 
-    private fun observeUserProfileUpdate() {
+    private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.userProfile.collect { state ->
+                sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            //todo 로딩
+                            // Handle loading state
                         }
 
                         is UiState.Success -> {
-                            sharedViewModel.getCurrentUser()
+                            isLogin()
+                            currentUser = state.data
+                            initView(state.data)
                         }
 
                         is UiState.Error -> {
+                            clearUserInfo()
+                            isLogOut()
                             Log.d("error", state.message)
                         }
                     }
@@ -111,48 +118,45 @@ class MyPageFragment : Fragment() {
             tvUserSelfIntroduction.text = user.userSelfIntroduction
             tvStackOfDevelopment.text = user.stackOfDevelopment
             tvPortfolio.text = user.userPortfolioText
-            //편집모드에 값 적용
             etUserName.setText(user.userName)
+            etUserGithub.setText(user.userGithub)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
             setChipList(binding.cgTypeTag, user.typeOfDevelopment)
             setChipList(binding.cgProgramTag, user.programOfDevelopment)
-
-            //이미지
-            ivUserProfileImage.load(user.userProfileThumbnailUrl)
+            ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.load(user.userPortfolioImageUrl)
         }
     }
 
-    private fun observeUserProfile() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                //fragment의 수명주기가 해당 상태일 때만 실행되도록 보장
-                sharedViewModel.currentUser.collect { state ->
-                    when (state) {
-                        is UiState.Loading -> {
-                            //todo 로딩
-                        }
-
-                        is UiState.Success -> {
-                            currentUser = state.data
-                            initView(state.data)
-                        }
-
-                        is UiState.Error -> {
-                            Log.d("error", state.message)
-                        }
-                    }
-                }
-            }
+    private fun clearUserInfo() {
+        with(binding) {
+            tvUserName.text = ""
+            etUserName.setText("")
+            tvUserSelfIntroduction.text = ""
+            etUserSelfIntroduction.setText("")
+            etUserGithub.setText("")
+            tvStackOfDevelopment.text = ""
+            etStackOfDevelopment.setText("")
+            tvPortfolio.text = ""
+            etPortfolio.setText("")
+            cgTypeTag.removeAllViews()
+            cgProgramTag.removeAllViews()
+            ivUserProfileImage.setThumbnailByUrlOrDefault(null)
+            ivBackProfileThumbnail.setImageDrawable(null)
+            ivPortfolioImage.setImageDrawable(null)
         }
     }
 
     private fun eachEventHandler() {
         binding.ivEditProfile.setOnClickListener {
-            setChangeMode()
+            if (currentUser != null) {
+                setChangeMode()
+            } else {
+                Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
+            }
         }
         binding.tvAddTagTypeOfDevelopment.setOnClickListener {
             showAddTagDialog(binding.cgTypeTag)
@@ -167,13 +171,37 @@ class MyPageFragment : Fragment() {
         binding.ivEditProfileImage.setOnClickListener {
             pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-
         binding.ivEditBackProfileThumbnail.setOnClickListener {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-
         binding.ivPortfolioImage.setOnClickListener {
             pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        }
+        binding.ivGitHub.setOnClickListener {
+            val githubUrl = currentUser?.userGithub
+
+//            val pattern = Patterns.WEB_URL.matcher(githubUrl).matches() //todo 일치한 깃헙 주소인지 확인 해야함!!
+            if (!githubUrl.isNullOrEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
+                startActivity(intent)
+            } else { //todo github 추가
+                Snackbar.make(binding.root, "설정한 Github 주소가 없습니다.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        binding.ivSetUp.setOnClickListener {
+            if (currentUser != null) {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, SetUpFragment())
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        binding.btnGoOnBoarding.setOnClickListener {
+            val intent = Intent(requireContext(), GetStartedActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
     }
 
@@ -184,12 +212,13 @@ class MyPageFragment : Fragment() {
             binding.tvAddTagTypeOfDevelopment,
             binding.tvAddTagProgramOfDevelopment,
             binding.etUserName,
+            binding.etUserGithub,
             binding.etUserSelfIntroduction,
             binding.etStackOfDevelopment,
             binding.etPortfolio,
             binding.btnCompleteEdit,
             binding.ivEditProfileImage,
-            binding.ivEditBackProfileThumbnail,
+            binding.ivEditBackProfileThumbnail
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -203,6 +232,20 @@ class MyPageFragment : Fragment() {
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         setCloseIconVisibility(binding.cgTypeTag, isEditMode)
         setCloseIconVisibility(binding.cgProgramTag, isEditMode)
+    }
+
+    private fun isLogin() { //todo 코드 간결화 필요
+        binding.clUserDetailInfo.setVisibleToVisible()
+        binding.ivSetUp.setVisibleToVisible()
+        binding.ivEditProfile.setVisibleToVisible()
+        binding.btnGoOnBoarding.setVisibleToGone()
+    }
+
+    private fun isLogOut() { //todo 코드 간결화 필요
+        binding.clUserDetailInfo.setVisibleToGone()
+        binding.ivSetUp.setVisibleToGone()
+        binding.ivEditProfile.setVisibleToGone()
+        binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
     private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
@@ -249,9 +292,9 @@ class MyPageFragment : Fragment() {
         val chip = Chip(requireContext())
         chip.text = tagText
         chip.isClickable = false
-        chip.isCloseIconVisible = showCloseIcon // x 생성
+        chip.isCloseIconVisible = showCloseIcon
         chip.setOnCloseIconClickListener {
-            chipGroup.removeView(chip) // 선택한 아이템 삭제
+            chipGroup.removeView(chip)
         }
         chipGroup.addView(chip)
     }
@@ -261,19 +304,20 @@ class MyPageFragment : Fragment() {
             val updatedUserModel = currentUser.copy(
                 userName = binding.etUserName.text.toString(),
                 userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+                userGithub = binding.etUserGithub.text.toString(),
                 stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
                 userProfileThumbnailUrl = profileImageUri?.toString() ?: currentUser.userProfileThumbnailUrl,
                 userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: currentUser.userBackgroundThumbnailUrl,
-                userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl,
+                userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl
             )
             viewModel.saveUserProfile(updatedUserModel)
+            sharedViewModel.updateUser(updatedUserModel)
         }
     }
 
-    //text를 list에 추가
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()
         for (i in 0 until chipGroup.childCount) {

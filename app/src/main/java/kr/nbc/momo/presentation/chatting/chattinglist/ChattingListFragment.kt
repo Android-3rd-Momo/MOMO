@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattinglist.dummy.groupIdsDummy
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
@@ -70,8 +69,24 @@ class ChattingListFragment : Fragment() {
     }
 
     private fun initData() {
-        chattingListViewModel.getChattingList(groupIdsDummy)
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.currentUser.collectLatest {
+                when (it) {
+                    is UiState.Loading -> {
+                        //todo 로딩
+                    }
 
+                    is UiState.Success -> {
+                        chattingListViewModel.getChattingList(it.data.userGroup)
+                        Log.d("Check UiState", "${it.data.userGroup}")
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", it.message)
+                    }
+                }
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             chattingListViewModel.chattingList.collectLatest { chattingList ->
                 when (chattingList) {
@@ -80,11 +95,11 @@ class ChattingListFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        if(chattingList.data.isNotEmpty()){
+                        if (chattingList.data.isNotEmpty()) {
                             chattingListAdapter.itemList = chattingList.data
                             Log.d("Check UiState", chattingList.data[0].latestChatMessage)
                             chattingListAdapter.notifyDataSetChanged()
-                        }else {
+                        } else {
                             //todo 가입한 모임이 없습니다.
                         }
                     }
