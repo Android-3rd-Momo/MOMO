@@ -222,6 +222,7 @@ class CreateGroupFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.createGroup(group)
             sharedViewModel.getGroupId(groupId)
+            viewModel.joinGroup(groupId)
             delay(1500)
 
             parentFragmentManager.popBackStack()
