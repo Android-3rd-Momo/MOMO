@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattinglist.dummy.groupIdsDummy
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
@@ -116,7 +115,7 @@ class ChattingListFragment : Fragment() {
 
     //넘기는 거 미완성(conflict 가능성)
     private fun itemOnClick(chattingListModel: ChattingListModel) {
-        sharedViewModel.setGroupIdToGroupChat(chattingListModel)
+        sharedViewModel.getGroupId(chattingListModel.groupId)
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, ChattingRoomFragment())
             addToBackStack(null)

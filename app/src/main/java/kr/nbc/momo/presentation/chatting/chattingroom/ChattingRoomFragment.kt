@@ -30,13 +30,11 @@ class ChattingRoomFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var chattingListModel = ChattingListModel()
-    //bundle로 던지든 공유뷰모델에 넣든 리스트에서 선택한 그룹아이디 받아오기(얘네도 정보 플로우 이용해서 갱신해야함)
-    private var groupId = ""
-    private var groupName = ""
 
     //공유 뷰모델에서 로그인 정보 받아오기
-    private var userId = ""
-    private var userName = ""
+    private var currentUserId = ""
+    private var currentUsername = ""
+    private var currentUrl = ""
     private val rvAdapter = ChattingRecyclerViewAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +51,8 @@ class ChattingRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeGroupId()
+        observeGroupListItem()
         hideNav()
         initData()
         observeChatList()
@@ -61,7 +61,7 @@ class ChattingRoomFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        sharedViewModel.setLastViewedChat(groupId, userId, userName)
+        sharedViewModel.setLastViewedChat(chattingListModel.groupId, currentUserId, currentUsername)
     }
 
     override fun onDestroyView() {
@@ -70,9 +70,32 @@ class ChattingRoomFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        sharedViewModel.removeGroupIdToGroupChat()
+    private fun observeGroupId() {
+        sharedViewModel.groupId.observe(viewLifecycleOwner) {
+            it?.let { groupId ->
+                viewModel.getChatListItemById(groupId)
+            }
+        }
+    }
+
+    private fun observeGroupListItem() {
+        lifecycleScope.launch {
+            viewModel.chatListItem.collectLatest {
+                when (it) {
+                    is UiState.Loading -> {}
+                    is UiState.Success -> {
+                        chattingListModel = it.data
+                        binding.tvTitle.text = it.data.groupName
+                        viewModel.getChatMessages(it.data.groupId)
+                        Log.d("ChattingRoom", "${it.data}")
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("ChattingRoom", "${it.message}")
+                    }
+                }
+            }
+        }
     }
 
     private fun observeChatList() {
@@ -84,10 +107,10 @@ class ChattingRoomFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
+                        Log.d("ChattingRoom", "${chatMessages.data}")
                         rvAdapter.itemList = chatMessages.data
                         binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
                         rvAdapter.notifyDataSetChanged()
-                        Log.d("ChattingRoom", "${chatMessages.data}")
                     }
 
                     is UiState.Error -> {
@@ -106,10 +129,15 @@ class ChattingRoomFragment : Fragment() {
             }
             ivSend.setOnClickListener {
                 val text = binding.etText.text.toString()
-                viewModel.sendChat(groupId, userId, text, userName, groupName)
+                chattingListModel.run {
+                    val userId = currentUserId
+                    val userName = currentUsername
+                    val url = currentUrl
+                    viewModel.sendChat(groupId, userId, text, userName, groupName, url)
+                    Log.d("ChattingRoom", "${it}")
+                }
                 binding.etText.text.clear()
             }
-            tvTitle.text = groupName
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
             }
@@ -118,24 +146,23 @@ class ChattingRoomFragment : Fragment() {
 
     private fun initData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.groupIdToGroupChat.collectLatest {
-                Log.d("group", "$it")
-                chattingListModel = it ?: ChattingListModel()
-                groupId = chattingListModel.groupId
-                groupName = chattingListModel.groupName
-                viewModel.getChatMessages(groupId)
-            }
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
                     is UiState.Success -> {
-                        userId = it.data.userId
-                        userName = it.data.userName
-                        rvAdapter.currentUserId = it.data.userId
+                        if (it.data.userId != "") {
+                            currentUserId = it.data.userId
+                            rvAdapter.currentUserId = it.data.userId
+                            Log.d("ChattingRoom", "${it.data}")
+                        }
+                        if (it.data.userName != "") currentUsername = it.data.userName
+                        currentUrl = it.data.userProfileThumbnailUrl
                         rvAdapter.notifyDataSetChanged()
                     }
 
                     is UiState.Loading -> {}
-                    is UiState.Error -> {}
+                    is UiState.Error -> {
+                        Log.d("ChattingRoom", "${it.message}")
+                    }
                 }
             }
         }

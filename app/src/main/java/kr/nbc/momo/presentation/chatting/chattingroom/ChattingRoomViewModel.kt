@@ -8,20 +8,27 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetChattingUseCase
 import kr.nbc.momo.domain.usecase.SendChatUseCase
-import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
+import kr.nbc.momo.presentation.chatting.chattinglist.model.toModel
 import kr.nbc.momo.presentation.chatting.chattingroom.model.GroupChatModel
 import kr.nbc.momo.presentation.chatting.chattingroom.model.toModel
 import javax.inject.Inject
+
 @HiltViewModel
 class ChattingRoomViewModel @Inject constructor(
     private val getChattingUseCase: GetChattingUseCase,
-    private val sendChatUseCase: SendChatUseCase
+    private val sendChatUseCase: SendChatUseCase,
+    private val getChattingListByIdUseCase: GetChattingListByIdUseCase
 ): ViewModel() {
     private val _chatMessages = MutableStateFlow<UiState<GroupChatModel>>(UiState.Loading)
     val chatMessages: StateFlow<UiState<GroupChatModel>> get() = _chatMessages
+
+    private val _chatListItem = MutableStateFlow<UiState<ChattingListModel>>(UiState.Loading)
+    val chatListItem: StateFlow<UiState<ChattingListModel>> get() = _chatListItem
 
     fun getChatMessages(groupId: String) {
         viewModelScope.launch {
@@ -33,9 +40,15 @@ class ChattingRoomViewModel @Inject constructor(
         }
     }
 
-    fun sendChat(groupId: String, userId: String, text: String, userName: String, groupName: String){
+    fun sendChat(groupId: String, userId: String, text: String, userName: String, groupName: String, url: String){
         viewModelScope.launch{
-            sendChatUseCase.invoke(groupId, userId, text, userName, groupName)
+            sendChatUseCase.invoke(groupId, userId, text, userName, groupName, url)
+        }
+    }
+
+    fun getChatListItemById(groupId: String){
+        viewModelScope.launch{
+            _chatListItem.value = UiState.Success(getChattingListByIdUseCase.invoke(groupId).toModel())
         }
     }
 }
