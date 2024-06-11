@@ -8,10 +8,13 @@ import kr.nbc.momo.databinding.RvItemErrorBinding
 import kr.nbc.momo.databinding.RvItemUserBinding
 import kr.nbc.momo.presentation.chatting.chattingroom.model.ChatModel
 import kr.nbc.momo.presentation.chatting.chattingroom.model.GroupChatModel
+import kr.nbc.momo.presentation.chatting.chattingroom.model.GroupUserModel
 import kr.nbc.momo.presentation.chatting.chattingroom.multi.ChattingEnumClass
 import kr.nbc.momo.util.setDateTimeFormatToMMDD
 import kr.nbc.momo.util.setDateTimeFormatToYYYYmmDD
+import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -64,6 +67,7 @@ class ChattingRecyclerViewAdapter() :
             )
 
             ChattingEnumClass.ELSE_VIEW_TYPE.type -> (holder as ItemElseViewHolder).bind(
+                itemList.userList.first { it.userId == currentUserId },
                 itemList.chatList[position],
                 isDateChanged(position),
                 isMinuteChanged(position),
@@ -103,6 +107,7 @@ class ChattingRecyclerViewAdapter() :
         private val binding: RvItemElseBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
+            userModel: GroupUserModel,
             chatModel: ChatModel,
             isDateChanged: Boolean,
             isMinuteChanged: Boolean,
@@ -113,25 +118,32 @@ class ChattingRecyclerViewAdapter() :
                 tvTime.text = chatModel.dateTime.setDateTimeFormatToMMDD()
                 tvDivider.text = chatModel.dateTime.setDateTimeFormatToYYYYmmDD()
                 tvUserName.text = chatModel.userName
+                ivProfile.setThumbnailByUrlOrDefault(userModel.userProfileUrl)
                 //유저 바뀌면 이름 보여주기
                 if (isUserChanged) {
+                    ivProfile.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
                     tvTime.setVisibleToVisible()
                 } else {
                     tvUserName.setVisibleToGone()
+                    tvUserName.setVisibleToInvisible()
                 }
 
                 if (isMinuteChanged) {
                     tvTime.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
+                    ivProfile.setVisibleToVisible()
                 } else {
-                    if (!isUserChanged) tvTime.setVisibleToGone()
+                    if (!isUserChanged) {
+                        tvTime.setVisibleToGone()
+                    }
                 }
 
                 //날 바뀌면 divider 보여주기
                 if (isDateChanged) {
                     tvDivider.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
+                    ivProfile.setVisibleToVisible()
                 } else {
                     tvDivider.setVisibleToGone()
                 }

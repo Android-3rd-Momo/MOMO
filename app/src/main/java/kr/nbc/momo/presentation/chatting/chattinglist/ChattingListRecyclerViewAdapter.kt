@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemChattingListBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setVisibleToInvisible
+import kr.nbc.momo.util.setVisibleToVisible
 
 class ChattingListRecyclerViewAdapter(
     private val onClick: (ChattingListModel) -> Unit
@@ -22,6 +24,14 @@ class ChattingListRecyclerViewAdapter(
                 tvGroupName.text = chattingListModel.groupName
                 tvLatestChatText.text = chattingListModel.latestChatMessage
                 tvLatestChatTime.text = chattingListModel.latestChatTimeGap
+                tvSign.apply {
+                    if (chattingListModel.latestChatIndexGap == 0) {
+                        setVisibleToInvisible()
+                    }else {
+                        setVisibleToVisible()
+                        text = chattingListModel.latestChatIndexGap.toString()
+                    }
+                }
             }
             itemView.setOnClickListener {
                 onClick(chattingListModel)
