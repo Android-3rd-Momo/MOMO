@@ -8,6 +8,7 @@ fun ChattingListEntity.toModel(): ChattingListModel{
         groupName = groupName,
         groupThumbnailUrl = groupThumbnailUrl,
         latestChatMessage = latestChatMessage,
-        latestChatTimeGap = latestChatTimeGap
+        latestChatTimeGap = latestChatTimeGap,
+        latestChatIndexGap = latestChatIndexGap
     )
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
+import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    private val getChattingListByIdUseCase: GetChattingListByIdUseCase
+    private val getChattingListByIdUseCase: GetChattingListByIdUseCase,
+    private val setLastViewedChatUseCase: SetLastViewedChatUseCase
 ) : ViewModel() {
     private val _groupId: MutableLiveData<String?> = MutableLiveData()
     val groupId: MutableLiveData<String?> get() = _groupId
@@ -64,11 +66,16 @@ class SharedViewModel @Inject constructor(
         _groupIdToGroupChat.value = null
     }
 
+    fun setLastViewedChat(groupId: String, userId: String, userName: String){
+        viewModelScope.launch {
+            setLastViewedChatUseCase.invoke(groupId, userId, userName)
+        }
+    }
+
     fun getChattingListById(string: String){
         viewModelScope.launch {
             _groupIdToGroupChat.value = getChattingListByIdUseCase(string).toModel()
         }
-
     }
 
 }
