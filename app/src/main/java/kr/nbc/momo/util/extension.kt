@@ -5,8 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import coil.load
 import kr.nbc.momo.R
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
+import kr.nbc.momo.databinding.UiStateLoadingBinding
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Period
@@ -119,10 +118,39 @@ fun ImageView.setThumbnailByUrlOrDefault(url: String?){
         this.load(url)
     }
 }
-fun ImageView.setUploadImageByUrlOrDefault(url: String?){
-    if (url.isNullOrEmpty()){
+
+fun ImageView.setUploadImageByUrlOrDefault(url: String?) {
+    if (url.isNullOrEmpty()) {
         this.load(R.drawable.image_default_upload)
-    }else {
+    } else {
         this.load(url)
     }
+}
+
+
+fun UiStateLoadingBinding.setVisibleToGone(){
+    prCircular.setVisibleToGone()
+    tvLoading.setVisibleToGone()
+    ivError.setVisibleToGone()
+    tvError.setVisibleToGone()
+}
+
+fun UiStateLoadingBinding.setVisibleToInvisible(){
+    prCircular.setVisibleToInvisible()
+    tvLoading.setVisibleToInvisible()
+    ivError.setVisibleToGone()
+    tvError.setVisibleToGone()
+}
+fun UiStateLoadingBinding.setVisibleToVisible(){
+    prCircular.setVisibleToVisible()
+    tvLoading.setVisibleToVisible()
+    ivError.setVisibleToGone()
+    tvError.setVisibleToGone()
+}
+
+fun UiStateLoadingBinding.setVisibleToError(){
+    prCircular.setVisibleToGone()
+    tvLoading.setVisibleToGone()
+    ivError.setVisibleToVisible()
+    tvError.setVisibleToVisible()
 }
