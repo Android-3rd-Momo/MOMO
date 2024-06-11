@@ -4,9 +4,19 @@ import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
 import kr.nbc.momo.domain.model.GroupUserEntity
 
-fun GroupUserEntity.toModel() = GroupUserModel(userId, userName, userProfileUrl)
+fun GroupUserEntity.toModel() = GroupUserModel(
+    userId,
+    userName,
+    userProfileUrl,
+    lastViewedChat.toModel()
+)
 
-fun ChatEntity.toModel() = ChatModel(userName, userId, text, dateTime)
+fun ChatEntity.toModel() = ChatModel(
+    userName,
+    userId,
+    text,
+    dateTime
+)
 
 fun GroupChatEntity.toModel() = GroupChatModel(
     groupId = groupId,

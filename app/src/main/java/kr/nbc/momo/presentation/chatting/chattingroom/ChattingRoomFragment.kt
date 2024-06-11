@@ -59,16 +59,25 @@ class ChattingRoomFragment : Fragment() {
         initView()
     }
 
+    override fun onStop() {
+        super.onStop()
+        sharedViewModel.setLastViewedChat(groupId, userId, userName)
+    }
+
     override fun onDestroyView() {
         showNav()
-        sharedViewModel.removeGroupIdToGroupChat()
         _binding = null
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        sharedViewModel.removeGroupIdToGroupChat()
+    }
+
     private fun observeChatList() {
         lifecycleScope.launch {
-            viewModel.chatMessages.collect { chatMessages ->
+            viewModel.chatMessages.collectLatest { chatMessages ->
                 when (chatMessages) {
                     is UiState.Loading -> {
 
@@ -78,6 +87,7 @@ class ChattingRoomFragment : Fragment() {
                         rvAdapter.itemList = chatMessages.data
                         binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
                         rvAdapter.notifyDataSetChanged()
+                        Log.d("ChattingRoom", "${chatMessages.data}")
                     }
 
                     is UiState.Error -> {
@@ -94,7 +104,7 @@ class ChattingRoomFragment : Fragment() {
                 adapter = rvAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
-            btnSend.setOnClickListener {
+            ivSend.setOnClickListener {
                 val text = binding.etText.text.toString()
                 viewModel.sendChat(groupId, userId, text, userName, groupName)
                 binding.etText.text.clear()

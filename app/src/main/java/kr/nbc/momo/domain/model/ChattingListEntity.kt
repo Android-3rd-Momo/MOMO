@@ -6,4 +6,5 @@ data class ChattingListEntity(
     val groupThumbnailUrl: String? = "",
     val latestChatMessage: String = "",
     val latestChatTimeGap: String = "",
+    val latestChatIndexGap: Int = 0
 )
