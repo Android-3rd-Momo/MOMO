@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/chatting_list_item_circle"
-        android:text="1"
+        tool:text="1"
         android:textColor="@color/white"
         android:textSize="12dp"
         android:maxLines="1"
