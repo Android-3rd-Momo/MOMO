@@ -62,14 +62,13 @@
 
     <TextView
         android:id="@+id/tvLatestChatTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:maxLines="1"
         android:textAlignment="center"
         android:textSize="12dp"
-        android:layout_marginTop="2dp"
-        app:layout_constraintEnd_toEndOf="@id/tvSign"
-        app:layout_constraintStart_toStartOf="@+id/tvSign"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSign"
         tool:text="5분 전" />
 </androidx.constraintlayout.widget.ConstraintLayout>
