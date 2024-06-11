@@ -1,6 +1,8 @@
 package kr.nbc.momo.presentation.group.create
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -10,8 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -34,6 +38,7 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
+import kr.nbc.momo.databinding.SpinnerItemSelectedBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
@@ -49,7 +54,7 @@ class CreateGroupFragment : Fragment() {
     private val viewModel: CreateGroupViewModel by viewModels()
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private var categoryText : String = "공모전"
+    private var categoryText : String = ""
     private lateinit var currentUser : String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -120,6 +125,9 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
+            binding.categorySpinner.clipToOutline = true
+            binding.ivGroupImage.clipToOutline = true
+
             val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
             val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
             setChipGroup(chipGroupDev, chipGroupDevelopmentOccupations)
@@ -134,37 +142,74 @@ class CreateGroupFragment : Fragment() {
             }
 
             clCategoryDetail.setOnClickListener {
-                if (chipGroupDevelopmentOccupations.visibility == View.GONE) chipGroupDevelopmentOccupations.visibility = View.VISIBLE
-                else chipGroupDevelopmentOccupations.visibility = View.GONE
-                if (chipProgramingLanguage.visibility == View.GONE) chipProgramingLanguage.visibility = View.VISIBLE
-                else chipProgramingLanguage.visibility = View.GONE
+                val viewArr = listOf(chipGroupDevelopmentOccupations, chipProgramingLanguage, tvDevelopmentOccupations, tvProgramingLanguage)
+                viewArr.forEach {
+                    if (it.visibility == View.GONE) {
+                        it.visibility = View.VISIBLE
+                    } else {
+                        it.visibility = View.GONE
+                    }
+                }
             }
 
+            ivGroupImage.clipToOutline = true
             ivGroupImage.setOnClickListener {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
             }
 
             btnCreateProject.setOnClickListener {
-                if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() || groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()) {
+                if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
+                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()) {
                     Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
+                } else if (categoryText == "카테고리" ||
+                    binding.chipProgramingLanguage.checkedChipIds.size +
+                    binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1) {
+                    Snackbar.make(binding.root, "카테고리를 선택해주세요.", Snackbar.LENGTH_SHORT).show()
                 } else {
                     showDialog()
                 }
             }
         }
         initSpinner()
+        binding.clHome.setOnClickListener {
+            hideKeyboard(requireActivity() as Activity)
+        }
+        binding.svHome.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scrollY > oldScrollY) {
+                hideKeyboard(requireActivity() as Activity)
+            }
+            if (scrollY  < oldScrollY) {
+                hideKeyboard(requireActivity() as Activity)
+            }
+        }
+
+
     }
 
     private fun initSpinner() {
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.classification,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.categorySpinner.adapter = adapter
+        val items = resources.getStringArray(R.array.classification)
+        val spinnerAapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val v = super.getView(position, convertView, parent)
+
+                if (position == count) {
+                    val textView = (v.findViewById<View>(R.id.tvCategorySpinner) as TextView)
+                    textView.text = ""
+                    textView.hint = getItem(count)
+                }
+
+                return v
+            }
+
+            override fun getCount(): Int {
+                return super.getCount() - 1
+            }
         }
 
+        spinnerAapter.addAll(items.toMutableList())
+        spinnerAapter.add("카테고리")
+        binding.categorySpinner.adapter = spinnerAapter
+        binding.categorySpinner.setSelection(spinnerAapter.count)
         binding.categorySpinner.onItemSelectedListener =
             object: AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -174,6 +219,7 @@ class CreateGroupFragment : Fragment() {
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
+                    categoryText = ""
                     return
                 }
             }
@@ -277,5 +323,10 @@ class CreateGroupFragment : Fragment() {
             textList.add(chip.text.toString())
         }
         return textList
+    }
+
+    private fun hideKeyboard(activity: Activity){
+        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken, 0)
     }
 }
