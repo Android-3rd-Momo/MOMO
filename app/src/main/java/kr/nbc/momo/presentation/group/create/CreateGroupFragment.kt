@@ -1,12 +1,15 @@
 package kr.nbc.momo.presentation.group.create
 
 import android.app.DatePickerDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -22,6 +25,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -115,6 +120,11 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
+            val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
+            val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
+            setChipGroup(chipGroupDev, chipGroupDevelopmentOccupations)
+            setChipGroup(chipGroupLang, chipProgramingLanguage)
+
             firstDate.setOnClickListener {
                 showDialog(firstDate)
             }
@@ -195,13 +205,8 @@ class CreateGroupFragment : Fragment() {
     private fun createGroup(){
         val categoryList = CategoryModel(
             categoryText,
-            listOf(binding.chipBack, binding.chipFront, binding.chipServer, binding.chipGame,
-                binding.chipAI, binding.chipIOS, binding.chipWeb, binding.chipUIUX, binding.chipEtc)
-                .filter { it.isChecked }
-                .map { it.text.toString() },
-            listOf(binding.chipFrontLang, binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp)
-                .filter { it.isChecked }
-                .map { it.text.toString() }
+            getChipText(binding.chipGroupDevelopmentOccupations),
+            getChipText(binding.chipProgramingLanguage)
         )
 
         val image = if (imageUri != null) imageUri.toString() else null
@@ -240,6 +245,8 @@ class CreateGroupFragment : Fragment() {
             .setView(dialogBinding.root)
             .setCancelable(false)
             .create()
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialogBinding.tvClose.text = "프로젝트를 생성합니다"
         dialogBinding.btnConfirm.setOnClickListener {
@@ -251,5 +258,24 @@ class CreateGroupFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup){
+        for (i in chipList) {
+            chipGroup.addView(Chip(requireContext()).apply {
+                tag = i
+                text = i
+                isCheckable = true
+            })
+        }
+    }
+
+    private fun getChipText(chipGroup: ChipGroup): List<String> {
+        val textList = mutableListOf<String>()
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as Chip
+            textList.add(chip.text.toString())
+        }
+        return textList
     }
 }
