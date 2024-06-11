@@ -119,6 +119,15 @@ fun ImageView.setThumbnailByUrlOrDefault(url: String?){
     }
 }
 
+fun ImageView.setUploadImageByUrlOrDefault(url: String?) {
+    if (url.isNullOrEmpty()) {
+        this.load(R.drawable.image_default_upload)
+    } else {
+        this.load(url)
+    }
+}
+
+
 fun UiStateLoadingBinding.setVisibleToGone(){
     prCircular.setVisibleToGone()
     tvLoading.setVisibleToGone()
