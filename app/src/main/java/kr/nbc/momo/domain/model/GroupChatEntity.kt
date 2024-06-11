@@ -10,7 +10,8 @@ data class GroupChatEntity(
 data class GroupUserEntity(
     val userId: String = "",
     val userName: String = "",
-    val userProfileUrl: String = ""
+    val userProfileUrl: String = "",
+    val lastViewedChat: ChatEntity = ChatEntity()
 )
 
 data class ChatEntity(

@@ -16,7 +16,7 @@ fun ChatResponse.toEntity(): ChatEntity {
 
 fun GroupUserResponse.toEntity(): GroupUserEntity {
     return GroupUserEntity(
-        userId, userName, userProfileUrl
+        userId, userName, userProfileUrl, lastViewedChat.toEntity()
     )
 }
 
@@ -121,6 +121,7 @@ fun ChattingListResponse.toEntity(): ChattingListEntity {
         groupId,
         groupThumbnailUrl,
         latestChatMessage,
-        latestChatTimeGap
+        latestChatTimeGap,
+        latestChatIndexGap
     )
 }

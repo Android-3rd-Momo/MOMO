@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.chatting.chattinglist.dummy.groupIdsDummy
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
@@ -77,7 +78,8 @@ class ChattingListFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        chattingListViewModel.getChattingList(it.data.userGroup)
+                        Log.d("Check UserState", "${it.data}")
+                        chattingListViewModel.getChattingList(it.data.userGroup, it.data.userId)
                         Log.d("Check UiState", "${it.data.userGroup}")
                     }
 
@@ -97,7 +99,7 @@ class ChattingListFragment : Fragment() {
                     is UiState.Success -> {
                         if (chattingList.data.isNotEmpty()) {
                             chattingListAdapter.itemList = chattingList.data
-                            Log.d("Check UiState", chattingList.data[0].latestChatMessage)
+                            Log.d("Check UiState", "${chattingList.data[0].latestChatIndexGap}")
                             chattingListAdapter.notifyDataSetChanged()
                         } else {
                             //todo 가입한 모임이 없습니다.
