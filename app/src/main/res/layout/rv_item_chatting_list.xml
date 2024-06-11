@@ -68,8 +68,7 @@
         android:textAlignment="center"
         android:textSize="12dp"
         android:layout_marginTop="2dp"
-        app:layout_constraintEnd_toEndOf="@id/tvSign"
-        app:layout_constraintStart_toStartOf="@+id/tvSign"
-        app:layout_constraintTop_toBottomOf="@+id/tvSign"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tool:text="5분 전" />
 </androidx.constraintlayout.widget.ConstraintLayout>
