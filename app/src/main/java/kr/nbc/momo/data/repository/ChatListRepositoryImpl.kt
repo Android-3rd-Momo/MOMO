@@ -39,7 +39,7 @@ class ChatListRepositoryImpl @Inject constructor(
             )
             val lastViewedChatting = databaseResponse.userList.firstOrNull { it.userId == userId }?.lastViewedChat ?: ChatResponse()
 
-            val chattingIndexGap = if(chatListResponse.indexOf(lastViewedChatting) == -1) 0 else chatListResponse.lastIndex - chatListResponse.indexOf(lastViewedChatting)
+            val chattingIndexGap = if(chatListResponse.indexOf(lastViewedChatting) == -1) chatListResponse.size else chatListResponse.lastIndex - chatListResponse.indexOf(lastViewedChatting)
 
             val chattingListResponse = ChattingListResponse(
                 groupName = storeResponse.groupName,

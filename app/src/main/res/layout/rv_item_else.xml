@@ -7,9 +7,9 @@
     android:paddingTop="10dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/ivProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/cardView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:cardCornerRadius="99dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
@@ -17,8 +17,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/ivProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/icon_profile" />
 
@@ -38,6 +39,7 @@
         android:id="@+id/tvChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/chatting_item_else_bg"
         android:paddingStart="10dp"
@@ -45,10 +47,11 @@
         android:paddingEnd="10dp"
         android:paddingBottom="7dp"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvUserName"
-        app:layout_constraintStart_toStartOf="@+id/tvUserName"
+        android:maxWidth="250dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/tvUserName"
-        tool:text="TEST" />
+        tool:text="TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -68,8 +71,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:textSize="14dp"
-        app:layout_constraintStart_toEndOf="@id/ivProfile"
-        app:layout_constraintTop_toTopOf="@id/ivProfile"
+        app:layout_constraintStart_toEndOf="@id/cardView"
+        app:layout_constraintTop_toTopOf="@id/cardView"
         tool:text="유저이름" />
 
 

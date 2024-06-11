@@ -54,7 +54,8 @@ class ChatRepositoryImpl @Inject constructor(
         userId: String,
         text: String,
         userName: String,
-        groupName: String
+        groupName: String,
+        url: String
     ) {
         try {
             val groupSnapshot = chatRef.child(groupId).get().await()

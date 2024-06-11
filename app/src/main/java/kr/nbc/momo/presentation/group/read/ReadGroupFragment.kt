@@ -1,7 +1,6 @@
 package kr.nbc.momo.presentation.group.read
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -265,7 +264,7 @@ class ReadGroupFragment : Fragment() {
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
+                    //sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
                     val chattingRoomFragment = ChattingRoomFragment()
                     parentFragmentManager.popBackStack()
                     parentFragmentManager.beginTransaction()

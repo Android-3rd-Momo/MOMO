@@ -14,13 +14,11 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
-import kr.nbc.momo.presentation.chatting.chattinglist.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    private val getChattingListByIdUseCase: GetChattingListByIdUseCase,
     private val setLastViewedChatUseCase: SetLastViewedChatUseCase
 ) : ViewModel() {
     private val _groupId: MutableLiveData<String?> = MutableLiveData()
@@ -55,27 +53,11 @@ class SharedViewModel @Inject constructor(
     }
 
 
-
-    private val _groupIdToGroupChat: MutableStateFlow<ChattingListModel?> = MutableStateFlow(null)
-    val groupIdToGroupChat: StateFlow<ChattingListModel?> get() = _groupIdToGroupChat
-
-    fun setGroupIdToGroupChat(chattingListModel: ChattingListModel){
-        _groupIdToGroupChat.value = chattingListModel
-    }
-    fun removeGroupIdToGroupChat(){
-        _groupIdToGroupChat.value = null
-    }
-
     fun setLastViewedChat(groupId: String, userId: String, userName: String){
         viewModelScope.launch {
             setLastViewedChatUseCase.invoke(groupId, userId, userName)
         }
     }
 
-    fun getChattingListById(string: String){
-        viewModelScope.launch {
-            _groupIdToGroupChat.value = getChattingListByIdUseCase(string).toModel()
-        }
-    }
 
 }
