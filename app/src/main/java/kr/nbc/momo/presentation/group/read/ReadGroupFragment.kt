@@ -1,12 +1,15 @@
 package kr.nbc.momo.presentation.group.read
 
 import android.app.DatePickerDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -22,6 +25,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
@@ -259,7 +264,7 @@ class ReadGroupFragment : Fragment() {
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
+                    //sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
                     val chattingRoomFragment = ChattingRoomFragment()
                     parentFragmentManager.popBackStack()
                     parentFragmentManager.beginTransaction()
@@ -288,14 +293,10 @@ class ReadGroupFragment : Fragment() {
 
         val categoryList = data.category.programingLanguage + data.category.developmentOccupations
 
-        val chips = listOf(binding.chipFront, binding.chipBack, binding.chipServer, binding.chipGame, binding.chipAI,
-            binding.chipAOS, binding.chipIOS, binding.chipUIUX, binding.chipEtc, binding.chipFrontLang,
-            binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp, binding.chipKotlin
-        )
-
-        chips.forEach { chip ->
-            chip.isChecked = categoryList.contains(chip.text)
-        }
+        val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
+        val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
+        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations, categoryList)
+        setChipGroup(chipGroupLang, binding.chipProgramingLanguage, categoryList)
 
         val editMode = arrayOf(
             binding.etGroupName,
@@ -374,13 +375,8 @@ class ReadGroupFragment : Fragment() {
     private fun btnCompleteEditOnClickListener(data: GroupModel, editMode: Array<View>, viewMode: Array<View>) {
         val categoryList = CategoryModel(
             categoryText,
-            listOf(binding.chipBack, binding.chipFront, binding.chipServer, binding.chipGame,
-                binding.chipAI, binding.chipIOS, binding.chipWeb, binding.chipUIUX, binding.chipEtc)
-                .filter { it.isChecked }
-                .map { it.text.toString() },
-            listOf(binding.chipFrontLang, binding.chipJava, binding.chipPython, binding.chipCSharp, binding.chipCpp)
-                .filter { it.isChecked }
-                .map { it.text.toString() }
+            getChipText(binding.chipGroupDevelopmentOccupations),
+            getChipText(binding.chipProgramingLanguage)
         )
 
 
@@ -428,8 +424,11 @@ class ReadGroupFragment : Fragment() {
             .setView(dialogBinding.root)
             .setCancelable(false)
             .create()
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         if (loginBoolean) {
+            dialogBinding.tvClose.text = "프로젝트에 참여하시겠습니까?"
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {
@@ -456,5 +455,26 @@ class ReadGroupFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, categoryList: List<String>){
+        for (i in chipList) {
+            chipGroup.addView(Chip(requireContext()).apply {
+                tag = i
+                text = i
+                isCheckable = true
+                if (categoryList.contains(i)) {
+                    isChecked = true
+                }
+            })
+        }
+    }
+
+    private fun getChipText(chipGroup: ChipGroup): List<String> {
+        val textList = mutableListOf<String>()
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as Chip
+            textList.add(chip.text.toString())
+        }
+        return textList
     }
 }
