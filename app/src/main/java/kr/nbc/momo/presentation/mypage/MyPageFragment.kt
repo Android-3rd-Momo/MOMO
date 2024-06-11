@@ -32,6 +32,7 @@ import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setUploadImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -127,7 +128,7 @@ class MyPageFragment : Fragment() {
             setChipList(binding.cgProgramTag, user.programOfDevelopment)
             ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
-            ivPortfolioImage.load(user.userPortfolioImageUrl)
+            ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
         }
     }
 
@@ -146,7 +147,7 @@ class MyPageFragment : Fragment() {
             cgProgramTag.removeAllViews()
             ivUserProfileImage.setThumbnailByUrlOrDefault(null)
             ivBackProfileThumbnail.setImageDrawable(null)
-            ivPortfolioImage.setImageDrawable(null)
+            ivPortfolioImage.setThumbnailByUrlOrDefault(null)
         }
     }
 
@@ -325,6 +326,11 @@ class MyPageFragment : Fragment() {
             textList.add(chip.text.toString())
         }
         return textList
+    }
+
+    private fun isValidId(username: String): Boolean {
+        val usernamePattern = "^[A-Za-z가-힣0-9]{3,20}$"
+        return username.matches(usernamePattern.toRegex())
     }
 
     override fun onDestroyView() {
