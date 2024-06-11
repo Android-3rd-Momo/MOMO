@@ -1,5 +1,6 @@
 package kr.nbc.momo.data.repository
 
+import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -18,8 +19,9 @@ class ChatListRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val fireStoreDatabase: FirebaseDatabase
 ) : ChatListRepository {
-    override suspend fun getChattingListByGroupIdList(list: List<String>): List<ChattingListEntity> {
+    override suspend fun getChattingListByGroupIdList(list: List<String>, userId: String): List<ChattingListEntity> {
         val newGroupList = mutableListOf<ChattingListResponse>()
+        Log.d("GroupIDList", "$list")
 
         for (i in list) {
             val storeSnapshot = fireStore.collection("groups").document(i).get().await()
@@ -31,16 +33,21 @@ class ChatListRepositoryImpl @Inject constructor(
             val databaseSnapshot = fireStoreDatabase.getReference("Chatting").child(i).get().await()
             val databaseResponse =
                 (databaseSnapshot.getValue(GroupChatResponse::class.java) ?: GroupChatResponse())
-            val latestChatting = databaseResponse.chatList.lastOrNull() ?: ChatResponse(
+            val chatListResponse = databaseResponse.chatList
+            val latestChatting = chatListResponse.lastOrNull() ?: ChatResponse(
                 text = "그룹 채팅을 시작해보세요!"
             )
+            val lastViewedChatting = databaseResponse.userList.firstOrNull { it.userId == userId }?.lastViewedChat ?: ChatResponse()
+
+            val chattingIndexGap = if(chatListResponse.indexOf(lastViewedChatting) == -1) 0 else chatListResponse.lastIndex - chatListResponse.indexOf(lastViewedChatting)
 
             val chattingListResponse = ChattingListResponse(
                 groupName = storeResponse.groupName,
                 groupId = i,
                 groupThumbnailUrl = storeResponse.groupThumbnail,
                 latestChatMessage = latestChatting.text,
-                latestChatTimeGap = latestChatting.dateTime.getTimeGap()
+                latestChatTimeGap = latestChatting.dateTime.getTimeGap(),
+                chattingIndexGap
             )
             newGroupList.add(chattingListResponse)
         }
