@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kr.nbc.momo.domain.usecase.JoinGroupUseCase
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.usecase.DeleteGroupUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
@@ -21,8 +22,9 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ReadGroupViewModel  @Inject constructor(
+class ReadGroupViewModel @Inject constructor(
     private val readGroupUseCase: ReadGroupUseCase,
+    private val joinGroupUseCase: JoinGroupUseCase,
     private val updateGroupUserListUseCase: UpdateGroupUserListUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
     private val deleteGroupUseCase: DeleteGroupUseCase
@@ -53,6 +55,16 @@ class ReadGroupViewModel  @Inject constructor(
         }
     }
 
+    fun joinGroup(groupId: String) {
+        viewModelScope.launch {
+            try {
+                joinGroupUseCase.invoke(groupId)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
     fun addUser(userList: List<String>, groupId: String) {
         viewModelScope.launch {
             _userListState.value = UiState.Loading
@@ -65,7 +77,6 @@ class ReadGroupViewModel  @Inject constructor(
                     _userListState.value = UiState.Success(data)
                 }
         }
-
     }
 
     fun updateGroup(groupModel: GroupModel, imageUri: Uri?) {

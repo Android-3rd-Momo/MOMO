@@ -47,4 +47,29 @@ class ChatListRepositoryImpl @Inject constructor(
 
         return newGroupList.map { it.toEntity() }
     }
+
+    override suspend fun getChattingListByGroupId(string: String): ChattingListEntity {
+        val storeSnapshot = fireStore.collection("groups").document(string).get().await()
+
+        val storeResponse = storeSnapshot.toObject<GroupResponse>() ?: GroupResponse(
+            groupName = "Error"
+        )
+
+        val databaseSnapshot = fireStoreDatabase.getReference("Chatting").child(string).get().await()
+        val databaseResponse =
+            (databaseSnapshot.getValue(GroupChatResponse::class.java) ?: GroupChatResponse())
+        val latestChatting = databaseResponse.chatList.lastOrNull() ?: ChatResponse(
+            text = "그룹 채팅을 시작해보세요!"
+        )
+
+        val chattingListResponse = ChattingListResponse(
+            groupName = storeResponse.groupName,
+            groupId = string,
+            groupThumbnailUrl = storeResponse.groupThumbnail,
+            latestChatMessage = latestChatting.text,
+            latestChatTimeGap = latestChatting.dateTime.getTimeGap()
+        )
+
+        return chattingListResponse.toEntity()
+    }
 }

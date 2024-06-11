@@ -1,5 +1,6 @@
 package kr.nbc.momo.data.model
 
+import kr.nbc.momo.domain.model.CategoryEntity
 import kr.nbc.momo.domain.model.ChatEntity
 import kr.nbc.momo.domain.model.ChattingListEntity
 import kr.nbc.momo.domain.model.GroupChatEntity
@@ -39,8 +40,25 @@ fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toResponse(),
         userList
+    )
+}
+
+fun CategoryEntity.toResponse(): CategoryResponse{
+    return CategoryResponse(
+        classification,
+        developmentOccupations,
+        programingLanguage
+    )
+}
+
+
+fun CategoryResponse.toEntity(): CategoryEntity{
+    return CategoryEntity(
+        classification,
+        developmentOccupations,
+        programingLanguage
     )
 }
 
@@ -54,7 +72,7 @@ fun GroupResponse.toEntity(): GroupEntity {
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toEntity(),
         userList
     )
 }
@@ -65,6 +83,7 @@ fun UserResponse.toEntity(): UserEntity {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
         userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
         userPortfolioImageUrl = this.userPortfolioImageUrl,
@@ -72,6 +91,7 @@ fun UserResponse.toEntity(): UserEntity {
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
+        userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText
     )
 }
@@ -82,6 +102,7 @@ fun UserEntity.toUserResponse(): UserResponse {
         userName = this.userName,
         userNumber = this.userNumber,
         userId = this.userId,
+        userGithub = this.userGithub,
         userProfileThumbnailUrl = this.userProfileThumbnailUrl,
         userBackgroundThumbnailUrl = this.userBackgroundThumbnailUrl,
         userPortfolioImageUrl = this.userPortfolioImageUrl,
@@ -89,6 +110,7 @@ fun UserEntity.toUserResponse(): UserResponse {
         typeOfDevelopment = this.typeOfDevelopment,
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
+        userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText
     )
 }
