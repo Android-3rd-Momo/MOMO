@@ -31,7 +31,7 @@ class DevelopmentActivity : AppCompatActivity() {
             tvSkip.setOnClickListener {
                 onBoardingSharedViewModel.clearTemporaryData()
                 val intent = Intent(this@DevelopmentActivity, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
             }
             viewPager.apply {
@@ -56,8 +56,9 @@ class DevelopmentActivity : AppCompatActivity() {
                 setVisibleToGone()
                 setOnClickListener {
                     val intent = Intent(this@DevelopmentActivity, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)//기존에 있으면 위에있는 모든 액티비티 제거하고 해당 액티비티 최상단, 없으면 그냥 재생성
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
+
                 }
             }
 
