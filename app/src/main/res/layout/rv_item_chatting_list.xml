@@ -11,12 +11,13 @@
         android:id="@+id/ivGroupImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="centerCrop"
+        android:layout_marginStart="4dp"
         android:background="@drawable/circle_bg"
         android:clipToOutline="true"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tool:src="@drawable/icon_profile"/>
+        tool:src="@drawable/icon_profile" />
 
     <TextView
         android:id="@+id/tvGroupName"
@@ -31,6 +32,20 @@
         app:layout_constraintStart_toEndOf="@+id/ivGroupImage"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="그룹 이름" />
+
+    <TextView
+        android:id="@+id/tvSign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chatting_list_item_circle"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:maxLines="1"
+        android:maxLength= "3"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvLatestChatText"
@@ -50,9 +65,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
+        android:textAlignment="center"
         android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvLatestChatText"
+        android:layout_marginTop="2dp"
+        app:layout_constraintEnd_toEndOf="@id/tvSign"
+        app:layout_constraintStart_toStartOf="@+id/tvSign"
+        app:layout_constraintTop_toBottomOf="@+id/tvSign"
         tool:text="5분 전" />
 </androidx.constraintlayout.widget.ConstraintLayout>
