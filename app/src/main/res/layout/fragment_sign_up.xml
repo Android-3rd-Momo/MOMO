@@ -41,6 +41,7 @@
                 android:fontFamily="@font/sfprodisplaymedium"
                 android:hint="@string/Id"
                 android:maxLength="20"
+                android:maxLines="1"
                 android:textSize="14dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,6 +73,7 @@
                 android:fontFamily="@font/sfprodisplaymedium"
                 android:hint="이름"
                 android:maxLength="20"
+                android:maxLines="1"
                 android:textSize="14dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,6 +93,7 @@
                 android:hint="이메일"
                 android:inputType="textEmailAddress"
                 android:maxLength="30"
+                android:maxLines="1"
                 android:textSize="14dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,6 +113,7 @@
                 android:hint="비밀번호"
                 android:inputType="textPassword"
                 android:maxLength="20"
+                android:maxLines="1"
                 android:textSize="14dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,6 +134,7 @@
                 android:hint="비밀번호 확인"
                 android:inputType="textPassword"
                 android:maxLength="20"
+                android:maxLines="1"
                 android:textSize="14dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,6 +158,7 @@
                 android:hint="전화번호"
                 android:inputType="number"
                 android:maxLength="20"
+                android:maxLines="1"
                 android:textSize="14dp" />
         </com.google.android.material.textfield.TextInputLayout>
 

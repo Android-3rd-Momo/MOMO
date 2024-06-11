@@ -143,7 +143,7 @@ class SignUpFragment : Fragment() {
                 binding.etId.error = "아이디를 입력해주세요."
                 isValid = false
             } else if (!isValidId(id)) {
-                binding.etId.error = "3-10자의 영문자나 한글만 가능합니다."
+                binding.etId.error = "3-10자의 영문자,한글 숫자만 가능합니다."
                 isValid = false
             } else if (!isIdChecked) {
                 binding.etId.error = "아이디 중복을 확인해주세요."
@@ -244,18 +244,18 @@ class SignUpFragment : Fragment() {
     }
 
     private fun isValidEmail(email: String): Boolean {
-        val emailPattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{5,30}$"
+        val emailPattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         return email.matches(emailPattern.toRegex())
     }
 
-    private fun isValidName(username: String): Boolean {
+    private fun isValidName(userName: String): Boolean {
         val usernamePattern = "^[A-Za-z가-힣]{3,20}$"
-        return username.matches(usernamePattern.toRegex())
+        return userName.matches(usernamePattern.toRegex())
     }
 
-    private fun isValidId(username: String): Boolean {
+    private fun isValidId(userId: String): Boolean {
         val usernamePattern = "^[A-Za-z가-힣0-9]{3,20}$"
-        return username.matches(usernamePattern.toRegex())
+        return userId.matches(usernamePattern.toRegex())
     }
 
     private fun isValidPassword(password: String): Boolean { //8~20, 영문 + 숫자
