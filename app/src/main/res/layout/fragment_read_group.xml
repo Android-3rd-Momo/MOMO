@@ -264,49 +264,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chipGroupDevelopmentOccupations">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipFrontLang"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HTML, CSS, JavaScript" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipJava"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Java" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipPython"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Python" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCSharp"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="C#" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCpp"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="C++" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipKotlin"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kotlin" />
-
         </com.google.android.material.chip.ChipGroup>
 
         <com.google.android.material.chip.ChipGroup
@@ -316,95 +273,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvCategoryDetailEditMode">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipBack"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BackEnd" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipFront"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FrontEnd" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipServer"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Server" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipGame"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Game" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAI"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AI" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAOS"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AOS" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipIOS"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="IOS" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipWeb"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Web" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipUIUX"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="UI/UX" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipEtc"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ETC" />
-
         </com.google.android.material.chip.ChipGroup>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUserList"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:columnWidth="50dp"
-        android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDetailCategoryList" />
 
