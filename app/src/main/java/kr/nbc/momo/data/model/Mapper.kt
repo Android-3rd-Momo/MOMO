@@ -121,6 +121,7 @@ fun ChattingListResponse.toEntity(): ChattingListEntity {
         groupId,
         groupThumbnailUrl,
         latestChatMessage,
-        latestChatTimeGap
+        latestChatTimeGap,
+        latestChatIndexGap
     )
 }

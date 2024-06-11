@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingUseCase
 import kr.nbc.momo.domain.usecase.SendChatUseCase
+import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattingroom.model.GroupChatModel
 import kr.nbc.momo.presentation.chatting.chattingroom.model.toModel
