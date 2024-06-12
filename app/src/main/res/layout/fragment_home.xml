@@ -208,40 +208,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvEmptyRecommendGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="태그를 등록하고 모임을 추천 받으세요"
-        android:textColor="@color/blue"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
-
-    <TextView
-        android:id="@+id/tvEmptyMyGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:text="모임을 가입해주세요"
-        android:textColor="@color/blue"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
-
-    <TextView
-        android:id="@+id/tvEmptyLatestGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:text="모집중인 모임이 없습니다"
-        android:textColor="@color/blue"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

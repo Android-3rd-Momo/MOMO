@@ -87,6 +87,7 @@ class SearchFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
+            includeNoResult.tvNoResult.text = "검색 결과가 없습니다."
             ivBackbutton.setOnClickListener {
                 parentFragmentManager.popBackStack()
             }

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,7 +23,6 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.decryptECB
 import kr.nbc.momo.util.setVisibleToGone
@@ -44,8 +42,8 @@ class HomeFragment : Fragment() {
     private lateinit var latestGroupListAdapter: LatestGroupListAdapter
     private lateinit var myGroupListAdapter: MyGroupListAdapter
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
-    private lateinit var currentUser : String
-    private lateinit var currentUserCategory : List<String>
+    private lateinit var currentUser: String
+    private lateinit var currentUserCategory: List<String>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,6 +69,32 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() {
+        with(binding.includeNoResultRecommend) {
+            tvNoResult.text = "추천 그룹이 없습니다.\n정보를 수정해주세요"
+            tvNoResult.setOnClickListener {
+                (requireActivity() as MainActivity).selectNavigationItem(R.id.myPageFragment)
+            }
+            ivNoResult.setOnClickListener {
+                (requireActivity() as MainActivity).selectNavigationItem(R.id.myPageFragment)
+            }
+        }
+
+        with(binding.includeNoResultJoined) {
+            tvNoResult.text = "가입한 그룹이 없습니다."
+            tvNoResult.setOnClickListener {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, SearchFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+            ivNoResult.setOnClickListener {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, SearchFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
         binding.floatingBtnCreateGroup.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, CreateGroupFragment())
@@ -87,20 +111,6 @@ class HomeFragment : Fragment() {
 
         }
 
-        binding.tvEmptyRecommendGroup.setOnClickListener {
-            val myPageFragment = MyPageFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, myPageFragment)
-                .commit()
-            (activity as? MainActivity)?.selectNavigationItem(R.id.myPageFragment)
-        }
-
-        binding.tvEmptyMyGroup.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SearchFragment())
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
     private fun observeUserProfile() {
@@ -116,7 +126,8 @@ class HomeFragment : Fragment() {
                         is UiState.Success -> {
                             Log.d("currentUser", state.data.userId)
                             currentUser = state.data.userId
-                            currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
+                            currentUserCategory =
+                                state.data.typeOfDevelopment + state.data.programOfDevelopment
                             binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
                         }
 
@@ -140,7 +151,7 @@ class HomeFragment : Fragment() {
                     }
 
                     UiState.Loading -> {
-                        with(binding){
+                        with(binding) {
                             prCircularJoined.setVisibleToVisible()
                             prCircularLatest.setVisibleToVisible()
                             prCircularRecommend.setVisibleToVisible()
@@ -154,21 +165,23 @@ class HomeFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        val latestGroupList = uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
-                            .sortedByDescending {
-                                val decrypt = it.groupId.decryptECB()
-                                val dateTimeIndex = decrypt.lastIndexOf(" ")
-                                decrypt.substring(dateTimeIndex)
-                            }
+                        val latestGroupList =
+                            uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                                .sortedByDescending {
+                                    val decrypt = it.groupId.decryptECB()
+                                    val dateTimeIndex = decrypt.lastIndexOf(" ")
+                                    decrypt.substring(dateTimeIndex)
+                                }
                         latestGroupListAdapter = LatestGroupListAdapter(latestGroupList)
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
-                        binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
+                        binding.rvLatestGroupList.layoutManager =
+                            LinearLayoutManager(requireContext())
                         if (latestGroupList.isEmpty()) {
                             //binding.tvEmptyLatestGroup.setVisibleToVisible()
                             binding.prCircularLatest.setVisibleToGone()
                             binding.includeNoResultLatest.setVisibleToVisible()
                             binding.rvLatestGroupList.setVisibleToInvisible()
-                        }else {
+                        } else {
                             binding.prCircularLatest.setVisibleToGone()
                             binding.includeNoResultLatest.setVisibleToGone()
                             binding.rvLatestGroupList.setVisibleToVisible()
@@ -178,7 +191,11 @@ class HomeFragment : Fragment() {
                         val myGroupList = uiState.data.filter { it.userList.contains(currentUser) }
                         myGroupListAdapter = MyGroupListAdapter(myGroupList)
                         binding.rvMyGroupList.adapter = myGroupListAdapter
-                        binding.rvMyGroupList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                        binding.rvMyGroupList.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
                         if (myGroupList.isEmpty()) {
                             //binding.tvEmptyMyGroup.setVisibleToVisible()
                             binding.prCircularJoined.setVisibleToGone()
@@ -192,13 +209,18 @@ class HomeFragment : Fragment() {
 
                         val recommendGroupList = uiState.data
                             .filter {
-                                val setA = (it.category.programingLanguage + it.category.developmentOccupations).toSet()
+                                val setA =
+                                    (it.category.programingLanguage + it.category.developmentOccupations).toSet()
                                 val setB = currentUserCategory.toSet()
                                 setA.intersect(setB).isNotEmpty()
                             } - myGroupList.toSet()
                         recommendGroupListAdapter = RecommendGroupListAdapter(recommendGroupList)
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
-                        binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                        binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
                         if (recommendGroupList.isEmpty()) {
                             //binding.tvEmptyRecommendGroup.setVisibleToVisible()
                             binding.prCircularRecommend.setVisibleToGone()
@@ -218,8 +240,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onClick(latestGroupList: List<GroupModel>, myGroupList: List<GroupModel>, recommendGroupList: List<GroupModel>) {
-        latestGroupListAdapter.itemClick = object : LatestGroupListAdapter.ItemClick{
+    private fun onClick(
+        latestGroupList: List<GroupModel>,
+        myGroupList: List<GroupModel>,
+        recommendGroupList: List<GroupModel>
+    ) {
+        latestGroupListAdapter.itemClick = object : LatestGroupListAdapter.ItemClick {
             override fun itemClick(position: Int) {
                 val groupId = latestGroupList[position].groupId
                 sharedViewModel.getGroupId(groupId)
@@ -231,7 +257,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        myGroupListAdapter.itemClick = object : MyGroupListAdapter.ItemClick{
+        myGroupListAdapter.itemClick = object : MyGroupListAdapter.ItemClick {
             override fun itemClick(position: Int) {
                 val groupId = myGroupList[position].groupId
                 sharedViewModel.getGroupId(groupId)
@@ -243,7 +269,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        recommendGroupListAdapter.itemClick = object : RecommendGroupListAdapter.ItemClick{
+        recommendGroupListAdapter.itemClick = object : RecommendGroupListAdapter.ItemClick {
             override fun itemClick(position: Int) {
                 val groupId = recommendGroupList[position].groupId
                 sharedViewModel.getGroupId(groupId)
@@ -256,7 +282,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun getCurrentTime() : String {
+    fun getCurrentTime(): String {
         val format = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
         format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
         return format.format(Date().time)

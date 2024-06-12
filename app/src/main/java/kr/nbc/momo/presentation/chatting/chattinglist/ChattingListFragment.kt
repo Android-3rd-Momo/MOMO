@@ -68,6 +68,8 @@ class ChattingListFragment : Fragment() {
                 adapter = chattingListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
+
+            includeNoResult.tvNoResult.text = "가입한 그룹이 없습니다."
         }
     }
 
