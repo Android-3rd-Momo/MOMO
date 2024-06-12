@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
@@ -43,6 +44,21 @@ class SharedViewModel @Inject constructor(
             }
         }
     }
+//    fun getCurrentUser() { //로그인된 정보
+//        viewModelScope.launch {
+//            getCurrentUserUseCase()
+//                .catch { exception ->
+//                    _currentUser.value = UiState.Error(exception.message.toString())
+//                }
+//                .collect { user ->
+//                    if (user != null) {
+//                        _currentUser.value = UiState.Success(user.toModel())
+//                    } else {
+//                        _currentUser.value = UiState.Error("User not found")
+//                    }
+//                }
+//        }
+//    }
 
     fun updateUser(user: UserModel) {
         _currentUser.value = UiState.Success(user)
