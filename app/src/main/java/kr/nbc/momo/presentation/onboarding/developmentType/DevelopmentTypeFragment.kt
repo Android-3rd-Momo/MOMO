@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentDevelopmentTypeBinding
 
 class DevelopmentTypeFragment : Fragment() {
