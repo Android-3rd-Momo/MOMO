@@ -1,6 +1,5 @@
 package kr.nbc.momo.presentation.mypage
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.children
@@ -24,15 +24,16 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.DialogAddTagBinding
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
+import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -93,18 +94,23 @@ class MyPageFragment : Fragment() {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            // Handle loading state
+                            binding.prCircular.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
                         }
 
                         is UiState.Success -> {
                             isLogin()
                             currentUser = state.data
                             initView(state.data)
+                            binding.prCircular.setVisibleToGone()
+                            binding.scrollView.setVisibleToVisible()
                         }
 
                         is UiState.Error -> {
                             clearUserInfo()
                             isLogOut()
+                            binding.prCircular.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
                             Log.d("error", state.message)
                         }
                     }
@@ -124,8 +130,8 @@ class MyPageFragment : Fragment() {
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
-            setChipList(binding.cgTypeTag, user.typeOfDevelopment)
-            setChipList(binding.cgProgramTag, user.programOfDevelopment)
+            setSelectedChips(binding.cgTypeTag, user.typeOfDevelopment)
+            setSelectedChips(binding.cgProgramTag, user.programOfDevelopment)
             ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
@@ -159,15 +165,12 @@ class MyPageFragment : Fragment() {
                 Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
             }
         }
-        binding.tvAddTagTypeOfDevelopment.setOnClickListener {
-            showAddTagDialog(binding.cgTypeTag)
-        }
-        binding.tvAddTagProgramOfDevelopment.setOnClickListener {
-            showAddTagDialog(binding.cgProgramTag)
-        }
         binding.btnCompleteEdit.setOnClickListener {
-            saveProfileInfo()
-            setChangeMode()
+            if (validName()) {
+                saveProfileInfo()
+                setChangeMode()
+                requireActivity().hideKeyboard()
+            }
         }
         binding.ivEditProfileImage.setOnClickListener {
             pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
@@ -175,17 +178,13 @@ class MyPageFragment : Fragment() {
         binding.ivEditBackProfileThumbnail.setOnClickListener {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-        binding.ivPortfolioImage.setOnClickListener {
-            pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
         binding.ivGitHub.setOnClickListener {
             val githubUrl = currentUser?.userGithub
 
-//            val pattern = Patterns.WEB_URL.matcher(githubUrl).matches() //todo 일치한 깃헙 주소인지 확인 해야함!!
             if (!githubUrl.isNullOrEmpty()) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
                 startActivity(intent)
-            } else { //todo github 추가
+            } else {
                 Snackbar.make(binding.root, "설정한 Github 주소가 없습니다.", Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -201,7 +200,6 @@ class MyPageFragment : Fragment() {
         }
         binding.btnGoOnBoarding.setOnClickListener {
             val intent = Intent(requireActivity(), GetStartedActivity::class.java)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         }
     }
@@ -209,9 +207,22 @@ class MyPageFragment : Fragment() {
     private fun setChangeMode() {
         isEditMode = !isEditMode
 
+        val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
+        val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
+
+        if (isEditMode) {
+            setChipGroup(chipGroupDev, binding.cgTypeTag)
+            setChipGroup(chipGroupLang, binding.cgProgramTag)
+            selectChips(binding.cgTypeTag, currentUser?.typeOfDevelopment ?: emptyList())
+            selectChips(binding.cgProgramTag, currentUser?.programOfDevelopment ?: emptyList())
+        } else {
+            setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
+            setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
+            currentUser?.let { initView(it) }
+        }
+
+
         val editMode = arrayOf(
-            binding.tvAddTagTypeOfDevelopment,
-            binding.tvAddTagProgramOfDevelopment,
             binding.etUserName,
             binding.etUserGithub,
             binding.etUserSelfIntroduction,
@@ -226,13 +237,20 @@ class MyPageFragment : Fragment() {
             binding.tvUserName,
             binding.tvUserSelfIntroduction,
             binding.tvStackOfDevelopment,
-            binding.tvPortfolio
+            binding.tvPortfolio,
+            binding.ivGitHub
         )
 
         editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
-        setCloseIconVisibility(binding.cgTypeTag, isEditMode)
-        setCloseIconVisibility(binding.cgProgramTag, isEditMode)
+
+        if (isEditMode) { //todo 임시
+            binding.ivPortfolioImage.setOnClickListener {
+                pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            }
+        } else {
+            binding.ivPortfolioImage.setOnClickListener(null)
+        }
     }
 
     private fun isLogin() { //todo 코드 간결화 필요
@@ -249,55 +267,35 @@ class MyPageFragment : Fragment() {
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
-    private fun setCloseIconVisibility(chipGroup: ChipGroup, visible: Boolean) {
-        chipGroup.children.forEach { child ->
-            (child as? Chip)?.isCloseIconVisible = visible
-            child.isClickable = false
-        }
-    }
 
-    private fun createChip(text: String, isCloseIcon: Boolean): Chip {
+    private fun createChip(text: String, isCheckable: Boolean): Chip {
         return Chip(requireContext()).apply {
             this.text = text
-            this.isCloseIconVisible = isCloseIcon
-            setOnCloseIconClickListener {
-                (parent as? ChipGroup)?.removeView(this)
-            }
+            this.isCheckable = isCheckable
+            this.isCloseIconVisible = false
         }
     }
 
-    private fun setChipList(chipGroup: ChipGroup, chipList: List<String>) {
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) { //chip 설정
         chipGroup.removeAllViews()
         chipList.forEach {
-            chipGroup.addView(createChip(it, isEditMode))
+            chipGroup.addView(createChip(it, true))
         }
     }
 
-    private fun showAddTagDialog(chipGroup: ChipGroup) {
-        val builder = AlertDialog.Builder(requireContext())
-        val dialogBinding = DialogAddTagBinding.inflate(layoutInflater)
-        builder.setView(dialogBinding.root)
-        val dialog = builder.create()
+    private fun setSelectedChips(chipGroup: ChipGroup, selectedChips: List<String>) { //선택된 chip만 보여줌
+        chipGroup.removeAllViews()
+        selectedChips.forEach {
+            chipGroup.addView(createChip(it, false))
+        }
+    }
 
-        dialogBinding.buttonAdd.setOnClickListener {
-            val tagText = dialogBinding.editTextTag.text.toString()
-            if (tagText.isNotEmpty()) {
-                addChipToGroup(chipGroup, tagText, true)
-                dialog.dismiss()
+    private fun selectChips(chipGroup: ChipGroup, selectedChips: List<String>) {
+        chipGroup.children.forEach { chip ->
+            if (chip is Chip && selectedChips.contains(chip.text.toString())) {
+                chip.isChecked = true
             }
         }
-        dialog.show()
-    }
-
-    private fun addChipToGroup(chipGroup: ChipGroup, tagText: String, showCloseIcon: Boolean) {
-        val chip = Chip(requireContext())
-        chip.text = tagText
-        chip.isClickable = false
-        chip.isCloseIconVisible = showCloseIcon
-        chip.setOnCloseIconClickListener {
-            chipGroup.removeView(chip)
-        }
-        chipGroup.addView(chip)
     }
 
     private fun saveProfileInfo() {
@@ -323,15 +321,43 @@ class MyPageFragment : Fragment() {
         val textList = mutableListOf<String>()
         for (i in 0 until chipGroup.childCount) {
             val chip = chipGroup.getChildAt(i) as Chip
-            textList.add(chip.text.toString())
+            if (chip.isChecked) {
+                textList.add(chip.text.toString())
+            }
         }
         return textList
     }
 
-    private fun isValidId(username: String): Boolean {
-        val usernamePattern = "^[A-Za-z가-힣0-9]{3,20}$"
-        return username.matches(usernamePattern.toRegex())
+
+    private fun validName(): Boolean {
+        val name = binding.etUserName.text.toString()
+        var isValid = true
+
+        if (name.isEmpty()) {
+            binding.etUserName.error = "이름을 입력해주세요."
+            isValid = false
+        } else if (!isValidName(name)) {
+            binding.etUserName.error = "3-10자의 영문자나 한글만 가능합니다."
+            isValid = false
+        } else {
+            binding.etUserName.error = null
+        }
+
+        return isValid
     }
+
+    private fun isValidName(userName: String): Boolean {
+        val usernamePattern = "^[A-Za-z가-힣]{3,20}$"
+        return userName.matches(usernamePattern.toRegex())
+    }
+//    private fun isValidGitHubUrl(url: String): Boolean { //todo 깃헙주소 유효성 및 입력형태
+//        val githubPattern = "^https://github\\.com/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*\$"
+//        return url.matches(githubPattern.toRegex())
+//    }
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
