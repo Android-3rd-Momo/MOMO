@@ -79,4 +79,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clSpinner"
         tools:listitem="@layout/rv_item_home_vertical" />
+
+    <include
+        android:id="@+id/prCircular"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clSpinner" />
+
+    <include
+        android:id="@+id/includeNoResult"
+        layout="@layout/ui_state_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clSpinner" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

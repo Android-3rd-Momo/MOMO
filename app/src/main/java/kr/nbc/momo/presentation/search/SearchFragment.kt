@@ -22,6 +22,9 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.setVisibleToError
+import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -32,23 +35,25 @@ class SearchFragment : Fragment() {
         searchItemOnClick(it)
     }
 
+    private var queryWord = ""
+
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val searchViewModel: SearchViewModel by viewModels()
 
-    private val categoryList: List<String> = listOf(
-        "선택 안함" , "공모전", "스터디", "토이 프로젝트", "기타"
-    )
+    private val categoryList: List<String> by lazy {
+        listOf("선택 안함") + resources.getStringArray(R.array.classification).toList()
+    }
 
-    private val worksList: List<String> = listOf(
-        "선택 안함", "프론트엔드", "백엔드", "서버", "AI", "게임", "AOS", "IOS", "웹", "UI/UX", "기타"
-    )
+    private val worksList: List<String> by lazy {
+        listOf("선택 안함") + resources.getStringArray(R.array.chipGroupDevelopmentOccupations).toList()
+    }
 
-    private val categorySpinnerAdapter by lazy{
+    private val categorySpinnerAdapter by lazy {
         SearchSpinnerAdapter(requireActivity(), categoryList) // 카테고리 리스트 넣기
     }
 
-    private val worksSpinnerAdapter by lazy{
+    private val worksSpinnerAdapter by lazy {
         SearchSpinnerAdapter(requireActivity(), worksList) // 직무 리스트 넣기
     }
 
@@ -80,8 +85,8 @@ class SearchFragment : Fragment() {
         bottomNavShow()
     }
 
-    private fun initView(){
-        with(binding){
+    private fun initView() {
+        with(binding) {
             ivBackbutton.setOnClickListener {
                 parentFragmentManager.popBackStack()
             }
@@ -101,8 +106,9 @@ class SearchFragment : Fragment() {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     // 검색어 변경될 때마다 호출됨
                     newText?.let {
-                        // 실시간 검색어 처리 로직?
+                        queryWord = it
                     }
+                    if (newText == null) queryWord = ""
                     return true
                 }
             })
@@ -113,21 +119,21 @@ class SearchFragment : Fragment() {
                 adapter = categorySpinnerAdapter
                 onItemSelectedListener =
                     object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        val item = (parent?.adapter?.getItem(position) as? String) ?: ""
-                        searchCategory = if (item == "선택 안함" ) "" else item
-                        Log.d("test", searchCategory)
-                        searchViewModel.getSearchResult(searchCategory, searchWorks, searchView.toString())
-                    }
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val item = (parent?.adapter?.getItem(position) as? String) ?: ""
+                            searchCategory = if (item == "선택 안함") "" else item
+                            Log.d("test", searchCategory)
+                            searchViewModel.getSearchResult(searchCategory, searchWorks, queryWord)
+                        }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                        }
                     }
-                }
             }
             spWorks.apply {
                 adapter = worksSpinnerAdapter
@@ -140,9 +146,9 @@ class SearchFragment : Fragment() {
                             id: Long
                         ) {
                             val item = (parent?.adapter?.getItem(position) as? String) ?: ""
-                            searchWorks = if (item == "선택 안함" ) "" else item
+                            searchWorks = if (item == "선택 안함") "" else item
                             Log.d("test", searchWorks)
-                            searchViewModel.getSearchResult(searchCategory, searchWorks, "")
+                            searchViewModel.getSearchResult(searchCategory, searchWorks, queryWord)
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -152,19 +158,35 @@ class SearchFragment : Fragment() {
         }
 
     }
-    private fun initFlow(){
+
+    private fun initFlow() {
         lifecycleScope.launch {
             searchViewModel.searchResult.collectLatest {
-                when(it){
+                when (it) {
                     is UiState.Success -> {
                         searchAdapter.itemList = it.data
                         searchAdapter.notifyDataSetChanged()
-                        Log.d("test", "${it.data}")
+                        if (it.data.isEmpty()) {
+                            binding.rvSearchResult.setVisibleToGone()
+                            binding.prCircular.setVisibleToGone()
+                            binding.includeNoResult.setVisibleToVisible()
+                        } else {
+                            binding.rvSearchResult.setVisibleToVisible()
+                            binding.prCircular.setVisibleToGone()
+                            binding.includeNoResult.setVisibleToGone()
+                        }
                     }
-                    is UiState.Loading -> {
 
+                    is UiState.Loading -> {
+                        binding.rvSearchResult.setVisibleToGone()
+                        binding.prCircular.setVisibleToVisible()
+                        binding.includeNoResult.setVisibleToGone()
                     }
+
                     is UiState.Error -> {
+                        binding.rvSearchResult.setVisibleToGone()
+                        binding.prCircular.setVisibleToError()
+                        binding.includeNoResult.setVisibleToGone()
                         Log.d("Error", it.message)
                     }
                 }
