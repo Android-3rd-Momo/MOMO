@@ -261,6 +261,7 @@ class CreateGroupFragment : Fragment() {
             getChipText(binding.chipProgramingLanguage)
         )
 
+
         val image = if (imageUri != null) imageUri.toString() else null
         val groupId = binding.groupName.text.toString().encryptECB()
         val group = GroupModel(
@@ -313,7 +314,6 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup){
-
         for (chipText in chipList) {
             val chip = Chip(requireContext()).apply {
                 text = chipText
@@ -328,7 +328,9 @@ class CreateGroupFragment : Fragment() {
         val textList = mutableListOf<String>()
         for (i in 0 until chipGroup.childCount) {
             val chip = chipGroup.getChildAt(i) as Chip
-            textList.add(chip.text.toString())
+            if (chip.isChecked) {
+                textList.add(chip.text.toString())
+            }
         }
         return textList
     }
