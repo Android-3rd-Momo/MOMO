@@ -130,11 +130,31 @@ class MyPageFragment : Fragment() {
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
-            setSelectedChips(binding.cgTypeTag, user.typeOfDevelopment)
-            setSelectedChips(binding.cgProgramTag, user.programOfDevelopment)
             ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
+
+            if (user.typeOfDevelopment.isEmpty()) {
+                tvEmptyTypeTag.setVisibleToVisible()
+                cgTypeTag.setVisibleToGone()
+            } else {
+                tvEmptyTypeTag.setVisibleToGone()
+                setSelectedChips(cgTypeTag, user.typeOfDevelopment)
+            }
+
+            if (user.programOfDevelopment.isEmpty()) {
+                tvEmptyProgramTag.setVisibleToVisible()
+                cgProgramTag.setVisibleToGone()
+            } else {
+                tvEmptyProgramTag.setVisibleToGone()
+                setSelectedChips(cgProgramTag, user.programOfDevelopment)
+            }
+//            if (user.userPortfolioImageUrl.isNullOrEmpty()) { //todo
+//                cvPortfolioImage.setVisibleToGone()
+//            } else {
+//                cvPortfolioImage.setVisibleToVisible()
+//            }
+
         }
     }
 
@@ -200,8 +220,8 @@ class MyPageFragment : Fragment() {
         val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
 
         if (isEditMode) {
-            setChipGroup(chipGroupDev, binding.cgTypeTag)
-            setChipGroup(chipGroupLang, binding.cgProgramTag)
+            setChipGroup(chipGroupDev, binding.cgTypeTag, isEditMode)
+            setChipGroup(chipGroupLang, binding.cgProgramTag, isEditMode)
             selectChips(binding.cgTypeTag, currentUser?.typeOfDevelopment ?: emptyList())
             selectChips(binding.cgProgramTag, currentUser?.programOfDevelopment ?: emptyList())
             binding.tvEmptyTypeTag.setVisibleToGone()
@@ -209,16 +229,16 @@ class MyPageFragment : Fragment() {
             binding.cgTypeTag.setVisibleToVisible()
             binding.cgProgramTag.setVisibleToVisible()
         } else {
-            if(binding.cgTypeTag.childCount == 0){
+            if (binding.cgTypeTag.childCount == 0) {
                 binding.tvEmptyTypeTag.setVisibleToVisible()
                 binding.cgTypeTag.setVisibleToGone()
-            }else{
+            } else {
                 binding.tvEmptyTypeTag.setVisibleToGone()
             }
-            if(binding.cgProgramTag.childCount == 0){
+            if (binding.cgProgramTag.childCount == 0) {
                 binding.tvEmptyProgramTag.setVisibleToVisible()
                 binding.cgProgramTag.setVisibleToGone()
-            }else{
+            } else {
                 binding.tvEmptyProgramTag.setVisibleToGone()
             }
 
@@ -244,7 +264,7 @@ class MyPageFragment : Fragment() {
             binding.tvStackOfDevelopment,
             binding.tvPortfolio,
 
-        )
+            )
 
         editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
@@ -273,44 +293,60 @@ class MyPageFragment : Fragment() {
     }
 
 
-    private fun createChip(text: String, isCheckable: Boolean): Chip {
+    private fun createChip(text: String, isCheckable: Boolean, isEditMode: Boolean): Chip {
         return Chip(requireContext()).apply {
             this.text = text
             this.isCheckable = isCheckable
             this.isCloseIconVisible = false
+            this.isClickable = isEditMode
+            updateChipAppearance(this, isChecked)
+
+            setOnCheckedChangeListener { _, isChecked ->
+                if (isEditMode) {
+                    updateChipAppearance(this, isChecked)
+                }
+            }
         }
     }
 
-    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) { //chip 설정
+    private fun updateChipAppearance(chip: Chip, isChecked: Boolean) {
+        chip.setTextColor(
+            ContextCompat.getColorStateList(
+                requireContext(),
+                if (isChecked) R.color.white else R.color.tv_chip_state_color
+            )
+        )
+        chip.setChipBackgroundColorResource(
+            if (isChecked) R.color.blue else R.color.bg_chip_state_color
+        )
+    }
+
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, isEditMode: Boolean) {
         chipGroup.removeAllViews()
-        chipList.forEach {
-            chipGroup.addView(createChip(it, true))
+        for (chipText in chipList) {
+            val chip = createChip(chipText, true, isEditMode)
+            chipGroup.addView(chip)
         }
     }
 
     private fun setSelectedChips(chipGroup: ChipGroup, selectedChips: List<String>) { //선택된 chip만 보여줌
         chipGroup.removeAllViews()
-//        selectedChips.forEach {
-//            chipGroup.addView(createChip(it, false))
-//        }
         selectedChips.forEach { chipText ->
             chipGroup.addView(Chip(requireContext()).apply {
                 text = chipText
-                isCheckable = true
+                isCheckable = false
                 isChecked = true
-                setOnCheckedChangeListener { buttonView, isChecked ->
-                    if (!isChecked) {
-                        chipGroup.removeView(buttonView)
-                    }
-                }
+                updateChipAppearance(this, true)
             })
         }
     }
 
     private fun selectChips(chipGroup: ChipGroup, selectedChips: List<String>) {
         chipGroup.children.forEach { chip ->
-            if (chip is Chip && selectedChips.contains(chip.text.toString())) {
-                chip.isChecked = true
+            if (chip is Chip) {
+                chip.isChecked = selectedChips.contains(chip.text.toString())
+                updateChipAppearance(chip, chip.isChecked)
+                chip.isClickable = isEditMode
             }
         }
     }
@@ -325,7 +361,8 @@ class MyPageFragment : Fragment() {
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
                 userProfileThumbnailUrl = profileImageUri?.toString() ?: currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: currentUser.userBackgroundThumbnailUrl,
+                userBackgroundThumbnailUrl = backgroundImageUri?.toString()
+                    ?: currentUser.userBackgroundThumbnailUrl,
                 userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl
             )
             viewModel.saveUserProfile(updatedUserModel)
