@@ -23,6 +23,8 @@ class ChattingRecyclerViewAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemList = GroupChatModel()
     var currentUserId = ""
+    var currentUserName = ""
+    var currentUrl = ""
 
     override fun getItemViewType(position: Int): Int {
         return when (itemList.chatList[position].userId == currentUserId) {
@@ -67,7 +69,7 @@ class ChattingRecyclerViewAdapter() :
             )
 
             ChattingEnumClass.ELSE_VIEW_TYPE.type -> (holder as ItemElseViewHolder).bind(
-                itemList.userList.first { it.userId == currentUserId },
+                itemList.userList.firstOrNull { it.userId == currentUserId }?: GroupUserModel(currentUserId, currentUserName, currentUrl),
                 itemList.chatList[position],
                 isDateChanged(position),
                 isMinuteChanged(position),

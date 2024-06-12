@@ -47,6 +47,16 @@
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
         tools:listitem="@layout/rv_item_else" />
 
+    <include
+        layout="@layout/ui_state_loading"
+        android:id="@+id/prCircular"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id = "@+id/constraint"
         android:layout_width="match_parent"
