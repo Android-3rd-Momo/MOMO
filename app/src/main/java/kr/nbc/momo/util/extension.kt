@@ -1,7 +1,10 @@
 package kr.nbc.momo.util
 
+import android.app.Activity
+import android.content.Context
 import android.util.Base64
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import coil.load
 import kr.nbc.momo.R
@@ -153,4 +156,9 @@ fun UiStateLoadingBinding.setVisibleToError(){
     tvLoading.setVisibleToGone()
     ivError.setVisibleToVisible()
     tvError.setVisibleToVisible()
+}
+
+fun Activity.hideKeyboard() {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
 }
