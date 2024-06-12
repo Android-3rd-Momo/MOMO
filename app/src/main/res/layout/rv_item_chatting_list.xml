@@ -52,23 +52,24 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textSize="14dp"
         android:ellipsize="end"
+        android:maxWidth="220dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivGroupImage"
         app:layout_constraintTop_toBottomOf="@+id/tvGroupName"
-        tool:text="마지막 메세지" />
+        tool:text="마지막 메세지마지막 메세지마지막 메세지마지막 메세지마지막 메세지마지막 메세지" />
 
     <TextView
         android:id="@+id/tvLatestChatTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:maxLines="1"
         android:textAlignment="center"
         android:textSize="12dp"
-        android:layout_marginTop="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSign"
         tool:text="5분 전" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,10 +16,12 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattinglist.dummy.groupIdsDummy
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.setVisibleToError
+import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class ChattingListFragment : Fragment() {
@@ -74,13 +76,10 @@ class ChattingListFragment : Fragment() {
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
                     is UiState.Loading -> {
-                        //todo 로딩
                     }
 
                     is UiState.Success -> {
-                        Log.d("Check UserState", "${it.data}")
                         chattingListViewModel.getChattingList(it.data.userGroup, it.data.userId)
-                        Log.d("Check UiState", "${it.data.userGroup}")
                     }
 
                     is UiState.Error -> {
@@ -93,20 +92,24 @@ class ChattingListFragment : Fragment() {
             chattingListViewModel.chattingList.collectLatest { chattingList ->
                 when (chattingList) {
                     is UiState.Loading -> {
-                        //todo 로딩
+                        binding.prCircular.setVisibleToVisible()
+                        binding.rvChattingList.setVisibleToGone()
                     }
 
                     is UiState.Success -> {
                         if (chattingList.data.isNotEmpty()) {
                             chattingListAdapter.itemList = chattingList.data
-                            Log.d("Check UiState", "${chattingList.data[0].latestChatIndexGap}")
                             chattingListAdapter.notifyDataSetChanged()
+                            binding.prCircular.setVisibleToGone()
+                            binding.rvChattingList.setVisibleToVisible()
                         } else {
                             //todo 가입한 모임이 없습니다.
                         }
                     }
 
                     is UiState.Error -> {
+                        binding.prCircular.setVisibleToError()
+                        binding.rvChattingList.setVisibleToGone()
                         Log.d("error", chattingList.message)
                     }
                 }
@@ -116,7 +119,7 @@ class ChattingListFragment : Fragment() {
 
     //넘기는 거 미완성(conflict 가능성)
     private fun itemOnClick(chattingListModel: ChattingListModel) {
-        sharedViewModel.setGroupIdToGroupChat(chattingListModel)
+        sharedViewModel.getGroupId(chattingListModel.groupId)
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, ChattingRoomFragment())
             addToBackStack(null)
