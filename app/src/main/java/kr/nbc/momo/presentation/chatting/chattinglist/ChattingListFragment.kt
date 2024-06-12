@@ -94,6 +94,7 @@ class ChattingListFragment : Fragment() {
                     is UiState.Loading -> {
                         binding.prCircular.setVisibleToVisible()
                         binding.rvChattingList.setVisibleToGone()
+                        binding.includeNoResult.setVisibleToGone()
                     }
 
                     is UiState.Success -> {
@@ -102,14 +103,19 @@ class ChattingListFragment : Fragment() {
                             chattingListAdapter.notifyDataSetChanged()
                             binding.prCircular.setVisibleToGone()
                             binding.rvChattingList.setVisibleToVisible()
+                            binding.includeNoResult.setVisibleToGone()
                         } else {
                             //todo 가입한 모임이 없습니다.
+                            binding.prCircular.setVisibleToGone()
+                            binding.rvChattingList.setVisibleToGone()
+                            binding.includeNoResult.setVisibleToVisible()
                         }
                     }
 
                     is UiState.Error -> {
                         binding.prCircular.setVisibleToError()
                         binding.rvChattingList.setVisibleToGone()
+                        binding.includeNoResult.setVisibleToGone()
                         Log.d("error", chattingList.message)
                     }
                 }
