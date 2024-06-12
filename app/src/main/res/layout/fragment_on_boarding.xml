@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.onboarding.onBoard.OnBoardingFragment">
+    tools:context=".presentation.onboarding.onBoard.OnBoardingFragment"
+    android:background="@color/white">
 
     <Button
         android:id="@+id/button_withoutLogin"
@@ -12,37 +13,30 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="#00000000"
         android:textColor = "@color/black"
         android:text="로그인 없이 앱 이용하기" />
 
     <Button
-        android:id="@+id/button_googleLogin"
-        android:layout_width="wrap_content"
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/button_withoutLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:padding="16dp"
+        android:textSize="16dp"
+        android:fontFamily="@font/sfproiddisplaybold"
+        android:layout_marginStart="40dp"
         android:backgroundTint="@color/blue"
-        android:text="구글 로그인" />
-
-    <Button
-        android:id="@+id/button_login"
-        android:layout_width="116dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/button_googleLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/blue"
-        android:text="로그인" />
+        android:text="로그인"
+        app:cornerRadius="16dp"/>
 
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_above="@id/button_login"
-        android:layout_marginBottom="12dp"
         app:ci_drawable="@drawable/circle_blue"
         app:ci_drawable_unselected="@drawable/circle_grey"/>
 
