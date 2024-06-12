@@ -129,13 +129,14 @@ class ReadGroupFragment : Fragment() {
             viewModel.groupState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
+
                     }
 
                     is UiState.Success -> {
                         initView(uiState.data)
                         initGroupThumbnail(uiState.data.groupThumbnail)
                         initUserList(uiState.data.userList)
+
                     }
 
                     is UiState.Error -> {
@@ -174,7 +175,7 @@ class ReadGroupFragment : Fragment() {
             viewModel.userListState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
+
                     }
 
                     is UiState.Success -> {
@@ -471,6 +472,7 @@ class ReadGroupFragment : Fragment() {
                     if (category.contains(chipText)){
                         isChecked = true
                     }
+
                     setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
                     setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
