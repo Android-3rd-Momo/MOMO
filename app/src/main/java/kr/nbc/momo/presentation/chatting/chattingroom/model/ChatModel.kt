@@ -10,7 +10,8 @@ data class GroupChatModel(
 data class GroupUserModel(
     val userId: String = "",
     val userName: String = "",
-    val userProfileUrl: String = ""
+    val userProfileUrl: String = "",
+    val lastViewedChat: ChatModel = ChatModel()
 )
 
 data class ChatModel(

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="classification">
+        <item>공모전</item>
+        <item>프로젝트</item>
+        <item>스터디</item>
+        <item>레슨</item>
+        <item>아웃소싱</item>
+    </string-array>
+
+    <string-array name="chipGroupDevelopmentOccupations">
+        <item>프론트엔드</item>
+        <item>백엔드</item>
+        <item>서버</item>
+        <item>게임</item>
+        <item>AI</item>
+        <item>AOS</item>
+        <item>IOS</item>
+        <item>웹</item>
+        <item>UI/UX</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="chipProgramingLanguage">
+        <item>HTML, CSS, JavaScript</item>
+        <item>Java</item>
+        <item>Python</item>
+        <item>C#</item>
+        <item>C++</item>
+        <item>Kotlin</item>
+    </string-array>
+</resources>

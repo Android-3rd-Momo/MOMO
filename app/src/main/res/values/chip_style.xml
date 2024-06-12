@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Chip" parent="@style/Widget.Material3.Chip.Suggestion" >
+        <item name="chipBackgroundColor">@color/bg_chip_state_color</item>
+        <item name="android:textColor">@color/tv_chip_state_color</item>
+    </style>
+</resources>

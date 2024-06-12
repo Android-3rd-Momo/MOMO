@@ -4,16 +4,20 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp">
+    android:background="@drawable/chatting_list_item_bg"
+    android:padding="20dp">
 
     <ImageView
         android:id="@+id/ivGroupImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon_profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/circle_bg"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tool:src="@drawable/icon_profile" />
 
     <TextView
         android:id="@+id/tvGroupName"
@@ -21,10 +25,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:maxLines="1"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:ellipsize="end"
         app:layout_constraintBottom_toTopOf="@+id/tvLatestChatText"
         app:layout_constraintStart_toEndOf="@+id/ivGroupImage"
         app:layout_constraintTop_toTopOf="parent"
-        tool:text="유저 이름" />
+        tool:text="그룹 이름" />
+
+    <TextView
+        android:id="@+id/tvSign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chatting_list_item_circle"
+        tool:text="1"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:maxLines="1"
+        android:maxLength= "3"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvLatestChatText"
@@ -32,9 +53,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:maxLines="1"
+        android:textSize="14dp"
+        android:ellipsize="end"
+        android:maxWidth="220dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivGroupImage"
         app:layout_constraintTop_toBottomOf="@+id/tvGroupName"
-        tool:text="마지막 메세지" />
+        tool:text="마지막 메세지마지막 메세지마지막 메세지마지막 메세지마지막 메세지마지막 메세지" />
 
+    <TextView
+        android:id="@+id/tvLatestChatTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSign"
+        tool:text="5분 전" />
 </androidx.constraintlayout.widget.ConstraintLayout>
