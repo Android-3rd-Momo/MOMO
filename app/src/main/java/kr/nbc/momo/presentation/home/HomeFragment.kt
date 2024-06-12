@@ -27,6 +27,8 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.decryptECB
+import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -108,7 +110,7 @@ class HomeFragment : Fragment() {
                 sharedViewModel.currentUser.collectLatest { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            //todo 로딩
+
                         }
 
                         is UiState.Success -> {
@@ -138,7 +140,17 @@ class HomeFragment : Fragment() {
                     }
 
                     UiState.Loading -> {
-                        // TODO()
+                        with(binding){
+                            prCircularJoined.setVisibleToVisible()
+                            prCircularLatest.setVisibleToVisible()
+                            prCircularRecommend.setVisibleToVisible()
+                            includeNoResultJoined.setVisibleToGone()
+                            includeNoResultLatest.setVisibleToGone()
+                            includeNoResultRecommend.setVisibleToGone()
+                            rvMyGroupList.setVisibleToInvisible()
+                            rvLatestGroupList.setVisibleToInvisible()
+                            rvRecommendGroupList.setVisibleToInvisible()
+                        }
                     }
 
                     is UiState.Success -> {
@@ -152,7 +164,14 @@ class HomeFragment : Fragment() {
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
                         binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
                         if (latestGroupList.isEmpty()) {
-                            binding.tvEmptyLatestGroup.setVisibleToVisible()
+                            //binding.tvEmptyLatestGroup.setVisibleToVisible()
+                            binding.prCircularLatest.setVisibleToGone()
+                            binding.includeNoResultLatest.setVisibleToVisible()
+                            binding.rvLatestGroupList.setVisibleToInvisible()
+                        }else {
+                            binding.prCircularLatest.setVisibleToGone()
+                            binding.includeNoResultLatest.setVisibleToGone()
+                            binding.rvLatestGroupList.setVisibleToVisible()
                         }
 
 
@@ -161,7 +180,14 @@ class HomeFragment : Fragment() {
                         binding.rvMyGroupList.adapter = myGroupListAdapter
                         binding.rvMyGroupList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                         if (myGroupList.isEmpty()) {
-                            binding.tvEmptyMyGroup.setVisibleToVisible()
+                            //binding.tvEmptyMyGroup.setVisibleToVisible()
+                            binding.prCircularJoined.setVisibleToGone()
+                            binding.includeNoResultJoined.setVisibleToVisible()
+                            binding.rvMyGroupList.setVisibleToInvisible()
+                        } else {
+                            binding.prCircularJoined.setVisibleToGone()
+                            binding.includeNoResultJoined.setVisibleToGone()
+                            binding.rvMyGroupList.setVisibleToVisible()
                         }
 
                         val recommendGroupList = uiState.data
@@ -174,7 +200,14 @@ class HomeFragment : Fragment() {
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
                         binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                         if (recommendGroupList.isEmpty()) {
-                            binding.tvEmptyRecommendGroup.setVisibleToVisible()
+                            //binding.tvEmptyRecommendGroup.setVisibleToVisible()
+                            binding.prCircularRecommend.setVisibleToGone()
+                            binding.includeNoResultRecommend.setVisibleToVisible()
+                            binding.rvRecommendGroupList.setVisibleToInvisible()
+                        } else {
+                            binding.prCircularRecommend.setVisibleToGone()
+                            binding.includeNoResultRecommend.setVisibleToGone()
+                            binding.rvRecommendGroupList.setVisibleToInvisible()
                         }
 
                         onClick(latestGroupList, myGroupList, recommendGroupList)

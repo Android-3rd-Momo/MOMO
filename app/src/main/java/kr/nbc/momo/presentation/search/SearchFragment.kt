@@ -82,6 +82,9 @@ class SearchFragment : Fragment() {
 
     private fun initView(){
         with(binding){
+            ivBackbutton.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
             rvSearchResult.apply {
                 adapter = searchAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
