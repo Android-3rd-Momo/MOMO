@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
@@ -108,17 +109,30 @@ class GroupRepositoryImpl @Inject constructor(
         awaitClose { listener.result }
     }
 
-    override suspend fun deleteGroup(groupId: String): Flow<Boolean> = callbackFlow {
-        val listener = fireStore.collection("groups")
-            .document(groupId)
-            .delete()
-            .addOnSuccessListener {
-                trySend(true)
-            }.addOnFailureListener {
-                trySend(false)
-            }
-        awaitClose { listener.result }
+    override suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean> = callbackFlow {
+        val query = fireStore.collection("userInfo").whereIn("userId", userList)
 
+        val listener = query.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    fireStore.runTransaction { transaction ->
+                        transaction.update(document.reference, "userGroup", FieldValue.arrayRemove(groupId))
+                    }.addOnFailureListener { e ->
+                        close(e)
+                    }
+                }
+                fireStore.collection("groups").document(groupId).delete()
+                    .addOnFailureListener { e ->
+                        close(e)
+                    }
+
+                trySend(true)
+            }
+            .addOnFailureListener { e ->
+                close(e)
+            }
+
+        awaitClose { listener.result }
     }
 
     override suspend fun getGroupList(): Flow<List<GroupEntity>> = flow {
