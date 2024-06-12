@@ -149,7 +149,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clCategoryDetail"
             android:layout_width="match_parent"
