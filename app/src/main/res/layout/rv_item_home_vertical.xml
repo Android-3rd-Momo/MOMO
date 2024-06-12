@@ -58,6 +58,7 @@
         android:layout_height="wrap_content"
         android:maxWidth="280dp"
         android:text="안녕하세용러더ㅑㅓ렁"
+        android:ellipsize = "end"
         android:textSize="12dp"
         android:fontFamily="@font/sfprodisplayregular"
         android:layout_marginTop="5dp"
