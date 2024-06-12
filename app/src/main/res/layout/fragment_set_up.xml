@@ -4,24 +4,161 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.setup.SetUpFragment">
+    tools:context=".presentation.setup.SetUpFragment"
+    android:background="@color/grey">
 
-    <!-- todo 변경 필요-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btnSignOut"
+        <ImageView
+            android:id="@+id/ivReturn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivReturn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvSignOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="16dp"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/chatting_list_item_bg"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
         android:text="로그아웃"
         />
-    <Button
-        android:id="@+id/btnWithdrawal"
+
+    <ImageView
+        android:id="@+id/ivSignOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_setup_next"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSignOut"
+        app:layout_constraintEnd_toEndOf="@+id/tvSignOut"
+        app:layout_constraintTop_toTopOf="@+id/tvSignOut" />
+
+    <TextView
+        android:id="@+id/tvWithdrawal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnSignOut"
+        android:textSize="16dp"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/chatting_list_item_bg"
+        app:layout_constraintTop_toBottomOf="@id/tvSignOut"
         android:text="회원 탈퇴"/>
 
+    <ImageView
+        android:id="@+id/ivWithdrawal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_setup_next"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvWithdrawal"
+        app:layout_constraintEnd_toEndOf="@+id/tvWithdrawal"
+        app:layout_constraintTop_toTopOf="@+id/tvWithdrawal" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--
+
+<androidx.constraintlayout.widget.ConstraintLayout
+android:id="@+id/clSignOut"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="10dp"
+app:layout_constraintTop_toBottomOf="@id/constraintLayout">
+
+<TextView
+    android:id="@+id/tvSignOut"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/chatting_list_item_bg"
+    android:gravity="start"
+    android:paddingStart="20dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="16dp"
+    android:text="로그아웃"
+    android:textColor="@color/black"
+    android:textSize="16dp"
+    app:layout_constraintTop_toTopOf="@id/clSignOut" />
+
+        <ImageView
+        android:id="@+id/ivSignOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_setup_next"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSignOut"
+        app:layout_constraintEnd_toEndOf="@+id/tvSignOut"
+        app:layout_constraintTop_toTopOf="@+id/tvSignOut" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+android:id="@+id/clWithdrawal"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+app:layout_constraintTop_toBottomOf="@id/clSignOut">
+
+<TextView
+    android:id="@+id/tvWithdrawal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/chatting_list_item_bg"
+    android:gravity="start"
+    android:paddingStart="20dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="16dp"
+    android:text="회원 탈퇴"
+    android:textColor="@color/black"
+    android:textSize="16dp"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivWithdrawal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_setup_next"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvWithdrawal"
+        app:layout_constraintEnd_toEndOf="@+id/tvWithdrawal"
+        app:layout_constraintTop_toTopOf="@+id/tvWithdrawal" />
+</androidx.constraintlayout.widget.ConstraintLayout>-->
