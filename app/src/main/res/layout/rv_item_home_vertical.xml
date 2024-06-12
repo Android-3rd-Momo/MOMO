@@ -37,7 +37,6 @@
         android:fontFamily="@font/sfprodisplayregular"
         android:textSize="12dp"
         android:textColor="@color/blue"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,10 +56,14 @@
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:maxWidth="280dp"
+        android:text="안녕하세용러더ㅑㅓ렁"
         android:textSize="12dp"
         android:fontFamily="@font/sfprodisplayregular"
-        android:layout_marginStart="11dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="12dp"
+        android:textColor="#919191"
+        android:maxLines="2"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

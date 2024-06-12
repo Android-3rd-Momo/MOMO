@@ -56,7 +56,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/spinner_search_bg"/>
 
         <Spinner
             android:id="@+id/spWorks"
@@ -64,7 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             app:layout_constraintStart_toEndOf="@id/spCategory"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/spinner_search_bg"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
