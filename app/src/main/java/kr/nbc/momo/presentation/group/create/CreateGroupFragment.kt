@@ -317,7 +317,6 @@ class CreateGroupFragment : Fragment() {
         for (chipText in chipList) {
             val chip = Chip(requireContext()).apply {
                 text = chipText
-                isCheckable = true
                 setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
                 setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
             }

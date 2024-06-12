@@ -23,6 +23,7 @@ import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.decryptECB
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -72,6 +73,14 @@ class HomeFragment : Fragment() {
                 .commit()
 
         }
+
+        binding.ivSearch.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SearchFragment())
+                .addToBackStack(null)
+                .commit()
+
+        }
     }
 
     private fun observeUserProfile() {
@@ -88,6 +97,7 @@ class HomeFragment : Fragment() {
                             Log.d("currentUser", state.data.userId)
                             currentUser = state.data.userId
                             currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
+                            binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
                         }
 
                         is UiState.Error -> {
