@@ -1,6 +1,14 @@
 package kr.nbc.momo.presentation.onboarding.developmentType
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +37,7 @@ class DevelopmentStackFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDevelopmentStack()
+        initView()
     }
 
     override fun onStop() {
@@ -51,6 +60,38 @@ class DevelopmentStackFragment : Fragment() {
             }
         }
     }
+
+    private fun initView(){
+        val ssb = SpannableStringBuilder("기술스택에 대해 알려주세요\n" +
+                "최소 10글자 이상 작성해주세요.")
+        val blue = Color.parseColor("#2D64CF")
+        val black = Color.parseColor("#000000")
+        ssb.setSpan(ForegroundColorSpan(blue), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ssb.setSpan(ForegroundColorSpan(black), 5, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ssb.setSpan(StyleSpan(Typeface.BOLD), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        binding.tvSubtitle.text = ssb
+
+
+        binding.etStack.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val textLength = binding.etStack.text.length.toString()
+                val lengthText = "$textLength/1000자"
+                binding.tvTextCount.text = lengthText
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                val textLength = binding.etStack.text.length.toString()
+                val lengthText = "$textLength/1000자"
+                binding.tvTextCount.text = lengthText
+            }
+
+        })
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
