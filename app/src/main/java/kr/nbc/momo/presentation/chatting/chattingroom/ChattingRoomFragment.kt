@@ -151,7 +151,11 @@ class ChattingRoomFragment : Fragment() {
                     is UiState.Success -> {
                         if (it.data.userId != "") {
                             currentUserId = it.data.userId
-                            rvAdapter.currentUserId = it.data.userId
+                            with(rvAdapter){
+                                currentUserId = it.data.userId
+                                currentUrl = it.data.userProfileThumbnailUrl
+                                currentUserName = it.data.userName
+                            }
                             Log.d("ChattingRoom", "${it.data}")
                         }
                         if (it.data.userName != "") currentUsername = it.data.userName
