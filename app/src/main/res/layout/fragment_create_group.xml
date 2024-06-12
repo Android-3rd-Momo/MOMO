@@ -137,7 +137,7 @@
                 android:id="@+id/categorySpinner"
                 style="@style/Widget.My.Spinner"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/bg_layout_corners"
                 app:layout_constraintBaseline_toTopOf="parent"
@@ -179,6 +179,7 @@
                 android:textSize="16dp"
                 android:visibility="gone"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/chipGroupDevelopmentOccupations" />
 
@@ -186,7 +187,7 @@
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipProgramingLanguage"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -203,13 +204,14 @@
                 android:visibility="gone"
                 android:textSize="16dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvCategoryDetail" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupDevelopmentOccupations"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="parent"

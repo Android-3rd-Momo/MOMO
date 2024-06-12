@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -70,11 +71,13 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initFlow()
+        bottomNavHide()
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+        bottomNavShow()
     }
 
     private fun initView(){
@@ -173,5 +176,15 @@ class SearchFragment : Fragment() {
             addToBackStack(null)
             commit()
         }
+    }
+
+    private fun bottomNavHide() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav?.visibility = View.GONE
+    }
+
+    private fun bottomNavShow() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav?.visibility = View.VISIBLE
     }
 }

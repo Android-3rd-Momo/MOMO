@@ -112,6 +112,7 @@ class SignUpFragment : Fragment() {
             } else {
                 binding.etPassWord.error = null
             }
+
             if (password != checkPassword) {
                 binding.etCheckPassWord.error = "비밀번호가 일치하지 않습니다."
                 isValid = false
@@ -136,7 +137,7 @@ class SignUpFragment : Fragment() {
                 binding.etNumber.error = "전화번호 중복을 확인해주세요."
                 isValid = false
             } else {
-                binding.etPassWord.error = null
+                binding.etNumber.error = null
             }
 
             if (id.isEmpty()) {

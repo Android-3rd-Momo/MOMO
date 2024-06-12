@@ -100,4 +100,8 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()        }
     }
+
+    fun selectNavigationItem(itemId: Int) {
+        binding.navigationView.selectedItemId = itemId
+    }
 }
