@@ -19,6 +19,7 @@ import kr.nbc.momo.databinding.FragmentChattingRoomBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -103,7 +104,8 @@ class ChattingRoomFragment : Fragment() {
             viewModel.chatMessages.collectLatest { chatMessages ->
                 when (chatMessages) {
                     is UiState.Loading -> {
-
+                        binding.rvChatMessage.setVisibleToGone()
+                        binding.prCircular.setVisibleToVisible()
                     }
 
                     is UiState.Success -> {
@@ -111,9 +113,13 @@ class ChattingRoomFragment : Fragment() {
                         rvAdapter.itemList = chatMessages.data
                         binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
                         rvAdapter.notifyDataSetChanged()
+                        binding.rvChatMessage.setVisibleToVisible()
+                        binding.prCircular.setVisibleToGone()
                     }
 
                     is UiState.Error -> {
+                        binding.rvChatMessage.setVisibleToGone()
+                        binding.prCircular.setVisibleToError()
                         Log.d("error", chatMessages.message)
                     }
                 }
@@ -151,19 +157,20 @@ class ChattingRoomFragment : Fragment() {
                     is UiState.Success -> {
                         if (it.data.userId != "") {
                             currentUserId = it.data.userId
+                            currentUsername = it.data.userName
+                            currentUrl = it.data.userProfileThumbnailUrl
                             with(rvAdapter){
                                 currentUserId = it.data.userId
                                 currentUrl = it.data.userProfileThumbnailUrl
                                 currentUserName = it.data.userName
                             }
-                            Log.d("ChattingRoom", "${it.data}")
                         }
-                        if (it.data.userName != "") currentUsername = it.data.userName
-                        currentUrl = it.data.userProfileThumbnailUrl
                         rvAdapter.notifyDataSetChanged()
                     }
 
-                    is UiState.Loading -> {}
+                    is UiState.Loading -> {
+
+                    }
                     is UiState.Error -> {
                         Log.d("ChattingRoom", "${it.message}")
                     }
