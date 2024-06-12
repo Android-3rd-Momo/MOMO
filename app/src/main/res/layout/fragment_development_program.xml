@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="사용하시는 프로그램을 선택해주세요"
+        tools:text="사용하시는 프로그램을 선택해주세요"
         android:textSize="16dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,52 +37,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:chipSpacingVertical="4dp"
+        app:chipSpacingHorizontal="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
         app:singleSelection="false">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_1"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:text="안드로이드스튜디오"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_2"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="플러터"
-            app:layout_constraintBottom_toBottomOf="@+id/chip_1"
-            app:layout_constraintStart_toEndOf="@+id/chip_1"
-            app:layout_constraintTop_toTopOf="@+id/chip_1" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_3"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="SQL"
-            app:layout_constraintBottom_toBottomOf="@+id/chip_2"
-            app:layout_constraintStart_toEndOf="@+id/chip_2"
-            app:layout_constraintTop_toTopOf="@+id/chip_2" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_4"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="IDE"
-            app:layout_constraintBottom_toBottomOf="@+id/chip_3"
-            app:layout_constraintStart_toEndOf="@+id/chip_3"
-            app:layout_constraintTop_toTopOf="@+id/chip_3" />
 
     </com.google.android.material.chip.ChipGroup>
 
