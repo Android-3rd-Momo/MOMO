@@ -1,6 +1,8 @@
 package kr.nbc.momo.presentation.home
 
+import android.graphics.Rect
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -32,7 +34,7 @@ class MyGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adap
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }
-
+        holder.image.clipToOutline = true
         holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].category.classification
     }

@@ -32,7 +32,7 @@ class RecommendGroupListAdapter(private var items: List<GroupModel>): RecyclerVi
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }
-
+        holder.image.clipToOutline = true
         holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].category.classification
     }

@@ -22,9 +22,12 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
+import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.decryptECB
+import kr.nbc.momo.util.setVisibleToVisible
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -81,6 +84,21 @@ class HomeFragment : Fragment() {
                 .commit()
 
         }
+
+        binding.tvEmptyRecommendGroup.setOnClickListener {
+            val myPageFragment = MyPageFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, myPageFragment)
+                .commit()
+            (activity as? MainActivity)?.selectNavigationItem(R.id.myPageFragment)
+        }
+
+        binding.tvEmptyMyGroup.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SearchFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun observeUserProfile() {
@@ -133,11 +151,18 @@ class HomeFragment : Fragment() {
                         latestGroupListAdapter = LatestGroupListAdapter(latestGroupList)
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
                         binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
+                        if (latestGroupList.isEmpty()) {
+                            binding.tvEmptyLatestGroup.setVisibleToVisible()
+                        }
+
 
                         val myGroupList = uiState.data.filter { it.userList.contains(currentUser) }
                         myGroupListAdapter = MyGroupListAdapter(myGroupList)
                         binding.rvMyGroupList.adapter = myGroupListAdapter
                         binding.rvMyGroupList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                        if (myGroupList.isEmpty()) {
+                            binding.tvEmptyMyGroup.setVisibleToVisible()
+                        }
 
                         val recommendGroupList = uiState.data
                             .filter {
@@ -148,6 +173,9 @@ class HomeFragment : Fragment() {
                         recommendGroupListAdapter = RecommendGroupListAdapter(recommendGroupList)
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
                         binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                        if (recommendGroupList.isEmpty()) {
+                            binding.tvEmptyRecommendGroup.setVisibleToVisible()
+                        }
 
                         onClick(latestGroupList, myGroupList, recommendGroupList)
                     }
