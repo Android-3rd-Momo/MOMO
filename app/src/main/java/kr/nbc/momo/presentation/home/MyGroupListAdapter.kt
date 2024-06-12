@@ -1,11 +1,14 @@
 package kr.nbc.momo.presentation.home
 
+import android.graphics.Rect
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import kr.nbc.momo.databinding.RvItemHomeHorizontalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
+import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 
 class MyGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MyGroupListAdapter.Holder>() {
     interface ItemClick{
@@ -31,9 +34,9 @@ class MyGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adap
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }
-
-        holder.image.load(items[position].groupThumbnail)
-        holder.name.text = items[position].groupName
+        holder.image.clipToOutline = true
+        holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
+        holder.name.text = items[position].category.classification
     }
 
 }

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,10 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColor
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -30,6 +35,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,8 +131,8 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            binding.categorySpinner.clipToOutline = true
-            binding.ivGroupImage.clipToOutline = true
+            categorySpinner.clipToOutline = true
+            ivGroupImage.clipToOutline = true
 
             val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
             val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
@@ -307,12 +313,14 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup){
-        for (i in chipList) {
-            chipGroup.addView(Chip(requireContext()).apply {
-                tag = i
-                text = i
-                isCheckable = true
-            })
+
+        for (chipText in chipList) {
+            val chip = Chip(requireContext()).apply {
+                text = chipText
+                setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
+                setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
+            }
+            chipGroup.addView(chip)
         }
     }
 
