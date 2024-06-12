@@ -12,12 +12,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class SetUpFragment : Fragment() {
@@ -32,6 +36,7 @@ class SetUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideNav()
         observeUserProfile()
         eachEventHandler()
     }
@@ -59,17 +64,21 @@ class SetUpFragment : Fragment() {
     }
 
     private fun eachEventHandler(){ //todo 임시 dialog
-        binding.btnSignOut.setOnClickListener {
-            showConfirmationDialog("로그아웃 하시겠습니까?") {
-                viewModel.signOut()
-                sharedViewModel.getCurrentUser()
+        with(binding){
+            ivReturn.setOnClickListener {
+                parentFragmentManager.popBackStack()
             }
-        }
-
-        binding.btnWithdrawal.setOnClickListener {
-            showConfirmationDialog("회원탈퇴 하시겠습니까?") {
-                viewModel.withdrawal()
-                sharedViewModel.getCurrentUser()
+            tvSignOut.setOnClickListener {
+                showConfirmationDialog("로그아웃 하시겠습니까?") {
+                    viewModel.signOut()
+                    sharedViewModel.getCurrentUser()
+                }
+            }
+            tvWithdrawal.setOnClickListener {
+                showConfirmationDialog("회원탈퇴 하시겠습니까?") {
+                    viewModel.withdrawal()
+                    sharedViewModel.getCurrentUser()
+                }
             }
         }
     }
@@ -97,6 +106,17 @@ class SetUpFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        showNav()
         _binding = null
+    }
+
+    private fun showNav() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav.setVisibleToVisible()
+    }
+
+    private fun hideNav() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav.setVisibleToGone()
     }
 }
