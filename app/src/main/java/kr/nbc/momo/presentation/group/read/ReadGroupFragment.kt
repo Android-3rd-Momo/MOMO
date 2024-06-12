@@ -301,10 +301,11 @@ class ReadGroupFragment : Fragment() {
     }
 
     private fun setEditMode(data: GroupModel) {
+        val categoryList = data.category.programingLanguage + data.category.developmentOccupations
         val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
         val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
-        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations)
-        setChipGroup(chipGroupLang, binding.chipProgramingLanguage)
+        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations,categoryList)
+        setChipGroup(chipGroupLang, binding.chipProgramingLanguage,categoryList)
 
         val editMode = arrayOf(
             binding.clEditMode,
@@ -385,8 +386,6 @@ class ReadGroupFragment : Fragment() {
             getChipText(binding.chipProgramingLanguage)
         )
 
-        Log.d("chipGroupDevelopmentOccupations", "${getChipText(binding.chipGroupDevelopmentOccupations)}")
-
         image = data.groupThumbnail
         viewModel.updateGroup(
             data.copy(
@@ -463,11 +462,15 @@ class ReadGroupFragment : Fragment() {
         }
         dialog.show()
     }
-    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup){
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, category: List<String>){
         if (chipGroup.childCount == 0) {
             for (chipText in chipList) {
                 val chip = Chip(requireContext()).apply {
                     text = chipText
+                    isCheckable = true
+                    if (category.contains(chipText)){
+                        isChecked = true
+                    }
                     setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
                     setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
