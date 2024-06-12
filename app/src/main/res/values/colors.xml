@@ -5,4 +5,5 @@
     <color name="blue"> #2D64CF</color>
     <color name= "grey"> #F7F7F7</color>
     <color name="red_error">#FF0000</color>
+    <color name= "darkGrey">#E9E9E9</color>
 </resources>
