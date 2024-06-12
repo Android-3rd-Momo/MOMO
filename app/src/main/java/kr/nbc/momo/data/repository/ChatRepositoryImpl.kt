@@ -58,49 +58,51 @@ class ChatRepositoryImpl @Inject constructor(
         url: String
     ) {
         try {
-            val groupSnapshot = chatRef.child(groupId).get().await()
-            val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
-            val koreaZoneId = ZoneId.of("Asia/Seoul")
-            val koreaTime = ZonedDateTime.now(koreaZoneId)
+            if (groupId.isNotBlank()) {
+                val groupSnapshot = chatRef.child(groupId).get().await()
+                val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
+                val koreaZoneId = ZoneId.of("Asia/Seoul")
+                val koreaTime = ZonedDateTime.now(koreaZoneId)
 
-            val newChatResponse = ChatResponse(
-                userName = userName,
-                userId = userId,
-                text = text,
-                dateTime = koreaTime.toString()
-            )
+                val newChatResponse = ChatResponse(
+                    userName = userName,
+                    userId = userId,
+                    text = text,
+                    dateTime = koreaTime.toString()
+                )
 
-            val updatedChatList = groupChatResponse?.chatList?.toMutableList() ?: mutableListOf()
-            updatedChatList.add(newChatResponse)
-            val userList = groupChatResponse?.userList ?: listOf()
+                val updatedChatList =
+                    groupChatResponse?.chatList?.toMutableList() ?: mutableListOf()
+                updatedChatList.add(newChatResponse)
+                val userList = groupChatResponse?.userList ?: listOf()
 
-            val newUserList =
-                if (userList.none { it.userId == userId }) userList.toMutableList().apply {
-                    add(
-                        GroupUserResponse(
-                            userId,
-                            userName,
-                            "",
-                            newChatResponse
+                val newUserList =
+                    if (userList.none { it.userId == userId }) userList.toMutableList().apply {
+                        add(
+                            GroupUserResponse(
+                                userId,
+                                userName,
+                                "",
+                                newChatResponse
+                            )
                         )
-                    )
-                }
-                else userList
+                    }
+                    else userList
 
-            val updatedGroupChatResponse = groupChatResponse?.copy(
-                groupId = groupId,
-                groupName = groupName,
-                userList = newUserList,
-                chatList = updatedChatList
-            ) ?: GroupChatResponse(
-                groupId = groupId,
-                groupName = groupName,
-                userList = newUserList,
-                chatList = updatedChatList
-            )
+                val updatedGroupChatResponse = groupChatResponse?.copy(
+                    groupId = groupId,
+                    groupName = groupName,
+                    userList = newUserList,
+                    chatList = updatedChatList
+                ) ?: GroupChatResponse(
+                    groupId = groupId,
+                    groupName = groupName,
+                    userList = newUserList,
+                    chatList = updatedChatList
+                )
 
-            chatRef.child(groupId).setValue(updatedGroupChatResponse).await()
-
+                chatRef.child(groupId).setValue(updatedGroupChatResponse).await()
+            }
         } catch (e: Exception) {
             Log.e("repository", "Failed to send message", e)
         }
@@ -108,20 +110,21 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun setLastViewedChat(groupId: String, userId: String, userName: String) {
         try {
-            val groupSnapshot = chatRef.child(groupId).get().await()
-            val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
-            val groupUserResponse = groupChatResponse?.userList ?: listOf()
+            if (groupId.isNotBlank()) {
+                val groupSnapshot = chatRef.child(groupId).get().await()
+                val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
+                val groupUserResponse = groupChatResponse?.userList ?: listOf()
 
-            val lastViewChatResponse = groupChatResponse?.chatList?.last() ?: ChatResponse()
-            val newGroupUserResponse = groupUserResponse.map {
-                if (it.userId == userId) it.copy(lastViewedChat = lastViewChatResponse) else it
+                val lastViewChatResponse = groupChatResponse?.chatList?.last() ?: ChatResponse()
+                val newGroupUserResponse = groupUserResponse.map {
+                    if (it.userId == userId) it.copy(lastViewedChat = lastViewChatResponse) else it
+                }
+
+                val newGroupChatResponse = groupChatResponse?.copy(
+                    userList = newGroupUserResponse
+                )
+                chatRef.child(groupId).setValue(newGroupChatResponse).await()
             }
-
-            val newGroupChatResponse = groupChatResponse?.copy(
-                userList = newGroupUserResponse
-            )
-            chatRef.child(groupId).setValue(newGroupChatResponse).await()
-
         } catch (e: Exception) {
             Log.e("repository", "Failed to update last viewed chat", e)
 
