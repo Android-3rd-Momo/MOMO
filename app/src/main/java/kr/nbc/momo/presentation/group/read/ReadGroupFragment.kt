@@ -559,9 +559,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (category.contains(chipText)) {
                         isChecked = true
                     }
-
-                    //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                    //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
                 chipGroup.addView(chip)
             }

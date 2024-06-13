@@ -24,40 +24,18 @@ class DevelopmentTypeFragment : Fragment() {
     private val onBoardingSharedViewModel: OnBoardingSharedViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentDevelopmentTypeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        saveSelectedChips()
         initView()
     }
 
-    private fun saveSelectedChips() {
-        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            val selectedChipTexts = checkedIds.map { id ->
-                group.findViewById<Chip>(id).text.toString()
-            }
-            onBoardingSharedViewModel.updateTypeOfDevelopment(selectedChipTexts)
-
-            checkedIds.forEach { id ->
-                val chip = group.findViewById<Chip>(id)
-                if (chip.isChecked) {
-                    onBoardingSharedViewModel.addSelectedTypeChipId(resources.getResourceEntryName(chip.id))
-                } else {
-                    onBoardingSharedViewModel.removeSelectedTypeChipId(resources.getResourceEntryName(chip.id))
-                }
-            }
-        }
-
-    }
-
-    private fun initView(){
+    private fun initView() {
         val ssb = SpannableStringBuilder("개발 직군을 골라주세요!\n")
         val blue = Color.parseColor("#2D64CF")
         val black = Color.parseColor("#000000")
@@ -70,31 +48,29 @@ class DevelopmentTypeFragment : Fragment() {
         setChipGroup(developType, binding.chipGroup)
     }
 
+
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) {
         for (chipText in chipList) {
             val chip = Chip(requireContext()).apply {
                 text = chipText
                 setTextColor(
                     ContextCompat.getColorStateList(
-                        requireContext(),
-                        R.color.tv_chip_state_color
+                        requireContext(), R.color.tv_chip_state_color
                     )
                 )
                 setChipBackgroundColorResource(R.color.bg_chip_state_color)
+                isCheckable = true
                 setOnClickListener {
-                    setChipBackgroundColorResource(R.color.blue)
-                    setTextColor(
-                        ContextCompat.getColorStateList(
-                            requireContext(),
-                            R.color.white
-                        )
-                    )
+                    if (isChecked) {
+                        onBoardingSharedViewModel.addSelectedTypeChipId(chipText)
+                    } else {
+                        onBoardingSharedViewModel.removeSelectedTypeChipId(chipText)
+                    }
                 }
             }
             chipGroup.addView(chip)
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
