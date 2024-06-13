@@ -61,9 +61,10 @@ class DevelopmentStackFragment : Fragment() {
         }
     }
 
-    private fun initView(){
-        val ssb = SpannableStringBuilder("기술스택에 대해 알려주세요\n" +
-                "최소 10글자 이상 작성해주세요.")
+    private fun initView() {
+        val ssb = SpannableStringBuilder(
+            "기술스택에 대해 알려주세요\n"
+        )
         val blue = Color.parseColor("#2D64CF")
         val black = Color.parseColor("#000000")
         ssb.setSpan(ForegroundColorSpan(blue), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -73,7 +74,7 @@ class DevelopmentStackFragment : Fragment() {
         binding.tvSubtitle.text = ssb
 
 
-        binding.etStack.addTextChangedListener(object : TextWatcher{
+        binding.etStack.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
