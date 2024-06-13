@@ -514,14 +514,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
+        <ImageView
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
-            android:text="delete"
-            android:textColor="#FD3C3C"
+            android:src ="@drawable/icon_delete"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
