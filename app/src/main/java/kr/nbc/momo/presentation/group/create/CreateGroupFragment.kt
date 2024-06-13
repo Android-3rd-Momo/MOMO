@@ -180,14 +180,6 @@ class CreateGroupFragment : Fragment() {
         binding.clHome.setOnClickListener {
             hideKeyboard(requireActivity() as Activity)
         }
-        binding.svHome.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (scrollY > oldScrollY) {
-                hideKeyboard(requireActivity() as Activity)
-            }
-            if (scrollY  < oldScrollY) {
-                hideKeyboard(requireActivity() as Activity)
-            }
-        }
 
 
     }
