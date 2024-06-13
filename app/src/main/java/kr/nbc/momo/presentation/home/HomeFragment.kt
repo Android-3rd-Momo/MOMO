@@ -189,7 +189,6 @@ class HomeFragment : Fragment() {
                         binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
 
                         if (latestGroupList.isEmpty()) {
-                            //binding.tvEmptyLatestGroup.setVisibleToVisible()
                             binding.prCircularLatest.setVisibleToGone()
                             binding.includeNoResultLatest.setVisibleToVisible()
                             binding.rvLatestGroupList.setVisibleToInvisible()
@@ -210,7 +209,6 @@ class HomeFragment : Fragment() {
                             false
                         )
                         if (myGroupList.isEmpty()) {
-                            //binding.tvEmptyMyGroup.setVisibleToVisible()
                             binding.prCircularJoined.setVisibleToGone()
                             binding.includeNoResultJoined.setVisibleToVisible()
                             binding.rvMyGroupList.setVisibleToInvisible()
@@ -225,7 +223,7 @@ class HomeFragment : Fragment() {
                                 val setA = (it.category.programingLanguage + it.category.developmentOccupations).toSet()
                                 val setB = currentUserCategory.toSet()
                                 setA.intersect(setB).isNotEmpty()
-                            }
+                            } - myGroupList.toSet()
                         recommendGroupListAdapter = RecommendGroupListAdapter(recommendGroupList)
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
                         binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(
@@ -234,14 +232,13 @@ class HomeFragment : Fragment() {
                             false
                         )
                         if (recommendGroupList.isEmpty()) {
-                            //binding.tvEmptyRecommendGroup.setVisibleToVisible()
                             binding.prCircularRecommend.setVisibleToGone()
                             binding.includeNoResultRecommend.setVisibleToVisible()
                             binding.rvRecommendGroupList.setVisibleToInvisible()
                         } else {
                             binding.prCircularRecommend.setVisibleToGone()
                             binding.includeNoResultRecommend.setVisibleToGone()
-                            binding.rvRecommendGroupList.setVisibleToInvisible()
+                            binding.rvRecommendGroupList.setVisibleToVisible()
                         }
 
                         onClick(latestGroupList, myGroupList, recommendGroupList)
