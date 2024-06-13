@@ -28,7 +28,7 @@ class DevelopmentProgramFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDevelopmentProgramBinding.inflate(inflater, container, false)
         return binding.root
     }
