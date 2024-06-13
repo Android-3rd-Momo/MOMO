@@ -213,7 +213,8 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvParticipant" />
+                app:layout_constraintTop_toBottomOf="@+id/tvParticipant"
+                tools:listitem="@layout/gridview_item"/>
 
             <TextView
                 android:id="@+id/tvParticipant"

@@ -272,7 +272,7 @@ class ReadGroupFragment : Fragment() {
     private fun initUserList(userList: List<String>) {
         val adapter = UserListAdapter(userList)
         binding.rvUserList.adapter = adapter
-        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 5)
+        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
