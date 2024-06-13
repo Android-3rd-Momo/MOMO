@@ -52,6 +52,7 @@ class TermFragment : BottomSheetDialogFragment() {
         binding.cbTerm2.isChecked = isChecked
         binding.cbTerm3.isChecked = isChecked
         binding.cbTerm4.isChecked = isChecked
+        binding.cbTerm5.isChecked = isChecked
     }
 
     private fun updateAllAcceptCheckbox() {
@@ -85,6 +86,11 @@ class TermFragment : BottomSheetDialogFragment() {
             val fragmentServiceTerm = ServiceTermFragment()
             fragmentServiceTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
             fragmentServiceTerm.show(parentFragmentManager, fragmentServiceTerm.tag)
+        }
+        binding.tvAccept4Desc.setOnClickListener{
+            val fragmentCommunityTerm = CommunityTermFragment()
+            fragmentCommunityTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
+            fragmentCommunityTerm.show(parentFragmentManager, fragmentCommunityTerm.tag)
         }
     }
 

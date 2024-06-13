@@ -24,6 +24,10 @@ class PrivateTermFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnCheck.setOnClickListener{
+            dismiss()
+        }
     }
 
     override fun onDestroyView() {
