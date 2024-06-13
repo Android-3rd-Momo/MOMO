@@ -2,6 +2,7 @@ package kr.nbc.momo.presentation.mypage
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,12 +10,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,6 +28,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.snackbar.Snackbar
@@ -92,6 +99,16 @@ class MyPageFragment : Fragment() {
         eachEventHandler()
     }
 
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+//    }
+
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -100,17 +117,17 @@ class MyPageFragment : Fragment() {
                         is UiState.Loading -> {
                             binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
-                            Log.d("mypage","Loading")
+                            Log.d("mypage", "Loading")
                         }
 
                         is UiState.Success -> {
                             binding.includeUiState.setVisibleToGone()
-                            Log.d("mypage","Success")
+                            Log.d("mypage", "Success")
                             if (state.data != null) {
                                 isLogin()
                                 currentUser = state.data
                                 initView(state.data)
-                            }else{
+                            } else {
                                 isLogOut()
                             }
                             binding.scrollView.setVisibleToVisible()
@@ -120,7 +137,7 @@ class MyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             clearUserInfo()
-                            Log.d("mypage","Error")
+                            Log.d("mypage", "Error")
                             Log.d("mypage error", state.message)
                         }
                     }
