@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
     private lateinit var currentUser: String
     private lateinit var currentUserCategory: List<String>
+    private lateinit var blackList: List<String>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -124,10 +125,10 @@ class HomeFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            Log.d("currentUser", state.data.userId)
+                            Log.d("currentUser", state.data.toString())
                             currentUser = state.data.userId
-                            currentUserCategory =
-                                state.data.typeOfDevelopment + state.data.programOfDevelopment
+                            currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
+                            blackList = state.data.blackList
                             binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
                         }
 
@@ -135,6 +136,7 @@ class HomeFragment : Fragment() {
                             Log.d("Error", state.message)
                             currentUser = ""
                             currentUserCategory = listOf()
+                            blackList = listOf()
                         }
                     }
                 }
@@ -165,8 +167,13 @@ class HomeFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
+                        val filteredData = uiState.data.filterNot { blackList.contains(it.leaderId) }
+
                         val latestGroupList =
-                            uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                            // filteredData 이거 사용하면 UI 없어짐 왜지?
+                            uiState.data
+                                .filterNot { blackList.contains(it.leaderId) }
+                                .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                                 .sortedByDescending {
                                     val decrypt = it.groupId.decryptECB()
                                     val dateTimeIndex = decrypt.lastIndexOf(" ")
@@ -188,7 +195,8 @@ class HomeFragment : Fragment() {
                         }
 
 
-                        val myGroupList = uiState.data.filter { it.userList.contains(currentUser) }
+                        val myGroupList = filteredData
+                            .filter { it.userList.contains(currentUser) }
                         myGroupListAdapter = MyGroupListAdapter(myGroupList)
                         binding.rvMyGroupList.adapter = myGroupListAdapter
                         binding.rvMyGroupList.layoutManager = LinearLayoutManager(
@@ -207,13 +215,12 @@ class HomeFragment : Fragment() {
                             binding.rvMyGroupList.setVisibleToVisible()
                         }
 
-                        val recommendGroupList = uiState.data
+                        val recommendGroupList = filteredData
                             .filter {
-                                val setA =
-                                    (it.category.programingLanguage + it.category.developmentOccupations).toSet()
+                                val setA = (it.category.programingLanguage + it.category.developmentOccupations).toSet()
                                 val setB = currentUserCategory.toSet()
                                 setA.intersect(setB).isNotEmpty()
-                            } - myGroupList.toSet()
+                            }
                         recommendGroupListAdapter = RecommendGroupListAdapter(recommendGroupList)
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
                         binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(

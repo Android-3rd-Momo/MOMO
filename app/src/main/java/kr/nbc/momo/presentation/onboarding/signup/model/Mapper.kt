@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.onboarding.signup.model
 
+import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.domain.model.UserEntity
 
 fun UserEntity.toModel(): UserModel {
@@ -17,7 +18,8 @@ fun UserEntity.toModel(): UserModel {
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
-        userPortfolioText = this.userPortfolioText
+        userPortfolioText = this.userPortfolioText,
+        blackList = this.blackList
     )
 }
 fun UserModel.toEntity(): UserEntity {
@@ -35,6 +37,7 @@ fun UserModel.toEntity(): UserEntity {
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
-        userPortfolioText = this.userPortfolioText
+        userPortfolioText = this.userPortfolioText,
+        blackList = this.blackList
     )
 }
