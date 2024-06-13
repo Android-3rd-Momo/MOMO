@@ -33,6 +33,12 @@ class ChattingRecyclerViewAdapter() :
         }
     }
 
+    interface ItemClick {
+        fun itemClick(userId: String)
+    }
+
+    var itemClick: ItemClick? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ChattingEnumClass.USER_VIEW_TYPE.type -> {
@@ -61,20 +67,37 @@ class ChattingRecyclerViewAdapter() :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            ChattingEnumClass.USER_VIEW_TYPE.type -> (holder as ItemUserHolder).bind(
-                itemList.chatList[position],
-                isDateChanged(position),
-                isMinuteChanged(position),
-                isUserIdChanged(position)
-            )
+            ChattingEnumClass.USER_VIEW_TYPE.type -> {
+                (holder as ItemUserHolder)
+                    .bind(
+                        itemList.chatList[position],
+                        isDateChanged(position),
+                        isMinuteChanged(position),
+                        isUserIdChanged(position)
+                    )
+                holder.itemView.setOnClickListener {
+                    itemClick?.itemClick(itemList.chatList[position].userId)
+                }
+            }
 
-            ChattingEnumClass.ELSE_VIEW_TYPE.type -> (holder as ItemElseViewHolder).bind(
-                itemList.userList.firstOrNull { it.userId == currentUserId }?: GroupUserModel(currentUserId, currentUserName, currentUrl),
-                itemList.chatList[position],
-                isDateChanged(position),
-                isMinuteChanged(position),
-                isUserIdChanged(position)
-            )
+
+            ChattingEnumClass.ELSE_VIEW_TYPE.type -> {
+                (holder as ItemElseViewHolder).bind(
+                    itemList.userList.firstOrNull { it.userId == currentUserId } ?: GroupUserModel(
+                        currentUserId,
+                        currentUserName,
+                        currentUrl
+                    ),
+                    itemList.chatList[position],
+                    isDateChanged(position),
+                    isMinuteChanged(position),
+                    isUserIdChanged(position)
+                )
+                holder.itemView.setOnClickListener {
+                    itemClick?.itemClick(itemList.chatList[position].userId)
+                }
+            }
+
             else -> (holder as ItemErrorHolder).bind()
         }
     }

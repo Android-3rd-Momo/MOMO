@@ -8,7 +8,7 @@ import kr.nbc.momo.databinding.GridviewItemBinding
 class UserListAdapter(private val userList: List<String>) :
     RecyclerView.Adapter<UserListAdapter.Holder>() {
     interface ItemClick {
-        fun itemClick(position: Int)
+        fun itemClick(userId: String)
     }
 
     var itemClick: ItemClick? = null
@@ -28,6 +28,10 @@ class UserListAdapter(private val userList: List<String>) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.userId.text = userList[position]
+        holder.itemView.setOnClickListener {
+            itemClick?.itemClick(userList[position])
+        }
+
     }
 
 }
