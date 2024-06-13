@@ -113,7 +113,10 @@ class SignUpFragment : Fragment() {
                 binding.etPassWord.error = null
             }
 
-            if (password != checkPassword) {
+            if(checkPassword.isEmpty()){
+                binding.etCheckPassWord.error = "비밀번호를 입력해주세요."
+                isValid = false
+            }else if (password != checkPassword) {
                 binding.etCheckPassWord.error = "비밀번호가 일치하지 않습니다."
                 isValid = false
             } else {
@@ -140,13 +143,7 @@ class SignUpFragment : Fragment() {
                 binding.etNumber.error = null
             }
 
-            if (id.isEmpty()) {
-                binding.etId.error = "아이디를 입력해주세요."
-                isValid = false
-            } else if (!isValidId(id)) {
-                binding.etId.error = "3-10자의 영문자,한글 숫자만 가능합니다."
-                isValid = false
-            } else if (!isIdChecked) {
+            if (!isIdChecked) {
                 binding.etId.error = "아이디 중복을 확인해주세요."
                 isValid = false
             } else {
@@ -164,8 +161,9 @@ class SignUpFragment : Fragment() {
             val id = binding.etId.text.toString()
             if (id.isEmpty()) {
                 binding.etId.error = "아이디를 입력해주세요."
+            } else if (!isValidId(id)) {
+                binding.etId.error = "3-10자의 영문자,한글 숫자만 가능합니다."
             } else {
-
                 lifecycleScope.launch {
                     try {
                         val isDuplicate = viewModel.isUserIdDuplicate(id)
@@ -215,7 +213,7 @@ class SignUpFragment : Fragment() {
             viewModel.authState.collect { state ->
                 when (state) {
                     is UiState.Loading -> {
-                        //로딩 처리
+                        //No action needed
                     }
 
                     is UiState.Success -> {
