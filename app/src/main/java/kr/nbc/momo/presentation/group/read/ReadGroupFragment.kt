@@ -339,7 +339,7 @@ class ReadGroupFragment : Fragment() {
 
     private fun initSpinner(category: String) {
         val items = resources.getStringArray(R.array.classification)
-        val spinnerAapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
+        val spinnerAdapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = super.getView(position, convertView, parent)
 
@@ -356,10 +356,10 @@ class ReadGroupFragment : Fragment() {
             }
         }
 
-        spinnerAapter.addAll(items.toMutableList())
-        spinnerAapter.add(category)
-        binding.categorySpinner.adapter = spinnerAapter
-        binding.categorySpinner.setSelection(spinnerAapter.count)
+        spinnerAdapter.addAll(items.toMutableList())
+        spinnerAdapter.add(category)
+        binding.categorySpinner.adapter = spinnerAdapter
+        binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
             object: AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -468,13 +468,20 @@ class ReadGroupFragment : Fragment() {
             for (chipText in chipList) {
                 val chip = Chip(requireContext()).apply {
                     text = chipText
+                    setTextColor(
+                        ContextCompat.getColorStateList(
+                            requireContext(),
+                            R.color.tv_chip_state_color
+                        )
+                    )
+                    setChipBackgroundColorResource(R.color.bg_chip_state_color)
                     isCheckable = true
                     if (category.contains(chipText)){
                         isChecked = true
                     }
 
-                    setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                    setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
+                //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
+                //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
                 chipGroup.addView(chip)
             }
