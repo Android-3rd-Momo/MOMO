@@ -124,7 +124,7 @@ class MyPageFragment : Fragment() {
         with(binding) {
             tvUserName.text = user.userName
             tvUserSelfIntroduction.text = user.userSelfIntroduction.ifEmpty { "자신을 소개해 보세요!" }
-            tvStackOfDevelopment.text = user.userSelfIntroduction.ifEmpty { "사용하신 기술이 있다면 작성해 보세요!" }
+            tvStackOfDevelopment.text = user.stackOfDevelopment.ifEmpty { "사용하신 기술이 있다면 작성해 보세요!" }
             tvPortfolio.text = user.userPortfolioText.ifEmpty { "간단한 포트폴리오를 작성해 보세요!" }
             etUserName.setText(user.userName)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
@@ -255,7 +255,8 @@ class MyPageFragment : Fragment() {
             binding.etPortfolio,
             binding.btnCompleteEdit,
             binding.ivEditProfileImage,
-            binding.ivEditBackProfileThumbnail
+            binding.ivEditBackProfileThumbnail,
+            binding.cvEditProfileImage
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -273,8 +274,10 @@ class MyPageFragment : Fragment() {
             binding.ivPortfolioImage.setOnClickListener {
                 pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
             }
+            binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
         } else {
             binding.ivPortfolioImage.setOnClickListener(null)
+            binding.llProfileImage.setBackgroundResource(0)
         }
     }
 
