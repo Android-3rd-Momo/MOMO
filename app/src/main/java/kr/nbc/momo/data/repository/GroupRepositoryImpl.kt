@@ -104,7 +104,6 @@ class GroupRepositoryImpl @Inject constructor(
             null
         }.addOnSuccessListener {
             trySend(userList)
-            close()
         }
         awaitClose { listener.result }
     }
