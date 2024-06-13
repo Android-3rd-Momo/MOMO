@@ -67,7 +67,7 @@ class GroupRepositoryImpl @Inject constructor(
                 transaction.update(ref, "groupDescription", groupResponse.groupDescription)
                 transaction.update(ref, "firstDate", groupResponse.firstDate)
                 transaction.update(ref, "lastDate", groupResponse.lastDate)
-                transaction.update(ref, "categoryList", groupResponse.category)
+                transaction.update(ref, "category", groupResponse.category)
                 transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
                 trySend(groupResponse.toEntity())
             }
@@ -86,7 +86,7 @@ class GroupRepositoryImpl @Inject constructor(
                         transaction.update(ref, "groupDescription", groupResponse.groupDescription)
                         transaction.update(ref, "firstDate", groupResponse.firstDate)
                         transaction.update(ref, "lastDate", groupResponse.lastDate)
-                        transaction.update(ref, "categoryList", groupResponse.category)
+                        transaction.update(ref, "category", groupResponse.category)
                         transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
                         trySend(groupResponse.toEntity())
                     }
