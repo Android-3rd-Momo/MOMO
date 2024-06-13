@@ -58,7 +58,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var isEditMode = false
     private var imageUri: Uri? = null
     private var image: String? = null
-    private var categoryText : String = "공모전"
+    private var categoryText: String = "공모전"
     private lateinit var groupId: String
     private lateinit var leaderId: String
     private lateinit var userList: List<String>
@@ -113,13 +113,17 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 sharedViewModel.currentUser.collect { uiState ->
                     when (uiState) {
                         is UiState.Loading -> {
-                            // todo 로딩
+                            //No action needed
                         }
 
                         is UiState.Success -> {
-                            Log.d("currentUser", uiState.data.userId)
-                            currentUser = uiState.data.userId
-                            initGroup()
+                            if (uiState.data != null) {
+                                Log.d("currentUser", uiState.data.userId)
+                                currentUser = uiState.data.userId
+                                initGroup()
+                            }else{
+                                initGroup()
+                            }
                         }
 
                         is UiState.Error -> {
@@ -368,8 +372,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val categoryList = data.category.programingLanguage + data.category.developmentOccupations
         val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
         val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
-        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations,categoryList)
-        setChipGroup(chipGroupLang, binding.chipProgramingLanguage,categoryList)
+        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations, categoryList)
+        setChipGroup(chipGroupLang, binding.chipProgramingLanguage, categoryList)
 
         val editMode = arrayOf(
             binding.clEditMode,
@@ -424,7 +428,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.categorySpinner.adapter = spinnerAdapter
         binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
-            object: AdapterView.OnItemSelectedListener {
+            object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p0 != null) {
                         categoryText = p0.getItemAtPosition(p2).toString()
@@ -526,7 +530,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
         dialog.show()
     }
-    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, category: List<String>){
+
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, category: List<String>) {
         if (chipGroup.childCount == 0) {
             for (chipText in chipList) {
                 val chip = Chip(requireContext()).apply {
@@ -539,12 +544,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     )
                     setChipBackgroundColorResource(R.color.bg_chip_state_color)
                     isCheckable = true
-                    if (category.contains(chipText)){
+                    if (category.contains(chipText)) {
                         isChecked = true
                     }
 
-                //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
+                    //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
+                    //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
                 chipGroup.addView(chip)
             }
@@ -574,10 +579,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             R.id.menu1 -> {
                 viewModel.deleteGroup(groupId, userList)
             }
+
             R.id.menu2 -> {
                 viewModel.reportUser(leaderId)
                 viewModel.blockUser(leaderId)
             }
+
             R.id.menu3 -> {
                 viewModel.blockUser(leaderId)
             }

@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var latestGroupListAdapter: LatestGroupListAdapter
     private lateinit var myGroupListAdapter: MyGroupListAdapter
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
-    private lateinit var currentUser: String
+    private var currentUser: String = ""
     private lateinit var currentUserCategory: List<String>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -120,21 +120,24 @@ class HomeFragment : Fragment() {
                 sharedViewModel.currentUser.collectLatest { state ->
                     when (state) {
                         is UiState.Loading -> {
-
+                            //No action needed
                         }
 
                         is UiState.Success -> {
-                            Log.d("currentUser", state.data.userId)
-                            currentUser = state.data.userId
-                            currentUserCategory =
-                                state.data.typeOfDevelopment + state.data.programOfDevelopment
-                            binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
+                            if (state.data != null) {
+                                Log.d("currentUser", state.data.userId)
+                                currentUser = state.data.userId
+                                currentUserCategory =
+                                    state.data.typeOfDevelopment + state.data.programOfDevelopment
+                                binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
+                            } else {
+                                currentUser = ""
+                                currentUserCategory = listOf()
+                            }
                         }
 
                         is UiState.Error -> {
                             Log.d("Error", state.message)
-                            currentUser = ""
-                            currentUserCategory = listOf()
                         }
                     }
                 }
