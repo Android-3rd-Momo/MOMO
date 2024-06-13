@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
     tools:context=".presentation.group.read.ReadGroupFragment">
-
+    <ScrollView
+        android:id="@+id/svRead"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clRead"
@@ -515,5 +518,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </ScrollView>
 
-</ScrollView>
+    <include
+        android:id="@+id/prCircular"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
