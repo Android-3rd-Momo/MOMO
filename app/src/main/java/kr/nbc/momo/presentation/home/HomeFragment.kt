@@ -224,6 +224,7 @@ class HomeFragment : Fragment() {
                                 val setB = currentUserCategory.toSet()
                                 setA.intersect(setB).isNotEmpty()
                             } - myGroupList.toSet()
+
                         recommendGroupListAdapter = RecommendGroupListAdapter(recommendGroupList)
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
                         binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(
