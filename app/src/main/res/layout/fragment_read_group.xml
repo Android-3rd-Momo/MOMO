@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
-    tools:context=".presentation.group.create.CreateGroupFragment">
-
+    tools:context=".presentation.group.read.ReadGroupFragment">
+    <ScrollView
+        android:id="@+id/svRead"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clRead"
@@ -210,7 +213,8 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvParticipant" />
+                app:layout_constraintTop_toBottomOf="@+id/tvParticipant"
+                tools:listitem="@layout/gridview_item"/>
 
             <TextView
                 android:id="@+id/tvParticipant"
@@ -247,8 +251,8 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="60dp"
             android:layout_marginEnd="25dp"
-            android:visibility="gone"
             android:background="@drawable/bg_layout_corners"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -273,6 +277,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/circle_bg"
                 android:scaleType="fitXY"
+                android:clipToOutline="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etGroupOneLineDescriptionEdit"
@@ -301,7 +306,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etGroupNameEdit" />
 
- />
+            />
 
 
             <TextView
@@ -394,6 +399,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="4dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvProgramingLanguage">
@@ -416,6 +423,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="4dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvDevelopmentOccupations">
@@ -520,5 +529,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </ScrollView>
 
-</ScrollView>
+    <include
+        android:id="@+id/prCircular"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

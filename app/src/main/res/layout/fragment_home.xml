@@ -64,6 +64,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
 
+    <include
+        android:id="@+id/prCircularJoined"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
+
+    <include
+        android:id="@+id/includeNoResultJoined"
+        layout="@layout/ui_state_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
+
     <TextView
         android:id="@+id/tvRecommendGroupList"
         android:layout_width="wrap_content"
@@ -78,6 +104,32 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecommendGroupList"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
+
+    <include
+        android:id="@+id/prCircularRecommend"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
+
+    <include
+        android:id="@+id/includeNoResultRecommend"
+        layout="@layout/ui_state_no_result"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="15dp"
@@ -113,6 +165,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
 
+    <include
+        android:id="@+id/includeNoResultLatest"
+        layout="@layout/ui_state_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
+
+    <include
+        android:id="@+id/prCircularLatest"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floatingBtnCreateGroup"
         android:layout_width="wrap_content"
@@ -128,40 +208,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvEmptyRecommendGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="태그를 등록하고 모임을 추천 받으세요"
-        android:textColor="@color/blue"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
-
-    <TextView
-        android:id="@+id/tvEmptyMyGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:text="모임을 가입해주세요"
-        android:textColor="@color/blue"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
-
-    <TextView
-        android:id="@+id/tvEmptyLatestGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:text="모집중인 모임이 없습니다"
-        android:textColor="@color/blue"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
