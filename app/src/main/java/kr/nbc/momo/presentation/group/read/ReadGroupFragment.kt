@@ -27,7 +27,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -67,7 +66,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
-            binding.ivGroupImage.load(uri)
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(uri.toString())
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
