@@ -91,7 +91,8 @@ fun UserResponse.toEntity(): UserEntity {
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
-        userPortfolioText = this.userPortfolioText
+        userPortfolioText = this.userPortfolioText,
+        blackList = this.blackList
     )
 }
 
@@ -109,7 +110,8 @@ fun UserEntity.toUserResponse(): UserResponse {
         programOfDevelopment = this.programOfDevelopment,
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
-        userPortfolioText = this.userPortfolioText
+        userPortfolioText = this.userPortfolioText,
+        blackList = this.blackList
     )
 }
 

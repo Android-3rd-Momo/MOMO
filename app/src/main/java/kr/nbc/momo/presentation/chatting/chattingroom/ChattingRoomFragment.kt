@@ -115,6 +115,20 @@ class ChattingRoomFragment : Fragment() {
                         rvAdapter.notifyDataSetChanged()
                         binding.rvChatMessage.setVisibleToVisible()
                         binding.prCircular.setVisibleToGone()
+                        binding.rvChatMessage.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+                            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int)
+                            {
+                                if (bottom < oldBottom)
+                                {
+                                    binding.rvChatMessage.postDelayed({
+                                        if (chatMessages.data.chatList.isNotEmpty())
+                                        {
+                                            binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.size -1)
+                                        }
+                                    }, 100)
+                                }
+                            }
+                        })
                     }
 
                     is UiState.Error -> {

@@ -190,15 +190,6 @@ class CreateGroupFragment : Fragment() {
         binding.clHome.setOnClickListener {
             hideKeyboard(requireActivity() as Activity)
         }
-        binding.svHome.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (scrollY > oldScrollY) {
-                hideKeyboard(requireActivity() as Activity)
-            }
-            if (scrollY < oldScrollY) {
-                hideKeyboard(requireActivity() as Activity)
-            }
-        }
-
 
     }
 
@@ -327,8 +318,17 @@ class CreateGroupFragment : Fragment() {
         for (chipText in chipList) {
             val chip = Chip(requireContext()).apply {
                 text = chipText
-                setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
+                setTextColor(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        R.color.tv_chip_state_color
+                    )
+                )
+                setChipBackgroundColorResource(R.color.bg_chip_state_color)
+                isCheckable = true
+
+                // setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
+                // setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
             }
             chipGroup.addView(chip)
         }
