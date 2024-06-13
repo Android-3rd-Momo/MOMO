@@ -25,6 +25,9 @@ class SharedViewModel @Inject constructor(
     private val _groupId: MutableLiveData<String?> = MutableLiveData()
     val groupId: MutableLiveData<String?> get() = _groupId
 
+    private val _userId: MutableLiveData<String?> = MutableLiveData()
+    val userId: MutableLiveData<String?> get() = _userId
+
     private val _currentUser = MutableStateFlow<UiState<UserModel?>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel?>> get() = _currentUser
 
@@ -52,6 +55,10 @@ class SharedViewModel @Inject constructor(
 
     fun getGroupId(groupId: String) {
         _groupId.value = groupId
+    }
+
+    fun getUserId(userId: String) {
+        _userId.value = userId
     }
 
 

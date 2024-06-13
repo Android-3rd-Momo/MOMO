@@ -42,6 +42,7 @@ import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
+import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
@@ -185,7 +186,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         initGroupThumbnail(image)
                     }
                 }
-
             }
         }
     }
@@ -332,6 +332,17 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val adapter = UserListAdapter(userList)
         binding.rvUserList.adapter = adapter
         binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
+        adapter.itemClick = object : UserListAdapter.ItemClick {
+            override fun itemClick(userId: String) {
+                sharedViewModel.getUserId(userId)
+                val userInfoFragment = UserInfoFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, userInfoFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
