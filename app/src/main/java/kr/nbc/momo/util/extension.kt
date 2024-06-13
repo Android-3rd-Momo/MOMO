@@ -159,11 +159,6 @@ fun UiStateLoadingBinding.setVisibleToError(){
     tvError.setVisibleToVisible()
 }
 
-fun Activity.hideKeyboard() {
-    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
-}
-
 fun UiStateNoResultBinding.setVisibleToVisible(){
     tvNoResult.setVisibleToVisible()
     ivNoResult.setVisibleToVisible()
@@ -172,4 +167,9 @@ fun UiStateNoResultBinding.setVisibleToVisible(){
 fun UiStateNoResultBinding.setVisibleToGone(){
     tvNoResult.setVisibleToGone()
     ivNoResult.setVisibleToGone()
+}
+
+fun Activity.hideKeyboard() {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
 }

@@ -3,11 +3,14 @@ package kr.nbc.momo.presentation.mypage
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -95,24 +98,30 @@ class MyPageFragment : Fragment() {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-//                            binding.prCircular.setVisibleToVisible() //todo 해결하기
-//                            binding.scrollView.setVisibleToGone()
+                            binding.includeUiState.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
+                            Log.d("mypage","Loading")
                         }
 
                         is UiState.Success -> {
-                            isLogin()
-                            currentUser = state.data
-                            initView(state.data)
-//                            binding.prCircular.setVisibleToGone()
-//                            binding.scrollView.setVisibleToVisible()
+                            binding.includeUiState.setVisibleToGone()
+                            Log.d("mypage","Success")
+                            if (state.data != null) {
+                                isLogin()
+                                currentUser = state.data
+                                initView(state.data)
+                            }else{
+                                isLogOut()
+                            }
+                            binding.scrollView.setVisibleToVisible()
                         }
 
                         is UiState.Error -> {
-//                            binding.prCircular.setVisibleToError()
-//                            binding.scrollView.setVisibleToGone()
+                            binding.includeUiState.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
                             clearUserInfo()
-                            isLogOut()
-                            Log.d("error", state.message)
+                            Log.d("mypage","Error")
+                            Log.d("mypage error", state.message)
                         }
                     }
                 }
@@ -149,13 +158,40 @@ class MyPageFragment : Fragment() {
                 tvEmptyProgramTag.setVisibleToGone()
                 setSelectedChips(cgProgramTag, user.programOfDevelopment)
             }
-//            if (user.userPortfolioImageUrl.isNullOrEmpty()) { //todo
-//                cvPortfolioImage.setVisibleToGone()
-//            } else {
-//                cvPortfolioImage.setVisibleToVisible()
-//            }
-
         }
+
+        binding.etStackOfDevelopment.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //No action needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
+            }
+        })
+        binding.etPortfolio.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //No action needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
+            }
+        })
+    }
+
+    private fun updateTextCount(et: EditText, tv: TextView) {
+        val textLength = et.text.length
+        val lengthText = "$textLength/500"
+        tv.text = lengthText
     }
 
     private fun clearUserInfo() {
@@ -213,6 +249,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
+
     private fun setChangeMode() {
         isEditMode = !isEditMode
 
@@ -228,6 +265,8 @@ class MyPageFragment : Fragment() {
             binding.tvEmptyProgramTag.setVisibleToGone()
             binding.cgTypeTag.setVisibleToVisible()
             binding.cgProgramTag.setVisibleToVisible()
+            updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
+            updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
         } else {
             if (binding.cgTypeTag.childCount == 0) {
                 binding.tvEmptyTypeTag.setVisibleToVisible()
@@ -256,7 +295,9 @@ class MyPageFragment : Fragment() {
             binding.btnCompleteEdit,
             binding.ivEditProfileImage,
             binding.ivEditBackProfileThumbnail,
-            binding.cvEditProfileImage
+            binding.cvEditProfileImage,
+            binding.tvCountStackEditText,
+            binding.tvCountPortfolioEditText
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -264,8 +305,7 @@ class MyPageFragment : Fragment() {
             binding.tvUserSelfIntroduction,
             binding.tvStackOfDevelopment,
             binding.tvPortfolio,
-
-            )
+        )
 
         editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
@@ -292,6 +332,7 @@ class MyPageFragment : Fragment() {
         binding.clUserDetailInfo.setVisibleToGone()
         binding.ivSetUp.setVisibleToGone()
         binding.ivEditProfile.setVisibleToGone()
+        binding.tvUserName.text = "로그인이 필요합니다" //todo 멘트 변경?
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 

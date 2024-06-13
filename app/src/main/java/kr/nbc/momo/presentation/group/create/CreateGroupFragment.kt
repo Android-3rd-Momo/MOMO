@@ -60,8 +60,8 @@ class CreateGroupFragment : Fragment() {
     private val viewModel: CreateGroupViewModel by viewModels()
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private var categoryText : String = ""
-    private lateinit var currentUser : String
+    private var categoryText: String = ""
+    private lateinit var currentUser: String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -108,20 +108,23 @@ class CreateGroupFragment : Fragment() {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            //todo 로딩
+                            //No action needed
                         }
 
                         is UiState.Success -> {
-                            Log.d("currentUser", state.data.userId)
-                            currentUser = state.data.userId
-                            initView()
-
+                            if (state.data != null) {
+                                Log.d("currentUser", state.data.userId)
+                                currentUser = state.data.userId
+                                initView()
+                            } else {
+                                parentFragmentManager.popBackStack()
+                                Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
+                            }
                         }
+
 
                         is UiState.Error -> {
                             Log.d("error", state.message)
-                            parentFragmentManager.popBackStack()
-                            Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -148,7 +151,12 @@ class CreateGroupFragment : Fragment() {
             }
 
             clCategoryDetail.setOnClickListener {
-                val viewArr = listOf(chipGroupDevelopmentOccupations, chipProgramingLanguage, tvDevelopmentOccupations, tvProgramingLanguage)
+                val viewArr = listOf(
+                    chipGroupDevelopmentOccupations,
+                    chipProgramingLanguage,
+                    tvDevelopmentOccupations,
+                    tvProgramingLanguage
+                )
                 viewArr.forEach {
                     if (it.visibility == View.GONE) {
                         it.visibility = View.VISIBLE
@@ -165,11 +173,13 @@ class CreateGroupFragment : Fragment() {
 
             btnCreateProject.setOnClickListener {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
-                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()) {
+                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()
+                ) {
                     Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
-                    binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1) {
+                    binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
+                ) {
                     Snackbar.make(binding.root, "카테고리를 선택해주세요.", Snackbar.LENGTH_SHORT).show()
                 } else {
                     showDialog()
@@ -184,7 +194,7 @@ class CreateGroupFragment : Fragment() {
             if (scrollY > oldScrollY) {
                 hideKeyboard(requireActivity() as Activity)
             }
-            if (scrollY  < oldScrollY) {
+            if (scrollY < oldScrollY) {
                 hideKeyboard(requireActivity() as Activity)
             }
         }
@@ -217,7 +227,7 @@ class CreateGroupFragment : Fragment() {
         binding.categorySpinner.adapter = spinnerAapter
         binding.categorySpinner.setSelection(spinnerAapter.count)
         binding.categorySpinner.onItemSelectedListener =
-            object: AdapterView.OnItemSelectedListener {
+            object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p0 != null) {
                         categoryText = p0.getItemAtPosition(p2).toString()
@@ -254,7 +264,7 @@ class CreateGroupFragment : Fragment() {
         picker.show()
     }
 
-    private fun createGroup(){
+    private fun createGroup() {
         val categoryList = CategoryModel(
             categoryText,
             getChipText(binding.chipGroupDevelopmentOccupations),
@@ -313,7 +323,7 @@ class CreateGroupFragment : Fragment() {
         dialog.show()
     }
 
-    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup){
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) {
         for (chipText in chipList) {
             val chip = Chip(requireContext()).apply {
                 text = chipText
@@ -335,7 +345,7 @@ class CreateGroupFragment : Fragment() {
         return textList
     }
 
-    private fun hideKeyboard(activity: Activity){
+    private fun hideKeyboard(activity: Activity) {
         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken, 0)
     }
