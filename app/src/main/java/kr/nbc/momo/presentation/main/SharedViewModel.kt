@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
@@ -22,11 +23,11 @@ class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val setLastViewedChatUseCase: SetLastViewedChatUseCase
 ) : ViewModel() {
-    private val _groupId: MutableLiveData<String?> = MutableLiveData()
-    val groupId: MutableLiveData<String?> get() = _groupId
+    private val _groupId: MutableStateFlow<String?> = MutableStateFlow(null)
+    val groupId: StateFlow<String?> get() = _groupId.asStateFlow()
 
-    private val _userId: MutableLiveData<String?> = MutableLiveData()
-    val userId: MutableLiveData<String?> get() = _userId
+    private val _userId: MutableStateFlow<String?> = MutableStateFlow(null)
+    val userId: StateFlow<String?> get() = _userId.asStateFlow()
 
     private val _currentUser = MutableStateFlow<UiState<UserModel?>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel?>> get() = _currentUser
