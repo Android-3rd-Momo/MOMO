@@ -69,7 +69,7 @@ class ChattingListFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireActivity())
             }
 
-            includeNoResult.tvNoResult.text = "가입한 그룹이 없습니다."
+//            includeNoResult.tvNoResult.text = "가입한 그룹이 없습니다."
         }
     }
 
@@ -78,13 +78,28 @@ class ChattingListFragment : Fragment() {
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
                     is UiState.Loading -> {
+                        binding.prCircular.setVisibleToVisible()
+                        binding.includeNoResult.setVisibleToGone()
                     }
 
                     is UiState.Success -> {
-                        chattingListViewModel.getChattingList(it.data.userGroup, it.data.userId)
+                        binding.prCircular.setVisibleToGone()
+                        binding.includeNoResult.setVisibleToGone()
+                        if (it.data != null) {
+                            binding.prCircular.setVisibleToVisible()
+                            binding.rvChattingList.setVisibleToGone()
+                            binding.includeNoResult.setVisibleToGone()
+                            chattingListViewModel.getChattingList(it.data.userGroup, it.data.userId)
+                        }else{
+                            //로그인 안되어 있을 경우
+                            binding.includeNoResult.tvNoResult.text = "로그인이 필요합니다."
+                            binding.includeNoResult.setVisibleToVisible()
+                        }
                     }
 
                     is UiState.Error -> {
+                        binding.includeNoResult.setVisibleToVisible()
+                        binding.prCircular.setVisibleToGone()
                         Log.d("error", it.message)
                     }
                 }
@@ -94,9 +109,6 @@ class ChattingListFragment : Fragment() {
             chattingListViewModel.chattingList.collectLatest { chattingList ->
                 when (chattingList) {
                     is UiState.Loading -> {
-                        binding.prCircular.setVisibleToVisible()
-                        binding.rvChattingList.setVisibleToGone()
-                        binding.includeNoResult.setVisibleToGone()
                     }
 
                     is UiState.Success -> {
@@ -110,6 +122,7 @@ class ChattingListFragment : Fragment() {
                             //todo 가입한 모임이 없습니다.
                             binding.prCircular.setVisibleToGone()
                             binding.rvChattingList.setVisibleToGone()
+                            binding.includeNoResult.tvNoResult.text = "가입된 모임이 없습니다."
                             binding.includeNoResult.setVisibleToVisible()
                         }
                     }

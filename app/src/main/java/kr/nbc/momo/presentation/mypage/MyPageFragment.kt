@@ -3,13 +3,17 @@ package kr.nbc.momo.presentation.mypage
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -94,24 +98,30 @@ class MyPageFragment : Fragment() {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            binding.prCircular.setVisibleToVisible()
+                            binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
+                            Log.d("mypage","Loading")
                         }
 
                         is UiState.Success -> {
-                            isLogin()
-                            currentUser = state.data
-                            initView(state.data)
-                            binding.prCircular.setVisibleToGone()
+                            binding.includeUiState.setVisibleToGone()
+                            Log.d("mypage","Success")
+                            if (state.data != null) {
+                                isLogin()
+                                currentUser = state.data
+                                initView(state.data)
+                            }else{
+                                isLogOut()
+                            }
                             binding.scrollView.setVisibleToVisible()
                         }
 
                         is UiState.Error -> {
-                            clearUserInfo()
-                            isLogOut()
-                            binding.prCircular.setVisibleToError()
+                            binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
-                            Log.d("error", state.message)
+                            clearUserInfo()
+                            Log.d("mypage","Error")
+                            Log.d("mypage error", state.message)
                         }
                     }
                 }
@@ -122,20 +132,66 @@ class MyPageFragment : Fragment() {
     private fun initView(user: UserModel) {
         with(binding) {
             tvUserName.text = user.userName
-            tvUserSelfIntroduction.text = user.userSelfIntroduction
-            tvStackOfDevelopment.text = user.stackOfDevelopment
-            tvPortfolio.text = user.userPortfolioText
+            tvUserSelfIntroduction.text = user.userSelfIntroduction.ifEmpty { "자신을 소개해 보세요!" }
+            tvStackOfDevelopment.text = user.stackOfDevelopment.ifEmpty { "사용하신 기술이 있다면 작성해 보세요!" }
+            tvPortfolio.text = user.userPortfolioText.ifEmpty { "간단한 포트폴리오를 작성해 보세요!" }
             etUserName.setText(user.userName)
-            etUserGithub.setText(user.userGithub)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
-            setSelectedChips(binding.cgTypeTag, user.typeOfDevelopment)
-            setSelectedChips(binding.cgProgramTag, user.programOfDevelopment)
             ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
+
+            if (user.typeOfDevelopment.isEmpty()) {
+                tvEmptyTypeTag.setVisibleToVisible()
+                cgTypeTag.setVisibleToGone()
+            } else {
+                tvEmptyTypeTag.setVisibleToGone()
+                setSelectedChips(cgTypeTag, user.typeOfDevelopment)
+            }
+
+            if (user.programOfDevelopment.isEmpty()) {
+                tvEmptyProgramTag.setVisibleToVisible()
+                cgProgramTag.setVisibleToGone()
+            } else {
+                tvEmptyProgramTag.setVisibleToGone()
+                setSelectedChips(cgProgramTag, user.programOfDevelopment)
+            }
         }
+
+        binding.etStackOfDevelopment.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //No action needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
+            }
+        })
+        binding.etPortfolio.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //No action needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
+            }
+        })
+    }
+
+    private fun updateTextCount(et: EditText, tv: TextView) {
+        val textLength = et.text.length
+        val lengthText = "$textLength/500"
+        tv.text = lengthText
     }
 
     private fun clearUserInfo() {
@@ -144,7 +200,6 @@ class MyPageFragment : Fragment() {
             etUserName.setText("")
             tvUserSelfIntroduction.text = ""
             etUserSelfIntroduction.setText("")
-            etUserGithub.setText("")
             tvStackOfDevelopment.text = ""
             etStackOfDevelopment.setText("")
             tvPortfolio.text = ""
@@ -178,16 +233,6 @@ class MyPageFragment : Fragment() {
         binding.ivEditBackProfileThumbnail.setOnClickListener {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-        binding.ivGitHub.setOnClickListener {
-            val githubUrl = currentUser?.userGithub
-
-            if (!githubUrl.isNullOrEmpty()) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
-                startActivity(intent)
-            } else {
-                Snackbar.make(binding.root, "설정한 Github 주소가 없습니다.", Snackbar.LENGTH_SHORT).show()
-            }
-        }
         binding.ivSetUp.setOnClickListener {
             if (currentUser != null) {
                 parentFragmentManager.beginTransaction()
@@ -204,6 +249,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
+
     private fun setChangeMode() {
         isEditMode = !isEditMode
 
@@ -211,11 +257,30 @@ class MyPageFragment : Fragment() {
         val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
 
         if (isEditMode) {
-            setChipGroup(chipGroupDev, binding.cgTypeTag)
-            setChipGroup(chipGroupLang, binding.cgProgramTag)
+            setChipGroup(chipGroupDev, binding.cgTypeTag, isEditMode)
+            setChipGroup(chipGroupLang, binding.cgProgramTag, isEditMode)
             selectChips(binding.cgTypeTag, currentUser?.typeOfDevelopment ?: emptyList())
             selectChips(binding.cgProgramTag, currentUser?.programOfDevelopment ?: emptyList())
+            binding.tvEmptyTypeTag.setVisibleToGone()
+            binding.tvEmptyProgramTag.setVisibleToGone()
+            binding.cgTypeTag.setVisibleToVisible()
+            binding.cgProgramTag.setVisibleToVisible()
+            updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
+            updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
         } else {
+            if (binding.cgTypeTag.childCount == 0) {
+                binding.tvEmptyTypeTag.setVisibleToVisible()
+                binding.cgTypeTag.setVisibleToGone()
+            } else {
+                binding.tvEmptyTypeTag.setVisibleToGone()
+            }
+            if (binding.cgProgramTag.childCount == 0) {
+                binding.tvEmptyProgramTag.setVisibleToVisible()
+                binding.cgProgramTag.setVisibleToGone()
+            } else {
+                binding.tvEmptyProgramTag.setVisibleToGone()
+            }
+
             setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
             setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
             currentUser?.let { initView(it) }
@@ -224,13 +289,15 @@ class MyPageFragment : Fragment() {
 
         val editMode = arrayOf(
             binding.etUserName,
-            binding.etUserGithub,
             binding.etUserSelfIntroduction,
             binding.etStackOfDevelopment,
             binding.etPortfolio,
             binding.btnCompleteEdit,
             binding.ivEditProfileImage,
-            binding.ivEditBackProfileThumbnail
+            binding.ivEditBackProfileThumbnail,
+            binding.cvEditProfileImage,
+            binding.tvCountStackEditText,
+            binding.tvCountPortfolioEditText
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -238,18 +305,19 @@ class MyPageFragment : Fragment() {
             binding.tvUserSelfIntroduction,
             binding.tvStackOfDevelopment,
             binding.tvPortfolio,
-            binding.ivGitHub
         )
 
         editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
 
-        if (isEditMode) { //todo 임시
+        if (isEditMode) {
             binding.ivPortfolioImage.setOnClickListener {
                 pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
             }
+            binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
         } else {
             binding.ivPortfolioImage.setOnClickListener(null)
+            binding.llProfileImage.setBackgroundResource(0)
         }
     }
 
@@ -264,36 +332,65 @@ class MyPageFragment : Fragment() {
         binding.clUserDetailInfo.setVisibleToGone()
         binding.ivSetUp.setVisibleToGone()
         binding.ivEditProfile.setVisibleToGone()
+        binding.tvUserName.text = "로그인이 필요합니다" //todo 멘트 변경?
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
 
-    private fun createChip(text: String, isCheckable: Boolean): Chip {
+    private fun createChip(text: String, isCheckable: Boolean, isEditMode: Boolean): Chip {
         return Chip(requireContext()).apply {
             this.text = text
             this.isCheckable = isCheckable
             this.isCloseIconVisible = false
+            this.isClickable = isEditMode
+            updateChipAppearance(this, isChecked)
+
+            setOnCheckedChangeListener { _, isChecked ->
+                if (isEditMode) {
+                    updateChipAppearance(this, isChecked)
+                }
+            }
         }
     }
 
-    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) { //chip 설정
+    private fun updateChipAppearance(chip: Chip, isChecked: Boolean) {
+        chip.setTextColor(
+            ContextCompat.getColorStateList(
+                requireContext(),
+                if (isChecked) R.color.white else R.color.tv_chip_state_color
+            )
+        )
+        chip.setChipBackgroundColorResource(
+            if (isChecked) R.color.blue else R.color.bg_chip_state_color
+        )
+    }
+
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, isEditMode: Boolean) {
         chipGroup.removeAllViews()
-        chipList.forEach {
-            chipGroup.addView(createChip(it, true))
+        for (chipText in chipList) {
+            val chip = createChip(chipText, true, isEditMode)
+            chipGroup.addView(chip)
         }
     }
 
     private fun setSelectedChips(chipGroup: ChipGroup, selectedChips: List<String>) { //선택된 chip만 보여줌
         chipGroup.removeAllViews()
-        selectedChips.forEach {
-            chipGroup.addView(createChip(it, false))
+        selectedChips.forEach { chipText ->
+            chipGroup.addView(Chip(requireContext()).apply {
+                text = chipText
+                isCheckable = false
+                isChecked = true
+                updateChipAppearance(this, true)
+            })
         }
     }
 
     private fun selectChips(chipGroup: ChipGroup, selectedChips: List<String>) {
         chipGroup.children.forEach { chip ->
-            if (chip is Chip && selectedChips.contains(chip.text.toString())) {
-                chip.isChecked = true
+            if (chip is Chip) {
+                chip.isChecked = selectedChips.contains(chip.text.toString())
+                updateChipAppearance(chip, chip.isChecked)
+                chip.isClickable = isEditMode
             }
         }
     }
@@ -303,13 +400,13 @@ class MyPageFragment : Fragment() {
             val updatedUserModel = currentUser.copy(
                 userName = binding.etUserName.text.toString(),
                 userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
-                userGithub = binding.etUserGithub.text.toString(),
                 stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
                 userProfileThumbnailUrl = profileImageUri?.toString() ?: currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: currentUser.userBackgroundThumbnailUrl,
+                userBackgroundThumbnailUrl = backgroundImageUri?.toString()
+                    ?: currentUser.userBackgroundThumbnailUrl,
                 userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl
             )
             viewModel.saveUserProfile(updatedUserModel)
@@ -350,13 +447,6 @@ class MyPageFragment : Fragment() {
         val usernamePattern = "^[A-Za-z가-힣]{3,20}$"
         return userName.matches(usernamePattern.toRegex())
     }
-//    private fun isValidGitHubUrl(url: String): Boolean { //todo 깃헙주소 유효성 및 입력형태
-//        val githubPattern = "^https://github\\.com/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*\$"
-//        return url.matches(githubPattern.toRegex())
-//    }
-
-
-
 
 
     override fun onDestroyView() {

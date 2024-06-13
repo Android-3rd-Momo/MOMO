@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var latestGroupListAdapter: LatestGroupListAdapter
     private lateinit var myGroupListAdapter: MyGroupListAdapter
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
-    private lateinit var currentUser: String
+    private var currentUser: String = ""
     private lateinit var currentUserCategory: List<String>
     private lateinit var blackList: List<String>
     override fun onCreateView(
@@ -121,15 +121,23 @@ class HomeFragment : Fragment() {
                 sharedViewModel.currentUser.collectLatest { state ->
                     when (state) {
                         is UiState.Loading -> {
-
+                            //No action needed
                         }
 
                         is UiState.Success -> {
+
                             Log.d("currentUser", state.data.toString())
-                            currentUser = state.data.userId
-                            currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
-                            blackList = state.data.blackList
-                            binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
+                            if (state.data != null) {
+                                Log.d("currentUser", state.data.userId)
+                                currentUser = state.data.userId
+                                currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
+                                blackList = state.data.blackList
+                                binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
+                            } else {
+                                currentUser = ""
+                                currentUserCategory = listOf()
+                                blackList = listOf()
+                            }
                         }
 
                         is UiState.Error -> {
@@ -169,9 +177,7 @@ class HomeFragment : Fragment() {
                     is UiState.Success -> {
                         val filteredData = uiState.data.filterNot { blackList.contains(it.leaderId) }
 
-                        val latestGroupList =
-                            // filteredData
-                            uiState.data
+                        val latestGroupList = filteredData
                                 .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                                 .sortedByDescending {
                                     val decrypt = it.groupId.decryptECB()
@@ -180,8 +186,7 @@ class HomeFragment : Fragment() {
                                 }
                         latestGroupListAdapter = LatestGroupListAdapter(latestGroupList)
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
-                        binding.rvLatestGroupList.layoutManager =
-                            LinearLayoutManager(requireContext())
+                        binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
 
                         if (latestGroupList.isEmpty()) {
                             //binding.tvEmptyLatestGroup.setVisibleToVisible()

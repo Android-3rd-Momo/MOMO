@@ -169,22 +169,25 @@ class ChattingRoomFragment : Fragment() {
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
                     is UiState.Success -> {
-                        if (it.data.userId != "") {
-                            currentUserId = it.data.userId
-                            currentUsername = it.data.userName
-                            currentUrl = it.data.userProfileThumbnailUrl
-                            with(rvAdapter){
+                        if (it.data != null) {
+                            if (it.data.userId != "") {
                                 currentUserId = it.data.userId
+                                currentUsername = it.data.userName
                                 currentUrl = it.data.userProfileThumbnailUrl
-                                currentUserName = it.data.userName
+                                with(rvAdapter) {
+                                    currentUserId = it.data.userId
+                                    currentUrl = it.data.userProfileThumbnailUrl
+                                    currentUserName = it.data.userName
+                                }
                             }
+                            rvAdapter.notifyDataSetChanged()
                         }
-                        rvAdapter.notifyDataSetChanged()
                     }
 
                     is UiState.Loading -> {
 
                     }
+
                     is UiState.Error -> {
                         Log.d("ChattingRoom", "${it.message}")
                     }
