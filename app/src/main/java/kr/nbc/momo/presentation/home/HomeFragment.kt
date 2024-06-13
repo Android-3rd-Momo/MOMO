@@ -170,9 +170,8 @@ class HomeFragment : Fragment() {
                         val filteredData = uiState.data.filterNot { blackList.contains(it.leaderId) }
 
                         val latestGroupList =
-                            // filteredData 이거 사용하면 UI 없어짐 왜지?
+                            // filteredData
                             uiState.data
-                                .filterNot { blackList.contains(it.leaderId) }
                                 .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                                 .sortedByDescending {
                                     val decrypt = it.groupId.decryptECB()
@@ -183,6 +182,7 @@ class HomeFragment : Fragment() {
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
                         binding.rvLatestGroupList.layoutManager =
                             LinearLayoutManager(requireContext())
+
                         if (latestGroupList.isEmpty()) {
                             //binding.tvEmptyLatestGroup.setVisibleToVisible()
                             binding.prCircularLatest.setVisibleToGone()
