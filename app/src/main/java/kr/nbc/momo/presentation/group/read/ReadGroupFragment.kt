@@ -32,6 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
@@ -281,9 +282,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initGroup() {
         lifecycleScope.launch {
-            sharedViewModel.groupId.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    viewModel.readGroup(it)
+            sharedViewModel.groupId.collectLatest { groupId ->
+                if (groupId != null) {
+                    viewModel.readGroup(groupId)
                 }
             }
         }

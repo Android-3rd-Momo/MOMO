@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentUserInfoBinding
@@ -78,7 +79,7 @@ class UserInfoFragment : Fragment() {
 
     private fun initUser() {
         lifecycleScope.launch {
-            sharedViewModel.userId.observe(viewLifecycleOwner) {
+            sharedViewModel.userId.collectLatest {
                 if (it != null) {
                     viewModel.userInfo(it)
                 }
