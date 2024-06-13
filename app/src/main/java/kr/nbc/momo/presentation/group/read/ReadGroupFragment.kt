@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,6 +40,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 import java.util.Calendar
@@ -129,19 +129,23 @@ class ReadGroupFragment : Fragment() {
             viewModel.groupState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-
+                        binding.prCircular.setVisibleToVisible()
+                        binding.svRead.setVisibleToGone()
                     }
 
                     is UiState.Success -> {
                         initView(uiState.data)
                         initGroupThumbnail(uiState.data.groupThumbnail)
                         initUserList(uiState.data.userList)
-
+                        binding.prCircular.setVisibleToGone()
+                        binding.svRead.setVisibleToVisible()
                     }
 
                     is UiState.Error -> {
                         // 오류 메시지 표시
                         Log.d("error", uiState.message)
+                        binding.prCircular.setVisibleToError()
+                        binding.svRead.setVisibleToGone()
                     }
                 }
 
@@ -268,7 +272,7 @@ class ReadGroupFragment : Fragment() {
     private fun initUserList(userList: List<String>) {
         val adapter = UserListAdapter(userList)
         binding.rvUserList.adapter = adapter
-        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 5)
+        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
@@ -339,7 +343,7 @@ class ReadGroupFragment : Fragment() {
 
     private fun initSpinner(category: String) {
         val items = resources.getStringArray(R.array.classification)
-        val spinnerAapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
+        val spinnerAdapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = super.getView(position, convertView, parent)
 
@@ -356,10 +360,10 @@ class ReadGroupFragment : Fragment() {
             }
         }
 
-        spinnerAapter.addAll(items.toMutableList())
-        spinnerAapter.add(category)
-        binding.categorySpinner.adapter = spinnerAapter
-        binding.categorySpinner.setSelection(spinnerAapter.count)
+        spinnerAdapter.addAll(items.toMutableList())
+        spinnerAdapter.add(category)
+        binding.categorySpinner.adapter = spinnerAdapter
+        binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
             object: AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -468,13 +472,20 @@ class ReadGroupFragment : Fragment() {
             for (chipText in chipList) {
                 val chip = Chip(requireContext()).apply {
                     text = chipText
+                    setTextColor(
+                        ContextCompat.getColorStateList(
+                            requireContext(),
+                            R.color.tv_chip_state_color
+                        )
+                    )
+                    setChipBackgroundColorResource(R.color.bg_chip_state_color)
                     isCheckable = true
                     if (category.contains(chipText)){
                         isChecked = true
                     }
 
-                    setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                    setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
+                //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
+                //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
                 chipGroup.addView(chip)
             }

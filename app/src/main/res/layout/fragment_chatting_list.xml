@@ -49,4 +49,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
+    <include
+        android:id="@+id/includeNoResult"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        layout="@layout/ui_state_no_result"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

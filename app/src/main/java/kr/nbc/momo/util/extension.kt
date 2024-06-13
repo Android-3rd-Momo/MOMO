@@ -9,6 +9,7 @@ import android.widget.ImageView
 import coil.load
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.UiStateLoadingBinding
+import kr.nbc.momo.databinding.UiStateNoResultBinding
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Period
@@ -161,4 +162,14 @@ fun UiStateLoadingBinding.setVisibleToError(){
 fun Activity.hideKeyboard() {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
+}
+
+fun UiStateNoResultBinding.setVisibleToVisible(){
+    tvNoResult.setVisibleToVisible()
+    ivNoResult.setVisibleToVisible()
+}
+
+fun UiStateNoResultBinding.setVisibleToGone(){
+    tvNoResult.setVisibleToGone()
+    ivNoResult.setVisibleToGone()
 }
