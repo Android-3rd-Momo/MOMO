@@ -14,6 +14,7 @@ data class UserEntity(
     val programOfDevelopment: List<String> = emptyList(),
     val stackOfDevelopment: String = "",
     val userGroup: List<String> = emptyList(),
-    val userPortfolioText: String = ""
+    val userPortfolioText: String = "",
+    val blackList: List<String> = emptyList()
 )
 

@@ -10,6 +10,6 @@ interface GroupRepository {
     suspend fun readGroup(groupId: String): Flow<GroupEntity>
     suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?): Flow<GroupEntity>
     suspend fun addUser(userList: List<String>, groupId: String): Flow<List<String>>
-    suspend fun deleteGroup(groupId: String): Flow<Boolean>
+    suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean>
     suspend fun getGroupList(): Flow<List<GroupEntity>>
 }

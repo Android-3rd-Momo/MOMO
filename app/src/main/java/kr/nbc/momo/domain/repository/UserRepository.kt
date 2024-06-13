@@ -13,4 +13,6 @@ interface UserRepository {
     suspend fun joinGroup(groupId: String)
     suspend fun signOutUser()
     suspend fun signWithdrawalUser()
+    suspend fun reportUser(reportedUser: String): Flow<Boolean>
+    suspend fun blockUser(blockUser: String): Flow<Boolean>
 }
