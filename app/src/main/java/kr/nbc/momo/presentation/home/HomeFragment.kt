@@ -189,7 +189,6 @@ class HomeFragment : Fragment() {
                         binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
 
                         if (latestGroupList.isEmpty()) {
-                            //binding.tvEmptyLatestGroup.setVisibleToVisible()
                             binding.prCircularLatest.setVisibleToGone()
                             binding.includeNoResultLatest.setVisibleToVisible()
                             binding.rvLatestGroupList.setVisibleToInvisible()
@@ -210,7 +209,6 @@ class HomeFragment : Fragment() {
                             false
                         )
                         if (myGroupList.isEmpty()) {
-                            //binding.tvEmptyMyGroup.setVisibleToVisible()
                             binding.prCircularJoined.setVisibleToGone()
                             binding.includeNoResultJoined.setVisibleToVisible()
                             binding.rvMyGroupList.setVisibleToInvisible()
