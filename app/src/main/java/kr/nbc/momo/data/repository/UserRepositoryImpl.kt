@@ -2,11 +2,14 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.datastore.UserPreferences
 import kr.nbc.momo.data.model.UserResponse
@@ -186,6 +189,35 @@ class UserRepositoryImpl @Inject constructor(
             throw e
         }
 
+    }
+
+    override suspend fun reportUser(reportedUser: String): Flow<Boolean> = callbackFlow {
+        val ref = fireStore.collection("blackList")
+        val user = hashMapOf(
+            "count" to 1
+        )
+
+        val listener = ref.document(reportedUser).update("count", FieldValue.increment(1))
+            .addOnSuccessListener { trySend(true) }
+            .addOnFailureListener {
+                ref.document(reportedUser).set(user)
+                    .addOnSuccessListener { trySend(true) }
+                    .addOnFailureListener { e -> close(e) }
+            }
+
+        awaitClose { listener.result }
+    }
+
+    override suspend fun blockUser(blockUser: String): Flow<Boolean> = callbackFlow {
+        val currentUserUid = getCurrentUserUid()
+        val ref = fireStore.collection("userInfo").document(currentUserUid)
+        val listener = fireStore.runTransaction { transaction ->
+            transaction.update(ref, "blackList", FieldValue.arrayUnion(blockUser))
+            null
+        }
+            .addOnSuccessListener { trySend(true) }
+            .addOnFailureListener { e -> close(e) }
+        awaitClose { listener.result }
     }
 
     override suspend fun isUserNumberDuplicate(userNumber: String): Boolean {

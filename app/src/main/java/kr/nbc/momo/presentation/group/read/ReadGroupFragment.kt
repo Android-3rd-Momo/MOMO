@@ -7,12 +7,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -27,7 +30,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,12 +43,13 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 import java.util.Calendar
 
 @AndroidEntryPoint
-class ReadGroupFragment : Fragment() {
+class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var _binding: FragmentReadGroupBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ReadGroupViewModel by viewModels()
@@ -56,6 +59,9 @@ class ReadGroupFragment : Fragment() {
     private var imageUri: Uri? = null
     private var image: String? = null
     private var categoryText : String = "공모전"
+    private lateinit var groupId: String
+    private lateinit var leaderId: String
+    private lateinit var userList: List<String>
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -81,6 +87,8 @@ class ReadGroupFragment : Fragment() {
         observeUpdateState()
         observeUserList()
         observeDeleteGroup()
+        observeBlockUser()
+        observeReportUser()
     }
 
     override fun onDestroyView() {
@@ -124,24 +132,32 @@ class ReadGroupFragment : Fragment() {
         }
     }
 
+
     private fun observeGroupState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.groupState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-
+                        binding.prCircular.setVisibleToVisible()
+                        binding.svRead.setVisibleToGone()
                     }
 
                     is UiState.Success -> {
                         initView(uiState.data)
                         initGroupThumbnail(uiState.data.groupThumbnail)
                         initUserList(uiState.data.userList)
-
+                        groupId = uiState.data.groupId
+                        leaderId = uiState.data.leaderId
+                        userList = uiState.data.userList
+                        binding.prCircular.setVisibleToGone()
+                        binding.svRead.setVisibleToVisible()
                     }
 
                     is UiState.Error -> {
                         // 오류 메시지 표시
                         Log.d("error", uiState.message)
+                        binding.prCircular.setVisibleToError()
+                        binding.svRead.setVisibleToGone()
                     }
                 }
 
@@ -201,15 +217,55 @@ class ReadGroupFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        if (uiState.data) {
-                            parentFragmentManager.popBackStack()
-                        } else {
-                            // 그룹 삭제 실패
-                        }
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "게시글 삭제 성공", Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
-                        // 이외 다른 예외
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun observeReportUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.reportUserState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "유저 신고 성공", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun observeBlockUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.blockUserState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "유저 차단 성공", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UiState.Error -> {
                         Log.d("error", uiState.message)
                     }
                 }
@@ -241,17 +297,20 @@ class ReadGroupFragment : Fragment() {
             tvLeaderId.text = data.leaderId
             val categoryList = data.category.developmentOccupations + data.category.programingLanguage
             tvDetailCategoryList.text = categoryList.joinToString()
+            etGroupNameEdit.setText(data.groupName)
+            etGroupOneLineDescriptionEdit.setText(data.groupOneLineDescription)
+            etGroupDescriptionEdit.setText(data.groupDescription)
+            ivGroupImageEdit.setThumbnailByUrlOrDefault(data.groupThumbnail)
+            tvLeaderIdEdit.text = data.leaderId
+            tvFirstDateEdit.text = data.firstDate
+            tvLastDateEdit.text = data.lastDate
 
-            binding.etGroupNameEdit.setText(data.groupName)
-            binding.etGroupOneLineDescriptionEdit.setText(data.groupOneLineDescription)
-            binding.etGroupDescriptionEdit.setText(data.groupDescription)
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(data.groupThumbnail)
-            binding.tvLeaderIdEdit.text = data.leaderId
-            binding.tvFirstDateEdit.text = data.firstDate
-            binding.tvLastDateEdit.text = data.lastDate
+            if (data.userList.contains(currentUser)) btnJoinProject.text = "채팅방 이동"
+            if (data.leaderId == currentUser) {
+                btnEdit.setVisibleToVisible()
+                btnPopUp.setVisibleToGone()
+            }
 
-            if (data.userList.contains(currentUser)) binding.btnJoinProject.text = "채팅방 이동"
-            if (data.leaderId == currentUser) binding.btnEdit.visibility = View.VISIBLE
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
@@ -268,7 +327,7 @@ class ReadGroupFragment : Fragment() {
     private fun initUserList(userList: List<String>) {
         val adapter = UserListAdapter(userList)
         binding.rvUserList.adapter = adapter
-        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 5)
+        binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
@@ -298,6 +357,10 @@ class ReadGroupFragment : Fragment() {
     private fun btnEditClickListener(data: GroupModel) {
         binding.btnEdit.setOnClickListener {
             setEditMode(data)
+        }
+
+        binding.btnPopUp.setOnClickListener {
+            showPopup(binding.btnPopUp)
         }
     }
 
@@ -332,14 +395,14 @@ class ReadGroupFragment : Fragment() {
             btnCompleteEditOnClickListener(data, editMode, viewMode)
         }
         binding.btnDelete.setOnClickListener {
-            viewModel.deleteGroup(data.groupId)
+            viewModel.deleteGroup(data.groupId, data.userList)
         }
         setChangeMode(editMode, viewMode)
     }
 
     private fun initSpinner(category: String) {
         val items = resources.getStringArray(R.array.classification)
-        val spinnerAapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
+        val spinnerAdapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = super.getView(position, convertView, parent)
 
@@ -356,10 +419,10 @@ class ReadGroupFragment : Fragment() {
             }
         }
 
-        spinnerAapter.addAll(items.toMutableList())
-        spinnerAapter.add(category)
-        binding.categorySpinner.adapter = spinnerAapter
-        binding.categorySpinner.setSelection(spinnerAapter.count)
+        spinnerAdapter.addAll(items.toMutableList())
+        spinnerAdapter.add(category)
+        binding.categorySpinner.adapter = spinnerAdapter
+        binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
             object: AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -468,13 +531,20 @@ class ReadGroupFragment : Fragment() {
             for (chipText in chipList) {
                 val chip = Chip(requireContext()).apply {
                     text = chipText
+                    setTextColor(
+                        ContextCompat.getColorStateList(
+                            requireContext(),
+                            R.color.tv_chip_state_color
+                        )
+                    )
+                    setChipBackgroundColorResource(R.color.bg_chip_state_color)
                     isCheckable = true
                     if (category.contains(chipText)){
                         isChecked = true
                     }
 
-                    setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                    setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
+                //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
+                //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
                 chipGroup.addView(chip)
             }
@@ -490,5 +560,29 @@ class ReadGroupFragment : Fragment() {
             }
         }
         return textList
+    }
+
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(requireContext(), v)
+        popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+        popup.setOnMenuItemClickListener(this)
+        popup.show() // 팝업 보여주기
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu1 -> {
+                viewModel.deleteGroup(groupId, userList)
+            }
+            R.id.menu2 -> {
+                viewModel.reportUser(leaderId)
+                viewModel.blockUser(leaderId)
+            }
+            R.id.menu3 -> {
+                viewModel.blockUser(leaderId)
+            }
+        }
+
+        return item != null
     }
 }

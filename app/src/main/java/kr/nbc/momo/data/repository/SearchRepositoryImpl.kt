@@ -31,15 +31,23 @@ class SearchRepositoryImpl @Inject constructor(
         }
         val storeSnapshot = query.get().await()
 
-        Log.d("test", "$storeSnapshot + $query2")
-        val response = storeSnapshot.documents.map {
+        var response = storeSnapshot.documents.map {
             it.toObject(GroupResponse::class.java) ?: GroupResponse()
-        }.filter {
-            true
-            //아래 코드로 검색어 필터링
-            //it.category.programingLanguage.any{ it in query3List }
         }
-        Log.d("test", "$response")
+        Log.d("test", "$response + $query1 + $query2 + $query3")
+
+
+        if (query3.isNotBlank()) response =
+            response.filter { groupResponse ->
+                groupResponse.category.programingLanguage.any {
+                    it in query3List
+                } || query3List.any {
+                    groupResponse.groupDescription.contains(it)
+                            || groupResponse.groupName.contains(it)
+                }
+            }
+        Log.d("test", "$response + $query1 + $query2")
+
         return response.map { it.toEntity() }
     }
 

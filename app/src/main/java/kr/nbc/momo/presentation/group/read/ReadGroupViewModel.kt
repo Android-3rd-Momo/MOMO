@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.JoinGroupUseCase
 import kr.nbc.momo.domain.model.GroupEntity
+import kr.nbc.momo.domain.usecase.BlockUserUseCase
 import kr.nbc.momo.domain.usecase.DeleteGroupUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
+import kr.nbc.momo.domain.usecase.ReportUserUseCase
 import kr.nbc.momo.domain.usecase.UpdateGroupUseCase
 import kr.nbc.momo.domain.usecase.UpdateGroupUserListUseCase
 import kr.nbc.momo.presentation.UiState
@@ -27,7 +29,9 @@ class ReadGroupViewModel @Inject constructor(
     private val joinGroupUseCase: JoinGroupUseCase,
     private val updateGroupUserListUseCase: UpdateGroupUserListUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
-    private val deleteGroupUseCase: DeleteGroupUseCase
+    private val deleteGroupUseCase: DeleteGroupUseCase,
+    private val reportUserUseCase: ReportUserUseCase,
+    private val blockUserUseCase: BlockUserUseCase
 ) : ViewModel() {
     private val _groupState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val groupState: StateFlow<UiState<GroupModel>> get() = _groupState
@@ -40,6 +44,12 @@ class ReadGroupViewModel @Inject constructor(
 
     private val _deleteGroupState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
     val deleteGroupState: StateFlow<UiState<Boolean>> get() = _deleteGroupState
+
+    private val _reportUserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
+    val reportUserState: StateFlow<UiState<Boolean>> get() = _reportUserState
+
+    private val _blockUserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
+    val blockUserState: StateFlow<UiState<Boolean>> get() = _blockUserState
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -93,16 +103,44 @@ class ReadGroupViewModel @Inject constructor(
         }
     }
 
-    fun deleteGroup(groupId: String) {
+    fun deleteGroup(groupId: String, userList: List<String>) {
         viewModelScope.launch {
             _deleteGroupState.value = UiState.Loading
 
-            deleteGroupUseCase.invoke(groupId)
+            deleteGroupUseCase.invoke(groupId, userList)
                 .catch { e ->
                     _deleteGroupState.value = UiState.Error(e.toString())
                 }
                 .collect { data ->
                     _deleteGroupState.value = UiState.Success(data)
+                }
+        }
+    }
+
+    fun reportUser(reportedUser: String) {
+        viewModelScope.launch {
+            _reportUserState.value = UiState.Loading
+
+            reportUserUseCase.invoke(reportedUser)
+                .catch { e ->
+                    _reportUserState.value = UiState.Error(e.toString())
+                }
+                .collect { data ->
+                    _reportUserState.value = UiState.Success(data)
+                }
+        }
+    }
+
+    fun blockUser(blockUser: String) {
+        viewModelScope.launch {
+            _blockUserState.value = UiState.Loading
+
+            blockUserUseCase.invoke(blockUser)
+                .catch { e ->
+                    _blockUserState.value = UiState.Error(e.toString())
+                }
+                .collect { data ->
+                    _blockUserState.value = UiState.Success(data)
                 }
         }
     }

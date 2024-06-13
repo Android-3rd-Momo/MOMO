@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -38,13 +39,12 @@ class SignInFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login()
+        setOnClickListener()
         observeLoginViewModel()
-        usingAppWithoutSignIn()
 
     }
 
-    private fun login() {
+    private fun setOnClickListener() {
         binding.btnSignUp.setOnClickListener {
             val email = binding.etId.text.toString()
             val password = binding.etPassWord.text.toString()
@@ -54,6 +54,13 @@ class SignInFragment : BottomSheetDialogFragment() {
             } else {
                 signInViewModel.signIn(email, password)
             }
+        }
+
+        binding.btnSignIn.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, SignUpFragment())
+                .commit()
+            dismiss()
         }
     }
     private fun observeLoginViewModel(){
@@ -73,18 +80,6 @@ class SignInFragment : BottomSheetDialogFragment() {
                     }
                 }
             }
-        }
-    }
-
-    private fun usingAppWithoutSignIn() {
-        binding.tvWithoutSignin.setOnClickListener {
-            val fragmentSignUp = SignUpFragment()
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView, fragmentSignUp)
-                .addToBackStack(null)  // This allows user to navigate back
-                .commit()
-            dismiss()
         }
     }
 

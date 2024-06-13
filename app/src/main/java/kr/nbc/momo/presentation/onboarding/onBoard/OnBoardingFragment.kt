@@ -45,11 +45,6 @@ class OnBoardingFragment : Fragment() {
             activity?.finish()
         }
 
-        binding.buttonGoogleLogin.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, DevelopmentTypeFragment())
-                .commit()
-        }
 
         postToList()
 
@@ -68,9 +63,9 @@ class OnBoardingFragment : Fragment() {
     }
 
     private fun postToList() {
-        addToList("모이개에 오신것을 환영합니다", "모두 모여라 이런 개발자 모임에 오셨군요", R.drawable.onboarding_illust1)
-        addToList("프로젝트에 같이 참여하실 인원을 구하기 어려우신가요? ", "저희 앱에서 구해보세요", R.drawable.onboardingillust2)
-        addToList("쉽고 간편하게", "모두 모여라 이런 개발자 모임에서 팀원을 구해보세요", R.drawable.onboardingillust3)
+        addToList("모이개에 어서오세요", "개발자 커뮤니티에 오신것을\n" + "환영합니다", R.drawable.onboarding_illust1)
+        addToList("다양한 개발자들이 한곳에 ", "프론트엔드, 백엔드 다양한 직군이\n" + "한곳에 모여있습니다", R.drawable.onboarding_illust3)
+        addToList("단기 프로젝트도 OK", "프로젝트를 함께 개발할 동료들을\n" + "모이개에서 모집해보세요!", R.drawable.onboarding_illust2)
     }
 
 }
