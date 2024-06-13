@@ -15,4 +15,5 @@ interface UserRepository {
     suspend fun signWithdrawalUser()
     suspend fun reportUser(reportedUser: String): Flow<Boolean>
     suspend fun blockUser(blockUser: String): Flow<Boolean>
+    suspend fun userInfo(userId: String): Flow<UserEntity>
 }

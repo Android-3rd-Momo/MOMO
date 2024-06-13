@@ -1,17 +1,22 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.datastore.UserPreferences
+import kr.nbc.momo.data.model.GroupResponse
 import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toUserResponse
@@ -218,6 +223,12 @@ class UserRepositoryImpl @Inject constructor(
             .addOnSuccessListener { trySend(true) }
             .addOnFailureListener { e -> close(e) }
         awaitClose { listener.result }
+    }
+
+    override suspend fun userInfo(userId: String): Flow<UserEntity> = flow {
+        val snapshot = fireStore.collection("userInfo").whereEqualTo("userId", userId).get().await()
+        val response = snapshot.toObjects<UserResponse>()
+        emit(response[0].toEntity())
     }
 
     override suspend fun isUserNumberDuplicate(userNumber: String): Boolean {

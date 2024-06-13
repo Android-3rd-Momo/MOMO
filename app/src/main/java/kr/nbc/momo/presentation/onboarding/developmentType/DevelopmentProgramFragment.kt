@@ -28,7 +28,7 @@ class DevelopmentProgramFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDevelopmentProgramBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,34 +36,6 @@ class DevelopmentProgramFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        saveDevelopmentOfProgramList()
-    }
-
-
-    private fun saveDevelopmentOfProgramList() {
-        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            val selectedChips = checkedIds.map { id ->
-                group.findViewById<Chip>(id).text.toString()
-            }
-            onBoardingSharedViewModel.updateProgramOfDevelopment(selectedChips)
-
-            checkedIds.forEach { id ->
-                val chip = group.findViewById<Chip>(id)
-                if (chip.isChecked) {
-                    onBoardingSharedViewModel.addSelectedProgramChipId(
-                        resources.getResourceEntryName(
-                            chip.id
-                        )
-                    )
-                } else {
-                    onBoardingSharedViewModel.removeSelectedProgramChipId(
-                        resources.getResourceEntryName(
-                            chip.id
-                        )
-                    )
-                }
-            }
-        }
     }
 
     private fun initView() {
@@ -97,14 +69,13 @@ class DevelopmentProgramFragment : Fragment() {
                     )
                 )
                 setChipBackgroundColorResource(R.color.bg_chip_state_color)
+                isCheckable = true
                 setOnClickListener {
-                    setChipBackgroundColorResource(R.color.blue)
-                    setTextColor(
-                        ContextCompat.getColorStateList(
-                            requireContext(),
-                            R.color.white
-                        )
-                    )
+                    if (isChecked) {
+                        onBoardingSharedViewModel.addSelectedProgramChipId(chipText)
+                    }else {
+                        onBoardingSharedViewModel.removeSelectedProgramChipId(chipText)
+                    }
                 }
             }
             chipGroup.addView(chip)

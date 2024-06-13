@@ -22,10 +22,8 @@ class OnBoardingSharedViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _typeOfDevelopment = MutableStateFlow<List<String>>(emptyList())
-    val typeOfDevelopment: StateFlow<List<String>> get() = _typeOfDevelopment
 
     private val _programOfDevelopment = MutableStateFlow<List<String>>(emptyList())
-    val programOfDevelopment: StateFlow<List<String>> get() = _programOfDevelopment
 
     private val _stackOfDevelopment = MutableStateFlow<String>("")
     val stackOfDevelopment: StateFlow<String> get() = _stackOfDevelopment
@@ -33,33 +31,26 @@ class OnBoardingSharedViewModel @Inject constructor(
     private val _currentUser = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel>> get() = _currentUser
     private val _saveProfileState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
-    val saveProfileState: StateFlow<UiState<Unit>> get() = _saveProfileState
-
-    private val _authState = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
-    val authState: StateFlow<UiState<UserModel>> get() = _authState
 
     private val _selectedTypeChipIds = MutableStateFlow<List<String>>(emptyList())
-    val selectedTypeChipIds: StateFlow<List<String>> get() = _selectedTypeChipIds
 
     private val _selectedProgramChipIds = MutableStateFlow<List<String>>(emptyList())
-    val selectedProgramChipIds: StateFlow<List<String>> get() = _selectedProgramChipIds
 
     fun addSelectedTypeChipId(chipId: String) {
-        _selectedTypeChipIds.value = _selectedTypeChipIds.value + chipId
+        _selectedTypeChipIds.value += chipId
     }
 
     fun removeSelectedTypeChipId(chipId: String) {
-        _selectedTypeChipIds.value = _selectedTypeChipIds.value - chipId
+        _selectedTypeChipIds.value -= chipId
     }
 
     fun addSelectedProgramChipId(chipId: String) {
-        _selectedProgramChipIds.value = _selectedProgramChipIds.value + chipId
+        _selectedProgramChipIds.value += chipId
     }
 
     fun removeSelectedProgramChipId(chipId: String) {
-        _selectedProgramChipIds.value = _selectedProgramChipIds.value - chipId
+        _selectedProgramChipIds.value -= chipId
     }
-
 
     init {
         getCurrentUser()
@@ -77,14 +68,6 @@ class OnBoardingSharedViewModel @Inject constructor(
         }
     }
 
-    fun updateTypeOfDevelopment(types: List<String>) {
-        _typeOfDevelopment.value = types
-    }
-
-    fun updateProgramOfDevelopment(programs: List<String>) {
-        _programOfDevelopment.value = programs
-    }
-
     fun updateStackOfDevelopment(stack: String) {
         _stackOfDevelopment.value = stack
     }
@@ -97,8 +80,8 @@ class OnBoardingSharedViewModel @Inject constructor(
                 val currentUser = (_currentUser.value as? UiState.Success)?.data
                 if (currentUser != null) {
                     val updatedUser = currentUser.copy(
-                        typeOfDevelopment = _typeOfDevelopment.value,
-                        programOfDevelopment = _programOfDevelopment.value,
+                        typeOfDevelopment = _selectedTypeChipIds.value,
+                        programOfDevelopment = _selectedProgramChipIds.value,
                         stackOfDevelopment = _stackOfDevelopment.value
                     )
                     saveUserProfileUseCase(updatedUser.toEntity())

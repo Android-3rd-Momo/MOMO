@@ -27,7 +27,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -42,6 +41,7 @@ import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
+import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
@@ -65,7 +65,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
-            binding.ivGroupImage.load(uri)
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(uri.toString())
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -185,7 +186,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         initGroupThumbnail(image)
                     }
                 }
-
             }
         }
     }
@@ -332,6 +332,17 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val adapter = UserListAdapter(userList)
         binding.rvUserList.adapter = adapter
         binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
+        adapter.itemClick = object : UserListAdapter.ItemClick {
+            override fun itemClick(userId: String) {
+                sharedViewModel.getUserId(userId)
+                val userInfoFragment = UserInfoFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, userInfoFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
@@ -547,9 +558,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (category.contains(chipText)) {
                         isChecked = true
                     }
-
-                    //setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                    //setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
                 }
                 chipGroup.addView(chip)
             }
