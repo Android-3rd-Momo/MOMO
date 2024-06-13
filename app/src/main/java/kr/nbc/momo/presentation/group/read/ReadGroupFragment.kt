@@ -186,7 +186,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         initGroupThumbnail(image)
                     }
                 }
-
             }
         }
     }

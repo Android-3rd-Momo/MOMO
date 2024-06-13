@@ -50,7 +50,7 @@ class ChattingRecyclerViewAdapter() :
             ChattingEnumClass.ELSE_VIEW_TYPE.type -> {
                 val binding =
                     RvItemElseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ItemElseViewHolder(binding)
+                ItemElseViewHolder(binding, itemClick)
             }
 
             else -> {
@@ -75,9 +75,6 @@ class ChattingRecyclerViewAdapter() :
                         isMinuteChanged(position),
                         isUserIdChanged(position)
                     )
-                holder.itemView.setOnClickListener {
-                    itemClick?.itemClick(itemList.chatList[position].userId)
-                }
             }
 
 
@@ -93,9 +90,6 @@ class ChattingRecyclerViewAdapter() :
                     isMinuteChanged(position),
                     isUserIdChanged(position)
                 )
-                holder.itemView.setOnClickListener {
-                    itemClick?.itemClick(itemList.chatList[position].userId)
-                }
             }
 
             else -> (holder as ItemErrorHolder).bind()
@@ -130,6 +124,7 @@ class ChattingRecyclerViewAdapter() :
 
     class ItemElseViewHolder(
         private val binding: RvItemElseBinding,
+        private val itemClick: ItemClick?
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             userModel: GroupUserModel,
@@ -172,12 +167,16 @@ class ChattingRecyclerViewAdapter() :
                 } else {
                     tvDivider.setVisibleToGone()
                 }
+
+                ivProfile.setOnClickListener {
+                    itemClick?.itemClick(userModel.userId)
+                }
             }
         }
     }
 
     class ItemUserHolder(
-        private val binding: RvItemUserBinding
+        private val binding: RvItemUserBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             chatModel: ChatModel,
