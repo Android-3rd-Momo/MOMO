@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
     private var currentUser: String = ""
     private lateinit var currentUserCategory: List<String>
+    private lateinit var blackList: List<String>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -124,20 +125,26 @@ class HomeFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
+
+                            Log.d("currentUser", state.data.toString())
                             if (state.data != null) {
                                 Log.d("currentUser", state.data.userId)
                                 currentUser = state.data.userId
-                                currentUserCategory =
-                                    state.data.typeOfDevelopment + state.data.programOfDevelopment
+                                currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
+                                blackList = state.data.blackList
                                 binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
                             } else {
                                 currentUser = ""
                                 currentUserCategory = listOf()
+                                blackList = listOf()
                             }
                         }
 
                         is UiState.Error -> {
                             Log.d("Error", state.message)
+                            currentUser = ""
+                            currentUserCategory = listOf()
+                            blackList = listOf()
                         }
                     }
                 }
@@ -168,8 +175,10 @@ class HomeFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        val latestGroupList =
-                            uiState.data.filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                        val filteredData = uiState.data.filterNot { blackList.contains(it.leaderId) }
+
+                        val latestGroupList = filteredData
+                                .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                                 .sortedByDescending {
                                     val decrypt = it.groupId.decryptECB()
                                     val dateTimeIndex = decrypt.lastIndexOf(" ")
@@ -177,8 +186,8 @@ class HomeFragment : Fragment() {
                                 }
                         latestGroupListAdapter = LatestGroupListAdapter(latestGroupList)
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
-                        binding.rvLatestGroupList.layoutManager =
-                            LinearLayoutManager(requireContext())
+                        binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
+
                         if (latestGroupList.isEmpty()) {
                             //binding.tvEmptyLatestGroup.setVisibleToVisible()
                             binding.prCircularLatest.setVisibleToGone()
@@ -191,7 +200,8 @@ class HomeFragment : Fragment() {
                         }
 
 
-                        val myGroupList = uiState.data.filter { it.userList.contains(currentUser) }
+                        val myGroupList = filteredData
+                            .filter { it.userList.contains(currentUser) }
                         myGroupListAdapter = MyGroupListAdapter(myGroupList)
                         binding.rvMyGroupList.adapter = myGroupListAdapter
                         binding.rvMyGroupList.layoutManager = LinearLayoutManager(
@@ -210,13 +220,12 @@ class HomeFragment : Fragment() {
                             binding.rvMyGroupList.setVisibleToVisible()
                         }
 
-                        val recommendGroupList = uiState.data
+                        val recommendGroupList = filteredData
                             .filter {
-                                val setA =
-                                    (it.category.programingLanguage + it.category.developmentOccupations).toSet()
+                                val setA = (it.category.programingLanguage + it.category.developmentOccupations).toSet()
                                 val setB = currentUserCategory.toSet()
                                 setA.intersect(setB).isNotEmpty()
-                            } - myGroupList.toSet()
+                            }
                         recommendGroupListAdapter = RecommendGroupListAdapter(recommendGroupList)
                         binding.rvRecommendGroupList.adapter = recommendGroupListAdapter
                         binding.rvRecommendGroupList.layoutManager = LinearLayoutManager(
