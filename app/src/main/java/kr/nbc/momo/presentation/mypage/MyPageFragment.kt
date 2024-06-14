@@ -117,12 +117,10 @@ class MyPageFragment : Fragment() {
                         is UiState.Loading -> {
                             binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
-                            Log.d("mypage", "Loading")
                         }
 
                         is UiState.Success -> {
                             binding.includeUiState.setVisibleToGone()
-                            Log.d("mypage", "Success")
                             if (state.data != null) {
                                 isLogin()
                                 currentUser = state.data
@@ -137,7 +135,6 @@ class MyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             clearUserInfo()
-                            Log.d("mypage", "Error")
                             Log.d("mypage error", state.message)
                         }
                     }
