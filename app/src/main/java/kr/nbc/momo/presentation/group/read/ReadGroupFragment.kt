@@ -83,7 +83,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
         observeGroupState()
         observeUserProfile()
         observeUpdateState()
@@ -95,8 +94,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
+        bottomNavHide()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         bottomNavShow()
         _binding = null
     }
@@ -291,10 +295,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         Toast.makeText(requireContext(), "리더 변경 성공", Toast.LENGTH_SHORT).show()
-                        binding.clViewMode.setVisibleToVisible()
-                        binding.clSimpleDescriptionContainer.setVisibleToVisible()
-                        binding.clEditMode.setVisibleToGone()
-                        binding.clSimpleDescriptionContainerEdit.setVisibleToGone()
+                        parentFragmentManager.popBackStack()
                     }
 
                     is UiState.Error -> {

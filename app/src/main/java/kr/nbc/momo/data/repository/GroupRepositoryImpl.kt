@@ -23,30 +23,39 @@ class GroupRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : GroupRepository {
-    override suspend fun createGroup(groupEntity: GroupEntity) {
-        try {
-            val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-            if (groupEntity.groupThumbnail != null) {
-                // 썸네일 있을 때
-                val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
-                uploadTask.continueWithTask { ref.downloadUrl }
-                    .addOnCompleteListener { task ->
-                        val downloadUri = task.result
-                        val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-                        fireStore.collection("groups")
-                            .document(groupResponse.groupId)
-                            .set(groupResponse)
-                    }
-            } else {
-                // 썸네일 없을 때
-                val groupResponse = groupEntity.toGroupResponse(null)
-                fireStore.collection("groups")
-                    .document(groupResponse.groupId)
-                    .set(groupResponse)
-            }
-        } catch (e: Exception) {
-            throw e
+    override suspend fun createGroup(groupEntity: GroupEntity): Flow<Boolean> = callbackFlow {
+        val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+        val listener = if (groupEntity.groupThumbnail != null) {
+            // 썸네일 있을 때
+            val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
+            uploadTask.continueWithTask { ref.downloadUrl }
+                .addOnCompleteListener { task ->
+                    val downloadUri = task.result
+                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                    fireStore.collection("groups")
+                        .document(groupResponse.groupId)
+                        .set(groupResponse)
+                        .addOnSuccessListener {
+                            trySend(true)
+                        }.addOnFailureListener { e ->
+                            close(e)
+                        }
+                }
+        } else {
+            // 썸네일 없을 때
+            val groupResponse = groupEntity.toGroupResponse(null)
+            fireStore.collection("groups")
+                .document(groupResponse.groupId)
+                .set(groupResponse)
+                .addOnSuccessListener {
+                    trySend(true)
+                }.addOnFailureListener { e ->
+                    close(e)
+                }
         }
+
+        awaitClose { listener.result }
+
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = flow {
@@ -127,9 +136,6 @@ class GroupRepositoryImpl @Inject constructor(
 
                 trySend(true)
             }
-            .addOnFailureListener { e ->
-                close(e)
-            }
 
         awaitClose { listener.result }
     }
@@ -151,6 +157,22 @@ class GroupRepositoryImpl @Inject constructor(
             close(e)
         }
 
+        awaitClose { listener.result }
+    }
+
+    override suspend fun searchLeader(userId: String): Flow<List<String>> = callbackFlow {
+        val ref = fireStore.collection("groups").whereEqualTo("leaderId", userId)
+        val listener = ref.get()
+            .addOnSuccessListener { querySnapshot ->
+                val list = emptyList<String>().toMutableList()
+                for (document in querySnapshot.documents) {
+                    document.getString("groupName")?.let { list.add(it) }
+                }
+                trySend(list)
+            }
+            .addOnFailureListener { e ->
+                close(e)
+            }
         awaitClose { listener.result }
     }
 }
