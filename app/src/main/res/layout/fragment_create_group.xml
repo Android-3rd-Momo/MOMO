@@ -111,6 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@drawable/bg_btn_radius_blue"
+            android:backgroundTint="@color/bg_btn_state_color"
             android:padding="10dp"
             android:text="모임 생성"
             android:textColor="@color/white"
