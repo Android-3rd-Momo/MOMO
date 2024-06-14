@@ -1,15 +1,9 @@
 package kr.nbc.momo.presentation.onboarding.onBoard
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ItemPageBinding
-import kr.nbc.momo.presentation.onboarding.GetStartedViewPagerAdapter
 
 class OnBoardingViewPagerAdapter(
     private val title: List<String>,
@@ -18,16 +12,6 @@ class OnBoardingViewPagerAdapter(
 ) : RecyclerView.Adapter<OnBoardingViewPagerAdapter.Pager2ViewHolder>() {
 
     inner class Pager2ViewHolder(private val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.ImageViewIllust.setOnClickListener {
-                val position = adapterPosition
-                Toast.makeText(
-                    binding.root.context,
-                    "You clicked on item = $position",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
 
         fun bind(title: String, desc: String, image: Int) {
             binding.TextViewTitle.text = title
