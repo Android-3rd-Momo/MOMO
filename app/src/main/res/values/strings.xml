@@ -23,7 +23,7 @@
     <string name="Term4">(필수) 커뮤니티 이용약관 동의</string>
     <string name="Term5">(선택) 마케팅 수신 동의</string>
     <string name="See">보기</string>
-    <string name="TermComplete">가입완료</string>
+    <string name="TermComplete">동의 완료</string>
 
     //이용약관 보기
     <string name="PrivateTermTitle">"개인정보 처리방침 동의</string>

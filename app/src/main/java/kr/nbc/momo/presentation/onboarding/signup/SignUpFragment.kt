@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.onboarding.signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,19 +8,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSignUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.term.TermFragment
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 
 @AndroidEntryPoint
@@ -171,7 +170,7 @@ class SignUpFragment : Fragment() {
                             binding.etId.error = "이미 사용 중인 아이디입니다."
                         } else {
                             binding.etId.error = null
-                            Snackbar.make(binding.root, "사용 가능한 아이디입니다.", Snackbar.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
                             isIdChecked = true
                         }
                     } catch (e: Exception) {
@@ -197,7 +196,7 @@ class SignUpFragment : Fragment() {
                             binding.etNumber.error = "이미 사용 중인 전화번호입니다."
                         } else {
                             binding.etNumber.error = null
-                            Snackbar.make(binding.root, "사용 가능한 전화번호입니다.", Snackbar.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "사용 가능한 전화번호입니다.", Toast.LENGTH_SHORT).show()
                             isNumberChecked = true
                         }
                     } catch (e: Exception) {
@@ -218,16 +217,10 @@ class SignUpFragment : Fragment() {
 
                     is UiState.Success -> {
                         sharedViewModel.updateUser(state.data)
-                        Snackbar.make(binding.root, "회원가입에 성공하였습니다.", Snackbar.LENGTH_SHORT).show()
-
-                        //todo 온보딩 정보 입력으로 이동
-                        val fragmentTerm = TermFragment()
-                        fragmentTerm.setStyle(
-                            BottomSheetDialogFragment.STYLE_NORMAL,
-                            R.style.AppBottomSheetDialogBorder20WhiteTheme
-                        )
-                        fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
-
+                        Toast.makeText(requireContext(), "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(requireActivity(), DevelopmentActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
                     }
 
                     is UiState.Error -> {
@@ -235,7 +228,7 @@ class SignUpFragment : Fragment() {
                         if (state.message.contains("The email address is already in use by another account")) {
                             binding.etEmail.error = "이미 가입된 이메일 입니다."
                         } else {
-                            Snackbar.make(binding.root, state.message, Snackbar.LENGTH_SHORT).show()
+                            Log.d("SignUp error",state.message)
                         }
                     }
                 }
