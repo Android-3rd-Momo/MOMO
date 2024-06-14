@@ -12,11 +12,13 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentDevelopmentStackBinding
 
 @AndroidEntryPoint
@@ -24,6 +26,7 @@ class DevelopmentStackFragment : Fragment() {
     private var _binding: FragmentDevelopmentStackBinding? = null
     private val binding get() = _binding!!
     private val onBoardingSharedViewModel: OnBoardingSharedViewModel by activityViewModels()
+    private lateinit var btnConfirm : Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +65,7 @@ class DevelopmentStackFragment : Fragment() {
     }
 
     private fun initView() {
+        btnConfirm = requireActivity().findViewById<Button>(R.id.btnConfirm)
         val ssb = SpannableStringBuilder(
             "기술스택에 대해 알려주세요\n"
         )
@@ -79,14 +83,21 @@ class DevelopmentStackFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val textLength = binding.etStack.text.length.toString()
-                val lengthText = "$textLength/1000자"
+                val textLength = binding.etStack.text.length
+                val lengthText = "$textLength/500자"
                 binding.tvTextCount.text = lengthText
+                if (textLength > 500) {
+                    binding.etStack.error = "500자를 초과했습니다!"
+                    btnConfirm.isEnabled = false
+                } else {
+                    binding.etStack.error = null
+                    btnConfirm.isEnabled = true
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
                 val textLength = binding.etStack.text.length.toString()
-                val lengthText = "$textLength/1000자"
+                val lengthText = "$textLength/500자"
                 binding.tvTextCount.text = lengthText
             }
 

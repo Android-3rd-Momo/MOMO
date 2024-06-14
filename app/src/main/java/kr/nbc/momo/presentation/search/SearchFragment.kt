@@ -76,12 +76,20 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initFlow()
+    }
+
+    override fun onResume() {
+        super.onResume()
         bottomNavHide()
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         bottomNavShow()
     }
 
