@@ -1,6 +1,5 @@
 package kr.nbc.momo.presentation.onboarding.term
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentTermBinding
-import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 
 @AndroidEntryPoint

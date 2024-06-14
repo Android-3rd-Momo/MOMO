@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +15,12 @@ import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.toColor
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -35,16 +30,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
-import kr.nbc.momo.databinding.SpinnerItemSelectedBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
@@ -203,12 +194,12 @@ class CreateGroupFragment : Fragment() {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
                     groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()
                 ) {
-                    Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
                     binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
                 ) {
-                    Snackbar.make(binding.root, "카테고리를 선택해주세요.", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 } else {
                     showDialog()
                 }

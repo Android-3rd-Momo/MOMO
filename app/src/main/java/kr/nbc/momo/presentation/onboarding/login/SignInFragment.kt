@@ -5,17 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentLoginBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.MainActivity
-import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.onboarding.term.TermFragment
 
 
@@ -47,7 +46,7 @@ class SignInFragment : BottomSheetDialogFragment() {
             val email = binding.etId.text.toString()
             val password = binding.etPassWord.text.toString()
             if (email.isEmpty() || password.isEmpty()) {
-                Snackbar.make(binding.root, "이메일 또는 비밀번호를 입력해주세요.", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "이메일 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
                 signInViewModel.signIn(email, password)
@@ -80,7 +79,7 @@ class SignInFragment : BottomSheetDialogFragment() {
                     }
 
                     is UiState.Error -> {
-                        Snackbar.make(binding.root, "이메일 또는 비밀번호를 다시 입력해주세요", Snackbar.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "이메일 또는 비밀번호를 다시 입력해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

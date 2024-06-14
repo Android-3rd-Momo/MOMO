@@ -16,6 +16,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -33,7 +34,6 @@ import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
@@ -246,7 +246,7 @@ class MyPageFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             } else {
-                Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "로그인 후 사용해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
         binding.btnGoOnBoarding.setOnClickListener {

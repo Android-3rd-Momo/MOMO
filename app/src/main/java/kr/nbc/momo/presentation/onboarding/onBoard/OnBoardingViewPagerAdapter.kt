@@ -1,15 +1,9 @@
 package kr.nbc.momo.presentation.onboarding.onBoard
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ItemPageBinding
-import kr.nbc.momo.presentation.onboarding.GetStartedViewPagerAdapter
 
 class OnBoardingViewPagerAdapter(
     private val title: List<String>,
