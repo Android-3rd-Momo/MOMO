@@ -99,15 +99,15 @@ class MyPageFragment : Fragment() {
         eachEventHandler()
     }
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-//    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-//    }
+    override fun onResume() {
+        super.onResume()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
 
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
