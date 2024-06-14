@@ -346,20 +346,18 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 btnPopUp.setVisibleToGone()
             }
 
+            ivReturn.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener(data)
         }
-        initBackBtnListener()
         initSpinner(data.category.classification)
     }
 
-    private fun initBackBtnListener() {
-        binding.ivReturn.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
-    }
 
     private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
         chipGroup.removeAllViews()

@@ -213,20 +213,16 @@ class CreateGroupFragment : Fragment() {
                     showDialog()
                 }
             }
+
+            ivReturn.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
         }
         initSpinner()
         binding.clHome.setOnClickListener {
             hideKeyboard(requireActivity() as Activity)
         }
 
-        initBackBtnListener()
-
-    }
-
-    private fun initBackBtnListener() {
-        binding.ivReturn.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
     }
 
     private fun initSpinner() {

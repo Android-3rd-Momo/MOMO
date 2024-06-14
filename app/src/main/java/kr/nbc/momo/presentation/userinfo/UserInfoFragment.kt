@@ -121,17 +121,14 @@ class UserInfoFragment : Fragment() {
             if (data.userSelfIntroduction.isNotEmpty()) {
                 tvUserSelfIntroduction.text = data.userSelfIntroduction
             }
-        }
 
-        initBackBtnListener()
-
-    }
-
-    private fun initBackBtnListener() {
-        binding.ivReturn.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            ivReturn.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
         }
     }
+
+
 
     private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
         for (chipText in chipList) {
