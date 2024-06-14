@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -24,8 +23,6 @@ class SignInFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val signInViewModel: SignInViewModel by viewModels()
-
-    //private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,9 +68,9 @@ class SignInFragment : BottomSheetDialogFragment() {
 
                     }
                     is UiState.Success -> {
-                        val intent = Intent(activity, MainActivity::class.java)
+                        val intent = Intent(requireActivity(), MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
-                        requireActivity().finish()
                     }
                     is UiState.Error -> {
                         Snackbar.make(binding.root, "이메일 또는 비밀번호를 다시 입력해주세요", Snackbar.LENGTH_SHORT).show()
@@ -87,35 +84,5 @@ class SignInFragment : BottomSheetDialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-    //private fun googleLogin() {
-    //firebaseAuth = FirebaseAuth.getInstance()
-    //파이어베이스 어스 사용인데 null이라서 다시 시도가 뜸
-
-    //val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-    //    .requestIdToken(getString(R.string.default_web_client_id))
-    //    .requestEmail()
-    //   .build()
-
-    //mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
-    //sign in  intent 호출부분이 없음
-
-    //val auth = Firebase.auth
-    //val user = auth.currentUser
-
-    //if (user != null) {
-    //val fragmentTerm = TermFragment()
-    //fragmentTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-    //fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
-    //dismiss()
-
-    //} else {
-    // Toast.makeText(requireContext(), "다시시도해주세요", Toast.LENGTH_SHORT).show()
-    //}
-
-    //
-
 
 }

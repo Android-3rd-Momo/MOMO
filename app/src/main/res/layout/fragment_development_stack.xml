@@ -52,7 +52,7 @@
         android:id="@+id/tvTextCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0/1000자"
+        android:text="0/500자"
         android:layout_margin="10dp"
         android:textColor="@color/darkGrey"
         app:layout_constraintBottom_toBottomOf="@+id/et_stack"
