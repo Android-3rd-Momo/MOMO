@@ -328,8 +328,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             tvFirstDate.text = data.firstDate
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
-            val categoryList = data.category.developmentOccupations + data.category.programingLanguage
-            tvDetailCategoryList.text = categoryList.joinToString()
             etGroupNameEdit.setText(data.groupName)
             etGroupOneLineDescriptionEdit.setText(data.groupOneLineDescription)
             etGroupDescriptionEdit.setText(data.groupDescription)
@@ -337,6 +335,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             tvLeaderIdEdit.text = data.leaderId
             tvFirstDateEdit.text = data.firstDate
             tvLastDateEdit.text = data.lastDate
+
+            initChip(chipGroupDevelopmentOccupations, data.category.developmentOccupations)
+            initChip(chipProgramingLanguage, data.category.programingLanguage)
 
             if (data.userList.contains(currentUser)) btnJoinProject.text = "채팅방 이동"
             if (data.leaderId == currentUser) {
@@ -350,6 +351,25 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             btnEditClickListener(data)
         }
         initSpinner(data.category.classification)
+    }
+
+    private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
+        chipGroup.removeAllViews()
+        for (chipText in chipList) {
+            val chip = Chip(requireContext()).apply {
+                text = chipText
+                setTextColor(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
+                setChipBackgroundColorResource(
+                    R.color.blue
+                )
+            }
+            chipGroup.addView(chip)
+        }
     }
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
@@ -421,8 +441,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val categoryList = data.category.programingLanguage + data.category.developmentOccupations
         val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
         val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
-        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations, categoryList)
-        setChipGroup(chipGroupLang, binding.chipProgramingLanguage, categoryList)
+        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupationsEdit, categoryList)
+        setChipGroup(chipGroupLang, binding.chipProgramingLanguageEdit, categoryList)
 
         val editMode = arrayOf(
             binding.clEditMode,
@@ -499,8 +519,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun btnCompleteEditOnClickListener(data: GroupModel, editMode: Array<View>, viewMode: Array<View>) {
         val categoryList = CategoryModel(
             categoryText,
-            getChipText(binding.chipGroupDevelopmentOccupations),
-            getChipText(binding.chipProgramingLanguage)
+            getChipText(binding.chipGroupDevelopmentOccupationsEdit),
+            getChipText(binding.chipProgramingLanguageEdit)
         )
 
         image = data.groupThumbnail
@@ -571,7 +591,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         if (loginBoolean) {
-            dialogBinding.tvClose.text = "프로젝트에 참여하시겠습니까?"
+            dialogBinding.tvClose.text = "모임에 참여하시겠습니까?"
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {

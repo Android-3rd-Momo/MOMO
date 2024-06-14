@@ -143,17 +143,6 @@ class UserInfoFragment : Fragment() {
         }
     }
 
-    private fun updateChipAppearance(chip: Chip, isChecked: Boolean) {
-        chip.setTextColor(
-            ContextCompat.getColorStateList(
-                requireContext(),
-                if (isChecked) R.color.white else R.color.tv_chip_state_color
-            )
-        )
-        chip.setChipBackgroundColorResource(
-            if (isChecked) R.color.blue else R.color.bg_chip_state_color
-        )
-    }
 
     private fun bottomNavHide() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
