@@ -123,6 +123,14 @@ class UserInfoFragment : Fragment() {
             }
         }
 
+        initBackBtnListener()
+
+    }
+
+    private fun initBackBtnListener() {
+        binding.ivReturn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
