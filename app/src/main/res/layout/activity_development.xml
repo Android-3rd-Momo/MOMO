@@ -70,7 +70,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/bg_btn_more_radius_blue"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="@color/bg_btn_state_color"
         android:padding="16dp"
         android:text="완료"
         android:textColor="@color/white"
