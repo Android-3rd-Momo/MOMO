@@ -73,9 +73,11 @@ class ChattingRoomFragment : Fragment() {
     }
 
     private fun observeGroupId() {
-        sharedViewModel.groupId.observe(viewLifecycleOwner) {
-            it?.let { groupId ->
-                viewModel.getChatListItemById(groupId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.groupId.collectLatest { groupId ->
+                groupId?.let {
+                    viewModel.getChatListItemById(it)
+                }
             }
         }
     }
