@@ -22,11 +22,32 @@
     </string-array>
 
     <string-array name="chipProgramingLanguage">
-        <item>HTML, CSS, JavaScript</item>
-        <item>Java</item>
-        <item>Python</item>
+        <item>Assembly language</item>
         <item>C#</item>
-        <item>C++</item>
+        <item>C/C++</item>
+        <item>CSS</item>
+        <item>Dart</item>
+        <item>F#</item>
+        <item>Go</item>
+        <item>Groovy</item>
+        <item>HTML</item>
+        <item>Java</item>
+        <item>JavaScript</item>
+        <item>Julia</item>
         <item>Kotlin</item>
+        <item>Node.js</item>
+        <item>Objective-C</item>
+        <item>PHP</item>
+        <item>PowerShell</item>
+        <item>Python</item>
+        <item>R</item>
+        <item>React</item>
+        <item>Ruby</item>
+        <item>Rust</item>
+        <item>SQL</item>
+        <item>Swift</item>
+        <item>TypeScript</item>
+        <item>Visual Basic</item>
+        <item>기타</item>
     </string-array>
 </resources>
