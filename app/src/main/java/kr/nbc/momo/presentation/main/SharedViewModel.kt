@@ -1,43 +1,51 @@
 package kr.nbc.momo.presentation.main
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
+import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.signup.model.UserModel
-import kr.nbc.momo.presentation.signup.model.toModel
+import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
+import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val setLastViewedChatUseCase: SetLastViewedChatUseCase
 ) : ViewModel() {
-    private val _groupName: MutableLiveData<String> = MutableLiveData()
-    val groupName: LiveData<String> get() = _groupName
+    private val _groupId: MutableStateFlow<String?> = MutableStateFlow(null)
+    val groupId: StateFlow<String?> get() = _groupId.asStateFlow()
 
-    private val _currentUser = MutableStateFlow<UiState<UserModel>>(UiState.Loading)
-    val currentUser: StateFlow<UiState<UserModel>> get() = _currentUser
+    private val _userId: MutableStateFlow<String?> = MutableStateFlow(null)
+    val userId: StateFlow<String?> get() = _userId.asStateFlow()
+
+    private val _currentUser = MutableStateFlow<UiState<UserModel?>>(UiState.Loading)
+    val currentUser: StateFlow<UiState<UserModel?>> get() = _currentUser
 
     init {
         getCurrentUser()
     }
 
-    fun getCurrentUser() { //로그인된 정보
+
+    fun getCurrentUser() { // 변경된 내용
         viewModelScope.launch {
             _currentUser.value = UiState.Loading
-            getCurrentUserUseCase().collect { userEntity ->
-                _currentUser.value = if (userEntity != null) {
-                    UiState.Success(userEntity.toModel())
-                } else {
-                    UiState.Error("Do not log in")
+            try {
+                getCurrentUserUseCase().collect { userEntity ->
+                    _currentUser.value = UiState.Success(userEntity?.toModel())
                 }
-
+            } catch (e: Exception) {
+                _currentUser.value = UiState.Error(e.message.toString())
             }
         }
     }
@@ -46,20 +54,20 @@ class SharedViewModel @Inject constructor(
         _currentUser.value = UiState.Success(user)
     }
 
-    fun getGroupName(groupName: String) {
-        _groupName.value = groupName
+    fun getGroupId(groupId: String) {
+        _groupId.value = groupId
+    }
+
+    fun getUserId(userId: String) {
+        _userId.value = userId
     }
 
 
-
-    private val _groupIdToGroupChat: MutableStateFlow<String?> = MutableStateFlow(null)
-    val groupIdToGroupChat: StateFlow<String?> get() = _groupIdToGroupChat
-
-    fun setGroupIdToGroupChat(groupId: String){
-        _groupIdToGroupChat.value = groupId
+    fun setLastViewedChat(groupId: String, userId: String, userName: String) {
+        viewModelScope.launch {
+            setLastViewedChatUseCase.invoke(groupId, userId, userName)
+        }
     }
-    fun removeGroupIdToGroupChat(){
-        _groupIdToGroupChat.value = null
-    }
+
 
 }
