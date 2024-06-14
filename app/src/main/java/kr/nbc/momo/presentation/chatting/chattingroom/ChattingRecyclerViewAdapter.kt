@@ -8,18 +8,23 @@ import kr.nbc.momo.databinding.RvItemErrorBinding
 import kr.nbc.momo.databinding.RvItemUserBinding
 import kr.nbc.momo.presentation.chatting.chattingroom.model.ChatModel
 import kr.nbc.momo.presentation.chatting.chattingroom.model.GroupChatModel
+import kr.nbc.momo.presentation.chatting.chattingroom.model.GroupUserModel
 import kr.nbc.momo.presentation.chatting.chattingroom.multi.ChattingEnumClass
 import kr.nbc.momo.util.setDateTimeFormatToMMDD
 import kr.nbc.momo.util.setDateTimeFormatToYYYYmmDD
+import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-class ChattingRecyclerViewAdapter(private val currentUserId: String) :
+class ChattingRecyclerViewAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemList = GroupChatModel()
-
+    var currentUserId = ""
+    var currentUserName = ""
+    var currentUrl = ""
 
     override fun getItemViewType(position: Int): Int {
         return when (itemList.chatList[position].userId == currentUserId) {
@@ -27,6 +32,12 @@ class ChattingRecyclerViewAdapter(private val currentUserId: String) :
             else -> ChattingEnumClass.ELSE_VIEW_TYPE.type
         }
     }
+
+    interface ItemClick {
+        fun itemClick(userId: String)
+    }
+
+    var itemClick: ItemClick? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -39,7 +50,7 @@ class ChattingRecyclerViewAdapter(private val currentUserId: String) :
             ChattingEnumClass.ELSE_VIEW_TYPE.type -> {
                 val binding =
                     RvItemElseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ItemElseViewHolder(binding)
+                ItemElseViewHolder(binding, itemClick)
             }
 
             else -> {
@@ -56,19 +67,31 @@ class ChattingRecyclerViewAdapter(private val currentUserId: String) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            ChattingEnumClass.USER_VIEW_TYPE.type -> (holder as ItemUserHolder).bind(
-                itemList.chatList[position],
-                isDateChanged(position),
-                isMinuteChanged(position),
-                isUserIdChanged(position)
-            )
+            ChattingEnumClass.USER_VIEW_TYPE.type -> {
+                (holder as ItemUserHolder)
+                    .bind(
+                        itemList.chatList[position],
+                        isDateChanged(position),
+                        isMinuteChanged(position),
+                        isUserIdChanged(position)
+                    )
+            }
 
-            ChattingEnumClass.ELSE_VIEW_TYPE.type -> (holder as ItemElseViewHolder).bind(
-                itemList.chatList[position],
-                isDateChanged(position),
-                isMinuteChanged(position),
-                isUserIdChanged(position)
-            )
+
+            ChattingEnumClass.ELSE_VIEW_TYPE.type -> {
+                (holder as ItemElseViewHolder).bind(
+                    itemList.userList.firstOrNull { it.userId == currentUserId } ?: GroupUserModel(
+                        currentUserId,
+                        currentUserName,
+                        currentUrl
+                    ),
+                    itemList.chatList[position],
+                    isDateChanged(position),
+                    isMinuteChanged(position),
+                    isUserIdChanged(position)
+                )
+            }
+
             else -> (holder as ItemErrorHolder).bind()
         }
     }
@@ -101,8 +124,10 @@ class ChattingRecyclerViewAdapter(private val currentUserId: String) :
 
     class ItemElseViewHolder(
         private val binding: RvItemElseBinding,
+        private val itemClick: ItemClick?
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
+            userModel: GroupUserModel,
             chatModel: ChatModel,
             isDateChanged: Boolean,
             isMinuteChanged: Boolean,
@@ -113,34 +138,45 @@ class ChattingRecyclerViewAdapter(private val currentUserId: String) :
                 tvTime.text = chatModel.dateTime.setDateTimeFormatToMMDD()
                 tvDivider.text = chatModel.dateTime.setDateTimeFormatToYYYYmmDD()
                 tvUserName.text = chatModel.userName
+                ivProfile.setThumbnailByUrlOrDefault(userModel.userProfileUrl)
                 //유저 바뀌면 이름 보여주기
                 if (isUserChanged) {
+                    ivProfile.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
                     tvTime.setVisibleToVisible()
                 } else {
                     tvUserName.setVisibleToGone()
+                    tvUserName.setVisibleToInvisible()
                 }
 
                 if (isMinuteChanged) {
                     tvTime.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
+                    ivProfile.setVisibleToVisible()
                 } else {
-                    tvTime.setVisibleToGone()
+                    if (!isUserChanged) {
+                        tvTime.setVisibleToGone()
+                    }
                 }
 
                 //날 바뀌면 divider 보여주기
                 if (isDateChanged) {
                     tvDivider.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
+                    ivProfile.setVisibleToVisible()
                 } else {
                     tvDivider.setVisibleToGone()
+                }
+
+                ivProfile.setOnClickListener {
+                    itemClick?.itemClick(userModel.userId)
                 }
             }
         }
     }
 
     class ItemUserHolder(
-        private val binding: RvItemUserBinding
+        private val binding: RvItemUserBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             chatModel: ChatModel,

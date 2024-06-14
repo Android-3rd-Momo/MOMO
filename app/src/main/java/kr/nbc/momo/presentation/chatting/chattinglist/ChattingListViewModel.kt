@@ -20,11 +20,11 @@ class ChattingListViewModel @Inject constructor(
     private val _chattingList = MutableStateFlow<UiState<List<ChattingListModel>>>(UiState.Loading)
     val chattingList: StateFlow<UiState<List<ChattingListModel>>> get() = _chattingList
 
-    fun getChattingList(list: List<String>) {
+    fun getChattingList(list: List<String>, userId: String) {
         viewModelScope.launch {
             try {
                 _chattingList.value =
-                    UiState.Success(chattingListUseCase.invoke(list).map { it.toModel() })
+                    UiState.Success(chattingListUseCase.invoke(list, userId).map { it.toModel() })
             } catch (e: Exception) {
                 Log.e("Chatting List Error", e.toString(), e)
                 _chattingList.value = UiState.Error(e.toString())

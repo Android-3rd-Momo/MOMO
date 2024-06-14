@@ -1,10 +1,13 @@
 package kr.nbc.momo.presentation.group.mapper
 
+import kr.nbc.momo.domain.model.CategoryEntity
 import kr.nbc.momo.domain.model.GroupEntity
+import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 
 fun GroupModel.asGroupEntity(): GroupEntity {
     return GroupEntity(
+        groupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,
@@ -12,13 +15,14 @@ fun GroupModel.asGroupEntity(): GroupEntity {
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toEntity(),
         userList
     )
 }
 
 fun GroupEntity.toGroupModel(): GroupModel {
     return GroupModel(
+        groupId,
         groupName,
         groupOneLineDescription,
         groupThumbnail,
@@ -26,7 +30,24 @@ fun GroupEntity.toGroupModel(): GroupModel {
         firstDate,
         lastDate,
         leaderId,
-        categoryList,
+        category.toModel(),
         userList
+    )
+}
+
+
+fun CategoryEntity.toModel(): CategoryModel {
+    return CategoryModel(
+        classification,
+        developmentOccupations,
+        programingLanguage
+    )
+}
+
+fun CategoryModel.toEntity(): CategoryEntity {
+    return CategoryEntity(
+        classification,
+        developmentOccupations,
+        programingLanguage
     )
 }
