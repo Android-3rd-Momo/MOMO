@@ -71,12 +71,22 @@
 
             <ImageView
                 android:id="@+id/ivEditBackProfileThumbnail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_margin="20dp"
                 android:src="@drawable/icon_camera"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivDeleteBackProfileThumbnail"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_margin="20dp"
+                android:src="@drawable/icon_delete"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/ivEditBackProfileThumbnail"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,6 +145,29 @@
                         android:layout_gravity="center"
                         android:src="@drawable/icon_camera" />
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvDeleteProfileImage"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="40dp"
+                    android:backgroundTint="@color/blue"
+                    android:visibility="gone"
+                    app:cardCornerRadius="50dp"
+                    app:layout_constraintBottom_toBottomOf="@id/llProfileImage"
+                    app:layout_constraintStart_toStartOf="@id/llProfileImage">
+
+                    <ImageView
+                        android:id="@+id/ivDeleteProfileImage"
+                        android:layout_width="17dp"
+                        android:layout_height="17dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_delete" />
+                </androidx.cardview.widget.CardView>
+
+
+
 
                 <TextView
                     android:id="@+id/tvUserName"
@@ -386,6 +419,16 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/image_default_upload" />
                 </androidx.cardview.widget.CardView>
+
+                <ImageView
+                    android:id="@+id/ivDeletePortfolioImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_delete"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/cvPortfolioImage"
+                    app:layout_constraintBottom_toBottomOf="@id/cvPortfolioImage"/>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clPortfolio"

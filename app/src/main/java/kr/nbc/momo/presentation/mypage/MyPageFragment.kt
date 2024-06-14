@@ -253,7 +253,24 @@ class MyPageFragment : Fragment() {
             val intent = Intent(requireActivity(), GetStartedActivity::class.java)
             startActivity(intent)
         }
+        binding.ivDeleteProfileImage.setOnClickListener {
+            profileImageUri = null
+            binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
+            binding.cvDeleteProfileImage.setVisibleToGone()
+        }
+        binding.ivDeleteBackProfileThumbnail.setOnClickListener {
+            backgroundImageUri = null
+            binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
+            it.setVisibleToGone()
+        }
+        binding.ivDeletePortfolioImage.setOnClickListener {
+            portfolioImageUri = null
+            binding.ivPortfolioImage.setUploadImageByUrlOrDefault(null)
+
+            it.setVisibleToGone()
+        }
     }
+
 
 
     private fun setChangeMode() {
@@ -273,7 +290,17 @@ class MyPageFragment : Fragment() {
             binding.cgProgramTag.setVisibleToVisible()
             updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
             updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
+
+            binding.ivPortfolioImage.setOnClickListener {
+                pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            }
+            binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
+            hideNav()
+            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            rootView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+
         } else {
+            //태그 빈값
             if (binding.cgTypeTag.childCount == 0) {
                 binding.tvEmptyTypeTag.setVisibleToVisible()
                 binding.cgTypeTag.setVisibleToGone()
@@ -290,6 +317,12 @@ class MyPageFragment : Fragment() {
             setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
             setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
             currentUser?.let { initView(it) }
+
+            binding.ivPortfolioImage.setOnClickListener(null)
+            binding.llProfileImage.setBackgroundResource(0)
+            showNav()
+            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            rootView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
         }
 
 
@@ -304,7 +337,11 @@ class MyPageFragment : Fragment() {
             binding.cvEditProfileImage,
             binding.tvCountStackEditText,
             binding.tvCountPortfolioEditText,
-            binding.ivBack
+            binding.ivBack,
+            binding.cvDeleteProfileImage,
+            binding.ivDeleteBackProfileThumbnail,
+            binding.ivDeletePortfolioImage
+
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -316,23 +353,6 @@ class MyPageFragment : Fragment() {
 
         editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
-
-        if (isEditMode) {
-            binding.ivPortfolioImage.setOnClickListener {
-                pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-            }
-            binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
-            hideNav()
-            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
-            rootView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
-
-        } else {
-            binding.ivPortfolioImage.setOnClickListener(null)
-            binding.llProfileImage.setBackgroundResource(0)
-            showNav()
-            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
-            rootView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
-        }
     }
 
     private fun isLogin() { //todo 코드 간결화 필요
@@ -346,7 +366,7 @@ class MyPageFragment : Fragment() {
         binding.clUserDetailInfo.setVisibleToGone()
         binding.ivSetUp.setVisibleToGone()
         binding.ivEditProfile.setVisibleToGone()
-        binding.tvUserName.text = "로그인이 필요합니다" //todo 멘트 변경?
+        binding.tvUserName.text = "로그인이 필요합니다"
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
