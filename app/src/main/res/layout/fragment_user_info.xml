@@ -6,10 +6,55 @@
     android:layout_height="match_parent"
     android:background="@color/grey">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnPopUp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_popup_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivReturn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="프로필"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivReturn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:id="@+id/svUserInfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -122,9 +167,9 @@
                 android:id="@+id/chipGroupDevelopmentOccupations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
                 app:chipSpacingHorizontal="4dp"
                 app:chipSpacingVertical="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -164,9 +209,9 @@
                 android:id="@+id/chipProgramingLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
                 app:chipSpacingHorizontal="4dp"
                 app:chipSpacingVertical="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -196,8 +241,8 @@
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
-                android:textSize="14dp"
                 android:text="작성한 내용이 없습니다."
+                android:textSize="14dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stackOfDevelopmentTitle" />
 
@@ -218,14 +263,13 @@
                 android:id="@+id/ivPortfolioImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="50dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="50dp"
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/portfolioTitle" />
-
 
 
             <TextView
@@ -237,11 +281,10 @@
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
-                android:textSize="14dp"
                 android:text="작성한 내용이 없습니다."
+                android:textSize="14dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivPortfolioImage" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
