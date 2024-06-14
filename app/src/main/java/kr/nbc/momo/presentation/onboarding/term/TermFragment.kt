@@ -45,6 +45,7 @@ class TermFragment : BottomSheetDialogFragment() {
         binding.cbTerm2.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
         binding.cbTerm3.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
         binding.cbTerm4.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+        binding.cbTerm5.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
     }
 
     private fun setAllCheckbox(isChecked: Boolean) {
@@ -57,7 +58,7 @@ class TermFragment : BottomSheetDialogFragment() {
 
     private fun updateAllAcceptCheckbox() {
         binding.cbAllAccept.setOnCheckedChangeListener(null)
-        binding.cbAllAccept.isChecked = binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked
+        binding.cbAllAccept.isChecked = binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked && binding.cbTerm5.isChecked
         binding.cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
             setAllCheckbox(isChecked)
         }
@@ -66,7 +67,7 @@ class TermFragment : BottomSheetDialogFragment() {
     //필수부분들이 전부체크되야지만 위에가 파랗게하기
     private fun termAccept() {
         binding.btnAccept.setOnClickListener {
-            if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked) {
+            if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked) {
                 val intent = Intent (requireActivity(), DevelopmentActivity::class.java)
                 startActivity(intent)
                 dismiss()
