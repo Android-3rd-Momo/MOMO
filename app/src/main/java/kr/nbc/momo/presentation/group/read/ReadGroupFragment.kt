@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -20,7 +22,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -92,6 +93,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeBlockUser()
         observeReportUser()
         observeChangeLeader()
+        initTextWatcher()
 
     }
 
@@ -683,5 +685,90 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
 
         return item != null
+    }
+
+    private fun initTextWatcher(){
+        with(binding){
+            etGroupDescriptionEdit.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //No action needed
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val textLength = binding.etGroupDescriptionEdit.text.length
+                    if (textLength > 500) {
+                        binding.etGroupDescriptionEdit.error = "그룹 소개는 500자까지 작성 가능합니다."
+                        btnCompleteEdit.isEnabled = false
+                    } else {
+                        binding.etGroupDescriptionEdit.error = null
+                        btnCompleteEdit.isEnabled = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    //No action needed
+                }
+
+            })
+
+            etGroupOneLineDescriptionEdit.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //No action needed
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val textLength = binding.etGroupOneLineDescriptionEdit.text.length
+                    if (textLength > 30) {
+                        binding.etGroupOneLineDescriptionEdit.error = "그룹 한 줄 소개는 30자까지 작성 가능합니다."
+                        btnCompleteEdit.isEnabled = false
+                    } else {
+                        binding.etGroupOneLineDescriptionEdit.error = null
+                        btnCompleteEdit.isEnabled = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    //No action needed
+                }
+
+            })
+
+            etGroupNameEdit.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //No action needed
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val textLength = binding.etGroupNameEdit.text.length
+                    if (textLength > 30) {
+                        binding.etGroupNameEdit.error = "그룹 이름은 30자까지 작성 가능합니다."
+                        btnCompleteEdit.isEnabled = false
+                    } else {
+                        binding.etGroupNameEdit.error = null
+                        btnCompleteEdit.isEnabled = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    //No action needed
+                }
+
+            })
+        }
     }
 }
