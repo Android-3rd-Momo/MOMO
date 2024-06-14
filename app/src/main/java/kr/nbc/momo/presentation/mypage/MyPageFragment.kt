@@ -1,6 +1,7 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.content.Intent
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.EditText
@@ -97,16 +99,6 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeUserProfile()
         eachEventHandler()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     private fun observeUserProfile() {
@@ -228,11 +220,7 @@ class MyPageFragment : Fragment() {
 
     private fun eachEventHandler() {
         binding.ivEditProfile.setOnClickListener {
-            if (currentUser != null) {
-                setChangeMode()
-            } else {
-                Snackbar.make(binding.root, "로그인 후 사용해주세요.", Snackbar.LENGTH_SHORT).show()
-            }
+            setChangeMode()
         }
         binding.btnCompleteEdit.setOnClickListener {
             if (validName()) {
@@ -240,6 +228,10 @@ class MyPageFragment : Fragment() {
                 setChangeMode()
                 requireActivity().hideKeyboard()
             }
+        }
+        binding.ivBack.setOnClickListener {
+            setChangeMode()
+            requireActivity().hideKeyboard()
         }
         binding.ivEditProfileImage.setOnClickListener {
             pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
@@ -311,7 +303,8 @@ class MyPageFragment : Fragment() {
             binding.ivEditBackProfileThumbnail,
             binding.cvEditProfileImage,
             binding.tvCountStackEditText,
-            binding.tvCountPortfolioEditText
+            binding.tvCountPortfolioEditText,
+            binding.ivBack
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -329,9 +322,16 @@ class MyPageFragment : Fragment() {
                 pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
             }
             binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
+            hideNav()
+            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            rootView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+
         } else {
             binding.ivPortfolioImage.setOnClickListener(null)
             binding.llProfileImage.setBackgroundResource(0)
+            showNav()
+            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            rootView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
         }
     }
 
@@ -462,6 +462,27 @@ class MyPageFragment : Fragment() {
         return userName.matches(usernamePattern.toRegex())
     }
 
+    private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+        val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+        val rect = Rect()
+        rootView.getWindowVisibleDisplayFrame(rect)
+        val screenHeight = rootView.rootView.height
+        val keypadHeight = screenHeight - rect.bottom
+        if (keypadHeight > screenHeight * 0.15) {
+            binding.btnCompleteEdit.visibility = View.GONE
+        } else {
+            binding.btnCompleteEdit.visibility = View.VISIBLE
+        }
+    }
+    private fun showNav() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav.setVisibleToVisible()
+    }
+
+    private fun hideNav() {
+        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+        nav.setVisibleToGone()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
