@@ -220,6 +220,7 @@ class SignUpFragment : Fragment() {
                         sharedViewModel.updateUser(state.data)
                         Snackbar.make(binding.root, "회원가입에 성공하였습니다.", Snackbar.LENGTH_SHORT).show()
 
+                        //todo 온보딩 정보 입력으로 이동
                         val fragmentTerm = TermFragment()
                         fragmentTerm.setStyle(
                             BottomSheetDialogFragment.STYLE_NORMAL,
