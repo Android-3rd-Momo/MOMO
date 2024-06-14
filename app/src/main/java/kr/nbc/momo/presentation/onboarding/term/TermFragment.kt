@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentTermBinding
 import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
+import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 
 @AndroidEntryPoint
 class TermFragment : BottomSheetDialogFragment() {
@@ -58,7 +59,8 @@ class TermFragment : BottomSheetDialogFragment() {
 
     private fun updateAllAcceptCheckbox() {
         binding.cbAllAccept.setOnCheckedChangeListener(null)
-        binding.cbAllAccept.isChecked = binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked && binding.cbTerm5.isChecked
+        binding.cbAllAccept.isChecked =
+            binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked && binding.cbTerm5.isChecked
         binding.cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
             setAllCheckbox(isChecked)
         }
@@ -68,8 +70,10 @@ class TermFragment : BottomSheetDialogFragment() {
     private fun termAccept() {
         binding.btnAccept.setOnClickListener {
             if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked) {
-                val intent = Intent (requireActivity(), DevelopmentActivity::class.java)
-                startActivity(intent)
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, SignUpFragment())
+                    .addToBackStack(null)
+                    .commit()
                 dismiss()
             } else {
                 Toast.makeText(requireContext(), "사용약관에 동의해주세요", Toast.LENGTH_SHORT).show()
@@ -88,7 +92,7 @@ class TermFragment : BottomSheetDialogFragment() {
             fragmentServiceTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
             fragmentServiceTerm.show(parentFragmentManager, fragmentServiceTerm.tag)
         }
-        binding.tvAccept4Desc.setOnClickListener{
+        binding.tvAccept4Desc.setOnClickListener {
             val fragmentCommunityTerm = CommunityTermFragment()
             fragmentCommunityTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
             fragmentCommunityTerm.show(parentFragmentManager, fragmentCommunityTerm.tag)

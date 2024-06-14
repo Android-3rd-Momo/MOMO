@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.onboarding.signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSignUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
 import kr.nbc.momo.presentation.onboarding.term.TermFragment
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 
@@ -219,15 +221,9 @@ class SignUpFragment : Fragment() {
                     is UiState.Success -> {
                         sharedViewModel.updateUser(state.data)
                         Snackbar.make(binding.root, "회원가입에 성공하였습니다.", Snackbar.LENGTH_SHORT).show()
-
-                        //todo 온보딩 정보 입력으로 이동
-                        val fragmentTerm = TermFragment()
-                        fragmentTerm.setStyle(
-                            BottomSheetDialogFragment.STYLE_NORMAL,
-                            R.style.AppBottomSheetDialogBorder20WhiteTheme
-                        )
-                        fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
-
+                        val intent = Intent(requireActivity(), DevelopmentActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
                     }
 
                     is UiState.Error -> {

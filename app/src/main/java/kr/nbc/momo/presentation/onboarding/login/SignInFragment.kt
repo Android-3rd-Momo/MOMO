@@ -16,6 +16,7 @@ import kr.nbc.momo.databinding.FragmentLoginBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
+import kr.nbc.momo.presentation.onboarding.term.TermFragment
 
 
 @AndroidEntryPoint
@@ -53,25 +54,31 @@ class SignInFragment : BottomSheetDialogFragment() {
             }
         }
 
-        binding.btnSignIn.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, SignUpFragment())
-                .commit()
+        binding.btnSignIn.setOnClickListener {
+            val fragmentTerm = TermFragment()
+            fragmentTerm.setStyle(
+                STYLE_NORMAL,
+                R.style.AppBottomSheetDialogBorder20WhiteTheme
+            )
+            fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
             dismiss()
         }
     }
-    private fun observeLoginViewModel(){
+
+    private fun observeLoginViewModel() {
         lifecycleScope.launch {
-            signInViewModel.authState.collect {uiState ->
-                when (uiState){
+            signInViewModel.authState.collect { uiState ->
+                when (uiState) {
                     is UiState.Loading -> {
 
                     }
+
                     is UiState.Success -> {
                         val intent = Intent(requireActivity(), MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
                     }
+
                     is UiState.Error -> {
                         Snackbar.make(binding.root, "이메일 또는 비밀번호를 다시 입력해주세요", Snackbar.LENGTH_SHORT).show()
                     }

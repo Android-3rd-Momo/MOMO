@@ -18,16 +18,6 @@ class OnBoardingViewPagerAdapter(
 ) : RecyclerView.Adapter<OnBoardingViewPagerAdapter.Pager2ViewHolder>() {
 
     inner class Pager2ViewHolder(private val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.ImageViewIllust.setOnClickListener {
-                val position = adapterPosition
-                Toast.makeText(
-                    binding.root.context,
-                    "You clicked on item = $position",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
 
         fun bind(title: String, desc: String, image: Int) {
             binding.TextViewTitle.text = title
