@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.GridviewItemBinding
 
-class UserListAdapter(private val userList: List<String>) :
-    RecyclerView.Adapter<UserListAdapter.Holder>() {
-    interface ItemClick {
-        fun itemClick(userId: String)
+class EditUserListAdapter(private val userList: List<String>) :
+    RecyclerView.Adapter<EditUserListAdapter.Holder>() {
+    interface LongClick {
+        fun longClick(userId: String)
     }
 
-    var itemClick: ItemClick? = null
+    var longClick: LongClick? = null
 
-    class Holder(binding: GridviewItemBinding ) : RecyclerView.ViewHolder(binding.root) {
+    class Holder(binding: GridviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val userId = binding.tvUserId
     }
 
@@ -28,9 +28,12 @@ class UserListAdapter(private val userList: List<String>) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.userId.text = userList[position]
-        holder.itemView.setOnClickListener {
-            itemClick?.itemClick(userList[position])
+
+        holder.itemView.setOnLongClickListener {
+            longClick?.longClick(userList[position])
+            true
         }
+
     }
 
 }

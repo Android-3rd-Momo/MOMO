@@ -83,7 +83,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
         observeGroupState()
         observeUserProfile()
         observeUpdateState()
@@ -91,10 +90,17 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeDeleteGroup()
         observeBlockUser()
         observeReportUser()
+        observeChangeLeader()
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
+        bottomNavHide()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         bottomNavShow()
         _binding = null
     }
@@ -279,6 +285,28 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
+    private fun observeChangeLeader() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.leaderChangeState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "리더 변경 성공", Toast.LENGTH_SHORT).show()
+                        parentFragmentManager.popBackStack()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
 
     private fun initGroup() {
         lifecycleScope.launch {
@@ -300,8 +328,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             tvFirstDate.text = data.firstDate
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
-            val categoryList = data.category.developmentOccupations + data.category.programingLanguage
-            tvDetailCategoryList.text = categoryList.joinToString()
             etGroupNameEdit.setText(data.groupName)
             etGroupOneLineDescriptionEdit.setText(data.groupOneLineDescription)
             etGroupDescriptionEdit.setText(data.groupDescription)
@@ -309,6 +335,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             tvLeaderIdEdit.text = data.leaderId
             tvFirstDateEdit.text = data.firstDate
             tvLastDateEdit.text = data.lastDate
+
+            initChip(chipGroupDevelopmentOccupations, data.category.developmentOccupations)
+            initChip(chipProgramingLanguage, data.category.programingLanguage)
 
             if (data.userList.contains(currentUser)) btnJoinProject.text = "채팅방 이동"
             if (data.leaderId == currentUser) {
@@ -322,6 +351,25 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             btnEditClickListener(data)
         }
         initSpinner(data.category.classification)
+    }
+
+    private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
+        chipGroup.removeAllViews()
+        for (chipText in chipList) {
+            val chip = Chip(requireContext()).apply {
+                text = chipText
+                setTextColor(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
+                setChipBackgroundColorResource(
+                    R.color.blue
+                )
+            }
+            chipGroup.addView(chip)
+        }
     }
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
@@ -341,6 +389,15 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     .replace(R.id.fragment_container, userInfoFragment)
                     .addToBackStack(null)
                     .commit()
+            }
+        }
+
+        val editAdapter = EditUserListAdapter(userList)
+        binding.rvUserListEdit.adapter = editAdapter
+        binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
+        editAdapter.longClick = object : EditUserListAdapter.LongClick {
+            override fun longClick(userId: String) {
+                showDialog(groupId, userId)
             }
         }
 
@@ -384,8 +441,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val categoryList = data.category.programingLanguage + data.category.developmentOccupations
         val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
         val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
-        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupations, categoryList)
-        setChipGroup(chipGroupLang, binding.chipProgramingLanguage, categoryList)
+        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupationsEdit, categoryList)
+        setChipGroup(chipGroupLang, binding.chipProgramingLanguageEdit, categoryList)
 
         val editMode = arrayOf(
             binding.clEditMode,
@@ -462,8 +519,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun btnCompleteEditOnClickListener(data: GroupModel, editMode: Array<View>, viewMode: Array<View>) {
         val categoryList = CategoryModel(
             categoryText,
-            getChipText(binding.chipGroupDevelopmentOccupations),
-            getChipText(binding.chipProgramingLanguage)
+            getChipText(binding.chipGroupDevelopmentOccupationsEdit),
+            getChipText(binding.chipProgramingLanguageEdit)
         )
 
         image = data.groupThumbnail
@@ -503,6 +560,26 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         picker.show()
     }
 
+    private fun showDialog(groupId: String, userId: String) {
+        val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.tvClose.text = "리더를 $userId 님으로 변경합니다."
+        dialogBinding.btnConfirm.setOnClickListener {
+            dialog.dismiss()
+            viewModel.leaderChangeState(groupId, userId)
+
+        }
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 
     private fun showDialog(loginBoolean: Boolean, data: GroupModel, currentUser: String?) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
@@ -514,7 +591,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         if (loginBoolean) {
-            dialogBinding.tvClose.text = "프로젝트에 참여하시겠습니까?"
+            dialogBinding.tvClose.text = "모임에 참여하시겠습니까?"
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {
