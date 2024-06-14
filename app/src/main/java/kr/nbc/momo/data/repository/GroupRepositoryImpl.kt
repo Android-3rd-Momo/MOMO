@@ -139,4 +139,18 @@ class GroupRepositoryImpl @Inject constructor(
         val response = snapshot.toObjects<GroupResponse>()
         emit(response.map { it.toEntity() })
     }
+
+    override suspend fun changeLeader(groupId: String, leaderId: String): Flow<Boolean> = callbackFlow {
+        val ref = fireStore.collection("groups").document(groupId)
+        val listener = fireStore.runTransaction { transaction ->
+            transaction.update(ref, "leaderId", leaderId)
+            null
+        }.addOnSuccessListener {
+            trySend(true)
+        }. addOnFailureListener { e ->
+            close(e)
+        }
+
+        awaitClose { listener.result }
+    }
 }

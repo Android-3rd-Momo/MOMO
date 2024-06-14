@@ -91,6 +91,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeDeleteGroup()
         observeBlockUser()
         observeReportUser()
+        observeChangeLeader()
+
     }
 
     override fun onDestroyView() {
@@ -279,6 +281,31 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
+    private fun observeChangeLeader() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.leaderChangeState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "리더 변경 성공", Toast.LENGTH_SHORT).show()
+                        binding.clViewMode.setVisibleToVisible()
+                        binding.clSimpleDescriptionContainer.setVisibleToVisible()
+                        binding.clEditMode.setVisibleToGone()
+                        binding.clSimpleDescriptionContainerEdit.setVisibleToGone()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
 
     private fun initGroup() {
         lifecycleScope.launch {
@@ -341,6 +368,15 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     .replace(R.id.fragment_container, userInfoFragment)
                     .addToBackStack(null)
                     .commit()
+            }
+        }
+
+        val editAdapter = EditUserListAdapter(userList)
+        binding.rvUserListEdit.adapter = editAdapter
+        binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
+        editAdapter.longClick = object : EditUserListAdapter.LongClick {
+            override fun longClick(userId: String) {
+                showDialog(groupId, userId)
             }
         }
 
@@ -501,6 +537,26 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
         var picker = DatePickerDialog(requireContext(), listener, year, month, day)
         picker.show()
+    }
+
+    private fun showDialog(groupId: String, userId: String) {
+        val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.tvClose.text = "리더를 $userId 님으로 변경합니다."
+        dialogBinding.btnConfirm.setOnClickListener {
+            dialog.dismiss()
+            viewModel.leaderChangeState(groupId, userId)
+
+        }
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
 

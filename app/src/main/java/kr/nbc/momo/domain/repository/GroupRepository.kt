@@ -12,4 +12,5 @@ interface GroupRepository {
     suspend fun addUser(userList: List<String>, groupId: String): Flow<List<String>>
     suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean>
     suspend fun getGroupList(): Flow<List<GroupEntity>>
+    suspend fun changeLeader(groupId: String, leaderId: String): Flow<Boolean>
 }
