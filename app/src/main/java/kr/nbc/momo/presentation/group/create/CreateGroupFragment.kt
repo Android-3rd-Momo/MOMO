@@ -33,7 +33,6 @@ import coil.load
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
@@ -281,15 +280,19 @@ class CreateGroupFragment : Fragment() {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
                     groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()
                 ) {
-                    Snackbar.make(binding.root, "입력하지 않은 항목이 있습니다.", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
                     binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
                 ) {
-                    Snackbar.make(binding.root, "카테고리를 선택해주세요.", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
                 } else {
                     showDialog()
                 }
+            }
+
+            ivReturn.setOnClickListener {
+                parentFragmentManager.popBackStack()
             }
         }
         initSpinner()

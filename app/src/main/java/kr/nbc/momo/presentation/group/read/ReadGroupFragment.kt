@@ -20,6 +20,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -345,6 +346,10 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 btnPopUp.setVisibleToGone()
             }
 
+            ivReturn.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
@@ -352,6 +357,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
         initSpinner(data.category.classification)
     }
+
 
     private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
         chipGroup.removeAllViews()
