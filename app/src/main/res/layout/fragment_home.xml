@@ -212,15 +212,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <android.widget.Button
         android:id="@+id/floatingBtnCreateGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:backgroundTint="@color/blue"
-        android:text="모임 생성"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/bg_btn_most_radius_blue"
+        android:text="+ 모임 생성"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="14sp"
