@@ -1,10 +1,14 @@
 package kr.nbc.momo.presentation.userinfo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
@@ -27,11 +31,12 @@ import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
-class UserInfoFragment : Fragment() {
+class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     private var _binding: FragmentUserInfoBinding? = null
     private val binding get() = _binding!!
     private val viewModel: UserInfoViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private lateinit var userId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,11 +51,58 @@ class UserInfoFragment : Fragment() {
         bottomNavHide()
         initUser()
         observeUserState()
+        observeReportUser()
+        observeBlockUser()
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         bottomNavShow()
+    }
+
+    private fun observeReportUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.reportUserState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "유저 신고 성공", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun observeBlockUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.blockUserState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "유저 차단 성공", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
     }
 
     private fun observeUserState() {
@@ -66,10 +118,12 @@ class UserInfoFragment : Fragment() {
                         initView(uiState.data)
                         binding.prCircular.setVisibleToGone()
                         binding.svUserInfo.setVisibleToVisible()
+                        userId = uiState.data.userId
                     }
 
                     is UiState.Error -> {
-
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "유저정보를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -125,7 +179,12 @@ class UserInfoFragment : Fragment() {
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
             }
+
+            btnPopUp.setOnClickListener {
+                showPopup(btnPopUp)
+            }
         }
+
     }
 
 
@@ -146,6 +205,28 @@ class UserInfoFragment : Fragment() {
             }
             chipGroup.addView(chip)
         }
+    }
+
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(requireContext(), v)
+        popup.menuInflater.inflate(R.menu.popoup_menu_user, popup.menu)
+        popup.setOnMenuItemClickListener(this)
+        popup.show() // 팝업 보여주기
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu1 -> {
+                viewModel.reportUser(userId)
+                viewModel.blockUser(userId)
+            }
+
+            R.id.menu2 -> {
+                viewModel.blockUser(userId)
+            }
+        }
+
+        return item != null
     }
 
 
