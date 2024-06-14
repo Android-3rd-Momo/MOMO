@@ -62,7 +62,7 @@ fun String.getTimeGap(): String {
             duration.seconds >= 1 -> "${duration.seconds}초 전"
             else -> "방금 전"
         }
-    }catch (e: Exception){
+    } catch (e: Exception) {
         resultString = "기록 없음"
     }
 
@@ -101,13 +101,15 @@ fun String.encryptECB(): String {
     val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
     cipher.init(Cipher.ENCRYPT_MODE, keySpec)
     val ciphertext = cipher.doFinal(this.plus(" " + LocalDateTime.now()).toByteArray())
-    val encodedByte = Base64.encode(ciphertext, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
+    val encodedByte =
+        Base64.encode(ciphertext, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
     return String(encodedByte)
 }
 
 fun String.decryptECB(): String {
     val keySpec = SecretKeySpec(SECRET_KEY.toByteArray(), "AES")
-    val decodedByte: ByteArray = Base64.decode(this, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
+    val decodedByte: ByteArray =
+        Base64.decode(this, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
     val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
     cipher.init(Cipher.DECRYPT_MODE, keySpec)
     val output = cipher.doFinal(decodedByte)
@@ -115,10 +117,10 @@ fun String.decryptECB(): String {
 }
 
 
-fun ImageView.setThumbnailByUrlOrDefault(url: String?){
-    if (url.isNullOrEmpty()){
+fun ImageView.setThumbnailByUrlOrDefault(url: String?) {
+    if (url.isNullOrEmpty() || url == "null") {
         this.load(R.drawable.icon_profile)
-    }else {
+    } else {
         this.load(url)
     }
 }
@@ -132,39 +134,40 @@ fun ImageView.setUploadImageByUrlOrDefault(url: String?) {
 }
 
 
-fun UiStateLoadingBinding.setVisibleToGone(){
+fun UiStateLoadingBinding.setVisibleToGone() {
     prCircular.setVisibleToGone()
     tvLoading.setVisibleToGone()
     ivError.setVisibleToGone()
     tvError.setVisibleToGone()
 }
 
-fun UiStateLoadingBinding.setVisibleToInvisible(){
+fun UiStateLoadingBinding.setVisibleToInvisible() {
     prCircular.setVisibleToInvisible()
     tvLoading.setVisibleToInvisible()
     ivError.setVisibleToGone()
     tvError.setVisibleToGone()
 }
-fun UiStateLoadingBinding.setVisibleToVisible(){
+
+fun UiStateLoadingBinding.setVisibleToVisible() {
     prCircular.setVisibleToVisible()
     tvLoading.setVisibleToVisible()
     ivError.setVisibleToGone()
     tvError.setVisibleToGone()
 }
 
-fun UiStateLoadingBinding.setVisibleToError(){
+fun UiStateLoadingBinding.setVisibleToError() {
     prCircular.setVisibleToGone()
     tvLoading.setVisibleToGone()
     ivError.setVisibleToVisible()
     tvError.setVisibleToVisible()
 }
 
-fun UiStateNoResultBinding.setVisibleToVisible(){
+fun UiStateNoResultBinding.setVisibleToVisible() {
     tvNoResult.setVisibleToVisible()
     ivNoResult.setVisibleToVisible()
 }
 
-fun UiStateNoResultBinding.setVisibleToGone(){
+fun UiStateNoResultBinding.setVisibleToGone() {
     tvNoResult.setVisibleToGone()
     ivNoResult.setVisibleToGone()
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.JoinGroupUseCase
 import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.usecase.BlockUserUseCase
+import kr.nbc.momo.domain.usecase.ChangeLeaderUseCase
 import kr.nbc.momo.domain.usecase.DeleteGroupUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
 import kr.nbc.momo.domain.usecase.ReportUserUseCase
@@ -31,7 +32,8 @@ class ReadGroupViewModel @Inject constructor(
     private val updateGroupUseCase: UpdateGroupUseCase,
     private val deleteGroupUseCase: DeleteGroupUseCase,
     private val reportUserUseCase: ReportUserUseCase,
-    private val blockUserUseCase: BlockUserUseCase
+    private val blockUserUseCase: BlockUserUseCase,
+    private val changeLeaderUseCase: ChangeLeaderUseCase
 ) : ViewModel() {
     private val _groupState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val groupState: StateFlow<UiState<GroupModel>> get() = _groupState
@@ -50,6 +52,9 @@ class ReadGroupViewModel @Inject constructor(
 
     private val _blockUserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
     val blockUserState: StateFlow<UiState<Boolean>> get() = _blockUserState
+
+    private val _leaderChangeState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
+    val leaderChangeState: StateFlow<UiState<Boolean>> get() = _leaderChangeState
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -141,6 +146,20 @@ class ReadGroupViewModel @Inject constructor(
                 }
                 .collect { data ->
                     _blockUserState.value = UiState.Success(data)
+                }
+        }
+    }
+
+    fun leaderChangeState(groupId: String, leaderId: String) {
+        viewModelScope.launch {
+            _leaderChangeState.value = UiState.Loading
+
+            changeLeaderUseCase.invoke(groupId, leaderId)
+                .catch { e ->
+                    _leaderChangeState.value = UiState.Error(e.toString())
+                }
+                .collect { data ->
+                    _leaderChangeState.value = UiState.Success(data)
                 }
         }
     }

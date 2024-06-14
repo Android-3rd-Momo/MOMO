@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -29,6 +30,7 @@ class SetUpFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SetUpViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    lateinit var user: String
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSetUpBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,7 +40,7 @@ class SetUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         hideNav()
         observeUserProfile()
-        eachEventHandler()
+        observerSearchLeader()
     }
 
     private fun observeUserProfile() {
@@ -51,7 +53,7 @@ class SetUpFragment : Fragment() {
                         }
                         is UiState.Success -> {
                             // Handle success state
-                            val user = state.data
+                            state.data?.let { eachEventHandler(it.userId) }
                             // Update UI with user info if needed
                         }
                         is UiState.Error -> {
@@ -63,7 +65,34 @@ class SetUpFragment : Fragment() {
         }
     }
 
-    private fun eachEventHandler(){ //todo 임시 dialog
+    private fun observerSearchLeader() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchLeaderState.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            // Handle loading state
+                        }
+                        is UiState.Success -> {
+                            if (state.data.isEmpty()) {
+                                showConfirmationDialog("회원탈퇴 하시겠습니까?") {
+                                    viewModel.withdrawal()
+                                    sharedViewModel.getCurrentUser()
+                                }
+                            } else {
+                                Toast.makeText(requireContext(), state.data.joinToString().plus("의 리더입니다."), Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        is UiState.Error -> {
+                            // Handle error state
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun eachEventHandler(userId: String) { //todo 임시 dialog
         with(binding){
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
@@ -75,10 +104,7 @@ class SetUpFragment : Fragment() {
                 }
             }
             tvWithdrawal.setOnClickListener {
-                showConfirmationDialog("회원탈퇴 하시겠습니까?") {
-                    viewModel.withdrawal()
-                    sharedViewModel.getCurrentUser()
-                }
+                viewModel.searchLeader(userId)
             }
         }
     }

@@ -220,7 +220,7 @@
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:backgroundTint="@color/blue"
-        android:text="프로젝트 생성"
+        android:text="모임 생성"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="14sp"

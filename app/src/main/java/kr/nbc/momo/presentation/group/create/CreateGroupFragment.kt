@@ -83,6 +83,7 @@ class CreateGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bottomNavHide()
         observeUserProfile()
+        observeCreateGroup()
     }
 
     override fun onDestroyView() {
@@ -128,6 +129,33 @@ class CreateGroupFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun observeCreateGroup() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.createGroupState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "그룹 생성 성공", Toast.LENGTH_SHORT).show()
+                        parentFragmentManager.popBackStack()
+                        val readGroupFragment = ReadGroupFragment()
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, readGroupFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
             }
         }
     }
@@ -282,14 +310,6 @@ class CreateGroupFragment : Fragment() {
             viewModel.createGroup(group)
             sharedViewModel.getGroupId(groupId)
             viewModel.joinGroup(groupId)
-            delay(1500)
-
-            parentFragmentManager.popBackStack()
-            val readGroupFragment = ReadGroupFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, readGroupFragment)
-                .addToBackStack(null)
-                .commit()
         }
     }
 
