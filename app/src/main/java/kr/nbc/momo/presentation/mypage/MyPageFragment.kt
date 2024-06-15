@@ -99,6 +99,7 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeUserProfile()
         eachEventHandler()
+        observeUpdateUser()
     }
 
     private fun observeUserProfile() {
@@ -127,6 +128,36 @@ class MyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             clearUserInfo()
+                            Log.d("mypage error", state.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeUpdateUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.updateUserState.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            Log.d("mypage loading","update")
+                            binding.includeUiState.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
+                        }
+
+                        is UiState.Success -> {
+                            binding.includeUiState.setVisibleToGone()
+                            binding.scrollView.setVisibleToVisible()
+                            sharedViewModel.getCurrentUser()
+                            Log.d("mypage success","update")
+                        }
+
+                        is UiState.Error -> {
+                            Log.d("mypage error","update")
+                            binding.includeUiState.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
                         }
                     }
@@ -256,21 +287,16 @@ class MyPageFragment : Fragment() {
         binding.ivDeleteProfileImage.setOnClickListener {
             profileImageUri = null
             binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
-            binding.cvDeleteProfileImage.setVisibleToGone()
         }
         binding.ivDeleteBackProfileThumbnail.setOnClickListener {
             backgroundImageUri = null
             binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
-            it.setVisibleToGone()
         }
         binding.ivDeletePortfolioImage.setOnClickListener {
             portfolioImageUri = null
             binding.ivPortfolioImage.setUploadImageByUrlOrDefault(null)
-
-            it.setVisibleToGone()
         }
     }
-
 
 
     private fun setChangeMode() {
@@ -438,10 +464,9 @@ class MyPageFragment : Fragment() {
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = profileImageUri?.toString() ?: currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = backgroundImageUri?.toString()
-                    ?: currentUser.userBackgroundThumbnailUrl,
-                userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl
+                userProfileThumbnailUrl = profileImageUri?.toString() ?: "",
+                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: "",
+                userPortfolioImageUrl = portfolioImageUri?.toString() ?: ""
             )
             viewModel.saveUserProfile(updatedUserModel)
             sharedViewModel.updateUser(updatedUserModel)
@@ -494,6 +519,7 @@ class MyPageFragment : Fragment() {
             binding.btnCompleteEdit.visibility = View.VISIBLE
         }
     }
+
     private fun showNav() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
         nav.setVisibleToVisible()

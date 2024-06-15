@@ -57,7 +57,7 @@ class UserRepositoryImpl @Inject constructor(
         return auth.currentUser?.uid ?: throw Exception("User not login")
     }
 
-    private suspend fun saveUserInfo(user: UserEntity) { //signUp, saveUserProfile
+    private suspend fun saveUserInfo(user: UserEntity) {
         val currentUserUid = getCurrentUserUid()
         val userResponse = user.toUserResponse()
         fireStore.collection("userInfo").document(currentUserUid).set(userResponse).await()

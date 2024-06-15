@@ -11,17 +11,20 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
+import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.toEntity
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    private val setLastViewedChatUseCase: SetLastViewedChatUseCase
+    private val setLastViewedChatUseCase: SetLastViewedChatUseCase,
+    private val saveUserProfileUseCase: SaveUserProfileUseCase,
 ) : ViewModel() {
     private val _groupId: MutableStateFlow<String?> = MutableStateFlow(null)
     val groupId: StateFlow<String?> get() = _groupId.asStateFlow()
@@ -31,6 +34,9 @@ class SharedViewModel @Inject constructor(
 
     private val _currentUser = MutableStateFlow<UiState<UserModel?>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel?>> get() = _currentUser
+
+    private val _updateUserState = MutableStateFlow<UiState<Unit>>(UiState.Success(Unit))
+    val updateUserState: StateFlow<UiState<Unit>> get() = _updateUserState
 
     init {
         getCurrentUser()
@@ -49,9 +55,17 @@ class SharedViewModel @Inject constructor(
             }
         }
     }
-
     fun updateUser(user: UserModel) {
-        _currentUser.value = UiState.Success(user)
+        viewModelScope.launch {
+            _updateUserState.value = UiState.Loading
+            try {
+                saveUserProfileUseCase(user.toEntity())
+                _updateUserState.value = UiState.Success(Unit)
+                _currentUser.value = UiState.Success(user)
+            } catch (e: Exception) {
+                _updateUserState.value = UiState.Error(e.message.toString())
+            }
+        }
     }
 
     fun getGroupId(groupId: String) {
