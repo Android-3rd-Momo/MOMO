@@ -142,7 +142,7 @@ class MyPageFragment : Fragment() {
                 sharedViewModel.updateUserState.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            Log.d("mypage loading","update")
+                            Log.d("mypage loading", "update")
                             binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
                         }
@@ -151,11 +151,11 @@ class MyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToGone()
                             binding.scrollView.setVisibleToVisible()
                             sharedViewModel.getCurrentUser()
-                            Log.d("mypage success","update")
+                            Log.d("mypage success", "update")
                         }
 
                         is UiState.Error -> {
-                            Log.d("mypage error","update")
+                            Log.d("mypage error", "update")
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
@@ -455,23 +455,23 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun saveProfileInfo() {
-        currentUser?.let { currentUser ->
-            val updatedUserModel = currentUser.copy(
-                userName = binding.etUserName.text.toString(),
-                userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
-                stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-                userPortfolioText = binding.etPortfolio.text.toString(),
-                typeOfDevelopment = getChipText(binding.cgTypeTag),
-                programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = profileImageUri?.toString() ?: "",
-                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: "",
-                userPortfolioImageUrl = portfolioImageUri?.toString() ?: ""
-            )
-            viewModel.saveUserProfile(updatedUserModel)
-            sharedViewModel.updateUser(updatedUserModel)
+        private fun saveProfileInfo() {
+            currentUser?.let { currentUser ->
+                val updatedUserModel = currentUser.copy(
+                    userName = binding.etUserName.text.toString(),
+                    userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+                    stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
+                    userPortfolioText = binding.etPortfolio.text.toString(),
+                    typeOfDevelopment = getChipText(binding.cgTypeTag),
+                    programOfDevelopment = getChipText(binding.cgProgramTag),
+                    userProfileThumbnailUrl = profileImageUri?.toString() ?: "",
+                    userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: "",
+                    userPortfolioImageUrl = portfolioImageUri?.toString() ?: ""
+                )
+                viewModel.saveUserProfile(updatedUserModel)
+                sharedViewModel.updateUser(updatedUserModel)
+            }
         }
-    }
 
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()

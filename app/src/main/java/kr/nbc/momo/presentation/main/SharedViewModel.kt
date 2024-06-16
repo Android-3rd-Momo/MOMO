@@ -43,7 +43,7 @@ class SharedViewModel @Inject constructor(
     }
 
 
-    fun getCurrentUser() { // 변경된 내용
+    fun getCurrentUser() {
         viewModelScope.launch {
             _currentUser.value = UiState.Loading
             try {
@@ -55,17 +55,9 @@ class SharedViewModel @Inject constructor(
             }
         }
     }
+
     fun updateUser(user: UserModel) {
-        viewModelScope.launch {
-            _updateUserState.value = UiState.Loading
-            try {
-                saveUserProfileUseCase(user.toEntity())
-                _updateUserState.value = UiState.Success(Unit)
-                _currentUser.value = UiState.Success(user)
-            } catch (e: Exception) {
-                _updateUserState.value = UiState.Error(e.message.toString())
-            }
-        }
+        _currentUser.value = UiState.Success(user)
     }
 
     fun getGroupId(groupId: String) {
