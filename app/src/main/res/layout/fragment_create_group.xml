@@ -133,15 +133,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@drawable/bg_btn_radius_blue"
+                android:backgroundTint="@color/bg_btn_state_color"
                 android:padding="10dp"
                 android:text="모임 생성"
                 android:textColor="@color/white"
                 android:textSize="16dp"
-                android:backgroundTint="@color/bg_btn_state_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clDateComponent" />
+                app:layout_constraintTop_toBottomOf="@+id/tvLimitPeople" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -351,6 +351,23 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvLimitPeople"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="start"
+                android:hint="모집 인원"
+                android:textSize="16dp"
+                android:background="@drawable/bg_layout_corner_stroke"
+                android:padding="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clDateComponent" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -37,14 +37,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
+import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
+import kr.nbc.momo.presentation.group.read.Dialog
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.encryptECB
 import java.util.Calendar
+import kotlin.math.max
 
 @AndroidEntryPoint
 class CreateGroupFragment : Fragment() {
@@ -247,6 +250,10 @@ class CreateGroupFragment : Fragment() {
             setChipGroup(chipGroupDev, chipGroupDevelopmentOccupations)
             setChipGroup(chipGroupLang, chipProgramingLanguage)
 
+            tvLimitPeople.setOnClickListener {
+                showDialogNumberPicker(tvLimitPeople)
+            }
+
             firstDate.setOnClickListener {
                 showDialog(firstDate)
             }
@@ -385,7 +392,8 @@ class CreateGroupFragment : Fragment() {
             binding.lastDate.text.toString(),
             currentUser,
             categoryList,
-            listOf(currentUser)
+            listOf(currentUser),
+            binding.tvLimitPeople.text.toString()
         )
 
         lifecycleScope.launch {
@@ -415,6 +423,29 @@ class CreateGroupFragment : Fragment() {
 
         dialog.show()
     }
+
+    private fun showDialogNumberPicker(textView: TextView) {
+        val arr =  Array(100) { (it + 5).toString() }
+        val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialogBinding.numberPicker.minValue = 5
+        dialogBinding.numberPicker.maxValue = arr.size
+        dialogBinding.numberPicker.displayedValues = arr
+        dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogBinding.btnConfirm.setOnClickListener {
+            dialogBuilder.dismiss()
+            textView.text = dialogBinding.numberPicker.value.toString()
+
+        }
+        dialogBuilder.show()
+    }
+
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) {
         for (chipText in chipList) {
