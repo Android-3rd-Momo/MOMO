@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
     private lateinit var myGroupListAdapter: MyGroupListAdapter
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
     private var currentUser: String = ""
-    private lateinit var currentUserCategory: List<String>
+    private var currentUserCategory: List<String> = listOf()
     private var blackList: List<String> = emptyList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -56,7 +56,7 @@ class GroupRepositoryImpl @Inject constructor(
                 }
         }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
 
     }
 
@@ -83,7 +83,7 @@ class GroupRepositoryImpl @Inject constructor(
                 transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
                 trySend(groupResponse.toEntity())
             }
-            awaitClose { listener.result }
+            awaitClose { listener.isComplete }
         } else {
             val storageRef = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
             val uploadTask = storageRef.putFile(imageUri)
@@ -103,7 +103,7 @@ class GroupRepositoryImpl @Inject constructor(
                         trySend(groupResponse.toEntity())
                     }
                 }
-            awaitClose { listener.result }
+            awaitClose { listener.isComplete }
         }
 
     }
@@ -116,7 +116,7 @@ class GroupRepositoryImpl @Inject constructor(
         }.addOnSuccessListener {
             trySend(userList)
         }
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean> = callbackFlow {
@@ -139,7 +139,7 @@ class GroupRepositoryImpl @Inject constructor(
                 trySend(true)
             }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun getGroupList(): Flow<List<GroupEntity>> = flow {
@@ -159,7 +159,7 @@ class GroupRepositoryImpl @Inject constructor(
             close(e)
         }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun searchLeader(userId: String): Flow<List<String>> = callbackFlow {
@@ -175,7 +175,7 @@ class GroupRepositoryImpl @Inject constructor(
             .addOnFailureListener { e ->
                 close(e)
             }
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun deleteUser(userId: String, groupId: String): Flow<List<String>> = callbackFlow {
@@ -187,9 +187,12 @@ class GroupRepositoryImpl @Inject constructor(
                     for (document in querySnapshot) {
                         document.reference.update("userGroup", FieldValue.arrayRemove(groupId))
                             .addOnSuccessListener {
-                                ref.get().result.toObject<GroupResponse>()?.userList?.let { list ->
-                                    trySend(list)
+                                ref.get().addOnSuccessListener {
+                                    it.toObject<GroupResponse>()?.userList?.let { it1 -> trySend(it1) }
+                                }.addOnFailureListener { e ->
+                                    close(e)
                                 }
+
                             }.addOnFailureListener { e ->
                                 close(e)
                             }

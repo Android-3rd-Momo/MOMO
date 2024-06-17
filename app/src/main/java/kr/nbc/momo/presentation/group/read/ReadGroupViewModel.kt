@@ -169,14 +169,14 @@ class ReadGroupViewModel @Inject constructor(
 
     fun deleteUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            _leaderChangeState.value = UiState.Loading
+            _userDeleteState.value = UiState.Loading
 
-            changeLeaderUseCase.invoke(userId, groupId)
+            deleteUserUseCase.invoke(userId, groupId)
                 .catch { e ->
-                    _leaderChangeState.value = UiState.Error(e.toString())
+                    _userDeleteState.value = UiState.Error(e.toString())
                 }
                 .collect { data ->
-                    _leaderChangeState.value = UiState.Success(data)
+                    _userDeleteState.value = UiState.Success(data)
                 }
         }
     }

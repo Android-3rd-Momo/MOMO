@@ -62,9 +62,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var imageUri: Uri? = null
     private var image: String? = null
     private var categoryText: String = "공모전"
-    private lateinit var groupId: String
-    private lateinit var leaderId: String
-    private lateinit var userList: List<String>
+    private var groupId: String = ""
+    private var leaderId: String = ""
+    private var userList: List<String> = listOf()
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -159,14 +159,14 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        initView(uiState.data)
-                        initGroupThumbnail(uiState.data.groupThumbnail)
-                        initUserList(uiState.data.userList)
                         groupId = uiState.data.groupId
                         leaderId = uiState.data.leaderId
                         userList = uiState.data.userList
                         binding.prCircular.setVisibleToGone()
                         binding.svRead.setVisibleToVisible()
+                        initView(uiState.data)
+                        initGroupThumbnail(uiState.data.groupThumbnail)
+                        initUserList(uiState.data.userList)
                     }
 
                     is UiState.Error -> {
@@ -410,7 +410,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initUserList(userList: List<String>) {
-        val adapter = UserListAdapter(userList)
+        val adapter = UserListAdapter(userList, leaderId, requireContext())
         binding.rvUserList.adapter = adapter
         binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
         adapter.itemClick = object : UserListAdapter.ItemClick {
@@ -424,7 +424,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         }
 
-        val editAdapter = EditUserListAdapter(userList)
+        val editAdapter = EditUserListAdapter(userList, leaderId, requireContext())
         binding.rvUserListEdit.adapter = editAdapter
         binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
         editAdapter.longClick = object : EditUserListAdapter.LongClick {
