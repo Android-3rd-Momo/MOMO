@@ -10,7 +10,8 @@ data class GroupModel(
     val lastDate: String,
     val leaderId: String,
     val category: CategoryModel,
-    val userList: List<String>
+    val userList: List<String>,
+    val limitPerson: String
 )
 
 data class CategoryModel(
