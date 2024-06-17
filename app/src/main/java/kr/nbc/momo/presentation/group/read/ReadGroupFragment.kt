@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -47,6 +45,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
+import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
@@ -793,86 +792,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initTextWatcher(){
         with(binding){
-            etGroupDescriptionEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.etGroupDescriptionEdit.text.length
-                    if (textLength > 500) {
-                        binding.etGroupDescriptionEdit.error = "그룹 소개는 500자까지 작성 가능합니다."
-                        btnCompleteEdit.isEnabled = false
-                    } else {
-                        binding.etGroupDescriptionEdit.error = null
-                        btnCompleteEdit.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-            etGroupOneLineDescriptionEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.etGroupOneLineDescriptionEdit.text.length
-                    if (textLength > 30) {
-                        binding.etGroupOneLineDescriptionEdit.error = "그룹 한 줄 소개는 30자까지 작성 가능합니다."
-                        btnCompleteEdit.isEnabled = false
-                    } else {
-                        binding.etGroupOneLineDescriptionEdit.error = null
-                        btnCompleteEdit.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-            etGroupNameEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.etGroupNameEdit.text.length
-                    if (textLength > 30) {
-                        binding.etGroupNameEdit.error = "그룹 이름은 30자까지 작성 가능합니다."
-                        btnCompleteEdit.isEnabled = false
-                    } else {
-                        binding.etGroupNameEdit.error = null
-                        btnCompleteEdit.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
+            etGroupDescriptionEdit.addTextWatcherWithError(500, "그룹 소개", btnCompleteEdit)
+            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, "그룹 한 줄 소개", btnCompleteEdit)
+            etGroupNameEdit.addTextWatcherWithError(30, "그룹 이름", btnCompleteEdit)
         }
     }
 }
