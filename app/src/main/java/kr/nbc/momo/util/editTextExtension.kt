@@ -72,8 +72,9 @@ fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Butt
 }
 
 fun isKoreanConsonant(char: Char): Boolean {
-    val unicodeBlock = Character.UnicodeBlock.of(char)
-    return unicodeBlock == Character.UnicodeBlock.HANGUL_JAMO || // 초성 자모
-            unicodeBlock == Character.UnicodeBlock.HANGUL_COMPATIBILITY_JAMO || // 중성 자모
-            unicodeBlock == Character.UnicodeBlock.HANGUL_SYLLABLES // 한글 음절
+    val unicode = char.code
+    // 한글 음절에서 받침이 있는지 여부를 판단
+    // 받침이 있는 경우: (unicode - 0xAC00) % 28 != 0
+    // 받침이 없는 경우: (unicode - 0xAC00) % 28 == 0
+    return (unicode - 0xAC00) % 28 == 0
 }
