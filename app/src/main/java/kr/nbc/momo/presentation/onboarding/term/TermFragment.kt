@@ -64,7 +64,6 @@ class TermFragment : BottomSheetDialogFragment() {
         }
     }
 
-    //필수부분들이 전부체크되야지만 위에가 파랗게하기
     private fun termAccept() {
         binding.btnAccept.setOnClickListener {
             if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked) {

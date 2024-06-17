@@ -1,7 +1,6 @@
 package kr.nbc.momo.presentation.group.read
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,10 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.JoinGroupUseCase
-import kr.nbc.momo.domain.model.GroupEntity
 import kr.nbc.momo.domain.usecase.BlockUserUseCase
 import kr.nbc.momo.domain.usecase.ChangeLeaderUseCase
 import kr.nbc.momo.domain.usecase.DeleteGroupUseCase
+import kr.nbc.momo.domain.usecase.DeleteUserUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
 import kr.nbc.momo.domain.usecase.ReportUserUseCase
 import kr.nbc.momo.domain.usecase.UpdateGroupUseCase
@@ -33,7 +32,8 @@ class ReadGroupViewModel @Inject constructor(
     private val deleteGroupUseCase: DeleteGroupUseCase,
     private val reportUserUseCase: ReportUserUseCase,
     private val blockUserUseCase: BlockUserUseCase,
-    private val changeLeaderUseCase: ChangeLeaderUseCase
+    private val changeLeaderUseCase: ChangeLeaderUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
     private val _groupState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val groupState: StateFlow<UiState<GroupModel>> get() = _groupState
@@ -55,6 +55,9 @@ class ReadGroupViewModel @Inject constructor(
 
     private val _leaderChangeState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
     val leaderChangeState: StateFlow<UiState<Boolean>> get() = _leaderChangeState
+
+    private val _userDeleteState = MutableStateFlow<UiState<List<String>>>(UiState.Loading)
+    val userDeleteState: StateFlow<UiState<List<String>>> get() = _userDeleteState
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -150,7 +153,7 @@ class ReadGroupViewModel @Inject constructor(
         }
     }
 
-    fun leaderChangeState(groupId: String, leaderId: String) {
+    fun leaderChange(groupId: String, leaderId: String) {
         viewModelScope.launch {
             _leaderChangeState.value = UiState.Loading
 
@@ -160,6 +163,20 @@ class ReadGroupViewModel @Inject constructor(
                 }
                 .collect { data ->
                     _leaderChangeState.value = UiState.Success(data)
+                }
+        }
+    }
+
+    fun deleteUser(userId: String, groupId: String) {
+        viewModelScope.launch {
+            _userDeleteState.value = UiState.Loading
+
+            deleteUserUseCase.invoke(userId, groupId)
+                .catch { e ->
+                    _userDeleteState.value = UiState.Error(e.toString())
+                }
+                .collect { data ->
+                    _userDeleteState.value = UiState.Success(data)
                 }
         }
     }

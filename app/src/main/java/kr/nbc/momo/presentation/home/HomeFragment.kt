@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
     private lateinit var myGroupListAdapter: MyGroupListAdapter
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
     private var currentUser: String = ""
-    private lateinit var currentUserCategory: List<String>
+    private var currentUserCategory: List<String> = listOf()
     private var blackList: List<String> = emptyList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -176,8 +176,9 @@ class HomeFragment : Fragment() {
 
                     is UiState.Success -> {
                         val filteredData = uiState.data.filterNot { blackList.contains(it.leaderId) }
+                        val limitPeopleData = filteredData.filter { it.userList.size < it.limitPerson.toInt() }
 
-                        val latestGroupList = filteredData
+                        val latestGroupList = limitPeopleData
                                 .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                                 .sortedByDescending {
                                     val decrypt = it.groupId.decryptECB()
@@ -218,7 +219,7 @@ class HomeFragment : Fragment() {
                             binding.rvMyGroupList.setVisibleToVisible()
                         }
 
-                        val recommendGroupList = filteredData
+                        val recommendGroupList = limitPeopleData
                             .filter {
                                 val setA = (it.category.programingLanguage + it.category.developmentOccupations).toSet()
                                 val setB = currentUserCategory.toSet()

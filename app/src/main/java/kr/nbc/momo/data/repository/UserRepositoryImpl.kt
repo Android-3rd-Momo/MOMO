@@ -210,7 +210,7 @@ class UserRepositoryImpl @Inject constructor(
                     .addOnFailureListener { e -> close(e) }
             }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun blockUser(blockUser: String): Flow<Boolean> = callbackFlow {
@@ -222,7 +222,7 @@ class UserRepositoryImpl @Inject constructor(
         }
             .addOnSuccessListener { trySend(true) }
             .addOnFailureListener { e -> close(e) }
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun userInfo(userId: String): Flow<UserEntity> = flow {

@@ -85,7 +85,6 @@ dependencies {
     //circleIndicator
     implementation (libs.circleindicator)
 
-
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)

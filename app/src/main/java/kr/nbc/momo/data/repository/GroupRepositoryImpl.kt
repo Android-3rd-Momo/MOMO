@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import android.util.Log
+import androidx.room.util.query
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
+import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
@@ -54,7 +56,7 @@ class GroupRepositoryImpl @Inject constructor(
                 }
         }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
 
     }
 
@@ -79,9 +81,10 @@ class GroupRepositoryImpl @Inject constructor(
                 transaction.update(ref, "lastDate", groupResponse.lastDate)
                 transaction.update(ref, "category", groupResponse.category)
                 transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                transaction.update(ref, "limitPerson", groupResponse.limitPerson)
                 trySend(groupResponse.toEntity())
             }
-            awaitClose { listener.result }
+            awaitClose { listener.isComplete }
         } else {
             val storageRef = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
             val uploadTask = storageRef.putFile(imageUri)
@@ -98,10 +101,11 @@ class GroupRepositoryImpl @Inject constructor(
                         transaction.update(ref, "lastDate", groupResponse.lastDate)
                         transaction.update(ref, "category", groupResponse.category)
                         transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                        transaction.update(ref, "limitPerson", groupResponse.limitPerson)
                         trySend(groupResponse.toEntity())
                     }
                 }
-            awaitClose { listener.result }
+            awaitClose { listener.isComplete }
         }
 
     }
@@ -114,7 +118,7 @@ class GroupRepositoryImpl @Inject constructor(
         }.addOnSuccessListener {
             trySend(userList)
         }
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean> = callbackFlow {
@@ -137,7 +141,7 @@ class GroupRepositoryImpl @Inject constructor(
                 trySend(true)
             }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun getGroupList(): Flow<List<GroupEntity>> = flow {
@@ -157,7 +161,7 @@ class GroupRepositoryImpl @Inject constructor(
             close(e)
         }
 
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
     }
 
     override suspend fun searchLeader(userId: String): Flow<List<String>> = callbackFlow {
@@ -173,6 +177,37 @@ class GroupRepositoryImpl @Inject constructor(
             .addOnFailureListener { e ->
                 close(e)
             }
-        awaitClose { listener.result }
+        awaitClose { listener.isComplete }
+    }
+
+    override suspend fun deleteUser(userId: String, groupId: String): Flow<List<String>> = callbackFlow {
+        val ref = fireStore.collection("groups").document(groupId)
+        val listener = ref.update("userList", FieldValue.arrayRemove(userId))
+            .addOnSuccessListener {
+                val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+                query.get().addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        document.reference.update("userGroup", FieldValue.arrayRemove(groupId))
+                            .addOnSuccessListener {
+                                ref.get().addOnSuccessListener {
+                                    it.toObject<GroupResponse>()?.userList?.let { it1 -> trySend(it1) }
+                                }.addOnFailureListener { e ->
+                                    close(e)
+                                }
+
+                            }.addOnFailureListener { e ->
+                                close(e)
+                            }
+                    }
+
+                }.addOnFailureListener { e ->
+                    close(e)
+                }
+
+            }.addOnFailureListener { e ->
+                close(e)
+            }
+
+        awaitClose { listener.isComplete }
     }
 }

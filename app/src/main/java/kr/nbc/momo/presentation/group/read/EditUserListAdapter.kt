@@ -1,11 +1,15 @@
 package kr.nbc.momo.presentation.group.read
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.GridviewItemBinding
+import kr.nbc.momo.util.setVisibleToVisible
 
-class EditUserListAdapter(private val userList: List<String>) :
+class EditUserListAdapter(private val userList: List<String>, private val leaderId: String, private val context: Context) :
     RecyclerView.Adapter<EditUserListAdapter.Holder>() {
     interface LongClick {
         fun longClick(userId: String)
@@ -13,8 +17,16 @@ class EditUserListAdapter(private val userList: List<String>) :
 
     var longClick: LongClick? = null
 
+    interface OnClick {
+        fun onClick(userId: String)
+    }
+
+    var onClick: OnClick? = null
+
     class Holder(binding: GridviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val userId = binding.tvUserId
+        val btnDelete = binding.ivDelete
+        val root = binding.clAdapterItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -27,11 +39,23 @@ class EditUserListAdapter(private val userList: List<String>) :
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        if (leaderId == userList[position]) {
+            holder.userId.setTextColor(ContextCompat.getColor(context, R.color.white))
+            holder.root.setBackgroundResource(R.drawable.bg_layout_corner_stroke_blue)
+        }
+
         holder.userId.text = userList[position]
 
         holder.itemView.setOnLongClickListener {
             longClick?.longClick(userList[position])
             true
+        }
+
+        if (leaderId != userList[position]) {
+            holder.btnDelete.setVisibleToVisible()
+        }
+        holder.btnDelete.setOnClickListener {
+            onClick?.onClick(userList[position])
         }
 
     }

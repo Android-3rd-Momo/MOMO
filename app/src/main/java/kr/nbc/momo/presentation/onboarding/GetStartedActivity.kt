@@ -14,7 +14,6 @@ class GetStartedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
@@ -23,8 +22,6 @@ class GetStartedActivity : AppCompatActivity() {
                 .commit()
         }
 
-/*        val viewPager: ViewPager2 = findViewById(R.id.view_pager2)
-        viewPager.adapter = DevelopmentViewPagerAdapter(this)*/
 
     }
 
