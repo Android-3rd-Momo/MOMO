@@ -99,7 +99,6 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeUserProfile()
         eachEventHandler()
-        observeUpdateUser()
     }
 
     private fun observeUserProfile() {
@@ -128,36 +127,6 @@ class MyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             clearUserInfo()
-                            Log.d("mypage error", state.message)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeUpdateUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.updateUserState.collect { state ->
-                    when (state) {
-                        is UiState.Loading -> {
-                            Log.d("mypage loading", "update")
-                            binding.includeUiState.setVisibleToVisible()
-                            binding.scrollView.setVisibleToGone()
-                        }
-
-                        is UiState.Success -> {
-                            binding.includeUiState.setVisibleToGone()
-                            binding.scrollView.setVisibleToVisible()
-                            sharedViewModel.getCurrentUser()
-                            Log.d("mypage success", "update")
-                        }
-
-                        is UiState.Error -> {
-                            Log.d("mypage error", "update")
-                            binding.includeUiState.setVisibleToError()
-                            binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
                         }
                     }
@@ -271,14 +240,10 @@ class MyPageFragment : Fragment() {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
         binding.ivSetUp.setOnClickListener {
-            if (currentUser != null) {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, SetUpFragment())
-                    .addToBackStack(null)
-                    .commit()
-            } else {
-                Toast.makeText(requireContext(), "로그인 후 사용해주세요.", Toast.LENGTH_SHORT).show()
-            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SetUpFragment())
+                .addToBackStack(null)
+                .commit()
         }
         binding.btnGoOnBoarding.setOnClickListener {
             val intent = Intent(requireActivity(), GetStartedActivity::class.java)
@@ -342,7 +307,7 @@ class MyPageFragment : Fragment() {
 
             setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
             setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
-            currentUser?.let { initView(it) }
+//            currentUser?.let { initView(it) }
 
             binding.ivPortfolioImage.setOnClickListener(null)
             binding.llProfileImage.setBackgroundResource(0)
@@ -455,23 +420,24 @@ class MyPageFragment : Fragment() {
         }
     }
 
-        private fun saveProfileInfo() {
-            currentUser?.let { currentUser ->
-                val updatedUserModel = currentUser.copy(
-                    userName = binding.etUserName.text.toString(),
-                    userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
-                    stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
-                    userPortfolioText = binding.etPortfolio.text.toString(),
-                    typeOfDevelopment = getChipText(binding.cgTypeTag),
-                    programOfDevelopment = getChipText(binding.cgProgramTag),
-                    userProfileThumbnailUrl = profileImageUri?.toString() ?: "",
-                    userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: "",
-                    userPortfolioImageUrl = portfolioImageUri?.toString() ?: ""
-                )
-                viewModel.saveUserProfile(updatedUserModel)
-                sharedViewModel.updateUser(updatedUserModel)
-            }
+    private fun saveProfileInfo() {
+        currentUser?.let { currentUser ->
+            val updatedUserModel = currentUser.copy(
+                userName = binding.etUserName.text.toString(),
+                userSelfIntroduction = binding.etUserSelfIntroduction.text.toString(),
+                stackOfDevelopment = binding.etStackOfDevelopment.text.toString(),
+                userPortfolioText = binding.etPortfolio.text.toString(),
+                typeOfDevelopment = getChipText(binding.cgTypeTag),
+                programOfDevelopment = getChipText(binding.cgProgramTag),
+                userProfileThumbnailUrl = profileImageUri?.toString() ?: "",
+                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: "",
+                userPortfolioImageUrl = portfolioImageUri?.toString() ?: ""
+            )
+            viewModel.saveUserProfile(updatedUserModel)
+            sharedViewModel.updateUser(updatedUserModel)
         }
+    }
+
 
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()

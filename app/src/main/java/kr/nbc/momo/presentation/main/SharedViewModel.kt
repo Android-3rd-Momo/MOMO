@@ -24,7 +24,7 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val setLastViewedChatUseCase: SetLastViewedChatUseCase,
-    private val saveUserProfileUseCase: SaveUserProfileUseCase,
+//    private val saveUserProfileUseCase: SaveUserProfileUseCase,
 ) : ViewModel() {
     private val _groupId: MutableStateFlow<String?> = MutableStateFlow(null)
     val groupId: StateFlow<String?> get() = _groupId.asStateFlow()
