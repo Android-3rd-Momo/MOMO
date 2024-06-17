@@ -46,26 +46,27 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnCreateProject"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clHome"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayout"
+            android:background="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/grey">
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clImageViewComponent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="1dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -73,9 +74,9 @@
                     android:id="@+id/ivGroupImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@drawable/bg_layout_corner_stroke"
                     android:scaleType="fitXY"
                     android:src="@drawable/image_default_upload"
-                    android:background="@drawable/bg_layout_corner_stroke"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -89,12 +90,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:hint="프로젝트명"
-                android:textSize="16dp"
                 android:padding="10dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clCategoryDetail" />
 
@@ -105,10 +106,10 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:hint="모임 한 줄 소개"
-                android:textSize="16dp"
                 android:background="@drawable/bg_layout_corner_stroke"
+                android:hint="모임 한 줄 소개"
                 android:padding="10dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/groupName" />
 
@@ -119,40 +120,23 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:hint="모임 소개"
-                android:textSize="16dp"
-                android:gravity="fill_horizontal"
                 android:background="@drawable/bg_layout_corner_stroke"
+                android:gravity="fill_horizontal"
+                android:hint="모임 소개"
                 android:padding="10dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/groupOneLineDescription" />
-
-            <android.widget.Button
-                android:id="@+id/btnCreateProject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@drawable/bg_btn_radius_blue"
-                android:backgroundTint="@color/bg_btn_state_color"
-                android:padding="10dp"
-                android:text="모임 생성"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLimitPeople" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clImageViewComponent2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="1dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clImageViewComponent">
 
@@ -176,11 +160,11 @@
                 android:id="@+id/clCategoryDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:padding="10dp"
                 android:background="@drawable/bg_layout_corner_stroke"
+                android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clImageViewComponent2">
 
@@ -197,11 +181,11 @@
                     android:id="@+id/tvProgramingLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
                     android:text="개발언어"
                     android:textSize="16dp"
                     android:visibility="gone"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="15dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chipGroupDevelopmentOccupations" />
 
@@ -210,8 +194,8 @@
                     android:id="@+id/chipProgramingLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_marginTop="5dp"
+                    android:visibility="gone"
                     app:chipSpacingHorizontal="4dp"
                     app:chipSpacingVertical="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -224,11 +208,11 @@
                     android:id="@+id/tvDevelopmentOccupations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="개발직군"
-                    android:visibility="gone"
-                    android:textSize="16dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="개발직군"
+                    android:textSize="16dp"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCategoryDetail" />
 
@@ -236,8 +220,8 @@
                     android:id="@+id/chipGroupDevelopmentOccupations"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_marginTop="5dp"
+                    android:visibility="gone"
                     app:chipSpacingHorizontal="4dp"
                     app:chipSpacingVertical="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -253,9 +237,9 @@
                 android:id="@+id/clDateComponent"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_layout_corner_stroke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -265,24 +249,24 @@
                     android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:hint="모집 기간"
                     android:textSize="16dp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grey"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDate"
+                    android:background="@color/grey"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
                 <View
                     android:id="@+id/viewVertical"
@@ -297,23 +281,23 @@
                     android:id="@+id/tvFirstDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:hint="시작일"
                     android:textSize="14dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/view"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view" />
 
                 <TextView
                     android:id="@+id/tvLastDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:hint="마감일"
                     android:textSize="14dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/view"
-                    app:layout_constraintStart_toStartOf="@id/viewVertical"/>
+                    app:layout_constraintStart_toStartOf="@id/viewVertical"
+                    app:layout_constraintTop_toBottomOf="@id/view" />
 
                 <TextView
                     android:id="@+id/firstDate"
@@ -325,8 +309,8 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_layout_corner_stroke"
                     android:hint="날짜"
-                    android:textSize="14dp"
                     android:padding="8dp"
+                    android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/viewVertical"
                     app:layout_constraintStart_toStartOf="parent"
@@ -342,8 +326,8 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_layout_corner_stroke"
                     android:hint="날짜"
-                    android:textSize="14dp"
                     android:padding="8dp"
+                    android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/viewVertical"
@@ -359,19 +343,33 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_layout_corner_stroke"
                 android:gravity="start"
                 android:hint="모집 인원"
-                android:textSize="16dp"
-                android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clDateComponent" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </ScrollView>
+
+    <android.widget.Button
+        android:id="@+id/btnCreateProject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_btn_radius_blue"
+        android:backgroundTint="@color/bg_btn_state_color"
+        android:padding="10dp"
+        android:text="모임 생성"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
