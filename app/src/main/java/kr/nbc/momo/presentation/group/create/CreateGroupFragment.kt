@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -110,7 +112,8 @@ class CreateGroupFragment : Fragment() {
                                 initView()
                             } else {
                                 parentFragmentManager.popBackStack()
-                                Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
 
@@ -153,6 +156,89 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
+            groupDescription.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //No action needed
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val textLength = binding.groupDescription.text.length
+                    if (textLength > 500) {
+                        binding.groupDescription.error = "그룹 소개는 500자까지 작성 가능합니다."
+                        btnCreateProject.isEnabled = false
+                    } else {
+                        binding.groupDescription.error = null
+                        btnCreateProject.isEnabled = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    //No action needed
+                }
+
+            })
+
+            groupOneLineDescription.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //No action needed
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val textLength = binding.groupOneLineDescription.text.length
+                    if (textLength > 30) {
+                        binding.groupOneLineDescription.error = "그룹 한 줄 소개는 30자까지 작성 가능합니다."
+                        btnCreateProject.isEnabled = false
+                    } else {
+                        binding.groupOneLineDescription.error = null
+                        btnCreateProject.isEnabled = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    //No action needed
+                }
+
+            })
+
+            groupName.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    //No action needed
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val textLength = binding.groupName.text.length
+                    if (textLength > 30) {
+                        binding.groupName.error = "그룹 이름은 30자까지 작성 가능합니다."
+                        btnCreateProject.isEnabled = false
+                    } else {
+                        binding.groupName.error = null
+                        btnCreateProject.isEnabled = true
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    //No action needed
+                }
+
+            })
+
+
+
             categorySpinner.clipToOutline = true
             ivGroupImage.clipToOutline = true
 
@@ -218,23 +304,24 @@ class CreateGroupFragment : Fragment() {
 
     private fun initSpinner() {
         val items = resources.getStringArray(R.array.classification)
-        val spinnerAapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val v = super.getView(position, convertView, parent)
+        val spinnerAapter =
+            object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val v = super.getView(position, convertView, parent)
 
-                if (position == count) {
-                    val textView = (v.findViewById<View>(R.id.tvCategorySpinner) as TextView)
-                    textView.text = ""
-                    textView.hint = getItem(count)
+                    if (position == count) {
+                        val textView = (v.findViewById<View>(R.id.tvCategorySpinner) as TextView)
+                        textView.text = ""
+                        textView.hint = getItem(count)
+                    }
+
+                    return v
                 }
 
-                return v
+                override fun getCount(): Int {
+                    return super.getCount() - 1
+                }
             }
-
-            override fun getCount(): Int {
-                return super.getCount() - 1
-            }
-        }
 
         spinnerAapter.addAll(items.toMutableList())
         spinnerAapter.add("카테고리")
