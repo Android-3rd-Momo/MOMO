@@ -118,7 +118,7 @@ class MyPageFragment : Fragment() {
                             if (state.data != null) {
                                 isLogin()
                                 currentUser = state.data
-                                setUpView(state.data)
+                                initView(state.data)
                             } else {
                                 isLogOut()
                             }
@@ -137,7 +137,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun setUpView(user: UserModel) {
+    private fun initView(user: UserModel) {
         with(binding) {
             tvUserName.text = user.userName
             tvUserSelfIntroduction.text = user.userSelfIntroduction.ifEmpty { "자신을 소개해 보세요!" }
@@ -353,7 +353,7 @@ class MyPageFragment : Fragment() {
 
             setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
             setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
-            currentUser?.let { setUpView(it) }
+            currentUser?.let { initView(it) }
 
             binding.ivPortfolioImage.setOnClickListener(null)
             binding.llProfileImage.setBackgroundResource(0)
