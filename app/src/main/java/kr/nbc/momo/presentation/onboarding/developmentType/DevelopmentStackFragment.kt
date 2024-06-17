@@ -3,10 +3,8 @@ package kr.nbc.momo.presentation.onboarding.developmentType
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -20,13 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentDevelopmentStackBinding
+import kr.nbc.momo.util.addTextWatcherWithError
 
 @AndroidEntryPoint
 class DevelopmentStackFragment : Fragment() {
     private var _binding: FragmentDevelopmentStackBinding? = null
     private val binding get() = _binding!!
     private val onBoardingSharedViewModel: OnBoardingSharedViewModel by activityViewModels()
-    private lateinit var btnConfirm : Button
+    private lateinit var btnConfirm: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,30 +77,7 @@ class DevelopmentStackFragment : Fragment() {
         binding.tvSubtitle.text = ssb
 
 
-        binding.etStack.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val textLength = binding.etStack.text.length
-                val lengthText = "$textLength/500자"
-                binding.tvTextCount.text = lengthText
-                if (textLength > 500) {
-                    binding.etStack.error = "500자를 초과했습니다!"
-                    btnConfirm.isEnabled = false
-                } else {
-                    binding.etStack.error = null
-                    btnConfirm.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val textLength = binding.etStack.text.length.toString()
-                val lengthText = "$textLength/500자"
-                binding.tvTextCount.text = lengthText
-            }
-
-        })
+        binding.etStack.addTextWatcherWithError(500, "기술스택", btnConfirm, binding.tvTextCount)
     }
 
 

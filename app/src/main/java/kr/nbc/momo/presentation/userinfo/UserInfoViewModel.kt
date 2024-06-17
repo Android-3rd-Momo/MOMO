@@ -11,7 +11,6 @@ import kr.nbc.momo.domain.usecase.BlockUserUseCase
 import kr.nbc.momo.domain.usecase.ReportUserUseCase
 import kr.nbc.momo.domain.usecase.UserInfoUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.mapper.toGroupModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject

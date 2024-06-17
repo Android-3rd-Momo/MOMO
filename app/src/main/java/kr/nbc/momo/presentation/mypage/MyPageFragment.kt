@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +35,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
@@ -195,74 +194,9 @@ class MyPageFragment : Fragment() {
             }
         }
 
-        binding.etStackOfDevelopment.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
-                val textLength = binding.etStackOfDevelopment.text.length
-                if (textLength > 500) {
-                    binding.etStackOfDevelopment.error = "기술스택은 500자 까지 작성 가능합니다."
-                    binding.btnCompleteEdit.isEnabled = false
-                } else {
-                    binding.etStackOfDevelopment.error = null
-                    binding.btnCompleteEdit.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
-            }
-        })
-        binding.etPortfolio.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
-                val textLength = binding.etPortfolio.text.length
-                if (textLength > 500) {
-                    binding.etPortfolio.error = "포트폴리오는 500자 까지 작성 가능합니다."
-                    binding.btnCompleteEdit.isEnabled = false
-                } else {
-                    binding.etPortfolio.error = null
-                    binding.btnCompleteEdit.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
-            }
-        })
-        binding.etUserSelfIntroduction.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-                //No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val textLength = binding.etUserSelfIntroduction.text.length
-                if (textLength > 60) {
-                    binding.etUserSelfIntroduction.error = "자기소개는 60자까지 작성 가능합니다."
-                    binding.btnCompleteEdit.isEnabled = false
-                } else {
-                    binding.etUserSelfIntroduction.error = null
-                    binding.btnCompleteEdit.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //No action needed
-            }
-
-        })
+        binding.etStackOfDevelopment.addTextWatcherWithError(500, "기술스택", binding.btnCompleteEdit, binding.tvCountStackEditText)
+        binding.etPortfolio.addTextWatcherWithError(500, "포트폴리오", binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
+        binding.etUserSelfIntroduction.addTextWatcherWithError(60, "자기소개", binding.btnCompleteEdit)
     }
 
     private fun updateTextCount(et: EditText, tv: TextView) {
