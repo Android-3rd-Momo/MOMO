@@ -13,6 +13,7 @@ data class GroupResponse(
     val leaderId: String = "",
     val category: CategoryResponse = CategoryResponse("", listOf(), listOf()),
     val userList: List<String> = listOf(),
+    val limitPerson: String = ""
 )
 
 data class CategoryResponse(

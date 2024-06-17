@@ -176,8 +176,9 @@ class HomeFragment : Fragment() {
 
                     is UiState.Success -> {
                         val filteredData = uiState.data.filterNot { blackList.contains(it.leaderId) }
+                        val limitPeopleData = filteredData.filter { it.userList.size < it.limitPerson.toInt() }
 
-                        val latestGroupList = filteredData
+                        val latestGroupList = limitPeopleData
                                 .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
                                 .sortedByDescending {
                                     val decrypt = it.groupId.decryptECB()
@@ -218,7 +219,7 @@ class HomeFragment : Fragment() {
                             binding.rvMyGroupList.setVisibleToVisible()
                         }
 
-                        val recommendGroupList = filteredData
+                        val recommendGroupList = limitPeopleData
                             .filter {
                                 val setA = (it.category.programingLanguage + it.category.developmentOccupations).toSet()
                                 val setB = currentUserCategory.toSet()

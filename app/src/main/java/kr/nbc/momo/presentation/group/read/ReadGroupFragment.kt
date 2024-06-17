@@ -1,3 +1,4 @@
+
 package kr.nbc.momo.presentation.group.read
 
 import android.app.DatePickerDialog
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
+import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
@@ -62,6 +64,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var imageUri: Uri? = null
     private var image: String? = null
     private var categoryText: String = "공모전"
+    private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""
     private var userList: List<String> = listOf()
@@ -95,7 +98,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeChangeLeader()
         observeDeleteUser()
         initTextWatcher()
-
     }
 
     override fun onResume() {
@@ -162,6 +164,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         groupId = uiState.data.groupId
                         leaderId = uiState.data.leaderId
                         userList = uiState.data.userList
+                        groupLimitPeople = uiState.data.limitPerson
                         binding.prCircular.setVisibleToGone()
                         binding.svRead.setVisibleToVisible()
                         initView(uiState.data)
@@ -190,7 +193,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-
+                        initView(uiState.data)
+                        initUserList(uiState.data.userList)
                     }
 
                     is UiState.Error -> {
@@ -240,7 +244,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         Log.d("error", uiState.message)
                     }
                 }
-
             }
         }
     }
@@ -363,6 +366,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             tvFirstDateEdit.text = data.firstDate
             tvLastDateEdit.text = data.lastDate
 
+            val limitPeopleText = data.userList.size.toString() + "/" + data.limitPerson
+            tvLimitPeople.text = limitPeopleText
+
             initChip(chipGroupDevelopmentOccupations, data.category.developmentOccupations)
             initChip(chipProgramingLanguage, data.category.programingLanguage)
 
@@ -460,7 +466,11 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }
             } else {
                 binding.btnJoinProject.setOnClickListener {
-                    showDialog(true, data, currentUser)
+                    if (data.userList.size < data.limitPerson.toInt()) {
+                        showDialog(true, data, currentUser)
+                    } else {
+                        Toast.makeText(requireContext(), "참가 인원 수 초과", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -493,6 +503,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             binding.clSimpleDescriptionContainer,
             binding.btnEdit
         )
+
+        val limitPeopleText = data.userList.size.toString() + "/" + data.limitPerson
+        binding.tvLimitPeopleEdit.text = limitPeopleText
+        binding.tvLimitPeopleEdit.setOnClickListener {
+            showDialogNumberPicker(binding.tvLimitPeopleEdit, data.userList.size)
+        }
 
         binding.ivGroupImageEdit.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
@@ -561,7 +577,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             getChipText(binding.chipGroupDevelopmentOccupationsEdit),
             getChipText(binding.chipProgramingLanguageEdit)
         )
-
         image = data.groupThumbnail
         viewModel.updateGroup(
             data.copy(
@@ -570,10 +585,34 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 groupDescription = binding.etGroupDescriptionEdit.text.toString(),
                 firstDate = binding.tvFirstDateEdit.text.toString(),
                 lastDate = binding.tvLastDateEdit.text.toString(),
-                category = categoryList
+                category = categoryList,
+                limitPerson = groupLimitPeople
             ), imageUri
         )
         setChangeMode(editMode, viewMode)
+    }
+
+    private fun showDialogNumberPicker(textView: TextView, size: Int) {
+        val arr =  Array(100) { (it + 5).toString() }
+        val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialogBinding.numberPicker.minValue = 5
+        dialogBinding.numberPicker.maxValue = arr.size
+        dialogBinding.numberPicker.displayedValues = arr
+        dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogBinding.btnConfirm.setOnClickListener {
+            dialogBuilder.dismiss()
+            val limitPeopleText = size.toString() + "/" + dialogBinding.numberPicker.value
+            textView.text = limitPeopleText
+            groupLimitPeople = dialogBinding.numberPicker.value.toString()
+        }
+        dialogBuilder.show()
     }
 
     private fun showDialog(dateType: TextView) {

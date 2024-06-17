@@ -285,7 +285,7 @@ class CreateGroupFragment : Fragment() {
 
             btnCreateProject.setOnClickListener {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
-                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()
+                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty() || tvLimitPeople.text.isEmpty()
                 ) {
                     Toast.makeText(requireContext(), "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||

@@ -41,7 +41,8 @@ fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
         lastDate,
         leaderId,
         category.toResponse(),
-        userList
+        userList,
+        limitPerson
     )
 }
 
@@ -73,7 +74,8 @@ fun GroupResponse.toEntity(): GroupEntity {
         lastDate,
         leaderId,
         category.toEntity(),
-        userList
+        userList,
+        limitPerson
     )
 }
 
