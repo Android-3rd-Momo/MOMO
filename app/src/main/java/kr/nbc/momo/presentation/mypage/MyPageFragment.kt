@@ -37,6 +37,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.util.addTextWatcher
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
@@ -160,7 +161,8 @@ class MyPageFragment : Fragment() {
             }
         }
 
-        binding.etStackOfDevelopment.addTextChangedListener(object : TextWatcher {
+        binding.etStackOfDevelopment.addTextWatcher(500, "기술스택", binding.btnCompleteEdit, binding.tvCountStackEditText)
+            /*.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //No action needed
             }
@@ -180,8 +182,9 @@ class MyPageFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
             }
-        })
-        binding.etPortfolio.addTextChangedListener(object : TextWatcher {
+        })*/
+        binding.etPortfolio.addTextWatcher(500, "포트폴리오", binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
+            /*.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //No action needed
             }
@@ -201,7 +204,7 @@ class MyPageFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
             }
-        })
+        })*/
         binding.etUserSelfIntroduction.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
