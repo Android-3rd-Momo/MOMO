@@ -2,6 +2,7 @@ package kr.nbc.momo.data.repository
 
 import android.net.Uri
 import android.util.Log
+import androidx.room.util.query
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
+import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
@@ -174,5 +176,33 @@ class GroupRepositoryImpl @Inject constructor(
                 close(e)
             }
         awaitClose { listener.result }
+    }
+
+    override suspend fun deleteUser(userId: String, groupId: String): Flow<List<String>> = callbackFlow {
+        val ref = fireStore.collection("groups").document(groupId)
+        val listener = ref.update("userList", FieldValue.arrayRemove(userId))
+            .addOnSuccessListener {
+                val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+                query.get().addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        document.reference.update("userGroup", FieldValue.arrayRemove(groupId))
+                            .addOnSuccessListener {
+                                ref.get().result.toObject<GroupResponse>()?.userList?.let { list ->
+                                    trySend(list)
+                                }
+                            }.addOnFailureListener { e ->
+                                close(e)
+                            }
+                    }
+
+                }.addOnFailureListener { e ->
+                    close(e)
+                }
+
+            }.addOnFailureListener { e ->
+                close(e)
+            }
+
+        awaitClose { listener.isComplete }
     }
 }

@@ -93,6 +93,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeBlockUser()
         observeReportUser()
         observeChangeLeader()
+        observeDeleteUser()
         initTextWatcher()
 
     }
@@ -189,7 +190,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        initView(uiState.data)
+
                     }
 
                     is UiState.Error -> {
@@ -310,6 +311,29 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
+    private fun observeDeleteUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.userDeleteState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "유저 강퇴 성공", Toast.LENGTH_SHORT).show()
+                        initUserList(uiState.data)
+
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
 
     private fun initGroup() {
         lifecycleScope.launch {
@@ -405,10 +429,17 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
         editAdapter.longClick = object : EditUserListAdapter.LongClick {
             override fun longClick(userId: String) {
-                showDialog(groupId, userId)
+                val dialog = Dialog.leaderChange
+                showDialog(groupId, userId, dialog)
             }
         }
 
+        editAdapter.onClick = object : EditUserListAdapter.OnClick {
+            override fun onClick(userId: String) {
+                val dialog = Dialog.deleteUser
+                showDialog(groupId, userId, dialog)
+            }
+        }
     }
 
     private fun btnJoinProjectClickListener(currentUser: String?, data: GroupModel) {
@@ -568,24 +599,35 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         picker.show()
     }
 
-    private fun showDialog(groupId: String, userId: String) {
+    private fun showDialog(groupId: String, userId: String, dialog: Dialog) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .setCancelable(false)
             .create()
-        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogBinding.tvClose.text = "리더를 $userId 님으로 변경합니다."
-        dialogBinding.btnConfirm.setOnClickListener {
-            dialog.dismiss()
-            viewModel.leaderChangeState(groupId, userId)
+        dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        if (dialog == Dialog.leaderChange) {
+            dialogBinding.tvClose.text = "리더를 $userId 님으로 변경합니다."
+            dialogBinding.btnConfirm.setOnClickListener {
+                dialogBuilder.dismiss()
+                viewModel.leaderChange(groupId, userId)
 
+            }
+        }
+
+        if (dialog == Dialog.deleteUser) {
+            dialogBinding.tvClose.text = "$userId 님을 모임에서 추방합니다."
+            dialogBinding.btnConfirm.setOnClickListener {
+                dialogBuilder.dismiss()
+                viewModel.deleteUser(userId, groupId)
+
+            }
         }
         dialogBinding.btnCancel.setOnClickListener {
-            dialog.dismiss()
+            dialogBuilder.dismiss()
         }
-        dialog.show()
+        dialogBuilder.show()
     }
 
 

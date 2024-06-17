@@ -13,6 +13,12 @@ class EditUserListAdapter(private val userList: List<String>) :
 
     var longClick: LongClick? = null
 
+    interface OnClick {
+        fun onClick(userId: String)
+    }
+
+    var onClick: OnClick? = null
+
     class Holder(binding: GridviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val userId = binding.tvUserId
     }
@@ -32,6 +38,10 @@ class EditUserListAdapter(private val userList: List<String>) :
         holder.itemView.setOnLongClickListener {
             longClick?.longClick(userList[position])
             true
+        }
+
+        holder.itemView.setOnClickListener {
+            onClick?.onClick(userList[position])
         }
 
     }
