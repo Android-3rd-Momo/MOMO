@@ -68,6 +68,10 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var groupId: String = ""
     private var leaderId: String = ""
     private var userList: List<String> = listOf()
+    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
+    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
+    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
+    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -435,15 +439,15 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
         editAdapter.longClick = object : EditUserListAdapter.LongClick {
             override fun longClick(userId: String) {
-                val dialog = Dialog.leaderChange
-                showDialog(groupId, userId, dialog)
+                val dailog = Dailog.LeaderChange
+                showDialog(groupId, userId, dailog)
             }
         }
 
         editAdapter.onClick = object : EditUserListAdapter.OnClick {
             override fun onClick(userId: String) {
-                val dialog = Dialog.deleteUser
-                showDialog(groupId, userId, dialog)
+                val dailog = Dailog.DeleteUser
+                showDialog(groupId, userId, dailog)
             }
         }
     }
@@ -514,10 +518,10 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
         binding.tvFirstDateEdit.setOnClickListener {
-            showDialog(binding.tvFirstDateEdit)
+            showDialog(binding.tvFirstDateEdit, Value.First)
         }
         binding.tvLastDateEdit.setOnClickListener {
-            showDialog(binding.tvLastDateEdit)
+            showDialog(binding.tvLastDateEdit, Value.Last)
         }
         binding.btnCompleteEdit.setOnClickListener {
             btnCompleteEditOnClickListener(data, editMode, viewMode)
@@ -615,7 +619,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         dialogBuilder.show()
     }
 
-    private fun showDialog(dateType: TextView) {
+    private fun showDialog(dateType: TextView, value: Value) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -632,13 +636,32 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             } else day.toString()
 
             dateType.text = "$year.$monthText.$dayText"
-        }
 
+            val selectedCalendar = Calendar.getInstance()
+            selectedCalendar.set(year, month, day, 0, 0, 0)
+            selectedCalendar.set(Calendar.MILLISECOND, 0)
+
+            // 선택 후
+            if (value == Value.First) {
+                lastMinTimeInMillis = selectedCalendar.timeInMillis
+            } else if (value == Value.Last) {
+                firstMaxTimeInMillis = selectedCalendar.timeInMillis
+            }
+        }
         var picker = DatePickerDialog(requireContext(), listener, year, month, day)
+
+        // 선택 전
+        if (value == Value.First) {
+            picker.datePicker.minDate = firstMinTimeInMillis
+            picker.datePicker.maxDate = firstMaxTimeInMillis
+        } else if (value == Value.Last) {
+            picker.datePicker.minDate = lastMinTimeInMillis
+            picker.datePicker.maxDate = lastMaxTimeInMillis
+        }
         picker.show()
     }
 
-    private fun showDialog(groupId: String, userId: String, dialog: Dialog) {
+    private fun showDialog(groupId: String, userId: String, anDailog: Dailog) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -646,7 +669,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             .create()
         dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        if (dialog == Dialog.leaderChange) {
+        if (anDailog == Dailog.LeaderChange) {
             dialogBinding.tvClose.text = "리더를 $userId 님으로 변경합니다."
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
@@ -655,7 +678,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         }
 
-        if (dialog == Dialog.deleteUser) {
+        if (anDailog == Dailog.DeleteUser) {
             dialogBinding.tvClose.text = "$userId 님을 모임에서 추방합니다."
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()

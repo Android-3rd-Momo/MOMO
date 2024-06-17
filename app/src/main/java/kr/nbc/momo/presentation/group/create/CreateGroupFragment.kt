@@ -42,12 +42,10 @@ import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.Dialog
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.encryptECB
 import java.util.Calendar
-import kotlin.math.max
 
 @AndroidEntryPoint
 class CreateGroupFragment : Fragment() {
