@@ -136,6 +136,33 @@ class MyPageFragment : Fragment() {
             }
         }
     }
+    private fun observeUserProfileUpdate() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userProfileUpdate.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            Log.d("test", "loding")
+                            binding.includeUiState.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
+                        }
+                        is UiState.Success -> {
+                            Log.d("test", "Success")
+                            binding.includeUiState.setVisibleToGone()
+                            sharedViewModel.getCurrentUser()
+                            binding.scrollView.setVisibleToVisible()
+                        }
+                        is UiState.Error -> {
+                            Log.d("test", "Error")
+                            binding.includeUiState.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
+                            Log.d("mypage error", state.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun initView(user: UserModel) {
         with(binding) {
@@ -271,6 +298,7 @@ class MyPageFragment : Fragment() {
                 saveProfileInfo()
                 setChangeMode()
                 requireActivity().hideKeyboard()
+                observeUserProfileUpdate()
             }
         }
         binding.ivBack.setOnClickListener {

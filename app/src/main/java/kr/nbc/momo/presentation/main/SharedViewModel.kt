@@ -23,8 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    private val setLastViewedChatUseCase: SetLastViewedChatUseCase,
-//    private val saveUserProfileUseCase: SaveUserProfileUseCase,
+    private val setLastViewedChatUseCase: SetLastViewedChatUseCase
 ) : ViewModel() {
     private val _groupId: MutableStateFlow<String?> = MutableStateFlow(null)
     val groupId: StateFlow<String?> get() = _groupId.asStateFlow()
@@ -56,9 +55,22 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    fun updateUser(user: UserModel) {
+/*    fun updateUser(user: UserModel) {
         _currentUser.value = UiState.Success(user)
+    }*/
+fun updateUser(user: UserModel) {
+//    _currentUser.value = UiState.Success(user)
+    viewModelScope.launch {
+        _updateUserState.value = UiState.Loading
+        try {
+//                saveUserProfileUseCase(user.toEntity())
+//                _updateUserState.value = UiState.Success(Unit)
+            _currentUser.value = UiState.Success(user)
+        } catch (e: Exception) {
+            _updateUserState.value = UiState.Error(e.message.toString())
+        }
     }
+}
 
     fun getGroupId(groupId: String) {
         _groupId.value = groupId
