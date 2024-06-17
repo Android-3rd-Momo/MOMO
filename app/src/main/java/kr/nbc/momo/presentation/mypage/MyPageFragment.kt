@@ -110,7 +110,7 @@ class MyPageFragment : Fragment() {
                             if (state.data != null) {
                                 isLogin()
                                 currentUser = state.data
-                                initView(state.data)
+                                setUpView(state.data)
                             } else {
                                 isLogOut()
                             }
@@ -129,7 +129,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun initView(user: UserModel) {
+    private fun setUpView(user: UserModel) {
         with(binding) {
             tvUserName.text = user.userName
             tvUserSelfIntroduction.text = user.userSelfIntroduction.ifEmpty { "자신을 소개해 보세요!" }
@@ -140,7 +140,7 @@ class MyPageFragment : Fragment() {
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
             ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
-            ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
+            ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl) //todo
             ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
 
             if (user.typeOfDevelopment.isEmpty()) {
@@ -299,37 +299,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun applyChangesToUI() {
-        currentUser?.let { user ->
-            user.userName = binding.etUserName.text.toString()
-            user.userSelfIntroduction = binding.etUserSelfIntroduction.text.toString()
-            user.stackOfDevelopment = binding.etStackOfDevelopment.text.toString()
-            user.userPortfolioText = binding.etPortfolio.text.toString()
-            user.typeOfDevelopment = getChipText(binding.cgTypeTag)
-            user.programOfDevelopment = getChipText(binding.cgProgramTag)
-            if (profileImageUri != null) {
-                user.userProfileThumbnailUrl = profileImageUri.toString()
-                binding.ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
-            }
-            if (backgroundImageUri != null) {
-                user.userBackgroundThumbnailUrl = backgroundImageUri.toString()
-                binding.ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
-            }
-            if (portfolioImageUri != null) {
-                user.userPortfolioImageUrl = portfolioImageUri.toString()
-                binding.ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
-            }
-        }
-    }
-
-    private fun saveProfileInfoInBackground() {
-        currentUser?.let { user ->
-            viewModel.saveUserProfile(user)
-            sharedViewModel.updateUser(user)
-        }
-    }
-
-
     private fun setChangeMode() {
         isEditMode = !isEditMode
 
@@ -373,7 +342,7 @@ class MyPageFragment : Fragment() {
 
             setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
             setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
-            currentUser?.let { initView(it) }
+            currentUser?.let { setUpView(it) }
 
             binding.ivPortfolioImage.setOnClickListener(null)
             binding.llProfileImage.setBackgroundResource(0)
