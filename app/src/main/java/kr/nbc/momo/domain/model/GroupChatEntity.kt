@@ -1,4 +1,4 @@
-package kr.nbc.momo.domain.model
+ package kr.nbc.momo.domain.model
 
 data class GroupChatEntity(
     val groupId: String = "",

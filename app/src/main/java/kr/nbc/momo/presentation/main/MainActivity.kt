@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                         .replace(R.id.fragment_container, chattingListFragment)
                         .commit()
                     true
+
                 }
 
                 R.id.myPageFragment -> {
