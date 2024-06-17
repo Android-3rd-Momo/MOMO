@@ -130,6 +130,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvGroupOneLineDescription"
                     tools:src="@tools:sample/avatars" />
 
+                <ImageView
+                    android:id="@+id/ivDeleteGroupImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_delete"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"
+                    app:layout_constraintStart_toEndOf="@id/ivGroupImage"
+                    app:layout_constraintBottom_toBottomOf="@id/ivGroupImage"/>
+
                 <TextView
                     android:id="@+id/tvGroupName"
                     android:layout_width="wrap_content"

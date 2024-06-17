@@ -51,6 +51,11 @@ class MyPageFragment : Fragment() {
     private val viewModel: MyPageViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
+    //이미지 변경 상태 확인
+    private var isProfileImageChange = false
+    private var isBackgroundImageChange = false
+    private var isPortfolioImageChange = false
+
     private var isEditMode = false
     private var currentUser: UserModel? = null
     private var profileImageUri: Uri? = null
@@ -60,6 +65,7 @@ class MyPageFragment : Fragment() {
     private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             profileImageUri = uri
+            isProfileImageChange = true
             binding.ivUserProfileImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -69,6 +75,7 @@ class MyPageFragment : Fragment() {
     private val pickBackgroundImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             backgroundImageUri = uri
+            isBackgroundImageChange = true
             binding.ivBackProfileThumbnail.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -78,6 +85,7 @@ class MyPageFragment : Fragment() {
     private val pickPortfolioImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             portfolioImageUri = uri
+            isPortfolioImageChange = true
             binding.ivPortfolioImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -287,14 +295,17 @@ class MyPageFragment : Fragment() {
         }
         binding.ivDeleteProfileImage.setOnClickListener {
             profileImageUri = null
+            isProfileImageChange = true
             binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
         }
         binding.ivDeleteBackProfileThumbnail.setOnClickListener {
             backgroundImageUri = null
+            isBackgroundImageChange = true
             binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
         }
         binding.ivDeletePortfolioImage.setOnClickListener {
             portfolioImageUri = null
+            isPortfolioImageChange = true
             binding.ivPortfolioImage.setUploadImageByUrlOrDefault(null)
         }
     }
@@ -464,12 +475,18 @@ class MyPageFragment : Fragment() {
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = profileImageUri?.toString() ?: "",
-                userBackgroundThumbnailUrl = backgroundImageUri?.toString() ?: "",
-                userPortfolioImageUrl = portfolioImageUri?.toString() ?: ""
+                userProfileThumbnailUrl = if (isProfileImageChange) profileImageUri?.toString() ?: ""
+                else currentUser.userProfileThumbnailUrl,
+                userBackgroundThumbnailUrl = if (isBackgroundImageChange) backgroundImageUri?.toString() ?: ""
+                else currentUser.userBackgroundThumbnailUrl,
+                userPortfolioImageUrl = if (isPortfolioImageChange) portfolioImageUri?.toString() ?: ""
+                else currentUser.userPortfolioImageUrl
             )
             viewModel.saveUserProfile(updatedUserModel)
             sharedViewModel.updateUser(updatedUserModel)
+            isProfileImageChange = false
+            isBackgroundImageChange = false
+            isPortfolioImageChange = false
         }
     }
 

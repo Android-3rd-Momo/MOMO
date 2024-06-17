@@ -59,6 +59,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: String? = null
     private var isEditMode = false
+    private var isGroupImageChange = false
     private var imageUri: Uri? = null
     private var image: String? = null
     private var categoryText: String = "공모전"
@@ -68,6 +69,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
+            isGroupImageChange = true
             binding.ivGroupImage.setThumbnailByUrlOrDefault(uri.toString())
             binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
         } else {
@@ -455,7 +457,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val editMode = arrayOf(
             binding.clEditMode,
             binding.clSimpleDescriptionContainerEdit,
-            binding.btnDelete
+            binding.btnDelete,
+            binding.ivDeleteGroupImage
         )
         val viewMode = arrayOf(
             binding.clViewMode,
@@ -466,6 +469,11 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.ivGroupImageEdit.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
+        binding.ivDeleteGroupImage.setOnClickListener {
+            imageUri = null
+            isGroupImageChange = true
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(null)
+        }
         binding.tvFirstDateEdit.setOnClickListener {
             showDialog(binding.tvFirstDateEdit)
         }
@@ -474,6 +482,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
         binding.btnCompleteEdit.setOnClickListener {
             btnCompleteEditOnClickListener(data, editMode, viewMode)
+            isGroupImageChange = false
         }
         binding.btnDelete.setOnClickListener {
             viewModel.deleteGroup(data.groupId, data.userList)
