@@ -45,7 +45,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
-import kr.nbc.momo.util.addTextWatcher
+import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
@@ -792,9 +792,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initTextWatcher(){
         with(binding){
-            etGroupDescriptionEdit.addTextWatcher(500, "그룹 소개", btnCompleteEdit)
-            etGroupOneLineDescriptionEdit.addTextWatcher(30, "그룹 한 줄 소개", btnCompleteEdit)
-            etGroupNameEdit.addTextWatcher(30, "그룹 이름", btnCompleteEdit)
+            etGroupDescriptionEdit.addTextWatcherWithError(500, "그룹 소개", btnCompleteEdit)
+            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, "그룹 한 줄 소개", btnCompleteEdit)
+            etGroupNameEdit.addTextWatcherWithError(30, "그룹 이름", btnCompleteEdit)
         }
     }
 }

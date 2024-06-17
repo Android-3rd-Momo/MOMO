@@ -5,7 +5,7 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.TextView
 
-fun TextView.addTextWatcher(maxLength: Int, editType: String, btn: Button) {
+fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Button) {
     addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(
             s: CharSequence?,
@@ -17,16 +17,16 @@ fun TextView.addTextWatcher(maxLength: Int, editType: String, btn: Button) {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val textLength = this@addTextWatcher.text.length
+            val textLength = this@addTextWatcherWithError.text.length
             val errorText =
                 if (isKoreanConsonant(editType.last())) "${editType}는 ${maxLength}자까지 작성 가능합니다."
                 else "${editType}은 ${maxLength}자까지 작성 가능합니다."
 
             if (textLength > maxLength) {
-                this@addTextWatcher.error = errorText
+                this@addTextWatcherWithError.error = errorText
                 btn.isEnabled = false
             } else {
-                this@addTextWatcher.error = null
+                this@addTextWatcherWithError.error = null
                 btn.isEnabled = true
             }
         }
@@ -38,7 +38,7 @@ fun TextView.addTextWatcher(maxLength: Int, editType: String, btn: Button) {
     })
 }
 
-fun TextView.addTextWatcher(maxLength: Int, editType: String, btn: Button, textNumberTextView: TextView) {
+fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Button, textNumberTextView: TextView) {
     addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(
             s: CharSequence?,
@@ -50,16 +50,16 @@ fun TextView.addTextWatcher(maxLength: Int, editType: String, btn: Button, textN
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val textLength = this@addTextWatcher.text.length
+            val textLength = this@addTextWatcherWithError.text.length
             val errorText =
                 if (isKoreanConsonant(editType.last())) "${editType}는 ${maxLength}자까지 작성 가능합니다."
                 else "${editType}은 ${maxLength}자까지 작성 가능합니다."
             textNumberTextView.text = "${textLength}/${maxLength}"
             if (textLength > maxLength) {
-                this@addTextWatcher.error = errorText
+                this@addTextWatcherWithError.error = errorText
                 btn.isEnabled = false
             } else {
-                this@addTextWatcher.error = null
+                this@addTextWatcherWithError.error = null
                 btn.isEnabled = true
             }
         }
