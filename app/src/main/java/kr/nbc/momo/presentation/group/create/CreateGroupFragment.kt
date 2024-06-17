@@ -37,11 +37,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
+import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
+import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.encryptECB
 import java.util.Calendar
@@ -54,6 +56,10 @@ class CreateGroupFragment : Fragment() {
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var categoryText: String = ""
+    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
+    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
+    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
+    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
     private lateinit var currentUser: String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -247,12 +253,16 @@ class CreateGroupFragment : Fragment() {
             setChipGroup(chipGroupDev, chipGroupDevelopmentOccupations)
             setChipGroup(chipGroupLang, chipProgramingLanguage)
 
+            tvLimitPeople.setOnClickListener {
+                showDialogNumberPicker(tvLimitPeople)
+            }
+
             firstDate.setOnClickListener {
-                showDialog(firstDate)
+                showDialog(firstDate, Value.First)
             }
 
             lastDate.setOnClickListener {
-                showDialog(lastDate)
+                showDialog(lastDate, Value.Last)
             }
 
             clCategoryDetail.setOnClickListener {
@@ -278,7 +288,7 @@ class CreateGroupFragment : Fragment() {
 
             btnCreateProject.setOnClickListener {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
-                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty()
+                    groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty() || tvLimitPeople.text.isEmpty()
                 ) {
                     Toast.makeText(requireContext(), "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||
@@ -342,7 +352,7 @@ class CreateGroupFragment : Fragment() {
             }
     }
 
-    private fun showDialog(dateType: TextView) {
+    private fun showDialog(dateType: TextView, value: Value) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -359,9 +369,28 @@ class CreateGroupFragment : Fragment() {
             } else day.toString()
 
             dateType.text = "$year.$monthText.$dayText"
-        }
 
+            val selectedCalendar = Calendar.getInstance()
+            selectedCalendar.set(year, month, day, 0, 0, 0)
+            selectedCalendar.set(Calendar.MILLISECOND, 0)
+
+            // 선택 후
+            if (value == Value.First) {
+                lastMinTimeInMillis = selectedCalendar.timeInMillis
+            } else if (value == Value.Last) {
+                firstMaxTimeInMillis = selectedCalendar.timeInMillis
+            }
+        }
         var picker = DatePickerDialog(requireContext(), listener, year, month, day)
+
+        // 선택 전
+        if (value == Value.First) {
+            picker.datePicker.minDate = firstMinTimeInMillis
+            picker.datePicker.maxDate = firstMaxTimeInMillis
+        } else if (value == Value.Last) {
+            picker.datePicker.minDate = lastMinTimeInMillis
+            picker.datePicker.maxDate = lastMaxTimeInMillis
+        }
         picker.show()
     }
 
@@ -385,7 +414,8 @@ class CreateGroupFragment : Fragment() {
             binding.lastDate.text.toString(),
             currentUser,
             categoryList,
-            listOf(currentUser)
+            listOf(currentUser),
+            binding.tvLimitPeople.text.toString()
         )
 
         lifecycleScope.launch {
@@ -415,6 +445,29 @@ class CreateGroupFragment : Fragment() {
 
         dialog.show()
     }
+
+    private fun showDialogNumberPicker(textView: TextView) {
+        val arr =  Array(100) { (it + 5).toString() }
+        val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialogBinding.numberPicker.minValue = 5
+        dialogBinding.numberPicker.maxValue = arr.size
+        dialogBinding.numberPicker.displayedValues = arr
+        dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogBinding.btnConfirm.setOnClickListener {
+            dialogBuilder.dismiss()
+            textView.text = dialogBinding.numberPicker.value.toString()
+
+        }
+        dialogBuilder.show()
+    }
+
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) {
         for (chipText in chipList) {
