@@ -60,6 +60,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: String? = null
     private var isEditMode = false
+    private var isGroupImageChange = false
     private var imageUri: Uri? = null
     private var image: String? = null
     private var categoryText: String = "공모전"
@@ -74,6 +75,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
+            isGroupImageChange = true
             binding.ivGroupImage.setThumbnailByUrlOrDefault(uri.toString())
             binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
         } else {
@@ -414,8 +416,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
-        binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
-        binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
+        if (groupThumbnail.isNullOrEmpty()) {
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(null)
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
+        } else {
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
+        }
     }
 
     private fun initUserList(userList: List<String>) {
@@ -499,7 +506,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val editMode = arrayOf(
             binding.clEditMode,
             binding.clSimpleDescriptionContainerEdit,
-            binding.btnDelete
+            binding.btnDelete,
+            binding.ivDeleteGroupImage
         )
         val viewMode = arrayOf(
             binding.clViewMode,
@@ -516,6 +524,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.ivGroupImageEdit.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
+        binding.ivDeleteGroupImage.setOnClickListener {
+            imageUri = null
+            isGroupImageChange = true
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(null) //todo
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
+        }
         binding.tvFirstDateEdit.setOnClickListener {
             showDialog(binding.tvFirstDateEdit, Value.First)
         }
@@ -524,6 +538,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
         binding.btnCompleteEdit.setOnClickListener {
             btnCompleteEditOnClickListener(data, editMode, viewMode)
+            isGroupImageChange = false
         }
         binding.btnDelete.setOnClickListener {
             viewModel.deleteGroup(data.groupId, data.userList)
@@ -580,7 +595,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             getChipText(binding.chipGroupDevelopmentOccupationsEdit),
             getChipText(binding.chipProgramingLanguageEdit)
         )
-        image = data.groupThumbnail
+        val updatedGroupThumbnail = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
         viewModel.updateGroup(
             data.copy(
                 groupName = binding.etGroupNameEdit.text.toString(),
@@ -589,7 +604,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 firstDate = binding.tvFirstDateEdit.text.toString(),
                 lastDate = binding.tvLastDateEdit.text.toString(),
                 category = categoryList,
-                limitPerson = groupLimitPeople
+                limitPerson = groupLimitPeople,
+                groupThumbnail = updatedGroupThumbnail,
             ), imageUri
         )
         setChangeMode(editMode, viewMode)

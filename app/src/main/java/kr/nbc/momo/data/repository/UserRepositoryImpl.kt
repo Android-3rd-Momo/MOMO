@@ -1,11 +1,9 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
@@ -15,8 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import kr.nbc.momo.data.datastore.UserPreferences
-import kr.nbc.momo.data.model.GroupResponse
 import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toUserResponse
@@ -27,8 +23,7 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
-    private val storage: FirebaseStorage,
-//    private val userPreferences: UserPreferences //todo 보류
+    private val storage: FirebaseStorage
 ) : UserRepository {
 
     private val _currentUser = MutableStateFlow<UserEntity?>(null)
@@ -57,7 +52,7 @@ class UserRepositoryImpl @Inject constructor(
         return auth.currentUser?.uid ?: throw Exception("User not login")
     }
 
-    private suspend fun saveUserInfo(user: UserEntity) { //signUp, saveUserProfile
+    private suspend fun saveUserInfo(user: UserEntity) {
         val currentUserUid = getCurrentUserUid()
         val userResponse = user.toUserResponse()
         fireStore.collection("userInfo").document(currentUserUid).set(userResponse).await()
@@ -81,7 +76,6 @@ class UserRepositoryImpl @Inject constructor(
             val currentUserUid = getCurrentUserUid()
             val snapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
             val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
-//            userPreferences.saveUserInfo(userResponse.toEntity()) //dataStore
             _currentUser.value = userResponse.toEntity()
             userResponse.toEntity()
         } catch (e: Exception) {
