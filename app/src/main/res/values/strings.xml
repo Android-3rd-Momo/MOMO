@@ -317,5 +317,9 @@
     <string name="a_divide_b">%1$d/%2$d</string>
     <string name="a_max_edit_is_b_nun">%1$s는 %2$d자까지 작성 가능합니다.</string>
     <string name="a_max_edit_is_b_eun">%1$s은 %2$d자까지 작성 가능합니다.</string>
-
+    <string name="welcome_to_dev_community">개발자 커뮤니티에 오신것을\n 환영합니다</string>
+    <string name="many_dev">다양한 개발자들이 한곳에</string>
+    <string name="any_come">프론트엔드, 백엔드 다양한 직군이\n한곳에 모여있습니다</string>
+    <string name="short_ok">단기 프로젝트도 OK</string>
+    <string name="recruit_member">프로젝트를 함께 개발할 동료들을\n모이개에서 모집해보세요!</string>
 </resources>

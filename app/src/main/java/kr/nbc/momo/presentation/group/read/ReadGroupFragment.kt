@@ -63,7 +63,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var isGroupImageChange = false
     private var imageUri: Uri? = null
     private var image: String? = null
-    private var categoryText: String = requireActivity().getString(R.string.contest)
+    private var categoryText: String = ""
     private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""
