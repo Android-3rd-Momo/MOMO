@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:fontFamily="@font/font"
-            android:text="마이페이지"
+            android:text="@string/my_page"
             android:gravity="center"
             android:textSize="18dp"
             android:textStyle="bold"

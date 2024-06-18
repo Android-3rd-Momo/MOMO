@@ -13,12 +13,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
+import kr.nbc.momo.presentation.group.read.ReadGroupFragment
+import kr.nbc.momo.presentation.home.MyGroupListAdapter
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.mypage.adapter.SubscriptionGroupAdapter
 
 @AndroidEntryPoint
 class MyGroupFragment : Fragment() {
@@ -115,14 +118,35 @@ class MyGroupFragment : Fragment() {
                                 }
                             }
                         }
-                        val adapter = SubscriptionGroupAdapter(list)
-                        binding.rvSubscriptionGroupList.adapter = adapter
-                        binding.rvSubscriptionGroupList.layoutManager = LinearLayoutManager(requireContext())
+                        val leaderSubAdapter = SubscriptionGroupAdapter(list)
+                        binding.rvLeaderSub.adapter = leaderSubAdapter
+                        binding.rvLeaderSub.layoutManager = LinearLayoutManager(requireContext())
 
-                        adapter.itemClick = object : SubscriptionGroupAdapter.ItemClick {
+                        leaderSubAdapter.itemClick = object : SubscriptionGroupAdapter.ItemClick {
                             override fun itemClick(groupId: String, userId: String) {
                                 viewModel.addUser(userId, groupId)
                                 currentUser?.let { initGroupList(it) }
+                            }
+                        }
+
+
+                        val leaderGroupAdapter = MyGroupListAdapter(uiState.data)
+                        binding.rvLeader.adapter = leaderGroupAdapter
+                        binding.rvLeader.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+
+                        leaderGroupAdapter.itemClick = object : MyGroupListAdapter.ItemClick {
+                            override fun itemClick(position: Int) {
+                                val groupId = uiState.data[position].groupId
+                                sharedViewModel.getGroupId(groupId)
+                                val readGroupFragment = ReadGroupFragment()
+                                parentFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, readGroupFragment)
+                                    .addToBackStack(null)
+                                    .commit()
                             }
                         }
 

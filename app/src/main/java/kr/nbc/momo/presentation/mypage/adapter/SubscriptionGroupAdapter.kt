@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,7 +19,8 @@ class SubscriptionGroupAdapter(private var items: MutableList<Pair<GroupModel, S
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val binding = RvItemSubscriptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            RvItemSubscriptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(binding)
     }
 
