@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="94dp"
                 android:background="@color/blue"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -165,8 +165,6 @@
                         android:layout_gravity="center"
                         android:src="@drawable/icon_delete" />
                 </androidx.cardview.widget.CardView>
-
-
 
 
                 <TextView
@@ -285,9 +283,9 @@
                         android:id="@+id/cgTypeTag"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:chipSpacing="8dp"
                         app:chipSpacingHorizontal="4dp"
-                        app:chipSpacingVertical="0dp"
-                        app:chipSpacing="8dp" />
+                        app:chipSpacingVertical="0dp" />
                 </LinearLayout>
 
                 <TextView
@@ -324,7 +322,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:chipSpacingHorizontal="4dp"
-                        app:chipSpacingVertical="0dp"/>
+                        app:chipSpacingVertical="0dp" />
                 </LinearLayout>
 
                 <TextView
@@ -423,10 +421,11 @@
                     android:id="@+id/ivDeletePortfolioImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:src="@drawable/icon_delete"
                     android:visibility="gone"
-                    app:layout_constraintStart_toEndOf="@id/cvPortfolioImage"
-                    app:layout_constraintBottom_toBottomOf="@id/cvPortfolioImage"/>
+                    app:layout_constraintBottom_toBottomOf="@id/cvPortfolioImage"
+                    app:layout_constraintStart_toEndOf="@id/cvPortfolioImage" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -502,9 +501,9 @@
         android:backgroundTint="@color/bg_btn_state_color"
         android:fontFamily="@font/sfproiddisplaybold"
         android:text="편집 완료"
+        android:textColor="@color/white"
         android:textSize="16dp"
         android:visibility="gone"
-        android:textColor="@color/white"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

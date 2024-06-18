@@ -174,7 +174,7 @@ class MyPageFragment : Fragment() {
             etStackOfDevelopment.setText(user.stackOfDevelopment)
             etPortfolio.setText(user.userPortfolioText)
             ivUserProfileImage.setThumbnailByUrlOrDefault(user.userProfileThumbnailUrl)
-            ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl) //todo
+            ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
 
             if (user.typeOfDevelopment.isEmpty()) {
@@ -370,10 +370,10 @@ class MyPageFragment : Fragment() {
     }
 
 
-    private fun createChip(text: String, isCheckable: Boolean, isEditMode: Boolean): Chip {
+    private fun createChip(text: String, isEditMode: Boolean): Chip {
         return Chip(requireContext()).apply {
             this.text = text
-            this.isCheckable = isCheckable
+            this.isCheckable = true
             this.isCloseIconVisible = false
             this.isClickable = isEditMode
             updateChipAppearance(this, isChecked)
@@ -401,7 +401,7 @@ class MyPageFragment : Fragment() {
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, isEditMode: Boolean) {
         chipGroup.removeAllViews()
         for (chipText in chipList) {
-            val chip = createChip(chipText, true, isEditMode)
+            val chip = createChip(chipText, isEditMode)
             chipGroup.addView(chip)
         }
     }
