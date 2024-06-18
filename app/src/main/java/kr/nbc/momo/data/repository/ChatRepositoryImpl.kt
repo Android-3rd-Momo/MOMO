@@ -117,49 +117,6 @@ class ChatRepositoryImpl @Inject constructor(
                     }
                 })
             }
-            /*val groupSnapshot = chatRef.child(groupId).get().await()
-            val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
-            val koreaZoneId = ZoneId.of("Asia/Seoul")
-            val koreaTime = ZonedDateTime.now(koreaZoneId)
-
-            val newChatResponse = ChatResponse(
-                userName = userName,
-                userId = userId,
-                text = text,
-                dateTime = koreaTime.toString()
-            )
-
-            val updatedChatList =
-                groupChatResponse?.chatList?.toMutableList() ?: mutableListOf()
-            updatedChatList.add(newChatResponse)
-            val userList = groupChatResponse?.userList ?: listOf()
-
-            val newUserList =
-                if (userList.none { it.userId == userId }) userList.toMutableList().apply {
-                    add(
-                        GroupUserResponse(
-                            userId,
-                            userName,
-                            url,
-                            newChatResponse
-                        )
-                    )
-                }
-                else userList
-
-            val updatedGroupChatResponse = groupChatResponse?.copy(
-                groupId = groupId,
-                groupName = groupName,
-                userList = newUserList,
-                chatList = updatedChatList
-            ) ?: GroupChatResponse(
-                groupId = groupId,
-                groupName = groupName,
-                userList = newUserList,
-                chatList = updatedChatList
-            )
-
-            chatRef.child(groupId).setValue(updatedGroupChatResponse).await()*/
 
         } catch (e: Exception) {
             Log.e("repository", "Failed to send message", e)
