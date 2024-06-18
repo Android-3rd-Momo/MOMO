@@ -11,6 +11,7 @@
     <string name="Id">아이디</string>
     <string name="Password">비밀번호</string>
     <string name="GoogleLogin">구글 로그인</string>
+    <string name="Email">이메일</string>
 
     //termFragment
     <string name="TermTitle">약관에 동의해주세요</string>
