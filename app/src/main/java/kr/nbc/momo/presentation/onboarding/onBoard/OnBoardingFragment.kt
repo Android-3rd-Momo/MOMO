@@ -2,19 +2,15 @@ package kr.nbc.momo.presentation.onboarding.onBoard
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentOnBoardingBinding
-import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.main.MainActivity
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
-import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentProgramFragment
-import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentTypeFragment
 import kr.nbc.momo.presentation.onboarding.login.SignInFragment
 
 class OnBoardingFragment : Fragment() {

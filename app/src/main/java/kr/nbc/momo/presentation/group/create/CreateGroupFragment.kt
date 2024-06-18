@@ -117,7 +117,8 @@ class CreateGroupFragment : Fragment() {
                                 initView()
                             } else {
                                 parentFragmentManager.popBackStack()
-                                Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT)
+                                val toastText = requireContext().getString(R.string.need_login)
+                                Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }
@@ -141,7 +142,8 @@ class CreateGroupFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), "그룹 생성 성공", Toast.LENGTH_SHORT).show()
+                        val toastText = requireContext().getString(R.string.create_success)
+                        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
                         parentFragmentManager.popBackStack()
                         val readGroupFragment = ReadGroupFragment()
                         parentFragmentManager.beginTransaction()
@@ -161,9 +163,9 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            groupDescription.addTextWatcherWithError(500, "그룹소개", btnCreateProject)
-            groupOneLineDescription.addTextWatcherWithError(30, "그룹 한 줄 소개", btnCreateProject)
-            groupName.addTextWatcherWithError(30, "그룹 이름", btnCreateProject)
+            groupDescription.addTextWatcherWithError(500, getString(R.string.group_desc), btnCreateProject)
+            groupOneLineDescription.addTextWatcherWithError(30, getString(R.string.group_one_line_desc), btnCreateProject)
+            groupName.addTextWatcherWithError(30, getString(R.string.group_name), btnCreateProject)
             categorySpinner.clipToOutline = true
             ivGroupImage.clipToOutline = true
 
@@ -209,12 +211,12 @@ class CreateGroupFragment : Fragment() {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
                     groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty() || tvLimitPeople.text.isEmpty()
                 ) {
-                    Toast.makeText(requireContext(), "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.blank_contain), Toast.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
                     binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
                 ) {
-                    Toast.makeText(requireContext(), "카테고리를 선택해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.choice_category), Toast.LENGTH_SHORT).show()
                 } else {
                     showDialog()
                 }
@@ -233,7 +235,7 @@ class CreateGroupFragment : Fragment() {
 
     private fun initSpinner() {
         val items = resources.getStringArray(R.array.classification)
-        val spinnerAapter =
+        val spinnerAdapter =
             object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                     val v = super.getView(position, convertView, parent)
@@ -251,11 +253,11 @@ class CreateGroupFragment : Fragment() {
                     return super.getCount() - 1
                 }
             }
-
-        spinnerAapter.addAll(items.toMutableList())
-        spinnerAapter.add("카테고리")
-        binding.categorySpinner.adapter = spinnerAapter
-        binding.categorySpinner.setSelection(spinnerAapter.count)
+        //todo
+        spinnerAdapter.addAll(items.toMutableList())
+        spinnerAdapter.add("카테고리")
+        binding.categorySpinner.adapter = spinnerAdapter
+        binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -287,7 +289,7 @@ class CreateGroupFragment : Fragment() {
                 "0$day"
             } else day.toString()
 
-            dateType.text = "$year.$monthText.$dayText"
+            dateType.text = getString(R.string.yyyy_MM_dd, year, monthText, dayText)
 
             val selectedCalendar = Calendar.getInstance()
             selectedCalendar.set(year, month, day, 0, 0, 0)
@@ -353,7 +355,7 @@ class CreateGroupFragment : Fragment() {
         dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialogBinding.tvClose.text = "프로젝트를 생성합니다"
+        dialogBinding.tvClose.setText(R.string.do_create_group)
         dialogBinding.btnConfirm.setOnClickListener {
             dialog.dismiss()
             createGroup()
@@ -401,8 +403,6 @@ class CreateGroupFragment : Fragment() {
                 setChipBackgroundColorResource(R.color.bg_chip_state_color)
                 isCheckable = true
 
-                // setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tv_chip_state_color))
-                // setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_Chip))
             }
             chipGroup.addView(chip)
         }

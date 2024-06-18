@@ -274,4 +274,28 @@
     <string name="report_user">사용자 신고하기</string>
     <string name="block_user">사용자 차단하기</string>
     <string name="report_group">게시물 신고하기</string>
+
+    <!--소스코드 시작-->
+    <string name="unknown_view_type_error">"UNKNOWN VIEW TYPE ERROR"</string>
+    <string name="empty_joined_group">가입된 모임이 없습니다.</string>
+    <string name="need_login">로그인이 필요합니다.</string>
+    <string name="create_success">모임 생성 성공</string>
+    <string name="blank_contain">입력하지 않은 항목이 있습니다.</string>
+    <string name="choice_category">카테고리를 선택해주세요.</string>
+    <string name="do_create_group">모임을 생성합니다.</string>
+    <string name="yyyy_MM_dd">%1$d.%2$s.%3$s</string>
+    <string name="contest">공모전</string>
+    <string name="delete_group_success">모임 삭제 성공</string>
+    <string name="user_report_success">유저 신고 성공</string>
+    <string name="user_block_success">유저 차단 성공</string>
+    <string name="change_leader_success">리더 변경 성공</string>
+    <string name="user_ban_success">유저 강퇴 성공</string>
+    <string name="move_to_chatting">채팅방 이동</string>
+    <string name="over_max_user">참가 인원 수 초과</string>
+    <string name="change_leader">리더를 %1$s 님으로 변경합니다.</string>
+    <string name="ban_user">%1$s 님을 모임에서 추방합니다.</string>
+    <string name="ask_join_group">모임에 참여하시겠습니까?</string>
+    <string name="go_to_login">로그인 페이지로 이동합니다.</string>
+    <string name="no_recommend">추천 그룹이 없습니다.\n정보를 수정해주세요</string>
+    <string name="no_joined">가입한 그룹이 없습니다.</string>
 </resources>

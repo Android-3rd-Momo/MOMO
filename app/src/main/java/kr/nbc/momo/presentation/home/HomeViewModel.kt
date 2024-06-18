@@ -3,12 +3,10 @@ package kr.nbc.momo.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kr.nbc.momo.domain.usecase.GetGroupListUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.mapper.toGroupModel

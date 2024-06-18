@@ -1,6 +1,5 @@
 package kr.nbc.momo.domain.usecase
 
-import android.net.Uri
 import kr.nbc.momo.domain.model.UserEntity
 import kr.nbc.momo.domain.repository.UserRepository
 import javax.inject.Inject

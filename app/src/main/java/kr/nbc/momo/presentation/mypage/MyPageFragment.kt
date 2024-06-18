@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -365,7 +364,7 @@ class MyPageFragment : Fragment() {
         binding.clUserDetailInfo.setVisibleToGone()
         binding.ivSetUp.setVisibleToGone()
         binding.ivEditProfile.setVisibleToGone()
-        binding.tvUserName.text = "로그인이 필요합니다"
+        binding.tvUserName.setText(R.string.need_login)
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
