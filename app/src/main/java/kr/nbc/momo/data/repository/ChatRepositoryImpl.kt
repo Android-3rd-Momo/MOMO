@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -59,50 +61,106 @@ class ChatRepositoryImpl @Inject constructor(
     ) {
         try {
             if (groupId.isNotBlank()) {
-                val groupSnapshot = chatRef.child(groupId).get().await()
-                val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
-                val koreaZoneId = ZoneId.of("Asia/Seoul")
-                val koreaTime = ZonedDateTime.now(koreaZoneId)
 
-                val newChatResponse = ChatResponse(
-                    userName = userName,
-                    userId = userId,
-                    text = text,
-                    dateTime = koreaTime.toString()
-                )
+                chatRef.child(groupId).runTransaction(object : Transaction.Handler {
+                    override fun doTransaction(currentData: MutableData): Transaction.Result {
+                        val groupChatResponse =
+                            currentData.getValue(GroupChatResponse::class.java)
+                                ?: GroupChatResponse(
+                                    groupId = groupId,
+                                    groupName = groupName
+                                )
 
-                val updatedChatList =
-                    groupChatResponse?.chatList?.toMutableList() ?: mutableListOf()
-                updatedChatList.add(newChatResponse)
-                val userList = groupChatResponse?.userList ?: listOf()
+                        val koreaZoneId = ZoneId.of("Asia/Seoul")
+                        val koreaTime = ZonedDateTime.now(koreaZoneId)
 
-                val newUserList =
-                    if (userList.none { it.userId == userId }) userList.toMutableList().apply {
-                        add(
-                            GroupUserResponse(
-                                userId,
-                                userName,
-                                "",
-                                newChatResponse
-                            )
+                        val newChat =
+                            ChatResponse(userName, userId, text, koreaTime.toString())
+
+                        val updatedChatList =
+                            groupChatResponse.chatList.toMutableList().apply {
+                                add(newChat)
+                            }
+
+                        val updatedUserList =
+                            groupChatResponse.userList.toMutableList().apply {
+                                val userIndex = indexOfFirst { it.userId == userId }
+                                if (userIndex != -1) {
+                                    this[userIndex] =
+                                        this[userIndex].copy(lastViewedChat = newChat, userProfileUrl = url)
+                                } else {
+                                    add(GroupUserResponse(userId, userName, url, newChat))
+                                }
+                            }
+
+                        currentData.value = groupChatResponse.copy(
+                            chatList = updatedChatList,
+                            userList = updatedUserList
                         )
+                        return Transaction.success(currentData)
                     }
-                    else userList
 
-                val updatedGroupChatResponse = groupChatResponse?.copy(
-                    groupId = groupId,
-                    groupName = groupName,
-                    userList = newUserList,
-                    chatList = updatedChatList
-                ) ?: GroupChatResponse(
-                    groupId = groupId,
-                    groupName = groupName,
-                    userList = newUserList,
-                    chatList = updatedChatList
-                )
-
-                chatRef.child(groupId).setValue(updatedGroupChatResponse).await()
+                    override fun onComplete(
+                        error: DatabaseError?,
+                        committed: Boolean,
+                        currentData: DataSnapshot?
+                    ) {
+                        if (error != null) {
+                            Log.e(
+                                "sendMessage",
+                                "Failed to send message",
+                                error.toException()
+                            )
+                        } else if (committed) {
+                            Log.d("sendMessage", "Message sent successfully")
+                        }
+                    }
+                })
             }
+            /*val groupSnapshot = chatRef.child(groupId).get().await()
+            val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
+            val koreaZoneId = ZoneId.of("Asia/Seoul")
+            val koreaTime = ZonedDateTime.now(koreaZoneId)
+
+            val newChatResponse = ChatResponse(
+                userName = userName,
+                userId = userId,
+                text = text,
+                dateTime = koreaTime.toString()
+            )
+
+            val updatedChatList =
+                groupChatResponse?.chatList?.toMutableList() ?: mutableListOf()
+            updatedChatList.add(newChatResponse)
+            val userList = groupChatResponse?.userList ?: listOf()
+
+            val newUserList =
+                if (userList.none { it.userId == userId }) userList.toMutableList().apply {
+                    add(
+                        GroupUserResponse(
+                            userId,
+                            userName,
+                            url,
+                            newChatResponse
+                        )
+                    )
+                }
+                else userList
+
+            val updatedGroupChatResponse = groupChatResponse?.copy(
+                groupId = groupId,
+                groupName = groupName,
+                userList = newUserList,
+                chatList = updatedChatList
+            ) ?: GroupChatResponse(
+                groupId = groupId,
+                groupName = groupName,
+                userList = newUserList,
+                chatList = updatedChatList
+            )
+
+            chatRef.child(groupId).setValue(updatedGroupChatResponse).await()*/
+
         } catch (e: Exception) {
             Log.e("repository", "Failed to send message", e)
         }
