@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.setup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,6 +44,7 @@ class SetUpViewModel @Inject constructor(
             try {
                 signOutUserUseCase()
             }catch (e:Exception){
+                Log.d("error", e.toString())
             }
         }
     }
@@ -52,6 +54,7 @@ class SetUpViewModel @Inject constructor(
             try {
                 signWithdrawalUserUseCase()
             } catch (e: Exception) {
+                Log.d("error", e.toString())
             }
         }
     }

@@ -140,7 +140,7 @@ class MyPageFragment : Fragment() {
                 viewModel.userProfileUpdate.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            Log.d("test", "loding")
+                            Log.d("test", "loading")
                             binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
                         }
@@ -165,9 +165,9 @@ class MyPageFragment : Fragment() {
     private fun initView(user: UserModel) {
         with(binding) {
             tvUserName.text = user.userName
-            tvUserSelfIntroduction.text = user.userSelfIntroduction.ifEmpty { "자신을 소개해 보세요!" }
-            tvStackOfDevelopment.text = user.stackOfDevelopment.ifEmpty { "사용하신 기술이 있다면 작성해 보세요!" }
-            tvPortfolio.text = user.userPortfolioText.ifEmpty { "간단한 포트폴리오를 작성해 보세요!" }
+            tvUserSelfIntroduction.text = user.userSelfIntroduction.ifEmpty { getString(R.string.introduce_yourself) }
+            tvStackOfDevelopment.text = user.stackOfDevelopment.ifEmpty { getString(R.string.introduce_stack) }
+            tvPortfolio.text = user.userPortfolioText.ifEmpty { getString(R.string.introduce_portfolio) }
             etUserName.setText(user.userName)
             etUserSelfIntroduction.setText(user.userSelfIntroduction)
             etStackOfDevelopment.setText(user.stackOfDevelopment)
@@ -469,10 +469,10 @@ class MyPageFragment : Fragment() {
         var isValid = true
 
         if (name.isEmpty()) {
-            binding.etUserName.error = "이름을 입력해주세요."
+            binding.etUserName.error = getString(R.string.please_edit_name)
             isValid = false
         } else if (!isValidName(name)) {
-            binding.etUserName.error = "3-10자의 영문자나 한글만 가능합니다."
+            binding.etUserName.error = getString(R.string.edit_name_error)
             isValid = false
         } else {
             binding.etUserName.error = null

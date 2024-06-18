@@ -1,3 +1,4 @@
+/*
 package kr.nbc.momo.presentation.onboarding
 
 import android.view.LayoutInflater
@@ -40,4 +41,4 @@ class GetStartedViewPagerAdapter(
         holder.itemDesc.text = desc[position]
         holder.itemillust.setImageResource(image[position])
     }
-}
+}*/

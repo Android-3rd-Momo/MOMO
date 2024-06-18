@@ -298,4 +298,19 @@
     <string name="go_to_login">로그인 페이지로 이동합니다.</string>
     <string name="no_recommend">추천 그룹이 없습니다.\n정보를 수정해주세요</string>
     <string name="no_joined">가입한 그룹이 없습니다.</string>
+    <string name="introduce_yourself">자신을 소개해보세요!</string>
+    <string name="introduce_stack">사용하신 기술이 있다면 작성해보세요!</string>
+    <string name="introduce_portfolio">간단한 포트폴리오를 작성해보세요!</string>
+    <string name="please_edit_name">이름을 입력해주세요.</string>
+    <string name="edit_name_error">3–10자의 영문자나 한글만 가능합니다.</string>
+    <string name="no_search_result">검색 결과가 없습니다.</string>
+    <string name="query_hint">개발 언어를 입력해주세요.(공백 또는 반점으로 구분)</string>
+    <string name="check_withdrawal">회원탈퇴 하시겠습니까?</string>
+    <string name="you_are_leader">의 리더입니다.</string>
+    <string name="check_logout">로그아웃 하시겠습니까?</string>
+    <string name="failed_get_user_info">유저정보를 불러오는데 실패했습니다.</string>
+    <string name="a_divide_b">%1$d/%2$d</string>
+    <string name="a_max_edit_is_b_nun">%1$s는 %2$d자까지 작성 가능합니다.</string>
+    <string name="a_max_edit_is_b_eun">%1$s은 %2$d자까지 작성 가능합니다.</string>
+
 </resources>

@@ -71,7 +71,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "유저 신고 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -93,7 +93,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "유저 차단 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -123,7 +123,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
                     is UiState.Error -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "유저정보를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.failed_get_user_info), Toast.LENGTH_SHORT).show()
                     }
                 }
 
