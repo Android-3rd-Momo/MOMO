@@ -141,18 +141,19 @@ class ChattingRecyclerViewAdapter() :
                 ivProfile.setThumbnailByUrlOrDefault(userModel.userProfileUrl)
                 //유저 바뀌면 이름 보여주기
                 if (isUserChanged) {
-                    ivProfile.setVisibleToVisible()
+                    cardView.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
                     tvTime.setVisibleToVisible()
                 } else {
                     tvUserName.setVisibleToGone()
-                    tvUserName.setVisibleToInvisible()
+                    tvUserName.setVisibleToGone()
+                    cardView.setVisibleToInvisible()
                 }
 
                 if (isMinuteChanged) {
                     tvTime.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
-                    ivProfile.setVisibleToVisible()
+                    cardView.setVisibleToVisible()
                 } else {
                     if (!isUserChanged) {
                         tvTime.setVisibleToGone()
@@ -163,7 +164,7 @@ class ChattingRecyclerViewAdapter() :
                 if (isDateChanged) {
                     tvDivider.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
-                    ivProfile.setVisibleToVisible()
+                    cardView.setVisibleToVisible()
                 } else {
                     tvDivider.setVisibleToGone()
                 }
