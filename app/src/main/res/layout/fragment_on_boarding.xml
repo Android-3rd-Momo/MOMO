@@ -16,7 +16,7 @@
         android:layout_marginBottom="20dp"
         android:backgroundTint="#00000000"
         android:textColor = "@color/black"
-        android:text="로그인 없이 앱 이용하기" />
+        android:text="@string/use_app_without_login" />
 
     <Button
         android:id="@+id/button_login"
@@ -29,7 +29,7 @@
         android:fontFamily="@font/sfproiddisplaybold"
         android:layout_marginStart="40dp"
         android:backgroundTint="@color/blue"
-        android:text="로그인"
+        android:text="@string/login"
         app:cornerRadius="16dp"/>
 
     <me.relex.circleindicator.CircleIndicator3
