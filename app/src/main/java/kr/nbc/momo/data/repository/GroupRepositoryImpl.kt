@@ -60,13 +60,18 @@ class GroupRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun readGroup(groupId: String): Flow<GroupEntity> = flow {
-        val snapshot = fireStore.collection("groups").document(groupId).get().await()
-        val response = snapshot.toObject<GroupResponse>()
-        if (response != null) {
-            emit(response.toEntity())
-            Log.d("categoryList", "${response.category.programingLanguage}")
-        }
+    override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
+        val snapshot = fireStore.collection("groups").document(groupId).get()
+            .addOnSuccessListener { snapshot ->
+                val response = snapshot.toObject<GroupResponse>()
+                if (response != null) {
+                    trySend(response.toEntity())
+                } else {
+                    trySend(GroupEntity(groupId = "error"))
+                }
+            }
+        awaitClose { snapshot.isComplete }
+
     }
 
     override suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?): Flow<GroupEntity> = callbackFlow {

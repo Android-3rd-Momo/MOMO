@@ -68,8 +68,13 @@ class ReadGroupViewModel @Inject constructor(
                     _groupState.value = UiState.Error(e.toString())
                 }
                 .collect { data ->
-                    _groupState.value = UiState.Success(data.toGroupModel())
+                    if (data.groupId == "error") {
+                        _groupState.value = UiState.Error("error")
+                    } else {
+                        _groupState.value = UiState.Success(data.toGroupModel())
+                    }
                 }
+
         }
     }
 
