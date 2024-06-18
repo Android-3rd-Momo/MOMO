@@ -66,7 +66,7 @@ class DevelopmentStackFragment : Fragment() {
     private fun initView() {
         btnConfirm = requireActivity().findViewById<Button>(R.id.btnConfirm)
         val ssb = SpannableStringBuilder(
-            "기술스택에 대해 알려주세요\n"
+            getString(R.string.please_introduce_your_stack)
         )
         val blue = Color.parseColor("#2D64CF")
         val black = Color.parseColor("#000000")

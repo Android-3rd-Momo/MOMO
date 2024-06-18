@@ -36,7 +36,7 @@ class DevelopmentTypeFragment : Fragment() {
     }
 
     private fun initView() {
-        val ssb = SpannableStringBuilder("개발 직군을 골라주세요!\n")
+        val ssb = SpannableStringBuilder(getString(R.string.please_pick_your_occupation))
         val blue = Color.parseColor("#2D64CF")
         val black = Color.parseColor("#000000")
         ssb.setSpan(ForegroundColorSpan(blue), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
