@@ -15,16 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MOMO"
         tools:targetApi="31">
+
         <activity
             android:name=".presentation.onboarding.developmentType.DevelopmentActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".presentation.onboarding.GetStartedActivity"
+            android:screenOrientation="portrait"
             android:exported="false"/>
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
