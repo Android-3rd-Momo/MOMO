@@ -88,9 +88,9 @@ class ChattingListFragment : Fragment() {
                             binding.rvChattingList.setVisibleToGone()
                             binding.includeNoResult.setVisibleToGone()
                             chattingListViewModel.getChattingList(it.data.userGroup, it.data.userId)
-                        }else{
+                        } else {
                             //로그인 안되어 있을 경우
-                            binding.includeNoResult.tvNoResult.text = "로그인이 필요합니다."
+                            binding.includeNoResult.tvNoResult.setText(R.string.need_login)
                             binding.includeNoResult.setVisibleToVisible()
                         }
                     }
@@ -118,10 +118,9 @@ class ChattingListFragment : Fragment() {
                             binding.rvChattingList.setVisibleToVisible()
                             binding.includeNoResult.setVisibleToGone()
                         } else {
-                            //todo 가입한 모임이 없습니다.
                             binding.prCircular.setVisibleToGone()
                             binding.rvChattingList.setVisibleToGone()
-                            binding.includeNoResult.tvNoResult.text = "가입된 모임이 없습니다."
+                            binding.includeNoResult.tvNoResult.setText(R.string.empty_joined_group)
                             binding.includeNoResult.setVisibleToVisible()
                         }
                     }

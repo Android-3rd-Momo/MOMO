@@ -3,7 +3,6 @@ package kr.nbc.momo.presentation.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import kr.nbc.momo.databinding.RvItemHomeHorizontalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault

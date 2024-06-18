@@ -11,8 +11,6 @@ data class GroupEntity(
     val category: CategoryEntity= CategoryEntity("", listOf(), listOf()),
     val userList: List<String> = listOf(),
     val limitPerson: String = ""
-//    val categoryList: List<String> = emptyList(),
-//    val userList: List<String> = emptyList(),
 )
 
 

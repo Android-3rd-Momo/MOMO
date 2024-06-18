@@ -1,3 +1,4 @@
+/*
 package kr.nbc.momo.presentation.mypage
 
 import android.os.Bundle
@@ -14,4 +15,4 @@ class RootFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_root, container, false)
     }
-}
+}*/

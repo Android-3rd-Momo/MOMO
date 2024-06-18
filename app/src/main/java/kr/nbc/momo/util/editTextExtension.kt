@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.TextView
+import kr.nbc.momo.R
 
 fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Button) {
     addTextChangedListener(object : TextWatcher {
@@ -19,8 +20,8 @@ fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Butt
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val textLength = this@addTextWatcherWithError.text.length
             val errorText =
-                if (isKoreanConsonant(editType.last())) "${editType}는 ${maxLength}자까지 작성 가능합니다."
-                else "${editType}은 ${maxLength}자까지 작성 가능합니다."
+                if (isKoreanConsonant(editType.last())) context.getString(R.string.a_max_edit_is_b_nun, editType, maxLength)
+                else context.getString(R.string.a_max_edit_is_b_eun, editType, maxLength)
 
             if (textLength > maxLength) {
                 this@addTextWatcherWithError.error = errorText
@@ -52,9 +53,9 @@ fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Butt
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val textLength = this@addTextWatcherWithError.text.length
             val errorText =
-                if (isKoreanConsonant(editType.last())) "${editType}는 ${maxLength}자까지 작성 가능합니다."
-                else "${editType}은 ${maxLength}자까지 작성 가능합니다."
-            textNumberTextView.text = "${textLength}/${maxLength}"
+                if (isKoreanConsonant(editType.last())) context.getString(R.string.a_max_edit_is_b_nun, editType, maxLength)
+                else context.getString(R.string.a_max_edit_is_b_eun, editType, maxLength)
+            textNumberTextView.text = context.getString(R.string.a_divide_b, textLength, maxLength)
             if (textLength > maxLength) {
                 this@addTextWatcherWithError.error = errorText
                 btn.isEnabled = false

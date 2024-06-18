@@ -63,7 +63,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var isGroupImageChange = false
     private var imageUri: Uri? = null
     private var image: String? = null
-    private var categoryText: String = "공모전"
+    private var categoryText: String = requireActivity().getString(R.string.contest)
     private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""
@@ -242,7 +242,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "게시글 삭제 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.delete_group_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -263,7 +263,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "유저 신고 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -285,7 +285,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "유저 차단 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -306,7 +306,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), "리더 변경 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.change_leader_success), Toast.LENGTH_SHORT).show()
                         parentFragmentManager.popBackStack()
                     }
 
@@ -328,7 +328,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), "유저 강퇴 성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                         initUserList(uiState.data)
 
                     }
@@ -377,7 +377,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             initChip(chipGroupDevelopmentOccupations, data.category.developmentOccupations)
             initChip(chipProgramingLanguage, data.category.programingLanguage)
 
-            if (data.userList.contains(currentUser)) btnJoinProject.text = "채팅방 이동"
+            if (data.userList.contains(currentUser)) btnJoinProject.setText(R.string.move_to_chatting)
             if (data.leaderId == currentUser) {
                 btnEdit.setVisibleToVisible()
                 btnPopUp.setVisibleToGone()
@@ -445,15 +445,15 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
         editAdapter.longClick = object : EditUserListAdapter.LongClick {
             override fun longClick(userId: String) {
-                val dailog = Dailog.LeaderChange
-                showDialog(groupId, userId, dailog)
+                val enumDialog = EnumDialog.LeaderChange
+                showDialog(groupId, userId, enumDialog)
             }
         }
 
         editAdapter.onClick = object : EditUserListAdapter.OnClick {
             override fun onClick(userId: String) {
-                val dailog = Dailog.DeleteUser
-                showDialog(groupId, userId, dailog)
+                val enumDialog = EnumDialog.DeleteUser
+                showDialog(groupId, userId, enumDialog)
             }
         }
     }
@@ -479,7 +479,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (data.userList.size < data.limitPerson.toInt()) {
                         showDialog(true, data, currentUser)
                     } else {
-                        Toast.makeText(requireContext(), "참가 인원 수 초과", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.over_max_user), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -497,7 +497,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         } else {
             binding.btnPopUp.setOnClickListener{
-                Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.need_login), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -656,7 +656,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 "0$day"
             } else day.toString()
 
-            dateType.text = "$year.$monthText.$dayText"
+            dateType.text = getString(R.string.yyyy_MM_dd, year, monthText, dayText)
 
             val selectedCalendar = Calendar.getInstance()
             selectedCalendar.set(year, month, day, 0, 0, 0)
@@ -669,7 +669,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 firstMaxTimeInMillis = selectedCalendar.timeInMillis
             }
         }
-        var picker = DatePickerDialog(requireContext(), listener, year, month, day)
+        val picker = DatePickerDialog(requireContext(), listener, year, month, day)
 
         // 선택 전
         if (value == Value.First) {
@@ -682,7 +682,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         picker.show()
     }
 
-    private fun showDialog(groupId: String, userId: String, anDailog: Dailog) {
+    private fun showDialog(groupId: String, userId: String, anDialog: EnumDialog) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -690,8 +690,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             .create()
         dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        if (anDailog == Dailog.LeaderChange) {
-            dialogBinding.tvClose.text = "리더를 $userId 님으로 변경합니다."
+        if (anDialog == EnumDialog.LeaderChange) {
+            dialogBinding.tvClose.text = getString(R.string.change_leader, userId)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
                 viewModel.leaderChange(groupId, userId)
@@ -699,8 +699,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         }
 
-        if (anDailog == Dailog.DeleteUser) {
-            dialogBinding.tvClose.text = "$userId 님을 모임에서 추방합니다."
+        if (anDialog == EnumDialog.DeleteUser) {
+            dialogBinding.tvClose.text = getString(R.string.ban_user, userId)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
                 viewModel.deleteUser(userId, groupId)
@@ -724,7 +724,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         if (loginBoolean) {
-            dialogBinding.tvClose.text = "모임에 참여하시겠습니까?"
+            dialogBinding.tvClose.setText(R.string.ask_join_group)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {
@@ -736,7 +736,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }
             }
         } else {
-            dialogBinding.tvClose.text = "로그인페이지로 이동합니다."
+            dialogBinding.tvClose.setText(R.string.go_to_login)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 val signUpFragment = SignUpFragment()
@@ -814,9 +814,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initTextWatcher(){
         with(binding){
-            etGroupDescriptionEdit.addTextWatcherWithError(500, "그룹 소개", btnCompleteEdit)
-            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, "그룹 한 줄 소개", btnCompleteEdit)
-            etGroupNameEdit.addTextWatcherWithError(30, "그룹 이름", btnCompleteEdit)
+            etGroupDescriptionEdit.addTextWatcherWithError(500, requireContext().getString(R.string.group_desc), btnCompleteEdit)
+            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_one_line_desc), btnCompleteEdit)
+            etGroupNameEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_name), btnCompleteEdit)
         }
     }
 }

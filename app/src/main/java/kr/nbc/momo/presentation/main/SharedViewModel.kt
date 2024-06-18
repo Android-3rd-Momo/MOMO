@@ -1,22 +1,16 @@
 package kr.nbc.momo.presentation.main
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
-import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
-import kr.nbc.momo.presentation.onboarding.signup.model.toEntity
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 

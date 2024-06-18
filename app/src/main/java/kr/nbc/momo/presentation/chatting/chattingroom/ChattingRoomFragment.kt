@@ -163,7 +163,7 @@ class ChattingRoomFragment : Fragment() {
             }
             ivSend.setOnClickListener {
                 val text = binding.etText.text.toString()
-                if (text.isNotBlank()){
+                if (text.isNotBlank()) {
                     chattingListModel.run {
                         val userId = currentUserId
                         val userName = currentUsername
@@ -201,10 +201,11 @@ class ChattingRoomFragment : Fragment() {
                     }
 
                     is UiState.Loading -> {
-
+                        //nothing to do
                     }
 
                     is UiState.Error -> {
+                        //nothing to do
                         Log.d("ChattingRoom", "${it.message}")
                     }
                 }

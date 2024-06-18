@@ -1,6 +1,6 @@
 package kr.nbc.momo.presentation.group.read
 
-enum class Dailog {
+enum class EnumDialog {
     LeaderChange,
     DeleteUser
 }

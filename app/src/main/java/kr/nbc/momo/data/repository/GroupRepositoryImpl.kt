@@ -1,8 +1,6 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
-import android.util.Log
-import androidx.room.util.query
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -14,7 +12,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
-import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity

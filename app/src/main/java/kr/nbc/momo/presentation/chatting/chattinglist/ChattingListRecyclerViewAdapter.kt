@@ -11,15 +11,15 @@ import kr.nbc.momo.util.setVisibleToVisible
 
 class ChattingListRecyclerViewAdapter(
     private val onClick: (ChattingListModel) -> Unit
-): RecyclerView.Adapter<ChattingListRecyclerViewAdapter.ChattingListItemHolder>() {
+) : RecyclerView.Adapter<ChattingListRecyclerViewAdapter.ChattingListItemHolder>() {
     var itemList = listOf<ChattingListModel>()
 
     class ChattingListItemHolder(
         private val onClick: (ChattingListModel) -> Unit,
         private val binding: RvItemChattingListBinding
-    ): RecyclerView.ViewHolder(binding.root){
-        fun bind(chattingListModel: ChattingListModel){
-            with(binding){
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(chattingListModel: ChattingListModel) {
+            with(binding) {
                 ivGroupImage.setThumbnailByUrlOrDefault(chattingListModel.groupThumbnailUrl)
                 tvGroupName.text = chattingListModel.groupName
                 tvLatestChatText.text = chattingListModel.latestChatMessage
@@ -27,7 +27,7 @@ class ChattingListRecyclerViewAdapter(
                 tvSign.apply {
                     if (chattingListModel.latestChatIndexGap == 0) {
                         setVisibleToInvisible()
-                    }else {
+                    } else {
                         setVisibleToVisible()
                         text = chattingListModel.latestChatIndexGap.toString()
                     }
@@ -40,7 +40,8 @@ class ChattingListRecyclerViewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChattingListItemHolder {
-        val binding = RvItemChattingListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            RvItemChattingListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ChattingListItemHolder(onClick, binding)
     }
 

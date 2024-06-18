@@ -75,12 +75,12 @@ class SetUpFragment : Fragment() {
                         }
                         is UiState.Success -> {
                             if (state.data.isEmpty()) {
-                                showConfirmationDialog("회원탈퇴 하시겠습니까?") {
+                                showConfirmationDialog(getString(R.string.check_withdrawal)) {
                                     viewModel.withdrawal()
                                     sharedViewModel.getCurrentUser()
                                 }
                             } else {
-                                Toast.makeText(requireContext(), state.data.joinToString().plus("의 리더입니다."), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)), Toast.LENGTH_SHORT).show()
                             }
                         }
                         is UiState.Error -> {
@@ -98,7 +98,7 @@ class SetUpFragment : Fragment() {
                 parentFragmentManager.popBackStack()
             }
             tvSignOut.setOnClickListener {
-                showConfirmationDialog("로그아웃 하시겠습니까?") {
+                showConfirmationDialog(getString(R.string.check_logout)) {
                     viewModel.signOut()
                     sharedViewModel.getCurrentUser()
                 }
@@ -112,12 +112,12 @@ class SetUpFragment : Fragment() {
     private fun showConfirmationDialog(message: String, onConfirm: () -> Unit) {
         AlertDialog.Builder(requireContext())
             .setMessage(message)
-            .setPositiveButton("확인") { dialog, _ ->
+            .setPositiveButton(getString(R.string.confirm)) { dialog, _ ->
                 onConfirm()
                 goOnboarding()
                 dialog.dismiss()
             }
-            .setNegativeButton("취소") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()

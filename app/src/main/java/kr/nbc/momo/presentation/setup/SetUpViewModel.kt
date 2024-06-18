@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.setup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,6 @@ import kr.nbc.momo.domain.usecase.SearchLeaderUseCase
 import kr.nbc.momo.domain.usecase.SignOutUserCase
 import kr.nbc.momo.domain.usecase.SignWithdrawalUserUseCase
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.mapper.toGroupModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,6 +43,7 @@ class SetUpViewModel @Inject constructor(
             try {
                 signOutUserUseCase()
             }catch (e:Exception){
+                Log.d("error", e.toString())
             }
         }
     }
@@ -52,6 +53,7 @@ class SetUpViewModel @Inject constructor(
             try {
                 signWithdrawalUserUseCase()
             } catch (e: Exception) {
+                Log.d("error", e.toString())
             }
         }
     }
