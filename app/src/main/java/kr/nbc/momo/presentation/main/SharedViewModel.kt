@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetChattingListByIdUseCase
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
+import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.domain.usecase.SetLastViewedChatUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.toEntity
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 
@@ -32,12 +34,15 @@ class SharedViewModel @Inject constructor(
     private val _currentUser = MutableStateFlow<UiState<UserModel?>>(UiState.Loading)
     val currentUser: StateFlow<UiState<UserModel?>> get() = _currentUser
 
+    private val _updateUserState = MutableStateFlow<UiState<Unit>>(UiState.Success(Unit))
+    val updateUserState: StateFlow<UiState<Unit>> get() = _updateUserState
+
     init {
         getCurrentUser()
     }
 
 
-    fun getCurrentUser() { // 변경된 내용
+    fun getCurrentUser() {
         viewModelScope.launch {
             _currentUser.value = UiState.Loading
             try {
@@ -50,9 +55,16 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    fun updateUser(user: UserModel) {
-        _currentUser.value = UiState.Success(user)
+fun updateUser(user: UserModel) {
+    viewModelScope.launch {
+        _updateUserState.value = UiState.Loading
+        try {
+            _currentUser.value = UiState.Success(user)
+        } catch (e: Exception) {
+            _updateUserState.value = UiState.Error(e.message.toString())
+        }
     }
+}
 
     fun getGroupId(groupId: String) {
         _groupId.value = groupId

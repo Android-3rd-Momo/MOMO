@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -47,6 +45,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
+import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
@@ -61,6 +60,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: String? = null
     private var isEditMode = false
+    private var isGroupImageChange = false
     private var imageUri: Uri? = null
     private var image: String? = null
     private var categoryText: String = "공모전"
@@ -75,6 +75,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
+            isGroupImageChange = true
             binding.ivGroupImage.setThumbnailByUrlOrDefault(uri.toString())
             binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
         } else {
@@ -415,8 +416,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
-        binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
-        binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
+        if (groupThumbnail.isNullOrEmpty()) {
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(null)
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
+        } else {
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
+        }
     }
 
     private fun initUserList(userList: List<String>) {
@@ -500,7 +506,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         val editMode = arrayOf(
             binding.clEditMode,
             binding.clSimpleDescriptionContainerEdit,
-            binding.btnDelete
+            binding.btnDelete,
+            binding.ivDeleteGroupImage
         )
         val viewMode = arrayOf(
             binding.clViewMode,
@@ -517,6 +524,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         binding.ivGroupImageEdit.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
+        binding.ivDeleteGroupImage.setOnClickListener {
+            imageUri = null
+            isGroupImageChange = true
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(null) //todo
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
+        }
         binding.tvFirstDateEdit.setOnClickListener {
             showDialog(binding.tvFirstDateEdit, Value.First)
         }
@@ -525,6 +538,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
         binding.btnCompleteEdit.setOnClickListener {
             btnCompleteEditOnClickListener(data, editMode, viewMode)
+            isGroupImageChange = false
         }
         binding.btnDelete.setOnClickListener {
             viewModel.deleteGroup(data.groupId, data.userList)
@@ -581,7 +595,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             getChipText(binding.chipGroupDevelopmentOccupationsEdit),
             getChipText(binding.chipProgramingLanguageEdit)
         )
-        image = data.groupThumbnail
+        val updatedGroupThumbnail = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
         viewModel.updateGroup(
             data.copy(
                 groupName = binding.etGroupNameEdit.text.toString(),
@@ -590,7 +604,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 firstDate = binding.tvFirstDateEdit.text.toString(),
                 lastDate = binding.tvLastDateEdit.text.toString(),
                 category = categoryList,
-                limitPerson = groupLimitPeople
+                limitPerson = groupLimitPeople,
+                groupThumbnail = updatedGroupThumbnail,
             ), imageUri
         )
         setChangeMode(editMode, viewMode)
@@ -793,86 +808,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initTextWatcher(){
         with(binding){
-            etGroupDescriptionEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.etGroupDescriptionEdit.text.length
-                    if (textLength > 500) {
-                        binding.etGroupDescriptionEdit.error = "그룹 소개는 500자까지 작성 가능합니다."
-                        btnCompleteEdit.isEnabled = false
-                    } else {
-                        binding.etGroupDescriptionEdit.error = null
-                        btnCompleteEdit.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-            etGroupOneLineDescriptionEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.etGroupOneLineDescriptionEdit.text.length
-                    if (textLength > 30) {
-                        binding.etGroupOneLineDescriptionEdit.error = "그룹 한 줄 소개는 30자까지 작성 가능합니다."
-                        btnCompleteEdit.isEnabled = false
-                    } else {
-                        binding.etGroupOneLineDescriptionEdit.error = null
-                        btnCompleteEdit.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-            etGroupNameEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.etGroupNameEdit.text.length
-                    if (textLength > 30) {
-                        binding.etGroupNameEdit.error = "그룹 이름은 30자까지 작성 가능합니다."
-                        btnCompleteEdit.isEnabled = false
-                    } else {
-                        binding.etGroupNameEdit.error = null
-                        btnCompleteEdit.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
+            etGroupDescriptionEdit.addTextWatcherWithError(500, "그룹 소개", btnCompleteEdit)
+            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, "그룹 한 줄 소개", btnCompleteEdit)
+            etGroupNameEdit.addTextWatcherWithError(30, "그룹 이름", btnCompleteEdit)
         }
     }
 }

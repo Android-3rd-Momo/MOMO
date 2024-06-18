@@ -7,8 +7,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +43,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.encryptECB
 import java.util.Calendar
 
@@ -162,89 +161,9 @@ class CreateGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            groupDescription.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.groupDescription.text.length
-                    if (textLength > 500) {
-                        binding.groupDescription.error = "그룹 소개는 500자까지 작성 가능합니다."
-                        btnCreateProject.isEnabled = false
-                    } else {
-                        binding.groupDescription.error = null
-                        btnCreateProject.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-            groupOneLineDescription.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.groupOneLineDescription.text.length
-                    if (textLength > 30) {
-                        binding.groupOneLineDescription.error = "그룹 한 줄 소개는 30자까지 작성 가능합니다."
-                        btnCreateProject.isEnabled = false
-                    } else {
-                        binding.groupOneLineDescription.error = null
-                        btnCreateProject.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-            groupName.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    //No action needed
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val textLength = binding.groupName.text.length
-                    if (textLength > 30) {
-                        binding.groupName.error = "그룹 이름은 30자까지 작성 가능합니다."
-                        btnCreateProject.isEnabled = false
-                    } else {
-                        binding.groupName.error = null
-                        btnCreateProject.isEnabled = true
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //No action needed
-                }
-
-            })
-
-
-
+            groupDescription.addTextWatcherWithError(500, "그룹소개", btnCreateProject)
+            groupOneLineDescription.addTextWatcherWithError(30, "그룹 한 줄 소개", btnCreateProject)
+            groupName.addTextWatcherWithError(30, "그룹 이름", btnCreateProject)
             categorySpinner.clipToOutline = true
             ivGroupImage.clipToOutline = true
 

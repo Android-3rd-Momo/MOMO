@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +35,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
@@ -51,6 +50,11 @@ class MyPageFragment : Fragment() {
     private val viewModel: MyPageViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
+    //이미지 변경 상태 확인
+    private var isProfileImageChange = false
+    private var isBackgroundImageChange = false
+    private var isPortfolioImageChange = false
+
     private var isEditMode = false
     private var currentUser: UserModel? = null
     private var profileImageUri: Uri? = null
@@ -60,6 +64,7 @@ class MyPageFragment : Fragment() {
     private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             profileImageUri = uri
+            isProfileImageChange = true
             binding.ivUserProfileImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -69,6 +74,7 @@ class MyPageFragment : Fragment() {
     private val pickBackgroundImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             backgroundImageUri = uri
+            isBackgroundImageChange = true
             binding.ivBackProfileThumbnail.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -78,6 +84,7 @@ class MyPageFragment : Fragment() {
     private val pickPortfolioImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             portfolioImageUri = uri
+            isPortfolioImageChange = true
             binding.ivPortfolioImage.load(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -128,6 +135,33 @@ class MyPageFragment : Fragment() {
             }
         }
     }
+    private fun observeUserProfileUpdate() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userProfileUpdate.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            Log.d("test", "loding")
+                            binding.includeUiState.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
+                        }
+                        is UiState.Success -> {
+                            Log.d("test", "Success")
+                            binding.includeUiState.setVisibleToGone()
+                            sharedViewModel.getCurrentUser()
+                            binding.scrollView.setVisibleToVisible()
+                        }
+                        is UiState.Error -> {
+                            Log.d("test", "Error")
+                            binding.includeUiState.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
+                            Log.d("mypage error", state.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun initView(user: UserModel) {
         with(binding) {
@@ -160,74 +194,9 @@ class MyPageFragment : Fragment() {
             }
         }
 
-        binding.etStackOfDevelopment.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
-                val textLength = binding.etStackOfDevelopment.text.length
-                if (textLength > 500) {
-                    binding.etStackOfDevelopment.error = "기술스택은 500자 까지 작성 가능합니다."
-                    binding.btnCompleteEdit.isEnabled = false
-                } else {
-                    binding.etStackOfDevelopment.error = null
-                    binding.btnCompleteEdit.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
-            }
-        })
-        binding.etPortfolio.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
-                val textLength = binding.etPortfolio.text.length
-                if (textLength > 500) {
-                    binding.etPortfolio.error = "포트폴리오는 500자 까지 작성 가능합니다."
-                    binding.btnCompleteEdit.isEnabled = false
-                } else {
-                    binding.etPortfolio.error = null
-                    binding.btnCompleteEdit.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
-            }
-        })
-        binding.etUserSelfIntroduction.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-                //No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val textLength = binding.etUserSelfIntroduction.text.length
-                if (textLength > 60) {
-                    binding.etUserSelfIntroduction.error = "자기소개는 60자까지 작성 가능합니다."
-                    binding.btnCompleteEdit.isEnabled = false
-                } else {
-                    binding.etUserSelfIntroduction.error = null
-                    binding.btnCompleteEdit.isEnabled = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //No action needed
-            }
-
-        })
+        binding.etStackOfDevelopment.addTextWatcherWithError(500, "기술스택", binding.btnCompleteEdit, binding.tvCountStackEditText)
+        binding.etPortfolio.addTextWatcherWithError(500, "포트폴리오", binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
+        binding.etUserSelfIntroduction.addTextWatcherWithError(60, "자기소개", binding.btnCompleteEdit)
     }
 
     private fun updateTextCount(et: EditText, tv: TextView) {
@@ -263,6 +232,7 @@ class MyPageFragment : Fragment() {
                 saveProfileInfo()
                 setChangeMode()
                 requireActivity().hideKeyboard()
+                observeUserProfileUpdate()
             }
         }
         binding.ivBack.setOnClickListener {
@@ -276,21 +246,31 @@ class MyPageFragment : Fragment() {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
         binding.ivSetUp.setOnClickListener {
-            if (currentUser != null) {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, SetUpFragment())
-                    .addToBackStack(null)
-                    .commit()
-            } else {
-                Toast.makeText(requireContext(), "로그인 후 사용해주세요.", Toast.LENGTH_SHORT).show()
-            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SetUpFragment())
+                .addToBackStack(null)
+                .commit()
         }
         binding.btnGoOnBoarding.setOnClickListener {
             val intent = Intent(requireActivity(), GetStartedActivity::class.java)
             startActivity(intent)
         }
+        binding.ivDeleteProfileImage.setOnClickListener {
+            profileImageUri = null
+            isProfileImageChange = true
+            binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
+        }
+        binding.ivDeleteBackProfileThumbnail.setOnClickListener {
+            backgroundImageUri = null
+            isBackgroundImageChange = true
+            binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
+        }
+        binding.ivDeletePortfolioImage.setOnClickListener {
+            portfolioImageUri = null
+            isPortfolioImageChange = true
+            binding.ivPortfolioImage.setUploadImageByUrlOrDefault(null)
+        }
     }
-
 
     private fun setChangeMode() {
         isEditMode = !isEditMode
@@ -309,7 +289,17 @@ class MyPageFragment : Fragment() {
             binding.cgProgramTag.setVisibleToVisible()
             updateTextCount(binding.etStackOfDevelopment, binding.tvCountStackEditText)
             updateTextCount(binding.etPortfolio, binding.tvCountPortfolioEditText)
+
+            binding.ivPortfolioImage.setOnClickListener {
+                pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            }
+            binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
+            hideNav()
+            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            rootView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+
         } else {
+            //태그 빈값
             if (binding.cgTypeTag.childCount == 0) {
                 binding.tvEmptyTypeTag.setVisibleToVisible()
                 binding.cgTypeTag.setVisibleToGone()
@@ -326,6 +316,12 @@ class MyPageFragment : Fragment() {
             setSelectedChips(binding.cgTypeTag, getChipText(binding.cgTypeTag))
             setSelectedChips(binding.cgProgramTag, getChipText(binding.cgProgramTag))
             currentUser?.let { initView(it) }
+
+            binding.ivPortfolioImage.setOnClickListener(null)
+            binding.llProfileImage.setBackgroundResource(0)
+            showNav()
+            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            rootView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
         }
 
 
@@ -340,7 +336,11 @@ class MyPageFragment : Fragment() {
             binding.cvEditProfileImage,
             binding.tvCountStackEditText,
             binding.tvCountPortfolioEditText,
-            binding.ivBack
+            binding.ivBack,
+            binding.cvDeleteProfileImage,
+            binding.ivDeleteBackProfileThumbnail,
+            binding.ivDeletePortfolioImage
+
         )
         val viewMode = arrayOf(
             binding.ivEditProfile,
@@ -352,23 +352,6 @@ class MyPageFragment : Fragment() {
 
         editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
         viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
-
-        if (isEditMode) {
-            binding.ivPortfolioImage.setOnClickListener {
-                pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-            }
-            binding.llProfileImage.setBackgroundResource(R.drawable.circle_blue)
-            hideNav()
-            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
-            rootView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
-
-        } else {
-            binding.ivPortfolioImage.setOnClickListener(null)
-            binding.llProfileImage.setBackgroundResource(0)
-            showNav()
-            val rootView = requireActivity().window.decorView.findViewById<View>(android.R.id.content)
-            rootView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
-        }
     }
 
     private fun isLogin() { //todo 코드 간결화 필요
@@ -382,15 +365,15 @@ class MyPageFragment : Fragment() {
         binding.clUserDetailInfo.setVisibleToGone()
         binding.ivSetUp.setVisibleToGone()
         binding.ivEditProfile.setVisibleToGone()
-        binding.tvUserName.text = "로그인이 필요합니다" //todo 멘트 변경?
+        binding.tvUserName.text = "로그인이 필요합니다"
         binding.btnGoOnBoarding.setVisibleToVisible()
     }
 
 
-    private fun createChip(text: String, isCheckable: Boolean, isEditMode: Boolean): Chip {
+    private fun createChip(text: String, isEditMode: Boolean): Chip {
         return Chip(requireContext()).apply {
             this.text = text
-            this.isCheckable = isCheckable
+            this.isCheckable = true
             this.isCloseIconVisible = false
             this.isClickable = isEditMode
             updateChipAppearance(this, isChecked)
@@ -418,7 +401,7 @@ class MyPageFragment : Fragment() {
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, isEditMode: Boolean) {
         chipGroup.removeAllViews()
         for (chipText in chipList) {
-            val chip = createChip(chipText, true, isEditMode)
+            val chip = createChip(chipText, isEditMode)
             chipGroup.addView(chip)
         }
     }
@@ -454,15 +437,21 @@ class MyPageFragment : Fragment() {
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = profileImageUri?.toString() ?: currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = backgroundImageUri?.toString()
-                    ?: currentUser.userBackgroundThumbnailUrl,
-                userPortfolioImageUrl = portfolioImageUri?.toString() ?: currentUser.userPortfolioImageUrl
+                userProfileThumbnailUrl = if (isProfileImageChange) profileImageUri?.toString() ?: ""
+                else currentUser.userProfileThumbnailUrl,
+                userBackgroundThumbnailUrl = if (isBackgroundImageChange) backgroundImageUri?.toString() ?: ""
+                else currentUser.userBackgroundThumbnailUrl,
+                userPortfolioImageUrl = if (isPortfolioImageChange) portfolioImageUri?.toString() ?: ""
+                else currentUser.userPortfolioImageUrl
             )
             viewModel.saveUserProfile(updatedUserModel)
             sharedViewModel.updateUser(updatedUserModel)
+            isProfileImageChange = false
+            isBackgroundImageChange = false
+            isPortfolioImageChange = false
         }
     }
+
 
     private fun getChipText(chipGroup: ChipGroup): List<String> {
         val textList = mutableListOf<String>()
@@ -510,6 +499,7 @@ class MyPageFragment : Fragment() {
             binding.btnCompleteEdit.visibility = View.VISIBLE
         }
     }
+
     private fun showNav() {
         val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
         nav.setVisibleToVisible()
