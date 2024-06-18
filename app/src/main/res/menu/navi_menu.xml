@@ -11,7 +11,7 @@
         android:icon="@drawable/icon_chat"/>
 
     <item
-        android:id="@+id/myPageFragment"
+        android:id="@+id/rootFragment"
         android:title="마이페이지"
         android:icon="@drawable/icon_mypage"/>
 </menu>

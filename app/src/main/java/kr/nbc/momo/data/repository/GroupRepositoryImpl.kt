@@ -126,6 +126,19 @@ class GroupRepositoryImpl @Inject constructor(
         awaitClose { listener.isComplete }
     }
 
+    override suspend fun subscription(userId: String, groupId: String): Flow<Boolean> = callbackFlow {
+        val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+        query.get().addOnSuccessListener { snapshot ->
+            for (document in snapshot.documents) {
+                fireStore.runTransaction { transaction ->
+                    transaction.update(document.reference, "subscription", FieldValue.arrayUnion(groupId))
+                }.addOnSuccessListener {
+                    fireStore.collection("groups").document(groupId)
+                }
+            }
+        }
+    }
+
     override suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean> = callbackFlow {
         val query = fireStore.collection("userInfo").whereIn("userId", userList)
 

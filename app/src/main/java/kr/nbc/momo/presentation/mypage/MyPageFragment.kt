@@ -235,21 +235,11 @@ class MyPageFragment : Fragment() {
                 observeUserProfileUpdate()
             }
         }
-        binding.ivBack.setOnClickListener {
-            setChangeMode()
-            requireActivity().hideKeyboard()
-        }
         binding.ivEditProfileImage.setOnClickListener {
             pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
         binding.ivEditBackProfileThumbnail.setOnClickListener {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
-        binding.ivSetUp.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SetUpFragment())
-                .addToBackStack(null)
-                .commit()
         }
         binding.btnGoOnBoarding.setOnClickListener {
             val intent = Intent(requireActivity(), GetStartedActivity::class.java)
@@ -336,7 +326,6 @@ class MyPageFragment : Fragment() {
             binding.cvEditProfileImage,
             binding.tvCountStackEditText,
             binding.tvCountPortfolioEditText,
-            binding.ivBack,
             binding.cvDeleteProfileImage,
             binding.ivDeleteBackProfileThumbnail,
             binding.ivDeletePortfolioImage
@@ -356,14 +345,12 @@ class MyPageFragment : Fragment() {
 
     private fun isLogin() { //todo 코드 간결화 필요
         binding.clUserDetailInfo.setVisibleToVisible()
-        binding.ivSetUp.setVisibleToVisible()
         binding.ivEditProfile.setVisibleToVisible()
         binding.btnGoOnBoarding.setVisibleToGone()
     }
 
     private fun isLogOut() { //todo 코드 간결화 필요
         binding.clUserDetailInfo.setVisibleToGone()
-        binding.ivSetUp.setVisibleToGone()
         binding.ivEditProfile.setVisibleToGone()
         binding.tvUserName.text = "로그인이 필요합니다"
         binding.btnGoOnBoarding.setVisibleToVisible()
