@@ -491,8 +491,14 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             setEditMode(data)
         }
 
-        binding.btnPopUp.setOnClickListener {
-            showPopup(binding.btnPopUp)
+        if (currentUser != null) {
+            binding.btnPopUp.setOnClickListener {
+                showPopup(binding.btnPopUp)
+            }
+        } else {
+            binding.btnPopUp.setOnClickListener{
+                Toast.makeText(requireContext(), "로그인이 필요합니다", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
