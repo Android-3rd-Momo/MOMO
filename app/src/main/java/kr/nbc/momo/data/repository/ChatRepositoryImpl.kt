@@ -60,7 +60,7 @@ class ChatRepositoryImpl @Inject constructor(
         url: String
     ) {
         try {
-            if (groupId.isNotBlank()) {
+            if (groupId.isNotBlank() && text.isNotBlank()) {
 
                 chatRef.child(groupId).runTransaction(object : Transaction.Handler {
                     override fun doTransaction(currentData: MutableData): Transaction.Result {

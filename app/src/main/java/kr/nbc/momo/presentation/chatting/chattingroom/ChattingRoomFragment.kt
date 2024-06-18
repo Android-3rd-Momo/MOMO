@@ -159,12 +159,14 @@ class ChattingRoomFragment : Fragment() {
             }
             ivSend.setOnClickListener {
                 val text = binding.etText.text.toString()
-                chattingListModel.run {
-                    val userId = currentUserId
-                    val userName = currentUsername
-                    val url = currentUrl
-                    viewModel.sendChat(groupId, userId, text, userName, groupName, url)
-                    Log.d("ChattingRoom", "${it}")
+                if (text.isNotBlank()){
+                    chattingListModel.run {
+                        val userId = currentUserId
+                        val userName = currentUsername
+                        val url = currentUrl
+                        viewModel.sendChat(groupId, userId, text, userName, groupName, url)
+                        Log.d("ChattingRoom", "${it}")
+                    }
                 }
                 binding.etText.text.clear()
             }
