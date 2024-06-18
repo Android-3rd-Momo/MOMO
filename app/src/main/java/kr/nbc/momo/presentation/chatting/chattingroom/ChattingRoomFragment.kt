@@ -52,10 +52,14 @@ class ChattingRoomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeGroupId()
         observeGroupListItem()
-        hideNav()
         initData()
         observeChatList()
         initView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideNav()
     }
 
     override fun onStop() {
@@ -64,12 +68,12 @@ class ChattingRoomFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        showNav()
         super.onDestroyView()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        showNav()
         _binding = null
     }
 
