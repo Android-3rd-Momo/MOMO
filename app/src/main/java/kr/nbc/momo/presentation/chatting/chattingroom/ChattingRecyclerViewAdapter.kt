@@ -130,7 +130,7 @@ class ChattingRecyclerViewAdapter() :
     }
 
     private fun isPrevMinuteChanged(position: Int): Boolean {
-        if (position == 0) return true
+        if (position == 0) return false
         val prevMin = ZonedDateTime.parse(itemList.chatList[position - 1].dateTime)
             .truncatedTo(ChronoUnit.MINUTES)
         val currentMin = ZonedDateTime.parse(itemList.chatList[position].dateTime)
@@ -169,16 +169,16 @@ class ChattingRecyclerViewAdapter() :
                     tvUserName.setVisibleToGone()
                     tvTime.setVisibleToGone()
                 }
-                if (isMinuteChanged){
+                if (isMinuteChanged) {
                     tvTime.setVisibleToVisible()
-                }else{
+                } else {
                     tvTime.setVisibleToGone()
                 }
 
-                if (isNextUserChanged){
+                if (isNextUserChanged) {
                     tvTime.setVisibleToVisible()
                 }
-                if (isPrevMinuteChanged){
+                if (isPrevMinuteChanged) {
                     cardView.setVisibleToVisible()
                     tvUserName.setVisibleToVisible()
                 }
@@ -188,6 +188,8 @@ class ChattingRecyclerViewAdapter() :
                     tvUserName.setVisibleToVisible()
                     tvTime.setVisibleToVisible()
                     tvDivider.setVisibleToVisible()
+                    if (!isMinuteChanged) tvTime.setVisibleToGone()
+
                 } else {
                     tvDivider.setVisibleToGone()
                 }
