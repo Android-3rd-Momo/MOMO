@@ -1,34 +1,37 @@
 <resources>
     <string name="app_name">모이개</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--OnBoardingPackage 문자모음-->
 
     //loginFragment
-    <string name="Login">로그인</string>
-    <string name="SignIn">회원가입</string>
-    <string name="Id">아이디</string>
-    <string name="Password">비밀번호</string>
-    <string name="GoogleLogin">구글 로그인</string>
-    <string name="Email">이메일</string>
+    <string name="login">로그인</string>
+    <string name="sign_in">회원가입</string>
+    <string name="id">아이디</string>
+    <string name="password">비밀번호</string>
+    <string name="google_login">구글 로그인</string>
+    <string name="email">이메일</string>
 
     //termFragment
-    <string name="TermTitle">약관에 동의해주세요</string>
-    <string name="TermMiddleTitle">개인정보 이용 및 서비스 이용관리에 동의해주세요</string>
-    <string name="Agree">모두 동의</string>
-    <string name="AgreeDesc">서비스 이용을 위해 아래 약관에 모두 동의합니다</string>
-    <string name="Term1">(필수) 만 14세 이상입니다</string>
-    <string name="Term2">(필수) 서비스 이용약관 동의</string>
-    <string name="Term3">(필수) 개인정보 처리방침 동의</string>
-    <string name="Term4">(필수) 커뮤니티 이용약관 동의</string>
-    <string name="Term5">(선택) 마케팅 수신 동의</string>
-    <string name="See">보기</string>
-    <string name="TermComplete">동의 완료</string>
+    <string name="term_title">약관에 동의해주세요</string>
+    <string name="term_middle_title">개인정보 이용 및 서비스 이용관리에 동의해주세요</string>
+    <string name="agree">모두 동의</string>
+    <string name="agree_desc">서비스 이용을 위해 아래 약관에 모두 동의합니다</string>
+    <string name="term1">(필수) 만 14세 이상입니다</string>
+    <string name="term2">(필수) 서비스 이용약관 동의</string>
+    <string name="term3">(필수) 개인정보 처리방침 동의</string>
+    <string name="term4">(필수) 커뮤니티 이용약관 동의</string>
+    <string name="term5">(선택) 마케팅 수신 동의</string>
+    <string name="see">보기</string>
+    <string name="term_complete">동의 완료</string>
+
+    //MyGroupFragment
+    <string name="myGroupList">"모임 내역</string>
 
     //이용약관 보기
-    <string name="PrivateTermTitle">"개인정보 처리방침 동의</string>
-    <string name="PrivateTerm">"□ 개인정보 제3자 제공 동의
+    <string name="private_termTitle">"개인정보 처리방침 동의</string>
+    <string name="private_term">"□ 개인정보 제3자 제공 동의
+
+
 
 제 1 조 (개인정보의 수집 및 이용 목적)
 
@@ -65,8 +68,8 @@
 
 </string>
 
-    <string name="ServiceTermTitle">"서비스 이용약관 동의"</string>
-    <string name="ServiceTerm"> "□ 앱 서비스 이용약관 동의 사항
+    <string name="service_term_title">"서비스 이용약관 동의"</string>
+    <string name="service_term"> "□ 앱 서비스 이용약관 동의 사항
 
 제 1 조 (목적)
 
@@ -137,10 +140,10 @@
 그러나 동의를 거부할 경우 앱이용에 제한을 받을 수 있습니다.
 
 개인정보 처리방침 시행일자 : 2024년 06월 18일"
-</string>
+    </string>
 
-    <string name="CommunityTermTitle">"커뮤니티 이용약관 동의"</string>
-    <string name="CommunityTerm">"모이개 커뮤니티 이용약관
+    <string name="community_term_title">"커뮤니티 이용약관 동의"</string>
+    <string name="community_term">"모이개 커뮤니티 이용약관
 
 1. 소개
 본 모이개 커뮤니티 이용약관(이하 "약관")은 모이개 커뮤니티 사용자가 준수해야 할 기본적인 규칙을 명시합니다. 본 커뮤니티에 가입하거나 사용하는 경우, 이용자는 본 약관에 동의한 것으로 간주됩니다.
@@ -187,5 +190,93 @@
 이메일: moigae4@gmail.com
 
 개인정보 처리방침 시행일자 : 2024년 06월 18일"
-</string>
+    </string>
+    <string name="please_check_desc">아래 내용을 확인해주세요</string>
+    <!--버튼 문구 문자모음-->
+    <string name="prev">이전</string>
+    <string name="next">다음</string>
+    <string name="confirm">완료</string>
+    <string name="skip">건너뛰기</string>
+    <string name="cancel">취소</string>
+    <!--dialog 문자모음-->
+    <string name="join_to_group">모임에 참여하시겠습니까?</string>
+    <!--chattingRoom 문자모음-->
+    <string name="please_edit_chat">입력하기</string>
+    <!--createGroup 문자모음-->
+    <string name="create_group">모임 생성</string>
+    <string name="group_name">모임 이름</string>
+    <string name="group_one_line_desc">모임 한 줄 소개</string>
+    <string name="group_desc">모임 소개</string>
+    <string name="category_info">카테고리 상세</string>
+    <string name="dev_lang">개발 언어</string>
+    <string name="dev_occupation">개발 직군</string>
+    <string name="period">모집 기간</string>
+    <string name="start_date">시작일</string>
+    <string name="end_date">마감일</string>
+    <string name="date">날짜</string>
+    <string name="group_max">모집 인원</string>
+    <!--기슬스택 문자모음-->
+    <string name="welcome_moigae">모이개에 오신것을 환영합니다</string>
+    <string name="please_pick_your_dev_lang">사용하시는 개발 언어를\n골라주세요!</string>
+    <string name="please_introduce_your_stack">기술스택에 대해 알려주세요\n</string>
+    <string name="please_edit_your_stack">기술 스택을 입력해주세요</string>
+    <string name="max_500">0/500</string>
+    <string name="please_pick_your_occupation">개발 직군을 골라주세요!\n</string>
+    <string name="default_user_joined_group">유저님의 가입 모임</string>
+    <string name="user_joined_group">님의 가입 모임</string>
+    <string name="recommend_group">추천 모임</string>
+    <string name="latest_group">모이개의 최신 모임</string>
+    <string name="floating_btn_create_group">+ 모임 생성</string>
+    <!--마이페이지 문자모음-->
+    <string name="name">이름</string>
+    <string name="please_edit_introduce">자기소개를 작성해주세요</string>
+    <string name="do_login">로그인 하기</string>
+    <string name="please_pick_dev_lang">사용하시는 개발 언어를 선택해보세요!</string>
+    <string name="please_pick_occupation">관심있는 직군을 선택해보세요!</string>
+    <string name="stack">기술 스택</string>
+    <string name="please_edit_stack">사용하신 기술이 있다면 작성해 보세요!</string>
+    <string name="portfolio">포트폴리오</string>
+    <string name="please_edit_portfolio">간단한 포트폴리오를 작성해 보세요!</string>
+    <string name="confirm_edit">편집 완료</string>
+    <!--로그인 문자모음-->
+    <string name="use_app_without_login">로그인 없이 앱 이용하기</string>
+    <string name="check">확인</string>
+    <!--리드그룹 문자모음-->
+    <string name="group_information">그룹 정보</string>
+    <string name="category">카테고리</string>
+    <string name="leader_id">리더 ID</string>
+    <string name="hyphen">-</string>
+    <string name="group_user">참가자</string>
+    <string name="default_max_user">1/15</string>
+    <string name="join_group">모임 참여하기</string>
+    <string name="zero">zero</string>
+    <!--설정 문자모음-->
+    <string name="option">설정</string>
+    <string name="logout">로그아웃</string>
+    <string name="withdrawal">회원 탈퇴</string>
+    <!--회원가입 문자모음-->
+    <string name="sign_up">회원 가입</string>
+    <string name="check_duplication">중복확인</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="phone_number">전화번호</string>
+    <string name="join_us">가입하기</string>
+    <!--유저인포 문자모음-->
+    <string name="profile">프로필</string>
+    <string name="empty_edit">작성한 내용이 없습니다.</string>
+    <!--온보딩 뷰페이저 문자모음-->
+    <string name="welcome_to_moigae">모이개에 어서오세요!</string>
+    <string name="recruit_team">프로젝트에 함께 할 사람들을 모이개를 통해서 모집해보세요!</string>
+    <!--uistate 아이템 문자 모음-->
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="no_result">결과가 없습니다</string>
+    <!--팝업메뉴 문자모음-->
+    <string name="home">홈</string>
+    <string name="chatting">채팅</string>
+    <string name="my_page">마이페이지</string>
+
+    <!--팝업메뉴 문자모음2-->
+    <string name="report_user">사용자 신고하기</string>
+    <string name="block_user">사용자 차단하기</string>
+    <string name="report_group">게시물 신고하기</string>
 </resources>

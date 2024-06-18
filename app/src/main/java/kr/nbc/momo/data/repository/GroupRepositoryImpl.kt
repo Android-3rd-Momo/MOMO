@@ -115,28 +115,60 @@ class GroupRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun addUser(userList: List<String>, groupId: String): Flow<List<String>> = callbackFlow  {
-        val ref = fireStore.collection("groups").document(groupId)
-        val listener = fireStore.runTransaction { transaction ->
-            transaction.update(ref, "userList", userList)
-            null
-        }.addOnSuccessListener {
-            trySend(userList)
+    override suspend fun addUser(userId: String, groupId: String): Flow<List<String>> = callbackFlow {
+        val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+        val listenerUser = query.get().addOnSuccessListener { snapshot ->
+            for (document in snapshot.documents) {
+                fireStore.runTransaction { transaction ->
+                    transaction.update(document.reference, "subscription", FieldValue.arrayRemove(groupId))
+                    transaction.update(document.reference, "userGroup", FieldValue.arrayUnion(groupId))
+                }.addOnFailureListener { e ->
+                    close(e)
+                }
+            }
         }
-        awaitClose { listener.isComplete }
+
+        val ref = fireStore.collection("groups").document(groupId)
+        val listenerGroup = fireStore.runTransaction { transaction ->
+            transaction.update(ref, "subscription", FieldValue.arrayRemove(userId))
+            transaction.update(ref, "userList", FieldValue.arrayUnion(userId))
+        }.addOnSuccessListener {
+            ref.get().addOnSuccessListener {
+                val groupResponse = it.toObject<GroupResponse>()
+                if (groupResponse != null) {
+                    trySend(groupResponse.userList)
+                }
+            }.addOnFailureListener { e ->
+                close(e)
+            }
+        }.addOnFailureListener { e ->
+            close(e)
+        }
+
+        awaitClose { listenerUser.isComplete && listenerGroup.isComplete }
     }
 
     override suspend fun subscription(userId: String, groupId: String): Flow<Boolean> = callbackFlow {
         val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
-        query.get().addOnSuccessListener { snapshot ->
+        val listenerUser = query.get().addOnSuccessListener { snapshot ->
             for (document in snapshot.documents) {
                 fireStore.runTransaction { transaction ->
                     transaction.update(document.reference, "subscription", FieldValue.arrayUnion(groupId))
-                }.addOnSuccessListener {
-                    fireStore.collection("groups").document(groupId)
+                }.addOnFailureListener { e ->
+                    close(e)
                 }
             }
         }
+
+        val ref = fireStore.collection("groups").document(groupId)
+        val listenerGroup = fireStore.runTransaction { transaction ->
+            transaction.update(ref, "subscription", FieldValue.arrayUnion(userId))
+        }.addOnFailureListener { e ->
+            close(e)
+        }
+
+        trySend(true)
+        awaitClose { listenerUser.isComplete && listenerGroup.isComplete }
     }
 
     override suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean> = callbackFlow {

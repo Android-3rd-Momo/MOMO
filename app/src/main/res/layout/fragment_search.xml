@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivBackbutton"
+            android:id="@+id/ivReturn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_back"
@@ -35,7 +35,7 @@
             android:background="@drawable/chatting_item_messagebox"
             android:searchIcon="@drawable/icon_search"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ivBackbutton"
+            app:layout_constraintStart_toEndOf="@id/ivReturn"
             app:layout_constraintTop_toTopOf="parent" />
 
 

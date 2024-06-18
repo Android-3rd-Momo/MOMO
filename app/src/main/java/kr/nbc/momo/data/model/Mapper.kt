@@ -42,7 +42,8 @@ fun GroupEntity.toGroupResponse(downloadUri: String?): GroupResponse{
         leaderId,
         category.toResponse(),
         userList,
-        limitPerson
+        limitPerson,
+        subscriptionList
     )
 }
 
@@ -75,7 +76,8 @@ fun GroupResponse.toEntity(): GroupEntity {
         leaderId,
         category.toEntity(),
         userList,
-        limitPerson
+        limitPerson,
+        subscriptionList
     )
 }
 
@@ -94,7 +96,8 @@ fun UserResponse.toEntity(): UserEntity {
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText,
-        blackList = this.blackList
+        blackList = this.blackList,
+        subscriptionList = this.subscriptionList
     )
 }
 
@@ -113,7 +116,8 @@ fun UserEntity.toUserResponse(): UserResponse {
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText,
-        blackList = this.blackList
+        blackList = this.blackList,
+        subscriptionList = this.subscriptionList
     )
 }
 

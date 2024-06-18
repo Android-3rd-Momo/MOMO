@@ -39,7 +39,7 @@ class DevelopmentProgramFragment : Fragment() {
     }
 
     private fun initView() {
-        val ssb = SpannableStringBuilder("사용하시는 개발 언어를 \n골라주세요!")
+        val ssb = SpannableStringBuilder(getString(R.string.please_pick_your_dev_lang))
         val blue = Color.parseColor("#2D64CF")
         val black = Color.parseColor("#000000")
         ssb.setSpan(ForegroundColorSpan(black), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

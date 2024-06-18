@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tvCategorySpinner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="test"
+    tools:text="test"
     android:background="@color/white"
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
     android:gravity="center_vertical"
     android:textColor="@color/black"
-    android:textSize="16dp"/>
+    android:textSize="16dp" />

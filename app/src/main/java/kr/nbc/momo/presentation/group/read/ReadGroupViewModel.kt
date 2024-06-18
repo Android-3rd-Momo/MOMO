@@ -16,7 +16,8 @@ import kr.nbc.momo.domain.usecase.DeleteUserUseCase
 import kr.nbc.momo.domain.usecase.ReadGroupUseCase
 import kr.nbc.momo.domain.usecase.ReportUserUseCase
 import kr.nbc.momo.domain.usecase.UpdateGroupUseCase
-import kr.nbc.momo.domain.usecase.UpdateGroupUserListUseCase
+import kr.nbc.momo.domain.usecase.AddUserUseCase
+import kr.nbc.momo.domain.usecase.SubscriptionUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.mapper.asGroupEntity
 import kr.nbc.momo.presentation.group.mapper.toGroupModel
@@ -27,7 +28,7 @@ import javax.inject.Inject
 class ReadGroupViewModel @Inject constructor(
     private val readGroupUseCase: ReadGroupUseCase,
     private val joinGroupUseCase: JoinGroupUseCase,
-    private val updateGroupUserListUseCase: UpdateGroupUserListUseCase,
+    private val subscriptionUseCase: SubscriptionUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
     private val deleteGroupUseCase: DeleteGroupUseCase,
     private val reportUserUseCase: ReportUserUseCase,
@@ -41,8 +42,8 @@ class ReadGroupViewModel @Inject constructor(
     private val _updateState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val updateState: StateFlow<UiState<GroupModel>> get() = _updateState
 
-    private val _userListState = MutableStateFlow<UiState<List<String>>>(UiState.Loading)
-    val userListState: StateFlow<UiState<List<String>>> get() = _userListState
+    private val _subscriptionState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
+    val subscriptionState: StateFlow<UiState<Boolean>> get() = _subscriptionState
 
     private val _deleteGroupState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
     val deleteGroupState: StateFlow<UiState<Boolean>> get() = _deleteGroupState
@@ -88,16 +89,16 @@ class ReadGroupViewModel @Inject constructor(
         }
     }
 
-    fun addUser(userList: List<String>, groupId: String) {
+    fun subscription(userId: String, groupId: String) {
         viewModelScope.launch {
-            _userListState.value = UiState.Loading
+            _subscriptionState.value = UiState.Loading
 
-            updateGroupUserListUseCase.invoke(userList, groupId)
+            subscriptionUseCase.invoke(userId, groupId)
                 .catch { e ->
-                    _userListState.value = UiState.Error(e.toString())
+                    _subscriptionState.value = UiState.Error(e.toString())
                 }
                 .collect { data ->
-                    _userListState.value = UiState.Success(data)
+                    _subscriptionState.value = UiState.Success(data)
                 }
         }
     }

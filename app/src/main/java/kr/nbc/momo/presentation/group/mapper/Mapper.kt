@@ -33,7 +33,8 @@ fun GroupEntity.toGroupModel(): GroupModel {
         leaderId,
         category.toModel(),
         userList,
-        limitPerson
+        limitPerson,
+        subscriptionList
     )
 }
 

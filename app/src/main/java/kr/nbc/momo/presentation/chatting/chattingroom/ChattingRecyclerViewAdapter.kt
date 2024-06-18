@@ -80,10 +80,10 @@ class ChattingRecyclerViewAdapter() :
 
             ChattingEnumClass.ELSE_VIEW_TYPE.type -> {
                 (holder as ItemElseViewHolder).bind(
-                    itemList.userList.firstOrNull { it.userId == currentUserId } ?: GroupUserModel(
-                        currentUserId,
-                        currentUserName,
-                        currentUrl
+                    itemList.userList.firstOrNull { it.userId == itemList.chatList[position].userId } ?: GroupUserModel(
+                        "error",
+                        "error",
+                        ""
                     ),
                     itemList.chatList[position],
                     isDateChanged(position),

@@ -68,8 +68,6 @@ class ChattingListFragment : Fragment() {
                 adapter = chattingListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
-
-//            includeNoResult.tvNoResult.text = "가입한 그룹이 없습니다."
         }
     }
 
@@ -109,6 +107,7 @@ class ChattingListFragment : Fragment() {
             chattingListViewModel.chattingList.collectLatest { chattingList ->
                 when (chattingList) {
                     is UiState.Loading -> {
+                        //nothing to do
                     }
 
                     is UiState.Success -> {

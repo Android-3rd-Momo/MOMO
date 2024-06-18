@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="결과가 없습니다"
+        android:text="@string/no_result"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"

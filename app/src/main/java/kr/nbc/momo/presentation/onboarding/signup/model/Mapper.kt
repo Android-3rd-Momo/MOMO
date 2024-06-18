@@ -18,7 +18,8 @@ fun UserEntity.toModel(): UserModel {
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText,
-        blackList = this.blackList
+        blackList = this.blackList,
+        subscriptionList = this.subscriptionList
     )
 }
 fun UserModel.toEntity(): UserEntity {
@@ -36,6 +37,7 @@ fun UserModel.toEntity(): UserEntity {
         stackOfDevelopment = this.stackOfDevelopment,
         userGroup = this.userGroup,
         userPortfolioText = this.userPortfolioText,
-        blackList = this.blackList
+        blackList = this.blackList,
+        subscriptionList = this.subscriptionList
     )
 }
