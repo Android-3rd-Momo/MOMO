@@ -14,7 +14,7 @@ data class GroupResponse(
     val category: CategoryResponse = CategoryResponse("", listOf(), listOf()),
     val userList: List<String> = listOf(),
     val limitPerson: String = "",
-    val subscriptionList: List<String> = emptyList()
+    val subscriptionList: List<String> = listOf(),
 )
 
 data class CategoryResponse(

@@ -1,60 +1,144 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kr.nbc.momo.R
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kr.nbc.momo.databinding.FragmentMyGroupBinding
+import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.model.GroupModel
+import kr.nbc.momo.presentation.main.SharedViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MyGroupFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class MyGroupFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private var _binding: FragmentMyGroupBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: MyGroupViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private var currentUser: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_group, container, false)
+    ): View {
+        _binding = FragmentMyGroupBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyGroupFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyGroupFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeUserProfile()
+        observeSubscriptionGroupList()
+        observeAddUser()
+    }
+
+    private fun initGroupList(userId: String) {
+        lifecycleScope.launch {
+            viewModel.getSubscriptionList(userId)
+        }
+    }
+
+    private fun observeUserProfile() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentUser.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> {
+                            //No action needed
+                        }
+
+                        is UiState.Success -> {
+                            if (uiState.data != null) {
+                                Log.d("currentUser", uiState.data.userId)
+                                currentUser = uiState.data.userId
+                                initGroupList(uiState.data.userId)
+                            }
+                        }
+
+                        is UiState.Error -> {
+
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun observeAddUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.adduserState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 오류 메시지 표시
+
+                    }
+                    is UiState.Success -> {
+                        currentUser?.let { initGroupList(it) }
+                    }
+
+                    is UiState.Error -> {
+                        // 오류 메시지 표시
+                        Log.d("error", uiState.message)
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun observeSubscriptionGroupList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.subscriptionListState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 오류 메시지 표시
+
+                    }
+
+                    is UiState.Success -> {
+                        Log.d("uiState", "${uiState.data}")
+                        val list = listOf<Pair<GroupModel, String>>().toMutableList()
+                        for (i in uiState.data) {
+                            if (i.subscriptionList.isNotEmpty()) {
+                                for (j in i.subscriptionList) {
+                                    list.add(Pair(i, j))
+                                }
+                            }
+                        }
+                        val adapter = SubscriptionGroupAdapter(list)
+                        binding.rvSubscriptionGroupList.adapter = adapter
+                        binding.rvSubscriptionGroupList.layoutManager = LinearLayoutManager(requireContext())
+
+                        adapter.itemClick = object : SubscriptionGroupAdapter.ItemClick {
+                            override fun itemClick(groupId: String, userId: String) {
+                                viewModel.addUser(userId, groupId)
+                                currentUser?.let { initGroupList(it) }
+                            }
+                        }
+
+                    }
+
+                    is UiState.Error -> {
+                        // 오류 메시지 표시
+                        Log.d("error", uiState.message)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
