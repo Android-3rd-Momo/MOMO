@@ -146,8 +146,8 @@ class ChattingRecyclerViewAdapter() :
                     tvTime.setVisibleToVisible()
                 } else {
                     tvUserName.setVisibleToGone()
-                    tvUserName.setVisibleToGone()
                     cardView.setVisibleToInvisible()
+                   // tvTime.setVisibleToGone()
                 }
 
                 if (isMinuteChanged) {
@@ -155,11 +155,11 @@ class ChattingRecyclerViewAdapter() :
                     tvUserName.setVisibleToVisible()
                     cardView.setVisibleToVisible()
                 } else {
-                    if (!isUserChanged) {
-                        tvTime.setVisibleToGone()
-                    }
+                    if (isUserChanged) {
+                        tvTime.setVisibleToVisible()
+                    } else tvTime.setVisibleToGone()
+                    //tvTime.setVisibleToGone()
                 }
-
                 //날 바뀌면 divider 보여주기
                 if (isDateChanged) {
                     tvDivider.setVisibleToVisible()
@@ -189,7 +189,7 @@ class ChattingRecyclerViewAdapter() :
                 tvChat.text = chatModel.text
                 tvTime.text = chatModel.dateTime.setDateTimeFormatToMMDD()
                 tvDivider.text = chatModel.dateTime.setDateTimeFormatToYYYYmmDD()
-                //유저 바뀌면 이름 보여주기
+
                 tvUserName.setVisibleToGone()
                 if (isUserChanged) {
                     tvTime.setVisibleToVisible()
