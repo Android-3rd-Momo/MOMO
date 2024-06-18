@@ -2,7 +2,6 @@ package kr.nbc.momo.domain.repository
 
 import android.net.Uri
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kr.nbc.momo.domain.model.GroupEntity
 
 interface GroupRepository {

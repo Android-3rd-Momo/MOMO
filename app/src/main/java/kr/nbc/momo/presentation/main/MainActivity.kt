@@ -9,7 +9,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
 import kr.nbc.momo.presentation.home.HomeFragment
-import kr.nbc.momo.presentation.mypage.MyPageFragment
 import kr.nbc.momo.presentation.mypage.RootFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 
@@ -19,11 +18,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
 
         initFirstFragment()
         setUpBottomNavigation()

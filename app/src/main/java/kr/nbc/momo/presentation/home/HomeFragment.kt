@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
         with(binding.includeNoResultRecommend) {
-            tvNoResult.text = "추천 그룹이 없습니다.\n정보를 수정해주세요"
+            tvNoResult.setText(R.string.no_recommend)
             tvNoResult.setOnClickListener {
                 (requireActivity() as MainActivity).selectNavigationItem(R.id.rootFragment)
             }
@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
         }
 
         with(binding.includeNoResultJoined) {
-            tvNoResult.text = "가입한 그룹이 없습니다."
+            tvNoResult.setText(R.string.no_joined)
             tvNoResult.setOnClickListener {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SearchFragment())

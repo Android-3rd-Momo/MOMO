@@ -95,7 +95,7 @@ class SearchFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            includeNoResult.tvNoResult.text = "검색 결과가 없습니다."
+            includeNoResult.tvNoResult.setText(R.string.no_search_result)
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
             }
@@ -122,7 +122,7 @@ class SearchFragment : Fragment() {
                 }
             })
 
-            searchView.queryHint = """개발 언어를 입력해주세요.(공백 또는 반점으로 구분)"""
+            searchView.queryHint = getString(R.string.query_hint)
 
             spCategory.apply {
                 adapter = categorySpinnerAdapter

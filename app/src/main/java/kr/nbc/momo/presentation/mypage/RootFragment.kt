@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.databinding.FragmentRootBinding
 import kr.nbc.momo.presentation.setup.SetUpFragment
 

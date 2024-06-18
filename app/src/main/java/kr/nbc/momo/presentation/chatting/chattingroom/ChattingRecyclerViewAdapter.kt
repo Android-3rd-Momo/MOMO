@@ -3,6 +3,7 @@ package kr.nbc.momo.presentation.chatting.chattingroom
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.RvItemElseBinding
 import kr.nbc.momo.databinding.RvItemErrorBinding
 import kr.nbc.momo.databinding.RvItemUserBinding
@@ -80,11 +81,8 @@ class ChattingRecyclerViewAdapter() :
 
             ChattingEnumClass.ELSE_VIEW_TYPE.type -> {
                 (holder as ItemElseViewHolder).bind(
-                    itemList.userList.firstOrNull { it.userId == itemList.chatList[position].userId } ?: GroupUserModel(
-                        "error",
-                        "error",
-                        ""
-                    ),
+                    itemList.userList.firstOrNull { it.userId == itemList.chatList[position].userId }
+                        ?: GroupUserModel(),
                     itemList.chatList[position],
                     isDateChanged(position),
                     isMinuteChanged(position),
@@ -147,7 +145,7 @@ class ChattingRecyclerViewAdapter() :
                 } else {
                     tvUserName.setVisibleToGone()
                     cardView.setVisibleToInvisible()
-                   // tvTime.setVisibleToGone()
+                    // tvTime.setVisibleToGone()
                 }
 
                 if (isMinuteChanged) {
@@ -216,8 +214,7 @@ class ChattingRecyclerViewAdapter() :
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             with(binding) {
-                val errorText = "UNKNOWN VIEW TYPE ERROR"
-                tvChat.text = errorText
+                tvChat.setText(R.string.unknown_view_type_error)
             }
         }
     }

@@ -1,7 +1,5 @@
 package kr.nbc.momo.data.model
 
-import kr.nbc.momo.domain.model.CategoryEntity
-
 data class GroupResponse(
     val groupId: String = "",
     val groupName: String = "",
