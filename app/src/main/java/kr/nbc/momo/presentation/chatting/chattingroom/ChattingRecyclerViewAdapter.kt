@@ -74,7 +74,8 @@ class ChattingRecyclerViewAdapter() :
                         itemList.chatList[position],
                         isDateChanged(position),
                         isMinuteChanged(position),
-                        isUserIdChanged(position)
+                        isUserIdChanged(position),
+                        isNextUserChanged(position)
                     )
             }
 
@@ -86,7 +87,9 @@ class ChattingRecyclerViewAdapter() :
                     itemList.chatList[position],
                     isDateChanged(position),
                     isMinuteChanged(position),
-                    isUserIdChanged(position)
+                    isUserIdChanged(position),
+                    isNextUserChanged(position),
+                    isPrevMinuteChanged(position)
                 )
             }
 
@@ -119,6 +122,23 @@ class ChattingRecyclerViewAdapter() :
         return prevUserId != currentUserId
     }
 
+    private fun isNextUserChanged(position: Int): Boolean {
+        if (position == itemCount - 1) return true
+        val nextUser = itemList.chatList[position + 1].userId
+        val currentUser = itemList.chatList[position].userId
+        return currentUser != nextUser
+    }
+
+    private fun isPrevMinuteChanged(position: Int): Boolean {
+        if (position == 0) return false
+        val prevMin = ZonedDateTime.parse(itemList.chatList[position - 1].dateTime)
+            .truncatedTo(ChronoUnit.MINUTES)
+        val currentMin = ZonedDateTime.parse(itemList.chatList[position].dateTime)
+            .truncatedTo(ChronoUnit.MINUTES)
+
+        return prevMin != currentMin
+    }
+
 
     class ItemElseViewHolder(
         private val binding: RvItemElseBinding,
@@ -129,7 +149,9 @@ class ChattingRecyclerViewAdapter() :
             chatModel: ChatModel,
             isDateChanged: Boolean,
             isMinuteChanged: Boolean,
-            isUserChanged: Boolean
+            isUserChanged: Boolean,
+            isNextUserChanged: Boolean,
+            isPrevMinuteChanged: Boolean
         ) {
             with(binding) {
                 tvChat.text = chatModel.text
@@ -143,26 +165,31 @@ class ChattingRecyclerViewAdapter() :
                     tvUserName.setVisibleToVisible()
                     tvTime.setVisibleToVisible()
                 } else {
-                    tvUserName.setVisibleToGone()
                     cardView.setVisibleToInvisible()
-                    // tvTime.setVisibleToGone()
+                    tvUserName.setVisibleToGone()
+                    tvTime.setVisibleToGone()
                 }
-
                 if (isMinuteChanged) {
                     tvTime.setVisibleToVisible()
-                    tvUserName.setVisibleToVisible()
-                    cardView.setVisibleToVisible()
                 } else {
-                    if (isUserChanged) {
-                        tvTime.setVisibleToVisible()
-                    } else tvTime.setVisibleToGone()
-                    //tvTime.setVisibleToGone()
+                    tvTime.setVisibleToGone()
                 }
-                //날 바뀌면 divider 보여주기
-                if (isDateChanged) {
-                    tvDivider.setVisibleToVisible()
-                    tvUserName.setVisibleToVisible()
+
+                if (isNextUserChanged) {
+                    tvTime.setVisibleToVisible()
+                }
+                if (isPrevMinuteChanged) {
                     cardView.setVisibleToVisible()
+                    tvUserName.setVisibleToVisible()
+                }
+
+                if (isDateChanged) {
+                    cardView.setVisibleToVisible()
+                    tvUserName.setVisibleToVisible()
+                    tvTime.setVisibleToVisible()
+                    tvDivider.setVisibleToVisible()
+                    if (!isMinuteChanged) tvTime.setVisibleToGone()
+
                 } else {
                     tvDivider.setVisibleToGone()
                 }
@@ -181,7 +208,8 @@ class ChattingRecyclerViewAdapter() :
             chatModel: ChatModel,
             isDateChanged: Boolean,
             isMinuteChanged: Boolean,
-            isUserChanged: Boolean
+            isUserChanged: Boolean,
+            isNextUserChanged: Boolean
         ) {
             with(binding) {
                 tvChat.text = chatModel.text
@@ -196,7 +224,8 @@ class ChattingRecyclerViewAdapter() :
                 if (isMinuteChanged) {
                     tvTime.setVisibleToVisible()
                 } else {
-                    tvTime.setVisibleToGone()
+                    if (isNextUserChanged) tvTime.setVisibleToVisible()
+                    else tvTime.setVisibleToGone()
                 }
 
                 //날 바뀌면 divider 보여주기
