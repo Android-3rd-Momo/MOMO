@@ -416,11 +416,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
-//        binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
-//        binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
         if (groupThumbnail.isNullOrEmpty()) {
-            binding.ivGroupImage.setThumbnailByUrlOrDefault(null) // 기본 이미지 설정
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null) // 기본 이미지 설정
+            binding.ivGroupImage.setThumbnailByUrlOrDefault(null)
+            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
         } else {
             binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
             binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
@@ -597,8 +595,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             getChipText(binding.chipGroupDevelopmentOccupationsEdit),
             getChipText(binding.chipProgramingLanguageEdit)
         )
-//        image = data.groupThumbnail
-//        image = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
         val updatedGroupThumbnail = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
         viewModel.updateGroup(
             data.copy(

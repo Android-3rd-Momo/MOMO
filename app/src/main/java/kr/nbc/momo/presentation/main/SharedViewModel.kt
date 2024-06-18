@@ -55,16 +55,10 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-/*    fun updateUser(user: UserModel) {
-        _currentUser.value = UiState.Success(user)
-    }*/
 fun updateUser(user: UserModel) {
-//    _currentUser.value = UiState.Success(user)
     viewModelScope.launch {
         _updateUserState.value = UiState.Loading
         try {
-//                saveUserProfileUseCase(user.toEntity())
-//                _updateUserState.value = UiState.Success(Unit)
             _currentUser.value = UiState.Success(user)
         } catch (e: Exception) {
             _updateUserState.value = UiState.Error(e.message.toString())
