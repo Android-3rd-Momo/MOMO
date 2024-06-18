@@ -73,10 +73,10 @@ class HomeFragment : Fragment() {
         with(binding.includeNoResultRecommend) {
             tvNoResult.setText(R.string.no_recommend)
             tvNoResult.setOnClickListener {
-                (requireActivity() as MainActivity).selectNavigationItem(R.id.myPageFragment)
+                (requireActivity() as MainActivity).selectNavigationItem(R.id.rootFragment)
             }
             ivNoResult.setOnClickListener {
-                (requireActivity() as MainActivity).selectNavigationItem(R.id.myPageFragment)
+                (requireActivity() as MainActivity).selectNavigationItem(R.id.rootFragment)
             }
         }
 

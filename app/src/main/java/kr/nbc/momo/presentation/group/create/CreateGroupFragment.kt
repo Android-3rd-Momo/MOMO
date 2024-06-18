@@ -336,7 +336,8 @@ class CreateGroupFragment : Fragment() {
             currentUser,
             categoryList,
             listOf(currentUser),
-            binding.tvLimitPeople.text.toString()
+            binding.tvLimitPeople.text.toString(),
+            emptyList()
         )
 
         lifecycleScope.launch {

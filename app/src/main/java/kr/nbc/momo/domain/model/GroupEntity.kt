@@ -10,7 +10,10 @@ data class GroupEntity(
     val leaderId: String = "",
     val category: CategoryEntity= CategoryEntity("", listOf(), listOf()),
     val userList: List<String> = listOf(),
-    val limitPerson: String = ""
+    val limitPerson: String = "",
+    val subscriptionList: List<String> = listOf()
+//    val categoryList: List<String> = emptyList(),
+//    val userList: List<String> = emptyList(),
 )
 
 

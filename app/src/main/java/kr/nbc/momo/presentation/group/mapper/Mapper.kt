@@ -17,7 +17,8 @@ fun GroupModel.asGroupEntity(): GroupEntity {
         leaderId,
         category.toEntity(),
         userList,
-        limitPerson
+        limitPerson,
+        subscriptionList
     )
 }
 
@@ -33,7 +34,8 @@ fun GroupEntity.toGroupModel(): GroupModel {
         leaderId,
         category.toModel(),
         userList,
-        limitPerson
+        limitPerson,
+        subscriptionList
     )
 }
 

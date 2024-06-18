@@ -9,7 +9,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
 import kr.nbc.momo.presentation.home.HomeFragment
-import kr.nbc.momo.presentation.mypage.MyPageFragment
+import kr.nbc.momo.presentation.mypage.RootFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 
 @AndroidEntryPoint
@@ -52,10 +52,10 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-                R.id.myPageFragment -> {
-                    val myPageFragment = MyPageFragment()
+                R.id.rootFragment -> {
+                    val rootFragment = RootFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, myPageFragment)
+                        .replace(R.id.fragment_container, rootFragment)
                         .commit()
                     true
                 }
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId){
                 R.id.homeFragment -> {}
                 R.id.chattingListFragment -> {}
-                R.id.myPageFragment -> {}
+                R.id.rootFragment -> {}
             }
         }
     }

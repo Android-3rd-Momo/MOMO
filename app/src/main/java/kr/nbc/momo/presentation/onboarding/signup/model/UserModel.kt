@@ -14,5 +14,6 @@ data class UserModel(
     val stackOfDevelopment: String = "",
     val userGroup: List<String> = emptyList(),
     val userPortfolioText: String = "",
-    val blackList: List<String> = emptyList()
+    val blackList: List<String> = emptyList(),
+    val subscriptionList: List<String> = emptyList()
 )

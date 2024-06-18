@@ -24,9 +24,14 @@
     <string name="see">보기</string>
     <string name="term_complete">동의 완료</string>
 
+    //MyGroupFragment
+    <string name="myGroupList">"모임 내역</string>
+
     //이용약관 보기
     <string name="private_termTitle">"개인정보 처리방침 동의</string>
     <string name="private_term">"□ 개인정보 제3자 제공 동의
+
+
 
 제 1 조 (개인정보의 수집 및 이용 목적)
 

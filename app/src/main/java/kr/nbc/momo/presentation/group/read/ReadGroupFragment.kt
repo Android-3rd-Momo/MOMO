@@ -212,14 +212,14 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun observeUserList() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.userListState.collect { uiState ->
+            viewModel.subscriptionState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
 
                     }
 
                     is UiState.Success -> {
-                        initUserList(uiState.data)
+                        Toast.makeText(requireContext(), "가입 신청 성공", Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -730,7 +730,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 lifecycleScope.launch {
                     val list = data.userList.toMutableList()
                     list.add(currentUser!!)
-                    viewModel.addUser(list, data.groupId)
+                    viewModel.subscription(currentUser, data.groupId)
                     viewModel.joinGroup(data.groupId)
                     initView(data.copy(userList = list))
                 }
