@@ -207,7 +207,7 @@ class SearchFragment : Fragment() {
         sharedViewModel.getGroupId(groupModel.groupId)
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, ReadGroupFragment())
-            addToBackStack(null)
+            addToBackStack("Read")
             commit()
         }
     }

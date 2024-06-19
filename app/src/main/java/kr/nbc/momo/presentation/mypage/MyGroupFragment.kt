@@ -2,11 +2,11 @@ package kr.nbc.momo.presentation.mypage
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,23 +14,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.UserListAdapter
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.mypage.adapter.LeaderGroupAdapter
-import kr.nbc.momo.presentation.mypage.adapter.MemberGroupAdapter
 import kr.nbc.momo.presentation.mypage.adapter.LeaderSubAdapter
+import kr.nbc.momo.presentation.mypage.adapter.MemberGroupAdapter
 import kr.nbc.momo.presentation.mypage.adapter.MemberSubAdapter
-import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
@@ -83,6 +79,15 @@ class MyGroupFragment : Fragment() {
                                 currentUser = uiState.data.userId
                                 userGroup = uiState.data.userGroup
                                 initGroupList(uiState.data.userId, uiState.data.userGroup)
+                            } else {
+                                with(binding) {
+                                    prCircularLeader.setVisibleToGone()
+                                    includeNoResultLeader.setVisibleToVisible()
+                                    rvLeader.setVisibleToInvisible()
+                                    prCircularMember.setVisibleToGone()
+                                    includeNoResultMember.setVisibleToVisible()
+                                    rvMember.setVisibleToInvisible()
+                                }
                             }
                         }
 
@@ -142,12 +147,18 @@ class MyGroupFragment : Fragment() {
             viewModel.userGroupList.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 오류 메시지 표시
+                        with(binding) {
+                            prCircularMember.setVisibleToVisible()
+                            includeNoResultMember.setVisibleToGone()
+                            rvMember.setVisibleToInvisible()
+                        }
 
                     }
 
                     is UiState.Success -> {
-                        val memberGroupAdapter = MemberGroupAdapter(uiState.data)
+                        val filterData = uiState.data.filterNot { it.leaderId == currentUser }
+
+                        val memberGroupAdapter = MemberGroupAdapter(filterData)
                         binding.rvMember.adapter = memberGroupAdapter
                         binding.rvMember.layoutManager = LinearLayoutManager(
                             requireContext(),
@@ -155,9 +166,19 @@ class MyGroupFragment : Fragment() {
                             false
                         )
 
+                        if (filterData.isEmpty()) {
+                            binding.prCircularMember.setVisibleToGone()
+                            binding.includeNoResultMember.setVisibleToVisible()
+                            binding.rvMember.setVisibleToInvisible()
+                        } else {
+                            binding.prCircularMember.setVisibleToGone()
+                            binding.includeNoResultMember.setVisibleToGone()
+                            binding.rvMember.setVisibleToVisible()
+                        }
+
                         memberGroupAdapter.itemClick = object : MemberGroupAdapter.ItemClick {
                             override fun itemClick(position: Int) {
-                                val groupId = uiState.data[position].groupId
+                                val groupId = filterData[position].groupId
                                 sharedViewModel.getGroupId(groupId)
                                 (activity as? MainActivity)?.beginTransactionRead()
                             }
@@ -204,8 +225,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
+
                     }
                 }
             }
@@ -217,7 +237,11 @@ class MyGroupFragment : Fragment() {
             viewModel.subscriptionListState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 오류 메시지 표시
+                        with(binding) {
+                            prCircularLeader.setVisibleToVisible()
+                            includeNoResultLeader.setVisibleToGone()
+                            rvLeader.setVisibleToInvisible()
+                        }
 
                     }
 
@@ -273,6 +297,17 @@ class MyGroupFragment : Fragment() {
                             }
                         }
 
+                        if (uiState.data.isEmpty()) {
+                            binding.prCircularLeader.setVisibleToGone()
+                            binding.includeNoResultLeader.setVisibleToVisible()
+                            binding.rvLeader.setVisibleToInvisible()
+                        } else {
+                            binding.prCircularLeader.setVisibleToGone()
+                            binding.includeNoResultLeader.setVisibleToGone()
+                            binding.rvLeader.setVisibleToVisible()
+                        }
+
+
                     }
 
                     is UiState.Error -> {
@@ -286,6 +321,9 @@ class MyGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
+            includeNoResultMember.tvNoResult.setText(R.string.memberGroupNoResult)
+            includeNoResultLeader.tvNoResult.setText(R.string.leaderGroupNoResult)
+
             tvMemberSub.setOnClickListener {
                 rvLeaderSub.setVisibleToGone()
                 rvMemberSub.setVisibleToVisible()

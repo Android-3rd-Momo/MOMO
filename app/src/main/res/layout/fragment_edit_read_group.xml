@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    tools:context=".presentation.group.read.ReadGroupFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.group.read.EditReadGroupFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -35,19 +33,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_delete"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/btnPopUp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_popup_menu"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivReturn"
@@ -76,6 +65,7 @@
         android:id="@+id/svRead"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -83,6 +73,7 @@
             android:id="@+id/clRead"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
             <View
                 android:id="@+id/view"
@@ -94,96 +85,105 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSimpleDescriptionContainer"
+                android:id="@+id/clSimpleDescriptionContainerEdit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="25dp"
-                android:paddingBottom="10dp"
                 android:background="@drawable/bg_layout_corners"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
-                <TextView
-                    android:id="@+id/tvCategoryClassification"
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    style="@style/Widget.My.Spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/category"
-                    android:textColor="@color/blue"
-                    android:textSize="12dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:background="@drawable/bg_layout_corners"
+                    app:layout_constraintBaseline_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
                 <ImageView
-                    android:id="@+id/ivGroupImage"
+                    android:id="@+id/ivGroupImageEdit"
                     android:layout_width="72dp"
                     android:layout_height="65dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/circle_bg"
+                    android:clipToOutline="true"
                     android:scaleType="fitXY"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvGroupOneLineDescription"
+                    app:layout_constraintTop_toBottomOf="@+id/etGroupOneLineDescriptionEdit"
                     tools:src="@tools:sample/avatars" />
 
-                <TextView
-                    android:id="@+id/tvGroupName"
-                    android:layout_width="0dp"
+                <ImageView
+                    android:id="@+id/ivDeleteGroupImage"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:gravity="center"
+                    android:src="@drawable/icon_delete"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"
+                    app:layout_constraintStart_toEndOf="@id/ivGroupImageEdit"
+                    app:layout_constraintBottom_toBottomOf="@id/ivGroupImageEdit"/>
+
+                <EditText
+                    android:id="@+id/etGroupNameEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/group_name"
                     android:textSize="18dp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:background="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvCategoryClassification" />
+                    app:layout_constraintTop_toBottomOf="@+id/categorySpinner" />
 
 
-                <TextView
-                    android:id="@+id/tvGroupOneLineDescription"
+                <EditText
+                    android:id="@+id/etGroupOneLineDescriptionEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="@string/group_one_line_desc"
                     android:textSize="14dp"
+                    android:background="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvGroupName" />
+                    app:layout_constraintTop_toBottomOf="@+id/etGroupNameEdit" />
 
 
                 <TextView
-                    android:id="@+id/tvLeaderId"
+                    android:id="@+id/tvLeaderIdEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/leader_id"
                     android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivGroupImage" />
+                    app:layout_constraintTop_toBottomOf="@+id/ivGroupImageEdit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clViewMode"
+                android:id="@+id/clEditMode"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clSimpleDescriptionContainer">
+                app:layout_constraintTop_toBottomOf="@id/clSimpleDescriptionContainerEdit"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="-151dp">
 
                 <TextView
-                    android:id="@+id/tvProject"
+                    android:id="@+id/tvProjectEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -194,8 +194,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvGroupDescription"
+                <EditText
+                    android:id="@+id/etGroupDescriptionEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -207,10 +207,11 @@
                     android:textSize="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvProject" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvProjectEdit" />
+
 
                 <TextView
-                    android:id="@+id/tvDevelopmentOccupations"
+                    android:id="@+id/tvDevelopmentOccupationsEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -219,10 +220,10 @@
                     android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvGroupDescription" />
+                    app:layout_constraintTop_toBottomOf="@+id/etGroupDescriptionEdit" />
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroupDevelopmentOccupations"
+                    android:id="@+id/chipGroupDevelopmentOccupationsEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -230,14 +231,13 @@
                     android:layout_marginEnd="20dp"
                     app:chipSpacingHorizontal="4dp"
                     app:chipSpacingVertical="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDevelopmentOccupations">
+                    app:layout_constraintTop_toBottomOf="@+id/tvDevelopmentOccupationsEdit">
 
                 </com.google.android.material.chip.ChipGroup>
 
                 <TextView
-                    android:id="@+id/tvProgramingLanguage"
+                    android:id="@+id/tvProgramingLanguageEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -246,11 +246,11 @@
                     android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/chipGroupDevelopmentOccupations" />
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroupDevelopmentOccupationsEdit" />
 
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipProgramingLanguage"
+                    android:id="@+id/chipProgramingLanguageEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -260,12 +260,12 @@
                     app:chipSpacingVertical="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvProgramingLanguage">
+                    app:layout_constraintTop_toBottomOf="@+id/tvProgramingLanguageEdit">
 
                 </com.google.android.material.chip.ChipGroup>
 
                 <TextView
-                    android:id="@+id/tvSchedule"
+                    android:id="@+id/tvScheduleEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -274,39 +274,54 @@
                     android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/chipProgramingLanguage" />
+                    app:layout_constraintTop_toBottomOf="@+id/chipProgramingLanguageEdit" />
 
                 <TextView
-                    android:id="@+id/tvFirstDate"
+                    android:id="@+id/tvFirstDateEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/start_date"
-                    app:layout_constraintStart_toStartOf="@+id/tvSchedule"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSchedule" />
+                    app:layout_constraintStart_toStartOf="@+id/tvScheduleEdit"
+                    app:layout_constraintTop_toBottomOf="@+id/tvScheduleEdit" />
 
                 <TextView
-                    android:id="@+id/tvLastDate"
+                    android:id="@+id/tvLastDateEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="@string/end_date"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvMinus"
-                    app:layout_constraintStart_toEndOf="@+id/tvMinus"
-                    app:layout_constraintTop_toTopOf="@+id/tvMinus" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tvMinusEdit"
+                    app:layout_constraintStart_toEndOf="@+id/tvMinusEdit"
+                    app:layout_constraintTop_toTopOf="@+id/tvMinusEdit" />
 
                 <TextView
-                    android:id="@+id/tvMinus"
+                    android:id="@+id/tvMinusEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="@string/hyphen"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvFirstDate"
-                    app:layout_constraintStart_toEndOf="@+id/tvFirstDate"
-                    app:layout_constraintTop_toTopOf="@+id/tvFirstDate" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tvFirstDateEdit"
+                    app:layout_constraintStart_toEndOf="@+id/tvFirstDateEdit"
+                    app:layout_constraintTop_toTopOf="@+id/tvFirstDateEdit" />
+
+                <android.widget.Button
+                    android:id="@+id/btnCompleteEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/bg_btn_radius_blue"
+                    android:text="@string/confirm_edit"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:backgroundTint="@color/bg_btn_state_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvUserListEdit" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvUserList"
+                    android:id="@+id/rvUserListEdit"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="20dp"
@@ -314,11 +329,11 @@
                     android:layout_marginEnd="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvParticipant"
+                    app:layout_constraintTop_toBottomOf="@+id/tvParticipantEdit"
                     tools:listitem="@layout/gridview_item" />
 
                 <TextView
-                    android:id="@+id/tvParticipant"
+                    android:id="@+id/tvParticipantEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -327,32 +342,18 @@
                     android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvFirstDate" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvFirstDateEdit" />
 
                 <TextView
-                    android:id="@+id/tvLimitPeople"
+                    android:id="@+id/tvLimitPeopleEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/default_max_user"
+                    android:text="@string/zero"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvParticipant"
-                    app:layout_constraintStart_toEndOf="@+id/tvParticipant"
-                    app:layout_constraintTop_toTopOf="@+id/tvParticipant" />
-
-                <android.widget.Button
-                    android:id="@+id/btnJoinProject"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/bg_btn_radius_blue"
-                    android:text="@string/join_group"
-                    android:textColor="@color/white"
-                    android:textSize="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rvUserList" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tvParticipantEdit"
+                    app:layout_constraintStart_toEndOf="@+id/tvParticipantEdit"
+                    app:layout_constraintTop_toTopOf="@+id/tvParticipantEdit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -360,11 +361,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <include
-        android:id="@+id/prCircular"
-        layout="@layout/ui_state_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
