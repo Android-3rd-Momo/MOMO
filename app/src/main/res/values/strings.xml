@@ -25,13 +25,16 @@
     <string name="term_complete">동의 완료</string>
 
     //MyGroupFragment
-    <string name="myGroupList">"모임 내역</string>
-    <string name="leaderGroup">"진행 모임</string>
-    <string name="memberGroup">"참여 모임</string>
-    <string name="subscription">"가입신청</string>
-    <string name="Approve">"가입승인</string>
-    <string name="approve">"승인</string>>
-    <string name="reject">"거절</string>>
+    <string name="myGroupList">모임 내역</string>
+    <string name="leaderGroup">진행 모임</string>
+    <string name="memberGroup">참여 모임</string>
+    <string name="subscription">가입신청</string>
+    <string name="Approve">가입승인</string>
+    <string name="approve">승인</string>>
+    <string name="reject">거절</string>>
+    <string name="leaderGroupNoResult">진행중인 모임이 없습니다</string>>
+    <string name="memberGroupNoResult">참여중인 모임이 없습니다</string>>
+    <string name="approveNoResult">신청 내역이 없습니다</string>>
 
     //이용약관 보기
     <string name="private_termTitle">"개인정보 처리방침 동의</string>
@@ -355,10 +358,8 @@
     <string name="email_or_password_blank_error">이메일 또는 비밀번호를 입력해주세요.</string>
     <string name="email_or_password_error">이메일 또는 비밀번호를 다시 입력해주세요.</string>
     <string name="apply_success">가입 신청 성공</string>
-
-
-
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

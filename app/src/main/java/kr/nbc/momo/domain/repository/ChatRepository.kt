@@ -16,5 +16,5 @@ interface ChatRepository {
         url: String
     )
 
-    suspend fun setLastViewedChat(groupId: String, userId: String, userName: String)
+    suspend fun setLastViewedChat(groupId: String, userId: String, userName: String, url: String)
 }

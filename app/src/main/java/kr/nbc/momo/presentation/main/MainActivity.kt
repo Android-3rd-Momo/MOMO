@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         val readGroupFragment = ReadGroupFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, readGroupFragment)
-            .addToBackStack(null)
+            .addToBackStack("Read")
             .commit()
     }
 
