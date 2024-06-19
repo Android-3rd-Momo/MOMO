@@ -85,12 +85,14 @@ class MyGroupFragment : Fragment() {
                                 userGroup = uiState.data.userGroup
                                 initGroupList(uiState.data.userId, uiState.data.userGroup)
                             } else {
-                                binding.prCircularLeader.setVisibleToGone()
-                                binding.includeNoResultLeader.setVisibleToVisible()
-                                binding.rvLeader.setVisibleToInvisible()
-                                binding.prCircularMember.setVisibleToGone()
-                                binding.includeNoResultMember.setVisibleToVisible()
-                                binding.rvMember.setVisibleToInvisible()
+                                with(binding) {
+                                    prCircularLeader.setVisibleToGone()
+                                    includeNoResultLeader.setVisibleToVisible()
+                                    rvLeader.setVisibleToInvisible()
+                                    prCircularMember.setVisibleToGone()
+                                    includeNoResultMember.setVisibleToVisible()
+                                    rvMember.setVisibleToInvisible()
+                                }
                             }
                         }
 
