@@ -8,18 +8,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSignUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.makeToastWithStringRes
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
@@ -93,57 +94,57 @@ class SignUpFragment : Fragment() {
             //입력하지 않았을 경우, 유효성 실패, 중복 확인
 
             if (email.isEmpty()) {
-                binding.etEmail.error = "이메일을 입력해주세요."
+                binding.etEmail.error = getString(R.string.email_blank_error)
                 isValid = false
             } else if (!isValidEmail(email)) {
-                binding.etEmail.error = "이메일 형식이 올바르지 않습니다."
+                binding.etEmail.error = getString(R.string.email_regex_error)
                 isValid = false
             } else {
                 binding.etEmail.error = null
             }
 
             if (password.isEmpty()) {
-                binding.etPassWord.error = "비밀번호를 입력해주세요."
+                binding.etPassWord.error = getString(R.string.password_blank_error)
                 isValid = false
             } else if (!isValidPassword(password)) {
-                binding.etPassWord.error = "8-20자의 영문과 숫자를 함께 사용해야합니다."
+                binding.etPassWord.error = getString(R.string.password_regex_error)
                 isValid = false
             } else {
                 binding.etPassWord.error = null
             }
 
             if(checkPassword.isEmpty()){
-                binding.etCheckPassWord.error = "비밀번호를 입력해주세요."
+                binding.etCheckPassWord.error = getString(R.string.password_blank_error)
                 isValid = false
             }else if (password != checkPassword) {
-                binding.etCheckPassWord.error = "비밀번호가 일치하지 않습니다."
+                binding.etCheckPassWord.error = getString(R.string.password_check_error)
                 isValid = false
             } else {
                 binding.etCheckPassWord.error = null
             }
 
             if (name.isEmpty()) {
-                binding.etName.error = "이름을 입력해주세요."
+                binding.etName.error = getString(R.string.name_blank_error)
                 isValid = false
             } else if (!isValidName(name)) {
-                binding.etName.error = "3-10자의 영문자나 한글만 가능합니다."
+                binding.etName.error = getString(R.string.name_regex_error)
                 isValid = false
             } else {
                 binding.etName.error = null
             }
 
             if (number.isEmpty()) {
-                binding.etNumber.error = "전화번호를 입력해주세요."
+                binding.etNumber.error = getString(R.string.phone_blank_error)
                 isValid = false
             } else if (!isNumberChecked) {
-                binding.etNumber.error = "전화번호 중복을 확인해주세요."
+                binding.etNumber.error = getString(R.string.phone_check_error)
                 isValid = false
             } else {
                 binding.etNumber.error = null
             }
 
             if (!isIdChecked) {
-                binding.etId.error = "아이디 중복을 확인해주세요."
+                binding.etId.error = getString(R.string.id_check_error)
                 isValid = false
             } else {
                 binding.etId.error = null
@@ -159,18 +160,19 @@ class SignUpFragment : Fragment() {
         binding.btnCheckId.setOnClickListener {
             val id = binding.etId.text.toString()
             if (id.isEmpty()) {
-                binding.etId.error = "아이디를 입력해주세요."
+                binding.etId.error = getString(R.string.id_blank_error)
             } else if (!isValidId(id)) {
-                binding.etId.error = "3-10자의 영문자,한글 숫자만 가능합니다."
+                binding.etId.error = getString(R.string.id_regex_error)
             } else {
                 lifecycleScope.launch {
                     try {
                         val isDuplicate = viewModel.isUserIdDuplicate(id)
                         if (isDuplicate) {
-                            binding.etId.error = "이미 사용 중인 아이디입니다."
+                            binding.etId.error = getString(R.string.id_duplication_error)
                         } else {
                             binding.etId.error = null
-                            Toast.makeText(requireContext(), "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
+                            makeToastWithStringRes(requireContext(), R.string.id_can_use)
+                            //Toast.makeText(requireContext(), "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
                             isIdChecked = true
                         }
                     } catch (e: Exception) {
@@ -185,7 +187,7 @@ class SignUpFragment : Fragment() {
         binding.btnCheckNumber.setOnClickListener {
             val number = binding.etNumber.text.toString()
             if (number.isEmpty()) {
-                binding.etNumber.error = "전화번호를 입력해주세요."
+                binding.etNumber.error = getString(R.string.phone_blank_error)
             } else {
 
                 lifecycleScope.launch {
@@ -193,10 +195,11 @@ class SignUpFragment : Fragment() {
 
                         val isDuplicate = viewModel.isUserNumberDuplicate(number)
                         if (isDuplicate) {
-                            binding.etNumber.error = "이미 사용 중인 전화번호입니다."
+                            binding.etNumber.error = getString(R.string.phone_duplication_error)
                         } else {
                             binding.etNumber.error = null
-                            Toast.makeText(requireContext(), "사용 가능한 전화번호입니다.", Toast.LENGTH_SHORT).show()
+                            makeToastWithStringRes(requireContext(), R.string.phone_can_use)
+                            //Toast.makeText(requireContext(), "사용 가능한 전화번호입니다.", Toast.LENGTH_SHORT).show()
                             isNumberChecked = true
                         }
                     } catch (e: Exception) {
@@ -217,7 +220,8 @@ class SignUpFragment : Fragment() {
 
                     is UiState.Success -> {
                         sharedViewModel.updateUser(state.data)
-                        Toast.makeText(requireContext(), "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.sign_up_success)
+                        //Toast.makeText(requireContext(), "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                         val intent = Intent(requireActivity(), DevelopmentActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
@@ -226,7 +230,7 @@ class SignUpFragment : Fragment() {
                     is UiState.Error -> {
                         Log.d("SignUp Error", state.message)
                         if (state.message.contains("The email address is already in use by another account")) {
-                            binding.etEmail.error = "이미 가입된 이메일 입니다."
+                            binding.etEmail.error = getString(R.string.email_duplication_error)
                         } else {
                             Log.d("SignUp error",state.message)
                         }

@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentTermBinding
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
+import kr.nbc.momo.util.makeToastWithStringRes
 
 @AndroidEntryPoint
 class TermFragment : BottomSheetDialogFragment() {
@@ -73,7 +73,8 @@ class TermFragment : BottomSheetDialogFragment() {
                     .commit()
                 dismiss()
             } else {
-                Toast.makeText(requireContext(), "사용약관에 동의해주세요", Toast.LENGTH_SHORT).show()
+                makeToastWithStringRes(requireContext(), R.string.term_title)
+                //Toast.makeText(requireContext(), "사용약관에 동의해주세요", Toast.LENGTH_SHORT).show()
             }
         }
     }
