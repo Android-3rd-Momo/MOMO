@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:padding="10dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="8dp"
     android:background="@drawable/rv_item_home_vertical_background">
 
     <androidx.cardview.widget.CardView
