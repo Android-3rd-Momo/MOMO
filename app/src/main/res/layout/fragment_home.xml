@@ -12,7 +12,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/bg_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,20 +24,21 @@
             android:layout_marginStart="20dp"
             android:text="@string/app_name"
             android:textSize="18dp"
-            android:textStyle="bold"
+            android:fontFamily="@font/sfproiddisplaybold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivSearch"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/icon_search"
             android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -59,10 +60,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/default_user_joined_group"
                 android:textSize="18dp"
-                android:textStyle="bold"
+                android:fontFamily="@font/sfproiddisplaybold"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,7 +72,7 @@
                 android:id="@+id/rvMyGroupList"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/grey"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
@@ -110,8 +112,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/recommend_group"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
+                android:fontFamily="@font/sfproiddisplaybold"
+                android:textColor="@color/black"
+                android:layout_marginTop="32dp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rvMyGroupList" />
@@ -146,7 +149,7 @@
                 layout="@layout/ui_state_no_result"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/grey"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
@@ -160,8 +163,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/latest_group"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
+                android:fontFamily="@font/sfproiddisplaybold"
+                android:textColor="@color/black"
+                android:layout_marginTop="32dp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rvRecommendGroupList" />
@@ -171,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -197,7 +201,7 @@
                 layout="@layout/ui_state_loading"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/grey"
