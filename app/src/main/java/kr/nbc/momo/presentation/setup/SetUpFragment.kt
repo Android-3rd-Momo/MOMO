@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,6 +20,7 @@ import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -80,7 +80,8 @@ class SetUpFragment : Fragment() {
                                     sharedViewModel.getCurrentUser()
                                 }
                             } else {
-                                Toast.makeText(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)), Toast.LENGTH_SHORT).show()
+                                makeToastWithString(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)))
+                                //Toast.makeText(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)), Toast.LENGTH_SHORT).show()
                             }
                         }
                         is UiState.Error -> {

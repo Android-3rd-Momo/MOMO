@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -45,6 +44,7 @@ import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.encryptECB
+import kr.nbc.momo.util.makeToastWithStringRes
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -117,9 +117,10 @@ class CreateGroupFragment : Fragment() {
                                 initView()
                             } else {
                                 parentFragmentManager.popBackStack()
-                                val toastText = requireContext().getString(R.string.need_login)
+                                makeToastWithStringRes(requireContext(), R.string.need_login)
+/*                                val toastText = requireContext().getString(R.string.need_login)
                                 Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT)
-                                    .show()
+                                    .show()*/
                             }
                         }
 
@@ -142,8 +143,9 @@ class CreateGroupFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        val toastText = requireContext().getString(R.string.create_success)
-                        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
+/*                        val toastText = requireContext().getString(R.string.create_success)
+                        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()*/
+                        makeToastWithStringRes(requireContext(), R.string.create_success)
                         parentFragmentManager.popBackStack()
                         val readGroupFragment = ReadGroupFragment()
                         parentFragmentManager.beginTransaction()
@@ -211,12 +213,14 @@ class CreateGroupFragment : Fragment() {
                 if (firstDate.text.isEmpty() || lastDate.text.isEmpty() || groupName.text.isEmpty() ||
                     groupDescription.text.isEmpty() || groupOneLineDescription.text.isEmpty() || tvLimitPeople.text.isEmpty()
                 ) {
-                    Toast.makeText(requireContext(), getString(R.string.blank_contain), Toast.LENGTH_SHORT).show()
+                    makeToastWithStringRes(requireContext(), R.string.blank_contain)
+                    //Toast.makeText(requireContext(), getString(R.string.blank_contain), Toast.LENGTH_SHORT).show()
                 } else if (categoryText == "카테고리" ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
                     binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
                 ) {
-                    Toast.makeText(requireContext(), getString(R.string.choice_category), Toast.LENGTH_SHORT).show()
+                    makeToastWithStringRes(requireContext(), R.string.choice_category)
+                    //Toast.makeText(requireContext(), getString(R.string.choice_category), Toast.LENGTH_SHORT).show()
                 } else {
                     showDialog()
                 }

@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,6 +24,7 @@ import kr.nbc.momo.databinding.FragmentUserInfoBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -70,7 +70,8 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.user_report_success)
+//                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -92,7 +93,8 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
+//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -122,7 +124,8 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
                     is UiState.Error -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), getString(R.string.failed_get_user_info), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.failed_get_user_info)
+//                        Toast.makeText(requireContext(), getString(R.string.failed_get_user_info), Toast.LENGTH_SHORT).show()
                     }
                 }
 

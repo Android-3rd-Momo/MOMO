@@ -17,7 +17,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -48,6 +47,7 @@ import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
@@ -221,7 +221,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), "가입 신청 성공", Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.apply_success)
+                        //Toast.makeText(requireContext(), "가입 신청 성공", Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -244,7 +245,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), getString(R.string.delete_group_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.delete_group_success)
+//                        Toast.makeText(requireContext(), getString(R.string.delete_group_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -265,7 +267,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.user_report_success)
                     }
 
                     is UiState.Error -> {
@@ -287,7 +290,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
+//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -308,7 +312,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), getString(R.string.change_leader_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.change_leader_success)
+//                        Toast.makeText(requireContext(), getString(R.string.change_leader_success), Toast.LENGTH_SHORT).show()
                         parentFragmentManager.popBackStack()
                     }
 
@@ -330,7 +335,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
+//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                         initUserList(uiState.data)
 
                     }
@@ -481,7 +487,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (data.userList.size < data.limitPerson.toInt()) {
                         showDialog(true, data, currentUser)
                     } else {
-                        Toast.makeText(requireContext(), getString(R.string.over_max_user), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.over_max_user)
+//                        Toast.makeText(requireContext(), getString(R.string.over_max_user), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -499,7 +506,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         } else {
             binding.btnPopUp.setOnClickListener{
-                Toast.makeText(requireContext(), getString(R.string.need_login), Toast.LENGTH_SHORT).show()
+                makeToastWithStringRes(requireContext(), R.string.need_login)
+//                Toast.makeText(requireContext(), getString(R.string.need_login), Toast.LENGTH_SHORT).show()
             }
         }
     }

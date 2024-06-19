@@ -328,4 +328,31 @@
     <string name="any_come">프론트엔드, 백엔드 다양한 직군이\n한곳에 모여있습니다</string>
     <string name="short_ok">단기 프로젝트도 OK</string>
     <string name="recruit_member">프로젝트를 함께 개발할 동료들을\n모이개에서 모집해보세요!</string>
+    <string name="id_blank_error">아이디를 입력해주세요.</string>
+    <string name="id_regex_error">3–10자의 영문자,한글 숫자만 가능합니다.</string>
+    <string name="email_blank_error">이메일을 입력해주세요.</string>
+    <string name="email_regex_error">이메일 형식이 올바르지 않습니다.</string>
+    <string name="password_blank_error">비밀번호를 입력해주세요.</string>
+    <string name="password_regex_error">8–20자의 영문과 숫자를 함께 사용해야합니다.</string>
+    <string name="password_check_error">비밀번호가 일치하지 않습니다.</string>
+    <string name="name_blank_error">이름을 입력해주세요.</string>
+    <string name="name_regex_error">3–10자의 영문자나 한글만 가능합니다.</string>
+    <string name="phone_blank_error">전화번호를 입력해주세요.</string>
+    <string name="phone_check_error">전화번호 중복을 확인해주세요.</string>
+    <string name="id_check_error">아이디 중복을 확인해주세요.</string>
+    <string name="id_duplication_error">이미 사용 중인 아이디입니다.</string>
+    <string name="id_can_use">사용 가능한 아이디입니다.</string>
+    <string name="phone_duplication_error">이미 사용 중인 전화번호입니다.</string>
+    <string name="phone_can_use">사용 가능한 전화번호입니다.</string>
+    <string name="sign_up_success">회원가입에 성공하였습니다.</string>
+    <string name="email_duplication_error">이미 가입된 이메일 입니다.</string>
+    <string name="email_or_password_blank_error">이메일 또는 비밀번호를 입력해주세요.</string>
+    <string name="email_or_password_error">이메일 또는 비밀번호를 다시 입력해주세요.</string>
+    <string name="apply_success">가입 신청 성공</string>
+
+
+
+
+
+
 </resources>
