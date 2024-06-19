@@ -33,7 +33,7 @@ class RecommendGroupListAdapter(private var items: List<GroupModel>): RecyclerVi
         }
         holder.image.clipToOutline = true
         holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
-        holder.name.text = items[position].category.classification
+        holder.name.text = items[position].groupName
     }
 
 }

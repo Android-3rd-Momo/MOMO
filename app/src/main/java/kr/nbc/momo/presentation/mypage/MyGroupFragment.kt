@@ -84,6 +84,13 @@ class MyGroupFragment : Fragment() {
                                 currentUser = uiState.data.userId
                                 userGroup = uiState.data.userGroup
                                 initGroupList(uiState.data.userId, uiState.data.userGroup)
+                            } else {
+                                binding.prCircularLeader.setVisibleToGone()
+                                binding.includeNoResultLeader.setVisibleToVisible()
+                                binding.rvLeader.setVisibleToInvisible()
+                                binding.prCircularMember.setVisibleToGone()
+                                binding.includeNoResultMember.setVisibleToVisible()
+                                binding.rvMember.setVisibleToInvisible()
                             }
                         }
 
@@ -143,7 +150,11 @@ class MyGroupFragment : Fragment() {
             viewModel.userGroupList.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 오류 메시지 표시
+                        with(binding) {
+                            prCircularMember.setVisibleToVisible()
+                            includeNoResultMember.setVisibleToGone()
+                            rvMember.setVisibleToInvisible()
+                        }
 
                     }
 
@@ -215,8 +226,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
+
                     }
                 }
             }

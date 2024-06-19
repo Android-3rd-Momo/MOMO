@@ -25,15 +25,16 @@
     <string name="term_complete">동의 완료</string>
 
     //MyGroupFragment
-    <string name="myGroupList">"모임 내역</string>
-    <string name="leaderGroup">"진행 모임</string>
-    <string name="memberGroup">"참여 모임</string>
-    <string name="subscription">"가입신청</string>
-    <string name="Approve">"가입승인</string>
-    <string name="approve">"승인</string>>
-    <string name="reject">"거절</string>>
-    <string name="leaderGroupNoResult">"진행중인 모임이 없습니다</string>>
-    <string name="memberGroupNoResult">"참여중인 모임이 없습니다</string>>
+    <string name="myGroupList">모임 내역</string>
+    <string name="leaderGroup">진행 모임</string>
+    <string name="memberGroup">참여 모임</string>
+    <string name="subscription">가입신청</string>
+    <string name="Approve">가입승인</string>
+    <string name="approve">승인</string>>
+    <string name="reject">거절</string>>
+    <string name="leaderGroupNoResult">진행중인 모임이 없습니다</string>>
+    <string name="memberGroupNoResult">참여중인 모임이 없습니다</string>>
+    <string name="approveNoResult">신청 내역이 없습니다</string>>
 
     //이용약관 보기
     <string name="private_termTitle">"개인정보 처리방침 동의</string>
