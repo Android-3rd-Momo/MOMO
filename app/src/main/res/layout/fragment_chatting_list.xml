@@ -24,7 +24,7 @@
             android:layout_marginStart="20dp"
             android:text="모임"
             android:gravity="center"
-            android:fontFamily="@font/font"
+            android:fontFamily="@font/sfproiddisplaybold"
             android:textStyle="bold"
             android:textSize="18dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -33,7 +33,7 @@
         android:id="@+id/rvChattingList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
