@@ -160,7 +160,8 @@
                 android:background="@drawable/button_rectangle_bg"
                 android:fontFamily="@font/sfprodisplaymedium"
                 android:hint="@string/phone_number"
-                android:inputType="number"
+                android:inputType="numberSigned"
+                android:digits="0123456789-"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:textSize="14dp" />
