@@ -43,8 +43,8 @@ import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
-import kr.nbc.momo.util.encryptECB
 import kr.nbc.momo.util.makeToastWithStringRes
+import kr.nbc.momo.util.randomStr
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -328,7 +328,7 @@ class CreateGroupFragment : Fragment() {
 
 
         val image = if (imageUri != null) imageUri.toString() else null
-        val groupId = binding.groupName.text.toString().encryptECB()
+        val groupId = binding.groupName.text.toString().randomStr()
         val group = GroupModel(
             groupId,
             binding.groupName.text.toString(),
