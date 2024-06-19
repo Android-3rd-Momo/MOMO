@@ -62,8 +62,8 @@ class ChattingRoomFragment : Fragment() {
         hideNav()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         sharedViewModel.setLastViewedChat(chattingListModel.groupId, currentUserId, currentUsername)
     }
 
