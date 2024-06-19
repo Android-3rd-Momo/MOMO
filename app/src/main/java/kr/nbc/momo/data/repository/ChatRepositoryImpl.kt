@@ -87,7 +87,10 @@ class ChatRepositoryImpl @Inject constructor(
                                 val userIndex = indexOfFirst { it.userId == userId }
                                 if (userIndex != -1) {
                                     this[userIndex] =
-                                        this[userIndex].copy(lastViewedChat = newChat, userProfileUrl = url)
+                                        this[userIndex].copy(
+                                            lastViewedChat = newChat,
+                                            userProfileUrl = url
+                                        )
                                 } else {
                                     add(GroupUserResponse(userId, userName, url, newChat))
                                 }
@@ -123,10 +126,51 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setLastViewedChat(groupId: String, userId: String, userName: String) {
+    override suspend fun setLastViewedChat(
+        groupId: String,
+        userId: String,
+        userName: String,
+        url: String
+    ) {
         try {
             if (groupId.isNotBlank()) {
-                val groupSnapshot = chatRef.child(groupId).get().await()
+                chatRef.child(groupId).runTransaction(object : Transaction.Handler {
+                    override fun doTransaction(currentData: MutableData): Transaction.Result {
+                        val groupChatResponse = currentData.getValue(GroupChatResponse::class.java)
+                        val groupUserResponse = groupChatResponse?.userList ?: listOf()
+
+                        val lastViewChatResponse = groupChatResponse?.chatList?.last() ?: ChatResponse()
+                        val newGroupUserResponse = groupUserResponse.map {
+                            if (it.userId == userId) it.copy(lastViewedChat = lastViewChatResponse) else it
+                        }
+                        val finalUserResponse = if (!groupUserResponse.any { it.userId == userId }) {
+                            newGroupUserResponse + GroupUserResponse(userId, userName, url, lastViewChatResponse)
+                        } else newGroupUserResponse
+
+                        val newGroupChatResponse = groupChatResponse?.copy(
+                            userList = finalUserResponse
+                        )
+                        currentData.value = newGroupChatResponse
+                        return Transaction.success(currentData)
+                    }
+
+                    override fun onComplete(
+                        error: DatabaseError?,
+                        committed: Boolean,
+                        currentData: DataSnapshot?
+                    ) {
+                        if (error != null) {
+                            Log.e(
+                                "lastViewedChat",
+                                "Failed to Set Last Viewed Chat",
+                                error.toException()
+                            )
+                        } else if (committed) {
+                            Log.d("lastViewedChat", "Success to Set Last Viewed Chat")
+                        }
+                    }
+                })
+/*                val groupSnapshot = chatRef.child(groupId).get().await()
                 val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
                 val groupUserResponse = groupChatResponse?.userList ?: listOf()
 
@@ -134,11 +178,14 @@ class ChatRepositoryImpl @Inject constructor(
                 val newGroupUserResponse = groupUserResponse.map {
                     if (it.userId == userId) it.copy(lastViewedChat = lastViewChatResponse) else it
                 }
+                val finalUserResponse = if (!groupUserResponse.any { it.userId == userId }) {
+                    newGroupUserResponse + GroupUserResponse(userId, userName, url, lastViewChatResponse)
+                } else groupUserResponse
 
                 val newGroupChatResponse = groupChatResponse?.copy(
-                    userList = newGroupUserResponse
+                    userList = finalUserResponse
                 )
-                chatRef.child(groupId).setValue(newGroupChatResponse).await()
+                chatRef.child(groupId).setValue(newGroupChatResponse).await()*/
             }
         } catch (e: Exception) {
             Log.e("repository", "Failed to update last viewed chat", e)
