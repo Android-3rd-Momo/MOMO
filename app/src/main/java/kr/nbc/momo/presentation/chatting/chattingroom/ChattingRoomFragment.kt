@@ -64,7 +64,7 @@ class ChattingRoomFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        sharedViewModel.setLastViewedChat(chattingListModel.groupId, currentUserId, currentUsername)
+        sharedViewModel.setLastViewedChat(chattingListModel.groupId, currentUserId, currentUsername, currentUrl)
     }
 
     override fun onDestroyView() {
