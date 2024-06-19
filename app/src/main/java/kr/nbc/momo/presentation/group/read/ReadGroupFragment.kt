@@ -44,7 +44,6 @@ import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
-import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.makeToastWithStringRes
@@ -434,7 +433,14 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initUserList(userList: List<String>) {
-        val adapter = UserListAdapter(userList, leaderId, requireContext())
+        val userMutableList = userList.toMutableList()
+        val index = userMutableList.indexOf(leaderId)
+        if (index != -1) {
+            userMutableList.removeAt(index)
+            userMutableList.add(0, leaderId)
+        }
+
+        val adapter = UserListAdapter(userMutableList, leaderId, requireContext())
         binding.rvUserList.adapter = adapter
         binding.rvUserList.layoutManager = GridLayoutManager(requireContext(), 2)
         adapter.itemClick = object : UserListAdapter.ItemClick {
