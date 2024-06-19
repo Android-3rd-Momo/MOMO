@@ -188,7 +188,10 @@ class SignUpFragment : Fragment() {
             val number = binding.etNumber.text.toString()
             if (number.isEmpty()) {
                 binding.etNumber.error = getString(R.string.phone_blank_error)
-            } else {
+            } else if (!isValidPhoneNumber(number)){
+                binding.etNumber.error = getString(R.string.phone_regex_error)
+            }
+            else {
 
                 lifecycleScope.launch {
                     try {
@@ -260,6 +263,10 @@ class SignUpFragment : Fragment() {
         return password.matches(passwordPattern.toRegex())
     }
 
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        val phoneNumberPattern = "^\\d{3}-\\d{4}-\\d{4}$"
+        return phoneNumber.matches(phoneNumberPattern.toRegex())
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
