@@ -59,16 +59,21 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
-        fireStore.collection("groups").document(groupId).get()
-            .addOnSuccessListener { snapshot ->
-                val response = snapshot.toObject<GroupResponse>()
+        val query = fireStore.collection("groups").document(groupId)
+        val registration  = query.addSnapshotListener{ value, e ->
+                if (e != null) {
+                    close(e)
+                }
+
+                val response = value?.toObject<GroupResponse>()
                 if (response != null) {
                     trySend(response.toEntity())
                 } else {
                     trySend(GroupEntity(groupId = "error"))
                 }
             }
-        awaitClose()
+
+        awaitClose { registration.remove() }
 
     }
 
@@ -318,15 +323,24 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getSubscriptionList(userId: String): Flow<List<GroupEntity>> =
         callbackFlow {
-            val ref = fireStore.collection("groups").whereEqualTo("leaderId", userId)
-            ref.get().addOnSuccessListener { snapshot ->
-                val list = snapshot.documents.map { it.toObject<GroupResponse>()!! }
+            val query = fireStore.collection("groups").whereEqualTo("leaderId", userId)
+            val registration = query.addSnapshotListener { value, e ->
+                if (e != null) {
+                    close(e)
+                }
+
+                val list = emptyList<GroupResponse>().toMutableList()
+                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }
+
                 trySend(list.map { it.toEntity() })
-            }.addOnFailureListener { e ->
-                close(e)
             }
 
-            awaitClose()
+
+            awaitClose { registration.remove() }
         }
 
     override suspend fun getUserGroupList(
@@ -334,39 +348,40 @@ class GroupRepositoryImpl @Inject constructor(
         userId: String
     ): Flow<List<GroupEntity>> =
         callbackFlow {
-            val ref = fireStore.collection("groups").whereIn("groupId", groupList)
-            ref.get().addOnSuccessListener { snapshot ->
+            val query = fireStore.collection("groups").whereIn("groupId", groupList)
+            val registration = query.addSnapshotListener { value, e ->
+                if (e != null) {
+                    close(e)
+                }
+
                 val list = listOf<GroupResponse>().toMutableList()
-                for (i in snapshot.documents) {
-                    val groupResponse = i.toObject<GroupResponse>()
-                    if (groupResponse?.leaderId != userId) {
-                        if (groupResponse != null) {
-                            list.add(groupResponse)
-                        }
+                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
                 trySend(list.map { it.toEntity() })
-            }.addOnFailureListener { e ->
-                close(e)
             }
-
-            awaitClose()
+            awaitClose { registration.remove() }
         }
 
     override suspend fun getAppliedGroup(userId: String): Flow<List<GroupEntity>> =
         callbackFlow {
-            val ref = fireStore.collection("groups").whereArrayContains("subscriptionList", userId)
-            ref.get().addOnSuccessListener { snapshot ->
-                val list = listOf<GroupResponse>().toMutableList()
-                for (i in snapshot) {
-                    val groupResponse = i.toObject<GroupResponse>()
-                    list.add(groupResponse)
-                    trySend(list.map { it.toEntity() })
+            val query = fireStore.collection("groups").whereArrayContains("subscriptionList", userId)
+            val registration = query.addSnapshotListener { value, e ->
+                if (e != null) {
+                    close(e)
                 }
-            }.addOnFailureListener { e ->
-                close(e)
+
+                val list = listOf<GroupResponse>().toMutableList()
+                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }
+                trySend(list.map { it.toEntity() })
             }
 
-            awaitClose()
+            awaitClose { registration.remove() }
         }
 }
