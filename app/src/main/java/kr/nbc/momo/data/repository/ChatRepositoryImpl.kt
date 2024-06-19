@@ -170,22 +170,6 @@ class ChatRepositoryImpl @Inject constructor(
                         }
                     }
                 })
-/*                val groupSnapshot = chatRef.child(groupId).get().await()
-                val groupChatResponse = groupSnapshot.getValue(GroupChatResponse::class.java)
-                val groupUserResponse = groupChatResponse?.userList ?: listOf()
-
-                val lastViewChatResponse = groupChatResponse?.chatList?.last() ?: ChatResponse()
-                val newGroupUserResponse = groupUserResponse.map {
-                    if (it.userId == userId) it.copy(lastViewedChat = lastViewChatResponse) else it
-                }
-                val finalUserResponse = if (!groupUserResponse.any { it.userId == userId }) {
-                    newGroupUserResponse + GroupUserResponse(userId, userName, url, lastViewChatResponse)
-                } else groupUserResponse
-
-                val newGroupChatResponse = groupChatResponse?.copy(
-                    userList = finalUserResponse
-                )
-                chatRef.child(groupId).setValue(newGroupChatResponse).await()*/
             }
         } catch (e: Exception) {
             Log.e("repository", "Failed to update last viewed chat", e)
