@@ -8,9 +8,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
+import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.RootFragment
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -94,5 +96,21 @@ class MainActivity : AppCompatActivity() {
 
     fun selectNavigationItem(itemId: Int) {
         binding.navigationView.selectedItemId = itemId
+    }
+
+    fun beginTransactionRead() {
+        val readGroupFragment = ReadGroupFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, readGroupFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun beginTransactionUserInfo() {
+        val userInfoFragment = UserInfoFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, userInfoFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

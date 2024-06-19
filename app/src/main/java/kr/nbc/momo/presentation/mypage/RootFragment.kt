@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentRootBinding
+import kr.nbc.momo.presentation.mypage.adapter.ViewPagerAdapter
 import kr.nbc.momo.presentation.setup.SetUpFragment
 
 @AndroidEntryPoint
@@ -48,11 +49,12 @@ class RootFragment : Fragment() {
         viewPager.addFragment(MyPageFragment())
         viewPager.addFragment(MyGroupFragment())
         binding.vpRoot.adapter = viewPager
+        binding.vpRoot.isUserInputEnabled = false
 
         TabLayoutMediator(binding.tlRoot, binding.vpRoot) { tab, position ->
             when (position) {
-                0 -> tab.text = "프로필"
-                1 -> tab.text = "모임 내역"
+                0 -> tab.setText(R.string.profile)
+                1 -> tab.setText(R.string.myGroupList)
             }
         }.attach()
     }

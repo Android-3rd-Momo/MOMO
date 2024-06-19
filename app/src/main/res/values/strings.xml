@@ -26,6 +26,12 @@
 
     //MyGroupFragment
     <string name="myGroupList">"모임 내역</string>
+    <string name="leaderGroup">"진행 모임</string>
+    <string name="memberGroup">"참여 모임</string>
+    <string name="subscription">"가입신청</string>
+    <string name="Approve">"가입승인</string>
+    <string name="approve">"승인</string>>
+    <string name="reject">"거절</string>>
 
     //이용약관 보기
     <string name="private_termTitle">"개인정보 처리방침 동의</string>

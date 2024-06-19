@@ -738,11 +738,11 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {
-                    val list = data.userList.toMutableList()
-                    list.add(currentUser!!)
-                    viewModel.subscription(currentUser, data.groupId)
-                    viewModel.joinGroup(data.groupId)
-                    initView(data.copy(userList = list))
+                    if (currentUser != null) {
+                        viewModel.subscription(currentUser, data.groupId)
+                    }
+                    //viewModel.joinGroup(data.groupId)
+
                 }
             }
         } else {
