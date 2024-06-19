@@ -1,9 +1,32 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MOMO" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.MOMO" parent="Base.Theme.MOMO" />
+
+    <!--Login bottom sheet Fragment 스타일 -->
+    <style name="AppBottomSheetDialogBorder20WhiteTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalBorder20WhiteStyle</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppModalBorder20WhiteStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/dialog_login_background</item>
+    </style>
+
+    <!--임시 스플래쉬 -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/blue</item>
+    </style>
+
+
+
+
+
+
 </resources>
