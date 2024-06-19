@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/grey">
 
-    <include
-        android:id="@+id/includeUiState"
-        layout="@layout/ui_state_loading"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -45,7 +36,6 @@
                 android:layout_height="20dp"
                 android:layout_margin="20dp"
                 android:src="@drawable/icon_camera"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +45,6 @@
                 android:layout_height="20dp"
                 android:layout_margin="20dp"
                 android:src="@drawable/icon_delete"
-                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@id/ivEditBackProfileThumbnail"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,6 +65,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginStart="17dp"
+                    android:background="@drawable/circle_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -103,7 +93,6 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginBottom="40dp"
                     android:backgroundTint="@color/blue"
-                    android:visibility="gone"
                     app:cardCornerRadius="50dp"
                     app:layout_constraintBottom_toBottomOf="@id/llProfileImage"
                     app:layout_constraintStart_toStartOf="@id/llProfileImage">
@@ -123,7 +112,6 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="40dp"
                     android:backgroundTint="@color/blue"
-                    android:visibility="gone"
                     app:cardCornerRadius="50dp"
                     app:layout_constraintBottom_toBottomOf="@id/llProfileImage"
                     app:layout_constraintStart_toStartOf="@id/llProfileImage">
@@ -137,19 +125,6 @@
                 </androidx.cardview.widget.CardView>
 
 
-                <TextView
-                    android:id="@+id/tvUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/sfproiddisplaybold"
-                    android:textSize="16dp"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toEndOf="@id/llProfileImage"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="홍길동" />
-
                 <EditText
                     android:id="@+id/etUserName"
                     android:layout_width="0dp"
@@ -160,50 +135,23 @@
                     android:hint="@string/name"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/llProfileImage"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvUserSelfIntroduction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="7dp"
-                    android:fontFamily="@font/sfprodisplaymedium"
-                    android:maxLength="40"
-                    android:maxLines="2"
-                    android:textSize="14dp"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toEndOf="@id/llProfileImage"
-                    app:layout_constraintTop_toBottomOf="@id/tvUserName"
-                    tools:text="자기소개 넣어주세요." />
 
                 <EditText
                     android:id="@+id/etUserSelfIntroduction"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/sfprodisplaymedium"
                     android:hint="@string/please_edit_introduce"
                     android:textSize="12dp"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/tvUserName"
+                    app:layout_constraintStart_toStartOf="@id/etUserName"
                     app:layout_constraintTop_toBottomOf="@id/etUserName" />
 
-                <ImageView
-                    android:id="@+id/ivEditProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/icon_edit"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -338,19 +286,7 @@
                         android:minHeight="95dp"
                         android:padding="10dp"
                         android:textSize="14dp"
-                        android:visibility="gone"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvStackOfDevelopment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/sfprodisplaymedium"
-                        android:minHeight="95dp"
-                        android:padding="10dp"
-                        android:textSize="14dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="기술스택은 ㅇㅇㅇ입니다." />
 
                     <TextView
                         android:id="@+id/tvCountStackEditText"
@@ -360,7 +296,6 @@
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/sfprodisplaymedium"
                         android:textSize="12dp"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:text="000/500" />
@@ -404,7 +339,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:src="@drawable/icon_delete"
-                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/cvPortfolioImage"
                     app:layout_constraintStart_toEndOf="@id/cvPortfolioImage" />
 
@@ -429,20 +363,7 @@
                         android:minHeight="95dp"
                         android:padding="10dp"
                         android:textSize="14dp"
-                        android:visibility="gone"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvPortfolio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/sfprodisplaymedium"
-                        android:maxLength="500"
-                        android:minHeight="95dp"
-                        android:padding="10dp"
-                        android:textSize="14dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="제가 만들었던 프로젝트는 ㅇㅇㅇ입니다." />
 
                     <TextView
                         android:id="@+id/tvCountPortfolioEditText"
@@ -452,7 +373,6 @@
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/sfprodisplaymedium"
                         android:textSize="12dp"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:text="000/500" />
@@ -484,7 +404,6 @@
         android:text="@string/confirm_edit"
         android:textColor="@color/white"
         android:textSize="16dp"
-        android:visibility="gone"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
