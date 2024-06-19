@@ -63,7 +63,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var isGroupImageChange = false
     private var imageUri: Uri? = null
     private var image: String? = null
-    private var categoryText: String = requireActivity().getString(R.string.contest)
+    private var categoryText: String = ""
     private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""
@@ -728,11 +728,11 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {
-                    val list = data.userList.toMutableList()
-                    list.add(currentUser!!)
-                    viewModel.subscription(currentUser, data.groupId)
-                    viewModel.joinGroup(data.groupId)
-                    initView(data.copy(userList = list))
+                    if (currentUser != null) {
+                        viewModel.subscription(currentUser, data.groupId)
+                    }
+                    //viewModel.joinGroup(data.groupId)
+
                 }
             }
         } else {

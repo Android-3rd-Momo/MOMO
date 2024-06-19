@@ -49,6 +49,7 @@ class RootFragment : Fragment() {
         viewPager.addFragment(MyPageFragment())
         viewPager.addFragment(MyGroupFragment())
         binding.vpRoot.adapter = viewPager
+        binding.vpRoot.isUserInputEnabled = false
 
         TabLayoutMediator(binding.tlRoot, binding.vpRoot) { tab, position ->
             when (position) {
