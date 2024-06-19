@@ -150,7 +150,7 @@ class CreateGroupFragment : Fragment() {
                         val readGroupFragment = ReadGroupFragment()
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, readGroupFragment)
-                            .addToBackStack(null)
+                            .addToBackStack("Read")
                             .commit()
                     }
 

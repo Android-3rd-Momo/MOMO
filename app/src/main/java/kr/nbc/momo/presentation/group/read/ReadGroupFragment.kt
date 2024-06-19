@@ -22,7 +22,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -60,29 +62,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: String? = null
-    private var isEditMode = false
-    private var isGroupImageChange = false
-    private var imageUri: Uri? = null
-    private var image: String? = null
     private var categoryText: String = ""
     private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""
     private var userList: List<String> = listOf()
-    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
-    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            imageUri = uri
-            isGroupImageChange = true
-            binding.ivGroupImage.setThumbnailByUrlOrDefault(uri.toString())
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
-        } else {
-            Log.d("PhotoPicker", "No media selected")
-        }
-    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,14 +82,18 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         observeGroupState()
         observeUserProfile()
-        observeUpdateState()
         observeUserList()
         observeDeleteGroup()
         observeBlockUser()
         observeReportUser()
-        observeChangeLeader()
-        observeDeleteUser()
-        initTextWatcher()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (leaderId == currentUser) {
+            binding.btnEdit.setVisibleToVisible()
+            binding.btnPopUp.setVisibleToGone()
+        }
     }
 
     override fun onResume() {
@@ -190,26 +180,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-    private fun observeUpdateState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.updateState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-
-                    }
-
-                    is UiState.Success -> {
-                        initView(uiState.data)
-                        initUserList(uiState.data.userList)
-                    }
-
-                    is UiState.Error -> {
-                        initGroupThumbnail(image)
-                    }
-                }
-            }
-        }
-    }
 
     private fun observeUserList() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -302,53 +272,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-    private fun observeChangeLeader() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.leaderChangeState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.change_leader_success)
-//                        Toast.makeText(requireContext(), getString(R.string.change_leader_success), Toast.LENGTH_SHORT).show()
-                        parentFragmentManager.popBackStack()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
-    private fun observeDeleteUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.userDeleteState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
-                        initUserList(uiState.data)
-
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
 
     private fun initGroup() {
         lifecycleScope.launch {
@@ -370,13 +293,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             tvFirstDate.text = data.firstDate
             tvLastDate.text = data.lastDate
             tvLeaderId.text = data.leaderId
-            etGroupNameEdit.setText(data.groupName)
-            etGroupOneLineDescriptionEdit.setText(data.groupOneLineDescription)
-            etGroupDescriptionEdit.setText(data.groupDescription)
-            ivGroupImageEdit.setThumbnailByUrlOrDefault(data.groupThumbnail)
-            tvLeaderIdEdit.text = data.leaderId
-            tvFirstDateEdit.text = data.firstDate
-            tvLastDateEdit.text = data.lastDate
 
             val limitPeopleText = data.userList.size.toString() + "/" + data.limitPerson
             tvLimitPeople.text = limitPeopleText
@@ -397,9 +313,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
-            btnEditClickListener(data)
+            btnEditClickListener()
         }
-        initSpinner(data.category.classification)
     }
 
 
@@ -425,10 +340,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun initGroupThumbnail(groupThumbnail: String?) {
         if (groupThumbnail.isNullOrEmpty()) {
             binding.ivGroupImage.setThumbnailByUrlOrDefault(null)
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
         } else {
             binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(groupThumbnail)
         }
     }
 
@@ -451,23 +364,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     .replace(R.id.fragment_container, userInfoFragment)
                     .addToBackStack(null)
                     .commit()
-            }
-        }
-
-        val editAdapter = EditUserListAdapter(userList, leaderId, requireContext())
-        binding.rvUserListEdit.adapter = editAdapter
-        binding.rvUserListEdit.layoutManager = GridLayoutManager(requireContext(), 2)
-        editAdapter.longClick = object : EditUserListAdapter.LongClick {
-            override fun longClick(userId: String) {
-                val enumDialog = EnumDialog.LeaderChange
-                showDialog(groupId, userId, enumDialog)
-            }
-        }
-
-        editAdapter.onClick = object : EditUserListAdapter.OnClick {
-            override fun onClick(userId: String) {
-                val enumDialog = EnumDialog.DeleteUser
-                showDialog(groupId, userId, enumDialog)
             }
         }
     }
@@ -501,9 +397,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-    private fun btnEditClickListener(data: GroupModel) {
+    private fun btnEditClickListener() {
         binding.btnEdit.setOnClickListener {
-            setEditMode(data)
+            val editReadGroupFragment = EditReadGroupFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, editReadGroupFragment)
+                .addToBackStack("Read")
+                .commit()
         }
 
         if (currentUser != null) {
@@ -518,216 +418,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-    private fun setEditMode(data: GroupModel) {
-        val categoryList = data.category.programingLanguage + data.category.developmentOccupations
-        val chipGroupDev = resources.getStringArray(R.array.chipGroupDevelopmentOccupations)
-        val chipGroupLang = resources.getStringArray(R.array.chipProgramingLanguage)
-        setChipGroup(chipGroupDev, binding.chipGroupDevelopmentOccupationsEdit, categoryList)
-        setChipGroup(chipGroupLang, binding.chipProgramingLanguageEdit, categoryList)
-
-        val editMode = arrayOf(
-            binding.clEditMode,
-            binding.clSimpleDescriptionContainerEdit,
-            binding.btnDelete,
-            binding.ivDeleteGroupImage
-        )
-        val viewMode = arrayOf(
-            binding.clViewMode,
-            binding.clSimpleDescriptionContainer,
-            binding.btnEdit
-        )
-
-        val limitPeopleText = data.userList.size.toString() + "/" + data.limitPerson
-        binding.tvLimitPeopleEdit.text = limitPeopleText
-        binding.tvLimitPeopleEdit.setOnClickListener {
-            showDialogNumberPicker(binding.tvLimitPeopleEdit, data.userList.size)
-        }
-
-        binding.ivGroupImageEdit.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
-        binding.ivDeleteGroupImage.setOnClickListener {
-            imageUri = null
-            isGroupImageChange = true
-            binding.ivGroupImage.setThumbnailByUrlOrDefault(null) //todo
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
-        }
-        binding.tvFirstDateEdit.setOnClickListener {
-            showDialog(binding.tvFirstDateEdit, Value.First)
-        }
-        binding.tvLastDateEdit.setOnClickListener {
-            showDialog(binding.tvLastDateEdit, Value.Last)
-        }
-        binding.btnCompleteEdit.setOnClickListener {
-            btnCompleteEditOnClickListener(data, editMode, viewMode)
-            isGroupImageChange = false
-        }
-        binding.btnDelete.setOnClickListener {
-            viewModel.deleteGroup(data.groupId, data.userList)
-        }
-        setChangeMode(editMode, viewMode)
-    }
-
-    private fun initSpinner(category: String) {
-        val items = resources.getStringArray(R.array.classification)
-        val spinnerAdapter = object : ArrayAdapter<String>(requireContext(), R.layout.spinner_item_category) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val v = super.getView(position, convertView, parent)
-
-                if (position == count) {
-                    val textView = (v.findViewById<View>(R.id.tvCategorySpinner) as TextView)
-                    textView.text = getItem(count)
-                }
-
-                return v
-            }
-
-            override fun getCount(): Int {
-                return super.getCount() - 1
-            }
-        }
-
-        spinnerAdapter.addAll(items.toMutableList())
-        spinnerAdapter.add(category)
-        binding.categorySpinner.adapter = spinnerAdapter
-        binding.categorySpinner.setSelection(spinnerAdapter.count)
-        binding.categorySpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p0 != null) {
-                        categoryText = p0.getItemAtPosition(p2).toString()
-                    }
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    return
-                }
-            }
-    }
-
-    private fun setChangeMode(editMode: Array<View>, viewMode: Array<View>) {
-        isEditMode = !isEditMode
-        editMode.forEach { if (isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
-        viewMode.forEach { if (!isEditMode) it.setVisibleToVisible() else it.setVisibleToGone() }
-    }
-
-    private fun btnCompleteEditOnClickListener(data: GroupModel, editMode: Array<View>, viewMode: Array<View>) {
-        val categoryList = CategoryModel(
-            categoryText,
-            getChipText(binding.chipGroupDevelopmentOccupationsEdit),
-            getChipText(binding.chipProgramingLanguageEdit)
-        )
-        val updatedGroupThumbnail = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
-        viewModel.updateGroup(
-            data.copy(
-                groupName = binding.etGroupNameEdit.text.toString(),
-                groupOneLineDescription = binding.etGroupOneLineDescriptionEdit.text.toString(),
-                groupDescription = binding.etGroupDescriptionEdit.text.toString(),
-                firstDate = binding.tvFirstDateEdit.text.toString(),
-                lastDate = binding.tvLastDateEdit.text.toString(),
-                category = categoryList,
-                limitPerson = groupLimitPeople,
-                groupThumbnail = updatedGroupThumbnail,
-            ), imageUri
-        )
-        setChangeMode(editMode, viewMode)
-    }
-
-    private fun showDialogNumberPicker(textView: TextView, size: Int) {
-        val arr =  Array(100) { (it + 5).toString() }
-        val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-            .setView(dialogBinding.root)
-            .setCancelable(false)
-            .create()
-
-        dialogBinding.numberPicker.minValue = 5
-        dialogBinding.numberPicker.maxValue = arr.size
-        dialogBinding.numberPicker.displayedValues = arr
-        dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        dialogBinding.btnConfirm.setOnClickListener {
-            dialogBuilder.dismiss()
-            val limitPeopleText = size.toString() + "/" + dialogBinding.numberPicker.value
-            textView.text = limitPeopleText
-            groupLimitPeople = dialogBinding.numberPicker.value.toString()
-        }
-        dialogBuilder.show()
-    }
-
-    private fun showDialog(dateType: TextView, value: Value) {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val listener = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
-            val mon = month + 1
-            val monthText = if (mon < 10) {
-                "0$mon"
-            } else mon.toString()
-
-            val dayText = if (day < 10) {
-                "0$day"
-            } else day.toString()
-
-            dateType.text = getString(R.string.yyyy_MM_dd, year, monthText, dayText)
-
-            val selectedCalendar = Calendar.getInstance()
-            selectedCalendar.set(year, month, day, 0, 0, 0)
-            selectedCalendar.set(Calendar.MILLISECOND, 0)
-
-            // 선택 후
-            if (value == Value.First) {
-                lastMinTimeInMillis = selectedCalendar.timeInMillis
-            } else if (value == Value.Last) {
-                firstMaxTimeInMillis = selectedCalendar.timeInMillis
-            }
-        }
-        val picker = DatePickerDialog(requireContext(), listener, year, month, day)
-
-        // 선택 전
-        if (value == Value.First) {
-            picker.datePicker.minDate = firstMinTimeInMillis
-            picker.datePicker.maxDate = firstMaxTimeInMillis
-        } else if (value == Value.Last) {
-            picker.datePicker.minDate = lastMinTimeInMillis
-            picker.datePicker.maxDate = lastMaxTimeInMillis
-        }
-        picker.show()
-    }
-
-    private fun showDialog(groupId: String, userId: String, anDialog: EnumDialog) {
-        val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-            .setView(dialogBinding.root)
-            .setCancelable(false)
-            .create()
-        dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        if (anDialog == EnumDialog.LeaderChange) {
-            dialogBinding.tvClose.text = getString(R.string.change_leader, userId)
-            dialogBinding.btnConfirm.setOnClickListener {
-                dialogBuilder.dismiss()
-                viewModel.leaderChange(groupId, userId)
-
-            }
-        }
-
-        if (anDialog == EnumDialog.DeleteUser) {
-            dialogBinding.tvClose.text = getString(R.string.ban_user, userId)
-            dialogBinding.btnConfirm.setOnClickListener {
-                dialogBuilder.dismiss()
-                viewModel.deleteUser(userId, groupId)
-
-            }
-        }
-        dialogBinding.btnCancel.setOnClickListener {
-            dialogBuilder.dismiss()
-        }
-        dialogBuilder.show()
-    }
 
 
     private fun showDialog(loginBoolean: Boolean, data: GroupModel, currentUser: String?) {
@@ -766,38 +456,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         dialog.show()
     }
 
-    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, category: List<String>) {
-        if (chipGroup.childCount == 0) {
-            for (chipText in chipList) {
-                val chip = Chip(requireContext()).apply {
-                    text = chipText
-                    setTextColor(
-                        ContextCompat.getColorStateList(
-                            requireContext(),
-                            R.color.tv_chip_state_color
-                        )
-                    )
-                    setChipBackgroundColorResource(R.color.bg_chip_state_color)
-                    isCheckable = true
-                    if (category.contains(chipText)) {
-                        isChecked = true
-                    }
-                }
-                chipGroup.addView(chip)
-            }
-        }
-    }
-
-    private fun getChipText(chipGroup: ChipGroup): List<String> {
-        val textList = mutableListOf<String>()
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as Chip
-            if (chip.isChecked) {
-                textList.add(chip.text.toString())
-            }
-        }
-        return textList
-    }
 
     private fun showPopup(v: View) {
         val popup = PopupMenu(requireContext(), v)
@@ -823,13 +481,5 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
 
         return item != null
-    }
-
-    private fun initTextWatcher(){
-        with(binding){
-            etGroupDescriptionEdit.addTextWatcherWithError(500, requireContext().getString(R.string.group_desc), btnCompleteEdit)
-            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_one_line_desc), btnCompleteEdit)
-            etGroupNameEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_name), btnCompleteEdit)
-        }
     }
 }
