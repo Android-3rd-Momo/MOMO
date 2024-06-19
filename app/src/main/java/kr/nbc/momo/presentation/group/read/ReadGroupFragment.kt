@@ -2,6 +2,7 @@
 package kr.nbc.momo.presentation.group.read
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -43,6 +44,7 @@ import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.SignUpFragment
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.addTextWatcherWithError
@@ -739,11 +741,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             dialogBinding.tvClose.setText(R.string.go_to_login)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
-                val signUpFragment = SignUpFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, signUpFragment)
-                    .addToBackStack(null)
-                    .commit()
+                val intent = Intent(requireActivity(), GetStartedActivity::class.java)
+                startActivity(intent)
             }
         }
 

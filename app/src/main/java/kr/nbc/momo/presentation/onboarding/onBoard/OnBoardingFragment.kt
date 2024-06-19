@@ -52,16 +52,16 @@ class OnBoardingFragment : Fragment() {
         indicator.setViewPager(viewPager2)
     }
 
-    private fun addToList(title: String, description: String, image: Int) {
-        titleList.add(title)
-        descList.add(description)
+    private fun addToList(titleId: Int, descriptionId: Int, image: Int) {
+        titleList.add(getString(titleId))
+        descList.add(getString(descriptionId))
         imageList.add(image)
     }
 
     private fun postToList() {
-        addToList("모이개에 어서오세요", "개발자 커뮤니티에 오신것을\n" + "환영합니다", R.drawable.onboarding_illust1)
-        addToList("다양한 개발자들이 한곳에 ", "프론트엔드, 백엔드 다양한 직군이\n" + "한곳에 모여있습니다", R.drawable.onboarding_illust3)
-        addToList("단기 프로젝트도 OK", "프로젝트를 함께 개발할 동료들을\n" + "모이개에서 모집해보세요!", R.drawable.onboarding_illust2)
+        addToList(R.string.welcome_to_moigae, R.string.welcome_to_dev_community, R.drawable.onboarding_illust1)
+        addToList(R.string.many_dev, R.string.any_come, R.drawable.onboarding_illust3)
+        addToList(R.string.short_ok, R.string.recruit_member, R.drawable.onboarding_illust2)
     }
 
 }

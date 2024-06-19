@@ -33,7 +33,6 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
-import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
@@ -498,6 +497,10 @@ class MyPageFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 

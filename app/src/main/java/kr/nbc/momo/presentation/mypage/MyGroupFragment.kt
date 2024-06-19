@@ -104,6 +104,7 @@ class MyGroupFragment : Fragment() {
 
                     }
                     is UiState.Success -> {
+                        delay(1000)
                         currentUser?.let { initGroupList(it, userGroup) }
                     }
 
