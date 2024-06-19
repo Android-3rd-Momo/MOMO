@@ -31,6 +31,7 @@ import kr.nbc.momo.presentation.mypage.adapter.LeaderSubAdapter
 import kr.nbc.momo.presentation.mypage.adapter.MemberSubAdapter
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.setVisibleToGone
+import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
@@ -155,6 +156,16 @@ class MyGroupFragment : Fragment() {
                             false
                         )
 
+                        if (uiState.data.isEmpty()) {
+                            binding.prCircularMember.setVisibleToGone()
+                            binding.includeNoResultMember.setVisibleToVisible()
+                            binding.rvMember.setVisibleToInvisible()
+                        } else {
+                            binding.prCircularMember.setVisibleToGone()
+                            binding.includeNoResultMember.setVisibleToGone()
+                            binding.rvMember.setVisibleToVisible()
+                        }
+
                         memberGroupAdapter.itemClick = object : MemberGroupAdapter.ItemClick {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
@@ -217,7 +228,11 @@ class MyGroupFragment : Fragment() {
             viewModel.subscriptionListState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 오류 메시지 표시
+                        with(binding) {
+                            prCircularLeader.setVisibleToVisible()
+                            includeNoResultLeader.setVisibleToGone()
+                            rvLeader.setVisibleToInvisible()
+                        }
 
                     }
 
@@ -273,6 +288,17 @@ class MyGroupFragment : Fragment() {
                             }
                         }
 
+                        if (uiState.data.isEmpty()) {
+                            binding.prCircularLeader.setVisibleToGone()
+                            binding.includeNoResultLeader.setVisibleToVisible()
+                            binding.rvLeader.setVisibleToInvisible()
+                        } else {
+                            binding.prCircularLeader.setVisibleToGone()
+                            binding.includeNoResultLeader.setVisibleToGone()
+                            binding.rvLeader.setVisibleToVisible()
+                        }
+
+
                     }
 
                     is UiState.Error -> {
@@ -286,6 +312,9 @@ class MyGroupFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
+            includeNoResultMember.tvNoResult.setText(R.string.memberGroupNoResult)
+            includeNoResultLeader.tvNoResult.setText(R.string.leaderGroupNoResult)
+
             tvMemberSub.setOnClickListener {
                 rvLeaderSub.setVisibleToGone()
                 rvMemberSub.setVisibleToVisible()

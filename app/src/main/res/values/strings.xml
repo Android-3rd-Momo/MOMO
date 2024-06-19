@@ -32,6 +32,8 @@
     <string name="Approve">"가입승인</string>
     <string name="approve">"승인</string>>
     <string name="reject">"거절</string>>
+    <string name="leaderGroupNoResult">"진행중인 모임이 없습니다</string>>
+    <string name="memberGroupNoResult">"참여중인 모임이 없습니다</string>>
 
     //이용약관 보기
     <string name="private_termTitle">"개인정보 처리방침 동의</string>

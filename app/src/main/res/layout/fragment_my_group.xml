@@ -32,6 +32,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
 
+    <include
+        android:id="@+id/prCircularLeader"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
+
+    <include
+        android:id="@+id/includeNoResultLeader"
+        layout="@layout/ui_state_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
+
     <TextView
         android:id="@+id/tvGroupMember"
         android:layout_width="wrap_content"
@@ -46,6 +72,32 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMember"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
+
+    <include
+        android:id="@+id/prCircularMember"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
+
+    <include
+        android:id="@+id/includeNoResultMember"
+        layout="@layout/ui_state_no_result"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="15dp"
@@ -91,6 +143,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
+        android:background="@drawable/bg_layout_corner_stroke"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
