@@ -204,7 +204,7 @@ class UserRepositoryImpl @Inject constructor(
                     .addOnFailureListener { e -> close(e) }
             }
 
-        awaitClose { listener.isComplete }
+        awaitClose()
     }
 
     override suspend fun blockUser(blockUser: String): Flow<Boolean> = callbackFlow {
@@ -216,7 +216,7 @@ class UserRepositoryImpl @Inject constructor(
         }
             .addOnSuccessListener { trySend(true) }
             .addOnFailureListener { e -> close(e) }
-        awaitClose { listener.isComplete }
+        awaitClose()
     }
 
     override suspend fun userInfo(userId: String): Flow<UserEntity> = flow {
