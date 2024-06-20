@@ -12,7 +12,8 @@ data class GroupModel(
     val category: CategoryModel,
     val userList: List<String>,
     val limitPerson: String,
-    val subscriptionList: List<String>
+    val subscriptionList: List<String>,
+    val createdDate: String
 )
 
 data class CategoryModel(

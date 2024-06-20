@@ -24,7 +24,6 @@ import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.search.SearchFragment
-import kr.nbc.momo.util.decryptECB
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
@@ -179,12 +178,9 @@ class HomeFragment : Fragment() {
                         val limitPeopleData = filteredData.filter { it.userList.size < it.limitPerson.toInt() }
 
                         val latestGroupList = limitPeopleData
-                                .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
-                                .sortedByDescending {
-                                    val decrypt = it.groupId.decryptECB()
-                                    val dateTimeIndex = decrypt.lastIndexOf(" ")
-                                    decrypt.substring(dateTimeIndex)
-                                }
+                            .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                            .sortedByDescending { it.createdDate }
+
                         latestGroupListAdapter = LatestGroupListAdapter(latestGroupList)
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
                         binding.rvLatestGroupList.layoutManager = LinearLayoutManager(requireContext())
@@ -246,7 +242,6 @@ class HomeFragment : Fragment() {
                         onClick(latestGroupList, myGroupList, recommendGroupList)
                     }
                 }
-
             }
         }
     }
