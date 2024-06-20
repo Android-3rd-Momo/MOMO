@@ -373,7 +373,7 @@
     <string name="content_desc_check_id">아이디 중복 확인</string>
     <string name="content_desc_check_number">전화번호 중복 확인</string>
     <string name="group">모임</string>
-
+    <string name="content_desc_rv_chat">채팅 리스트</string>
 
 
 
