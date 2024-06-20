@@ -14,15 +14,14 @@
         android:layout_height="70dp"
         android:background="@color/white"
         android:padding="10dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/btnEdit"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
             android:src="@drawable/icon_edit"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,8 +31,9 @@
 
         <ImageView
             android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
             android:src="@drawable/icon_delete"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,8 +42,9 @@
 
         <ImageView
             android:id="@+id/btnPopUp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
             android:src="@drawable/ic_popup_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,8 +52,9 @@
 
         <ImageView
             android:id="@+id/ivReturn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
             android:src="@drawable/icon_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +67,6 @@
             android:text="@string/group_information"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivReturn"
             app:layout_constraintTop_toTopOf="parent" />
