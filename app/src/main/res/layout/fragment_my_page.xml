@@ -41,9 +41,9 @@
 
             <ImageView
                 android:id="@+id/ivEditBackProfileThumbnail"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="20dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:src="@drawable/icon_camera"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,9 +51,10 @@
 
             <ImageView
                 android:id="@+id/ivDeleteBackProfileThumbnail"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="20dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp"
                 android:src="@drawable/icon_delete"
                 android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@id/ivEditBackProfileThumbnail"
@@ -100,8 +101,8 @@
                     android:id="@+id/cvEditProfileImage"
                     android:layout_width="27dp"
                     android:layout_height="27dp"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginBottom="50dp"
                     android:backgroundTint="@color/blue"
                     android:visibility="gone"
                     app:cardCornerRadius="50dp"
@@ -198,11 +199,10 @@
 
                 <ImageView
                     android:id="@+id/ivEditProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
                     android:layout_gravity="end"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
                     android:src="@drawable/icon_edit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -403,9 +403,9 @@
 
                 <ImageView
                     android:id="@+id/ivDeletePortfolioImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
                     android:src="@drawable/icon_delete"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/cvPortfolioImage"
@@ -488,7 +488,7 @@
         android:text="@string/confirm_edit"
         android:textColor="@color/white"
         android:textSize="16dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
