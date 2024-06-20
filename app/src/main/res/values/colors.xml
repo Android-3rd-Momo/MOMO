@@ -7,4 +7,5 @@
     <color name="red_error">#FF0000</color>
     <color name= "darkGrey">#E9E9E9</color>
     <color name= "textGrey">#C7C7C7</color>
+    <color name= "navIconGrey">#868686</color>
 </resources>

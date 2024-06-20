@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:textColor="@color/black"
         android:fontFamily="@font/sfprodisplaymedium"
         android:layout_marginTop="10dp"
