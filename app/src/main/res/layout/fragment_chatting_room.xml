@@ -73,6 +73,7 @@
             android:layout_marginEnd="60dp"
             android:background="@drawable/chatting_item_messagebox"
             android:hint="@string/please_edit_chat"
+            android:textColorHint="@color/hint_grey"
             android:paddingStart="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
