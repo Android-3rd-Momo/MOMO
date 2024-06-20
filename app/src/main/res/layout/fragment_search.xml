@@ -24,6 +24,7 @@
             android:layout_height="48dp"
             android:padding="10dp"
             android:src="@drawable/icon_back"
+            android:contentDescription="@string/content_desc_search_return"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

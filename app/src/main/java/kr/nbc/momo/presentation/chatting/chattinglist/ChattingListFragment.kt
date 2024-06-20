@@ -136,7 +136,6 @@ class ChattingListFragment : Fragment() {
         }
     }
 
-    //넘기는 거 미완성(conflict 가능성)
     private fun itemOnClick(chattingListModel: ChattingListModel) {
         sharedViewModel.getGroupId(chattingListModel.groupId)
         parentFragmentManager.beginTransaction().apply {
@@ -144,7 +143,5 @@ class ChattingListFragment : Fragment() {
             addToBackStack(null)
             commit()
         }
-
     }
-
 }

@@ -9,18 +9,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:background="@color/white"
-        android:padding="10dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/btnEdit"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/icon_edit"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,8 +29,10 @@
 
         <ImageView
             android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/icon_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +41,10 @@
 
         <ImageView
             android:id="@+id/ivReturn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/icon_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,6 +94,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="25dp"
+                android:paddingBottom="15dp"
                 android:background="@drawable/bg_layout_corners"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +105,7 @@
                     style="@style/Widget.My.Spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:background="@drawable/bg_layout_corners"
@@ -125,11 +130,11 @@
 
                 <ImageView
                     android:id="@+id/ivDeleteGroupImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
                     android:src="@drawable/icon_delete"
-                    android:visibility="gone"
-                    android:layout_margin="5dp"
+                    android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@id/ivGroupImageEdit"
                     app:layout_constraintBottom_toBottomOf="@id/ivGroupImageEdit"/>
 
@@ -139,6 +144,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/group_name"
                     android:textColorHint="@color/hint_grey"
+                    android:padding="5dp"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:background="@null"
@@ -153,6 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:padding="5dp"
                     android:hint="@string/group_one_line_desc"
                     android:textColorHint="@color/hint_grey"
                     android:textSize="14sp"
