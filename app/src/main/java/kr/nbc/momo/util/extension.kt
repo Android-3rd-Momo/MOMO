@@ -10,6 +10,7 @@ import coil.load
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.UiStateLoadingBinding
 import kr.nbc.momo.databinding.UiStateNoResultBinding
+import java.security.SecureRandom
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Period
@@ -96,10 +97,11 @@ fun String.getTimeGap(): String {
 //}
 
 
-fun String.randomStr() : String {
+fun randomStr() : String {
     val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    val secureRandom = SecureRandom()
     return (1..15)
-        .map { charset.random() }
+        .map { charset[secureRandom.nextInt(charset.size)] }
         .joinToString("")
 }
 

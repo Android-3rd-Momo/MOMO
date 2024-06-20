@@ -331,7 +331,7 @@ class CreateGroupFragment : Fragment() {
         )
 
         val image = if (imageUri != null) imageUri.toString() else null
-        val groupId = binding.groupName.text.toString().randomStr()
+        val groupId = randomStr()
         val group = GroupModel(
             groupId,
             binding.groupName.text.toString(),
