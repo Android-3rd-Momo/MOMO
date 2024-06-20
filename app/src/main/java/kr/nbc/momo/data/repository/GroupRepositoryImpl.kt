@@ -338,8 +338,6 @@ class GroupRepositoryImpl @Inject constructor(
 
                 trySend(list.map { it.toEntity() })
             }
-
-
             awaitClose { registration.remove() }
         }
 

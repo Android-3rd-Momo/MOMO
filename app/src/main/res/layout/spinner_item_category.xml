@@ -7,7 +7,8 @@
     tools:text="test"
     android:background="@color/white"
     android:paddingHorizontal="10dp"
-    android:paddingVertical="10dp"
     android:gravity="center_vertical"
-    android:textColor="@color/blue"
-    android:textSize="12sp" />
+    android:textColor="#FEFEFE"
+    android:fontFamily="@font/sfprodisplayregular"
+    android:textColorHint="@color/hint_grey"
+    android:textSize="16sp" />
