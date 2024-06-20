@@ -457,7 +457,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
 
     private fun showPopup(v: View) {
-        val popup = PopupMenu(requireContext(), v)
+        val popup = PopupMenu(requireContext(), v, 0, 0, R.style.CustomPopupMenu)
         popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
         popup.setOnMenuItemClickListener(this)
         popup.show() // 팝업 보여주기

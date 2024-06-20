@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:background="@color/white"
         android:padding="10dp"
         android:paddingStart="20dp"
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create_group"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -95,7 +95,7 @@
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:hint="@string/group_name"
                 android:padding="10dp"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clCategoryDetail" />
 
@@ -109,7 +109,7 @@
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:hint="@string/group_one_line_desc"
                 android:padding="10dp"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/groupName" />
 
@@ -124,7 +124,7 @@
                 android:gravity="fill_horizontal"
                 android:hint="@string/group_desc"
                 android:padding="10dp"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/groupOneLineDescription" />
 
@@ -173,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/category_info"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -184,7 +184,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
                     android:text="@string/dev_lang"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chipGroupDevelopmentOccupations" />
@@ -211,7 +211,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
                     android:text="@string/dev_occupation"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCategoryDetail" />
@@ -252,7 +252,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:hint="@string/period"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -284,7 +284,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:hint="@string/start_date"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view" />
 
@@ -295,7 +295,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:hint="@string/end_date"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@id/viewVertical"
                     app:layout_constraintTop_toBottomOf="@id/view" />
 
@@ -310,7 +310,7 @@
                     android:background="@drawable/bg_layout_corner_stroke"
                     android:hint="@string/date"
                     android:padding="8dp"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/viewVertical"
                     app:layout_constraintStart_toStartOf="parent"
@@ -327,7 +327,7 @@
                     android:background="@drawable/bg_layout_corner_stroke"
                     android:hint="@string/date"
                     android:padding="8dp"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/viewVertical"
@@ -347,7 +347,7 @@
                 android:gravity="start"
                 android:hint="@string/group_max"
                 android:padding="10dp"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clDateComponent" />
 
@@ -367,7 +367,7 @@
         android:padding="10dp"
         android:text="@string/create_group"
         android:textColor="@color/white"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
