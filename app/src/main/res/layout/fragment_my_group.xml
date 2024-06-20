@@ -114,7 +114,8 @@
     <TextView
         android:id="@+id/tvLeaderSub"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
         android:text="@string/Approve"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -127,9 +128,10 @@
     <TextView
         android:id="@+id/tvMemberSub"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/subscription"
         android:textColor="@color/blue"
         android:textSize="18sp"
