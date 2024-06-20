@@ -178,7 +178,8 @@ class HomeFragment : Fragment() {
                         val limitPeopleData = filteredData.filter { it.userList.size < it.limitPerson.toInt() }
 
                         val latestGroupList = limitPeopleData
-                                .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                            .filter { it.lastDate >= getCurrentTime() && it.firstDate <= getCurrentTime() }
+                            .sortedByDescending { it.createdDate }
 
                         latestGroupListAdapter = LatestGroupListAdapter(latestGroupList)
                         binding.rvLatestGroupList.adapter = latestGroupListAdapter
