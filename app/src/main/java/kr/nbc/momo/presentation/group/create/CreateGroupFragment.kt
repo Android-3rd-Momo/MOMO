@@ -310,7 +310,7 @@ class CreateGroupFragment : Fragment() {
                 firstMaxTimeInMillis = selectedCalendar.timeInMillis
             }
         }
-        var picker = DatePickerDialog(requireContext(), R.style.CustomDatePicker, listener, year, month, day)
+        val picker = DatePickerDialog(requireContext(), R.style.CustomDatePicker, listener, year, month, day)
 
         // 선택 전
         if (value == Value.First) {

@@ -102,7 +102,7 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="25dp"
                 android:paddingBottom="15dp"
-                android:background="@drawable/bg_layout_corners"
+                android:background="@drawable/rv_item_home_vertical_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -201,8 +201,6 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:background="@drawable/bg_layout_corner_stroke"
-                    android:padding="10dp"
                     android:text="@string/group_desc"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
