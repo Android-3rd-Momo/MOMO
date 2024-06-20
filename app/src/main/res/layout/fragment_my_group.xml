@@ -28,6 +28,7 @@
         android:background="@color/grey"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:contentDescription="@string/content_desc_leading_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
@@ -78,6 +79,7 @@
         android:background="@color/grey"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:contentDescription="@string/content_desc_joined_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
@@ -152,6 +154,7 @@
             android:id="@+id/rvMemberSub"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/content_desc_apply_group"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -162,6 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
+            android:contentDescription="@string/content_desc_apply_confirm"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
