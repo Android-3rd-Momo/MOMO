@@ -187,8 +187,9 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
+                        binding.prCircularMember.setVisibleToGone()
+                        binding.includeNoResultMember.setVisibleToVisible()
+                        binding.rvMember.setVisibleToInvisible()
                     }
                 }
             }
