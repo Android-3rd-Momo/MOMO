@@ -56,6 +56,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorColor="@color/blue"
+            app:tabRippleColor="@null"
             app:tabSelectedTextAppearance="@style/template_tab_text"
             app:tabSelectedTextColor="@color/blue"
             app:tabTextAppearance="@style/template_tab_text"
