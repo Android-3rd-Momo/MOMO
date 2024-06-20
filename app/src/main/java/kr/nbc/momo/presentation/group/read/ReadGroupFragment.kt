@@ -62,7 +62,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: String? = null
-    private var categoryText: String = ""
     private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""

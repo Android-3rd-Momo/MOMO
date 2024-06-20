@@ -95,27 +95,13 @@ fun String.getTimeGap(): String {
 //    return digest
 //}
 
-const val SECRET_KEY = "ABCDEFGH12345678"
-fun String.encryptECB(): String {
-    val keySpec = SecretKeySpec(SECRET_KEY.toByteArray(), "AES")
-    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
-    cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-    val ciphertext = cipher.doFinal(this.plus(" " + LocalDateTime.now()).toByteArray())
-    val encodedByte =
-        Base64.encode(ciphertext, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
-    return String(encodedByte)
-}
 
-fun String.decryptECB(): String {
-    val keySpec = SecretKeySpec(SECRET_KEY.toByteArray(), "AES")
-    val decodedByte: ByteArray =
-        Base64.decode(this, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
-    val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
-    cipher.init(Cipher.DECRYPT_MODE, keySpec)
-    val output = cipher.doFinal(decodedByte)
-    return String(output)
+fun String.randomStr() : String {
+    val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    return (1..15)
+        .map { charset.random() }
+        .joinToString("")
 }
-
 
 fun ImageView.setThumbnailByUrlOrDefault(url: String?) {
     if (url.isNullOrEmpty() || url == "null") {
