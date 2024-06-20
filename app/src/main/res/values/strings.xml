@@ -358,8 +358,6 @@
     <string name="email_or_password_blank_error">이메일 또는 비밀번호를 입력해주세요.</string>
     <string name="email_or_password_error">이메일 또는 비밀번호를 다시 입력해주세요.</string>
     <string name="apply_success">가입 신청 성공</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

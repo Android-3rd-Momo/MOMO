@@ -88,7 +88,7 @@ class RootFragment : Fragment() {
     }
     private fun initViewPager() {
         val viewPager = ViewPagerAdapter(this)
-        viewPager.addFragment(MyPageFragment())
+        viewPager.addFragment(MyPageContainerFragment())
         viewPager.addFragment(MyGroupFragment())
         binding.vpRoot.adapter = viewPager
         binding.vpRoot.isUserInputEnabled = false

@@ -31,6 +31,7 @@ import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
+import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -89,22 +90,45 @@ class EditMyPageFragment : Fragment() {
         initEventHandlers()
     }
 
-    private fun observeUserProfile() {
+    private fun observeUserProfile() { //todo
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            // No action needed
+                            // todo
                         }
                         is UiState.Success -> {
-                            state.data?.let { user ->
-                                currentUser = user
-                                initView(user)
+                            if (state.data != null) {
+                                currentUser = state.data
+                                initView(state.data)
+                            } else {
                             }
                         }
                         is UiState.Error -> {
-                            // Handle error
+                            // todo
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private fun observeUserProfileUpdate() { //todo
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userProfileUpdate.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                        }
+
+                        is UiState.Success -> {
+                            Log.d("test", "Success")
+                            binding.scrollView.setVisibleToVisible()
+                        }
+
+                        is UiState.Error -> {
+                            Log.d("test", "Error")
+                            Log.d("mypage error", state.message)
                         }
                     }
                 }
@@ -173,7 +197,8 @@ class EditMyPageFragment : Fragment() {
             if (validName()) {
                 saveProfileInfo()
                 requireActivity().hideKeyboard()
-//                parentFragmentManager.popBackStack()
+                observeUserProfileUpdate()
+                (parentFragment as? MyPageContainerFragment)?.switchToMyPage()
             }
         }
     }
