@@ -242,7 +242,6 @@ class HomeFragment : Fragment() {
                         onClick(latestGroupList, myGroupList, recommendGroupList)
                     }
                 }
-
             }
         }
     }
