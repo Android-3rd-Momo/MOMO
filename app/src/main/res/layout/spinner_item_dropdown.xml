@@ -10,7 +10,7 @@
         android:id="@+id/tvSpinner"
         android:layout_width="120dp"
         android:layout_height="match_parent"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:maxLines="1"

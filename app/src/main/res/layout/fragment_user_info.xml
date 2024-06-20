@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profile"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +59,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 
             <ImageView
                 android:id="@+id/ivBackProfileThumbnail"
@@ -115,7 +114,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/sfproiddisplaybold"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@id/llProfileImage"
                     app:layout_constraintTop_toTopOf="parent"
@@ -131,7 +130,7 @@
                     android:maxLength="40"
                     android:maxLines="2"
                     android:text="@string/empty_edit"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@id/llProfileImage"
                     app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
@@ -146,7 +145,7 @@
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/dev_occupation"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clUserInfo" />
 
@@ -158,7 +157,7 @@
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/empty_edit"
                 android:textColor="@color/blue"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chipGroupDevelopmentOccupations" />
@@ -187,7 +186,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/dev_lang"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/typeOfDevelopmentText" />
 
@@ -200,7 +199,7 @@
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/empty_edit"
                 android:textColor="@color/blue"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chipProgramingLanguage" />
@@ -228,7 +227,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/stack"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/programOfDevelopmentText" />
 
@@ -242,7 +241,7 @@
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
                 android:text="@string/empty_edit"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stackOfDevelopmentTitle" />
 
@@ -255,7 +254,7 @@
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/portfolio"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stackOfDevelopment" />
 
@@ -282,7 +281,7 @@
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
                 android:text="@string/empty_edit"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivPortfolioImage" />
 
