@@ -43,9 +43,13 @@ import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
-import kr.nbc.momo.util.encryptECB
 import kr.nbc.momo.util.makeToastWithStringRes
+import kr.nbc.momo.util.randomStr
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class CreateGroupFragment : Fragment() {
@@ -326,9 +330,8 @@ class CreateGroupFragment : Fragment() {
             getChipText(binding.chipProgramingLanguage)
         )
 
-
         val image = if (imageUri != null) imageUri.toString() else null
-        val groupId = binding.groupName.text.toString().encryptECB()
+        val groupId = binding.groupName.text.toString().randomStr()
         val group = GroupModel(
             groupId,
             binding.groupName.text.toString(),
@@ -341,7 +344,8 @@ class CreateGroupFragment : Fragment() {
             categoryList,
             listOf(currentUser),
             binding.tvLimitPeople.text.toString(),
-            emptyList()
+            emptyList(),
+            getFormattedDate()
         )
 
         lifecycleScope.launch {
@@ -427,5 +431,11 @@ class CreateGroupFragment : Fragment() {
     private fun hideKeyboard(activity: Activity) {
         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken, 0)
+    }
+
+    private fun getFormattedDate() : String {
+        val format = SimpleDateFormat("yyyyMMddhhmmss", Locale.KOREA)
+        format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
+        return format.format(Date().time)
     }
 }

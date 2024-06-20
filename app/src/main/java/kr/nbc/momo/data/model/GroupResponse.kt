@@ -13,6 +13,7 @@ data class GroupResponse(
     val userList: List<String> = listOf(),
     val limitPerson: String = "",
     val subscriptionList: List<String> = listOf(),
+    val createdDate: String = ""
 )
 
 data class CategoryResponse(
