@@ -101,10 +101,10 @@
                     android:id="@+id/cvEditProfileImage"
                     android:layout_width="27dp"
                     android:layout_height="27dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginBottom="50dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginBottom="40dp"
                     android:backgroundTint="@color/blue"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:cardCornerRadius="50dp"
                     app:layout_constraintBottom_toBottomOf="@id/llProfileImage"
                     app:layout_constraintStart_toStartOf="@id/llProfileImage">
