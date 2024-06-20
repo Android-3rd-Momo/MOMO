@@ -56,6 +56,7 @@
             android:text="@string/check_duplication"
             android:textSize="14sp"
             app:cornerRadius="8dp"
+            android:contentDescription="@string/content_desc_check_id"
             app:layout_constraintBottom_toBottomOf="@id/tilId"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tilId"
@@ -180,6 +181,7 @@
             android:fontFamily="@font/sfprodisplaymedium"
             android:text="@string/check_duplication"
             android:textSize="14sp"
+            android:contentDescription="@string/content_desc_check_number"
             app:cornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="@id/tilNumber"
             app:layout_constraintEnd_toEndOf="parent"
@@ -194,8 +196,9 @@
             android:backgroundTint="@color/blue"
             android:fontFamily="@font/sfproiddisplaybold"
             android:text="@string/join_us"
-            android:textSize="18sp"
-            app:cornerRadius="8dp"
+            android:textSize="16sp"
+            android:padding="16dp"
+            app:cornerRadius="16dp"
             app:layout_constraintTop_toBottomOf="@id/tilNumber" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

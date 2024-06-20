@@ -35,6 +35,7 @@
             android:layout_height="20dp"
             android:src="@drawable/icon_search"
             android:layout_marginEnd="20dp"
+            android:contentDescription="@string/content_desc_go_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +63,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/default_user_joined_group"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +103,7 @@
                 android:background="@color/grey"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                app:layoutDescription="@string/content_desc_no_joined"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
@@ -153,6 +155,7 @@
                 android:background="@color/grey"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                app:layoutDescription="@string/content_desc_no_recommend"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
@@ -191,6 +194,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/grey"
+                app:layoutDescription="@string/content_desc_no_latest"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

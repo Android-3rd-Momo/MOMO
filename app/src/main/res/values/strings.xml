@@ -361,5 +361,28 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="content_desc_on_boarding">모이개에 오신것을 환영합니다!</string>
+    <string name="content_desc_search_return">홈 화면으로 돌아갑니다</string>
+    <string name="content_desc_go_search">검색 화면으로 이동합니다</string>
+    <string name="content_desc_no_latest">최신 그룹이 없습니다.</string>
+    <string name="content_desc_no_joined">가입 그룹이 없습니다.</string>
+    <string name="content_desc_no_recommend">추천 그룹이 없습니다.</string>
+    <string name="content_desc_no_chat_list">가입 그룹이 없습니다.</string>
+    <string name="content_desc_leading_group">진행 모임</string>
+    <string name="content_desc_joined_group">참여 모임</string>
+    <string name="content_desc_apply_group">가입 신청 목록</string>
+    <string name="content_desc_apply_confirm">가입 승인 목록</string>
+    <string name="content_desc_check_id">아이디 중복 확인</string>
+    <string name="content_desc_check_number">전화번호 중복 확인</string>
+    <string name="group">모임</string>
+
+
+
+
+
+
+
+
+
 
 </resources>
