@@ -250,7 +250,7 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getGroupList(): Flow<List<GroupEntity>> = flow {
         val snapshot = fireStore.collection("groups").get().await()
-        val response = snapshot.toObjects<GroupResponse>()
+        val response = snapshot?.toObjects<GroupResponse>() ?: listOf()
         emit(response.map { it.toEntity() })
     }
 
