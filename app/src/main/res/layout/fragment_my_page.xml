@@ -278,7 +278,7 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:text="@string/dev_lang"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/clTypeTag" />
 
@@ -297,7 +297,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/sfprodisplaymedium"
                         android:text="@string/please_pick_dev_lang"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:visibility="gone" />
 
                     <com.google.android.material.chip.ChipGroup
@@ -315,7 +315,7 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:text="@string/stack"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/clProgramTag" />
 
@@ -466,7 +466,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="70dp"
                     app:layout_constraintTop_toBottomOf="@id/clPortfolio" />
 
 
@@ -487,8 +487,8 @@
         android:fontFamily="@font/sfproiddisplaybold"
         android:text="@string/confirm_edit"
         android:textColor="@color/white"
-        android:textSize="16dp"
-        android:visibility="visible"
+        android:textSize="16sp"
+        android:visibility="gone"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
