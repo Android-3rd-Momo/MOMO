@@ -23,6 +23,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.notification.NotificationFragment
 import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
@@ -109,6 +110,13 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
 
+        }
+
+        binding.ivNotification.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, NotificationFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
     }
