@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeleteGroupUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(groupId: String, userList: List<String>): Flow<Boolean> {
+    suspend fun invoke(groupId: String, userList: List<String>) {
         return groupRepository.deleteGroup(groupId, userList)
     }
 }

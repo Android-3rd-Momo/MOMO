@@ -25,6 +25,7 @@ import kr.nbc.momo.presentation.mypage.adapter.LeaderGroupAdapter
 import kr.nbc.momo.presentation.mypage.adapter.LeaderSubAdapter
 import kr.nbc.momo.presentation.mypage.adapter.MemberGroupAdapter
 import kr.nbc.momo.presentation.mypage.adapter.MemberSubAdapter
+import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
@@ -49,10 +50,8 @@ class MyGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeUserProfile()
         observeSubscriptionGroupList()
-        observeAddUser()
         observerUserGroup()
         observerUserAppliedGroup()
-        observeRejectUser()
         initView()
     }
 
@@ -100,47 +99,6 @@ class MyGroupFragment : Fragment() {
         }
     }
 
-    private fun observeAddUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.adduserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 오류 메시지 표시
-
-                    }
-                    is UiState.Success -> {
-                        currentUser?.let { initGroupList(it, userGroup) }
-                    }
-
-                    is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
-                    }
-                }
-            }
-        }
-
-    }
-
-    private fun observeRejectUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.rejectUserState.collect() { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-
-                    }
-                    is UiState.Success -> {
-                        Log.d("Success","Success")
-                        currentUser?.let { initGroupList(it, userGroup) }
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-            }
-        }
-    }
 
     private fun observerUserGroup() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -262,15 +220,27 @@ class MyGroupFragment : Fragment() {
 
                         leaderSubAdapter.confirm = object : LeaderSubAdapter.Confirm {
                             override fun confirm(groupId: String, userId: String) {
-                                viewModel.addUser(userId, groupId)
-                                currentUser?.let { initGroupList(it, userGroup) }
+                                lifecycleScope.launch {
+                                    try {
+                                        viewModel.addUser(userId, groupId)
+                                        currentUser?.let { initGroupList(it, userGroup) }
+                                    } catch (e : Exception) {
+                                        makeToastWithStringRes(requireContext(), R.string.error)
+                                    }
+                                }
                             }
                         }
 
                         leaderSubAdapter.reject = object : LeaderSubAdapter.Reject {
                             override fun reject(groupId: String, userId: String) {
-                                viewModel.rejectUser(userId, groupId)
-                                currentUser?.let { initGroupList(it, userGroup) }
+                                lifecycleScope.launch {
+                                    try {
+                                        viewModel.rejectUser(userId, groupId)
+                                        currentUser?.let { initGroupList(it, userGroup) }
+                                    } catch (e : Exception) {
+                                        makeToastWithStringRes(requireContext(), R.string.error)
+                                    }
+                                }
                             }
                         }
 

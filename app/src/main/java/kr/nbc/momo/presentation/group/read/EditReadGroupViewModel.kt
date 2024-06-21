@@ -30,19 +30,6 @@ class EditReadGroupViewModel @Inject constructor(
     private val _groupState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val groupState: StateFlow<UiState<GroupModel>> get() = _groupState
 
-    private val _updateState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
-    val updateState: StateFlow<UiState<GroupModel>> get() = _updateState
-
-    private val _subscriptionState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val subscriptionState: StateFlow<UiState<Boolean>> get() = _subscriptionState
-
-    private val _deleteGroupState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val deleteGroupState: StateFlow<UiState<Boolean>> get() = _deleteGroupState
-
-
-    private val _leaderChangeState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val leaderChangeState: StateFlow<UiState<Boolean>> get() = _leaderChangeState
-
     private val _userDeleteState = MutableStateFlow<UiState<List<String>>>(UiState.Loading)
     val userDeleteState: StateFlow<UiState<List<String>>> get() = _userDeleteState
 
@@ -68,44 +55,20 @@ class EditReadGroupViewModel @Inject constructor(
 
     fun updateGroup(groupModel: GroupModel, imageUri: Uri?) {
         viewModelScope.launch {
-            _updateState.value = UiState.Loading
-
             updateGroupUseCase.invoke(groupModel.asGroupEntity(), imageUri)
-                .catch { e ->
-                    _updateState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _updateState.value = UiState.Success(data.toGroupModel())
-                }
         }
     }
 
     fun deleteGroup(groupId: String, userList: List<String>) {
         viewModelScope.launch {
-            _deleteGroupState.value = UiState.Loading
-
             deleteGroupUseCase.invoke(groupId, userList)
-                .catch { e ->
-                    _deleteGroupState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _deleteGroupState.value = UiState.Success(data)
-                }
         }
     }
 
 
     fun leaderChange(groupId: String, leaderId: String) {
         viewModelScope.launch {
-            _leaderChangeState.value = UiState.Loading
-
             changeLeaderUseCase.invoke(groupId, leaderId)
-                .catch { e ->
-                    _leaderChangeState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _leaderChangeState.value = UiState.Success(data)
-                }
         }
     }
 

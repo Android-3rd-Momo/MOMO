@@ -85,7 +85,6 @@ class CreateGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bottomNavHide()
         observeUserProfile()
-        observeCreateGroup()
     }
 
     override fun onDestroyView() {
@@ -134,35 +133,6 @@ class CreateGroupFragment : Fragment() {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private fun observeCreateGroup() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.createGroupState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-/*                        val toastText = requireContext().getString(R.string.create_success)
-                        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()*/
-                        makeToastWithStringRes(requireContext(), R.string.create_success)
-                        parentFragmentManager.popBackStack()
-                        val readGroupFragment = ReadGroupFragment()
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, readGroupFragment)
-                            .addToBackStack("Read")
-                            .commit()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
             }
         }
     }
@@ -350,9 +320,21 @@ class CreateGroupFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            viewModel.createGroup(group)
-            sharedViewModel.getGroupId(groupId)
-            viewModel.joinGroup(groupId)
+            try {
+                viewModel.createGroup(group)
+                sharedViewModel.getGroupId(groupId)
+                viewModel.joinGroup(groupId)
+
+                makeToastWithStringRes(requireContext(), R.string.create_success)
+                parentFragmentManager.popBackStack()
+                val readGroupFragment = ReadGroupFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, readGroupFragment)
+                    .addToBackStack("Read")
+                    .commit()
+            } catch (e : Exception) {
+                makeToastWithStringRes(requireContext(), R.string.error)
+            }
         }
     }
 

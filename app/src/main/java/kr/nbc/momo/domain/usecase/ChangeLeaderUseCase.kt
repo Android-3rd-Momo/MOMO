@@ -6,7 +6,7 @@ import javax.inject.Inject
 class ChangeLeaderUseCase@Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(groupId: String, leaderId: String): Flow<Boolean> {
+    suspend fun invoke(groupId: String, leaderId: String) {
         return groupRepository.changeLeader(groupId, leaderId)
     }
 }

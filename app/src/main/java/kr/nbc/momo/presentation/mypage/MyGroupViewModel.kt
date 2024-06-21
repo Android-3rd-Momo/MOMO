@@ -29,12 +29,6 @@ class MyGroupViewModel @Inject constructor(
     private val _subscriptionListState = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
     val subscriptionListState: StateFlow<UiState<List<GroupModel>>> get() = _subscriptionListState
 
-    private val _adduserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val adduserState: StateFlow<UiState<Boolean>> get() = _adduserState
-
-    private val _rejectUserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val rejectUserState: StateFlow<UiState<Boolean>> get() = _rejectUserState
-
     private val _userGroupList = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
     val userGroupList: StateFlow<UiState<List<GroupModel>>> get() = _userGroupList
 
@@ -89,31 +83,13 @@ class MyGroupViewModel @Inject constructor(
 
     fun addUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            _adduserState.value = UiState.Loading
-
             addUserUseCase.invoke(userId, groupId)
-                .catch { e ->
-                    _adduserState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _adduserState.value = UiState.Success(data)
-                }
-
         }
     }
 
     fun rejectUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            _rejectUserState.value = UiState.Loading
-
             rejectionSubscriptionUseCase.invoke(userId, groupId)
-                .catch { e ->
-                    _rejectUserState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _rejectUserState.value = UiState.Success(data)
-                }
-
         }
     }
 }
