@@ -190,30 +190,19 @@ class UserRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun reportUser(reportedUser: String): Flow<Boolean> = callbackFlow {
+    override suspend fun reportUser(reportedUser: String) {
         val ref = fireStore.collection("blackList")
         val user = hashMapOf("count" to 1)
         ref.document(reportedUser).update("count", FieldValue.increment(1))
-            .addOnSuccessListener { trySend(true) }
-            .addOnFailureListener {
-                ref.document(reportedUser).set(user)
-                    .addOnSuccessListener { trySend(true) }
-                    .addOnFailureListener { e -> close(e) }
-            }
-
-        awaitClose()
+        ref.document(reportedUser).set(user)
     }
 
-    override suspend fun blockUser(blockUser: String): Flow<Boolean> = callbackFlow {
+    override suspend fun blockUser(blockUser: String) {
         val currentUserUid = getCurrentUserUid()
         val ref = fireStore.collection("userInfo").document(currentUserUid)
         fireStore.runTransaction { transaction ->
             transaction.update(ref, "blackList", FieldValue.arrayUnion(blockUser))
-            null
         }
-            .addOnSuccessListener { trySend(true) }
-            .addOnFailureListener { e -> close(e) }
-        awaitClose()
     }
 
     override suspend fun userInfo(userId: String): Flow<UserEntity> = flow {

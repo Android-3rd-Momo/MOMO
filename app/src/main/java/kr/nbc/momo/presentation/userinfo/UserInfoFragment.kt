@@ -52,60 +52,12 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         hideNav()
         initUser()
         observeUserState()
-        observeReportUser()
-        observeBlockUser()
 
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         showNav()
-    }
-
-    private fun observeReportUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.reportUserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                        makeToastWithStringRes(requireContext(), R.string.user_report_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
-    private fun observeBlockUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.blockUserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
     }
 
     private fun observeUserState() {
@@ -221,12 +173,24 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu1 -> {
-                viewModel.reportUser(userId)
-                viewModel.blockUser(userId)
+                lifecycleScope.launch {
+                    try {
+                        viewModel.reportUser(userId)
+                        viewModel.blockUser(userId)
+                        parentFragmentManager.popBackStack()
+                    } catch (e : Exception) {
+                        makeToastWithStringRes(requireContext(), R.string.error)
+                    }
+                }
             }
 
             R.id.menu2 -> {
-                viewModel.blockUser(userId)
+                try {
+                    viewModel.blockUser(userId)
+                    parentFragmentManager.popBackStack()
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
 
