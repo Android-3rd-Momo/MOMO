@@ -252,6 +252,10 @@
     <string name="portfolio">포트폴리오</string>
     <string name="please_edit_portfolio">간단한 포트폴리오를 작성해 보세요!</string>
     <string name="confirm_edit">편집 완료</string>
+    <string-array name="image_edit">
+        <item>앨범에서 사진 선택</item>
+        <item>기본 이미지 적용</item>
+    </string-array>
     <!--로그인 문자모음-->
     <string name="use_app_without_login">로그인 없이 앱 이용하기</string>
     <string name="check">확인</string>

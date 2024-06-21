@@ -25,6 +25,7 @@ import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
+import kr.nbc.momo.util.setVisibleState
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -60,11 +61,11 @@ class MyPageFragment : Fragment() {
                         is UiState.Success -> {
                             binding.includeUiState.setVisibleToGone()
                             if (state.data != null) {
-                                isLogin()
+                                isLogin(true)
                                 currentUser = state.data
                                 initView(state.data)
                             } else {
-                                isLogOut()
+                                isLogin(false)
                             }
                             binding.scrollView.setVisibleToVisible()
                         }
@@ -72,7 +73,6 @@ class MyPageFragment : Fragment() {
                         is UiState.Error -> {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
-                            clearUserInfo()
                             Log.d("mypage error", state.message)
                         }
                     }
@@ -109,20 +109,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun clearUserInfo() {
-        with(binding) {
-            tvUserName.text = ""
-            tvUserSelfIntroduction.text = ""
-            tvStackOfDevelopment.text = ""
-            tvPortfolio.text = ""
-            cgTypeTag.removeAllViews()
-            cgProgramTag.removeAllViews()
-            ivUserProfileImage.setThumbnailByUrlOrDefault(null)
-            ivBackProfileThumbnail.setImageDrawable(null)
-            ivPortfolioImage.setThumbnailByUrlOrDefault(null)
-        }
-    }
-
     private fun initEventHandler() {
         binding.ivEditProfile.setOnClickListener {
             (parentFragment as? MyPageContainerFragment)?.switchToEditPage()
@@ -133,17 +119,15 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun isLogin() {
-        binding.clUserDetailInfo.setVisibleToVisible()
-        binding.ivEditProfile.setVisibleToVisible()
-        binding.btnGoOnBoarding.setVisibleToGone()
-    }
-
-    private fun isLogOut() {
-        binding.clUserDetailInfo.setVisibleToGone()
-        binding.ivEditProfile.setVisibleToGone()
-        binding.tvUserName.setText(R.string.need_login)
-        binding.btnGoOnBoarding.setVisibleToVisible()
+    private fun isLogin(isLogIn: Boolean){
+        binding.apply {
+            clUserDetailInfo.setVisibleState(isLogIn)
+            ivEditProfile.setVisibleState(isLogIn)
+            btnGoOnBoarding.setVisibleState(!isLogIn)
+            if(!isLogIn){
+                tvUserName.setText(R.string.need_login)
+            }
+        }
     }
 
     private fun updateChipAppearance(chip: Chip, isChecked: Boolean) {
@@ -172,11 +156,6 @@ class MyPageFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
         _binding = null
     }
-
 }

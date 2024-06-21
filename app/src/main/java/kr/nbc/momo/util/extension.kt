@@ -47,6 +47,10 @@ fun View.setVisibleToInvisible() {
     this.visibility = View.INVISIBLE
 }
 
+fun View.setVisibleState(isVisible: Boolean){
+    this.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
 fun String.getTimeGap(): String {
     var resultString: String
     try {
