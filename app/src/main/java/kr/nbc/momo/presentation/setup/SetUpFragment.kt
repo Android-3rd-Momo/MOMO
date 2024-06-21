@@ -19,10 +19,12 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class SetUpFragment : Fragment() {
@@ -93,7 +95,7 @@ class SetUpFragment : Fragment() {
         }
     }
 
-    private fun eachEventHandler(userId: String) { //todo 임시 dialog
+    private fun eachEventHandler(userId: String) {
         with(binding){
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
@@ -125,7 +127,7 @@ class SetUpFragment : Fragment() {
     }
 
     private fun goOnboarding(){
-        val intent = Intent(activity, OnBoardingActivity::class.java)
+        val intent = Intent(activity, GetStartedActivity::class.java)
         startActivity(intent)
         activity?.finish()
     }
@@ -135,15 +137,5 @@ class SetUpFragment : Fragment() {
         super.onDestroyView()
         showNav()
         _binding = null
-    }
-
-    private fun showNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToVisible()
-    }
-
-    private fun hideNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToGone()
     }
 }

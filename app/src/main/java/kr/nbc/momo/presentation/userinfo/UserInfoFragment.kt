@@ -24,10 +24,12 @@ import kr.nbc.momo.databinding.FragmentUserInfoBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
@@ -47,63 +49,15 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
+        hideNav()
         initUser()
         observeUserState()
-        observeReportUser()
-        observeBlockUser()
 
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        bottomNavShow()
-    }
-
-    private fun observeReportUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.reportUserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                        makeToastWithStringRes(requireContext(), R.string.user_report_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
-    private fun observeBlockUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.blockUserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
+        showNav()
     }
 
     private fun observeUserState() {
@@ -219,27 +173,27 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu1 -> {
-                viewModel.reportUser(userId)
-                viewModel.blockUser(userId)
+                lifecycleScope.launch {
+                    try {
+                        viewModel.reportUser(userId)
+                        viewModel.blockUser(userId)
+                        parentFragmentManager.popBackStack()
+                    } catch (e : Exception) {
+                        makeToastWithStringRes(requireContext(), R.string.error)
+                    }
+                }
             }
 
             R.id.menu2 -> {
-                viewModel.blockUser(userId)
+                try {
+                    viewModel.blockUser(userId)
+                    parentFragmentManager.popBackStack()
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
 
         return item != null
     }
-
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToGone()
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToVisible()
-    }
-
 }

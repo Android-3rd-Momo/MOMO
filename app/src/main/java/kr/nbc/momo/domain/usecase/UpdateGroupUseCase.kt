@@ -8,7 +8,7 @@ import javax.inject.Inject
 class UpdateGroupUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(groupEntity: GroupEntity, imageUri: Uri?): Flow<GroupEntity> {
+    suspend fun invoke(groupEntity: GroupEntity, imageUri: Uri?) {
         return groupRepository.updateGroup(groupEntity, imageUri)
     }
 }

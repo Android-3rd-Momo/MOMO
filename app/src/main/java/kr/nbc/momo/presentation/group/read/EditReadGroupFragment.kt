@@ -85,10 +85,7 @@ class EditReadGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeGroupState()
         observeUserProfile()
-        observeChangeLeader()
         observeDeleteUser()
-        observeDeleteGroup()
-        observeUpdateState()
         initTextWatcher()
     }
     private fun observeUserProfile() {
@@ -145,70 +142,6 @@ class EditReadGroupFragment : Fragment() {
         }
     }
 
-
-    private fun observeChangeLeader() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.leaderChangeState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.change_leader_success)
-//                        Toast.makeText(requireContext(), getString(R.string.change_leader_success), Toast.LENGTH_SHORT).show()
-                        parentFragmentManager.popBackStack()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
-    private fun observeUpdateState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.updateState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                    }
-
-                    is UiState.Error -> {
-                        parentFragmentManager.popBackStack()
-                    }
-                }
-            }
-        }
-    }
-    private fun observeDeleteGroup() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.deleteGroupState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack("Read", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        makeToastWithStringRes(requireContext(), R.string.delete_group_success)
-//                        Toast.makeText(requireContext(), getString(R.string.delete_group_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-            }
-        }
-    }
 
 
     private fun observeDeleteUser() {
@@ -304,7 +237,12 @@ class EditReadGroupFragment : Fragment() {
                 btnCompleteEditOnClickListener(data)
             }
             btnDelete.setOnClickListener {
-                viewModel.deleteGroup(data.groupId, data.userList)
+                try {
+                    viewModel.deleteGroup(data.groupId, data.userList)
+                    parentFragmentManager.popBackStack("Read", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
@@ -331,18 +269,25 @@ class EditReadGroupFragment : Fragment() {
         )
         val updatedGroupThumbnail = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
         val str = binding.tvLimitPeopleEdit.text.toString().split("/")
-        viewModel.updateGroup(
-            data.copy(
-                groupName = binding.etGroupNameEdit.text.toString(),
-                groupOneLineDescription = binding.etGroupOneLineDescriptionEdit.text.toString(),
-                groupDescription = binding.etGroupDescriptionEdit.text.toString(),
-                firstDate = binding.tvFirstDateEdit.text.toString(),
-                lastDate = binding.tvLastDateEdit.text.toString(),
-                category = categoryList,
-                limitPerson = str[1],
-                groupThumbnail = updatedGroupThumbnail,
-            ), imageUri
-        )
+
+        try {
+            viewModel.updateGroup(
+                data.copy(
+                    groupName = binding.etGroupNameEdit.text.toString(),
+                    groupOneLineDescription = binding.etGroupOneLineDescriptionEdit.text.toString(),
+                    groupDescription = binding.etGroupDescriptionEdit.text.toString(),
+                    firstDate = binding.tvFirstDateEdit.text.toString(),
+                    lastDate = binding.tvLastDateEdit.text.toString(),
+                    category = categoryList,
+                    limitPerson = str[1],
+                    groupThumbnail = updatedGroupThumbnail,
+                ), imageUri
+            )
+            parentFragmentManager.popBackStack()
+        } catch (e : Exception) {
+            makeToastWithStringRes(requireContext(), R.string.error)
+        }
+
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, category: List<String>) {
@@ -455,8 +400,12 @@ class EditReadGroupFragment : Fragment() {
             dialogBinding.tvClose.text = getString(R.string.change_leader, userId)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
-                viewModel.leaderChange(groupId, userId)
-
+                try {
+                    viewModel.leaderChange(groupId, userId)
+                    parentFragmentManager.popBackStack()
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
 
@@ -464,8 +413,11 @@ class EditReadGroupFragment : Fragment() {
             dialogBinding.tvClose.text = getString(R.string.ban_user, userId)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
-                viewModel.deleteUser(userId, groupId)
-
+                try {
+                    viewModel.deleteUser(userId, groupId)
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
         dialogBinding.btnCancel.setOnClickListener {
@@ -516,5 +468,4 @@ class EditReadGroupFragment : Fragment() {
         }
         picker.show()
     }
-
 }

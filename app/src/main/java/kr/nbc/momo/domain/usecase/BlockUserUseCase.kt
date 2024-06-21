@@ -7,7 +7,7 @@ import javax.inject.Inject
 class BlockUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend fun invoke(blockUser: String): Flow<Boolean> {
+    suspend fun invoke(blockUser: String) {
         return userRepository.blockUser(blockUser)
     }
 }

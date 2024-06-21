@@ -43,8 +43,10 @@ import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.randomStr
+import kr.nbc.momo.util.showNav
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -83,25 +85,14 @@ class CreateGroupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
+        hideNav()
         observeUserProfile()
-        observeCreateGroup()
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-        bottomNavShow()
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.GONE
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.VISIBLE
+        showNav()
     }
 
     private fun observeUserProfile() {
@@ -134,35 +125,6 @@ class CreateGroupFragment : Fragment() {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private fun observeCreateGroup() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.createGroupState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-/*                        val toastText = requireContext().getString(R.string.create_success)
-                        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()*/
-                        makeToastWithStringRes(requireContext(), R.string.create_success)
-                        parentFragmentManager.popBackStack()
-                        val readGroupFragment = ReadGroupFragment()
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, readGroupFragment)
-                            .addToBackStack("Read")
-                            .commit()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
             }
         }
     }
@@ -350,9 +312,21 @@ class CreateGroupFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            viewModel.createGroup(group)
-            sharedViewModel.getGroupId(groupId)
-            viewModel.joinGroup(groupId)
+            try {
+                viewModel.createGroup(group)
+                sharedViewModel.getGroupId(groupId)
+                viewModel.joinGroup(groupId)
+
+                makeToastWithStringRes(requireContext(), R.string.create_success)
+                parentFragmentManager.popBackStack()
+                val readGroupFragment = ReadGroupFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, readGroupFragment)
+                    .addToBackStack("Read")
+                    .commit()
+            } catch (e : Exception) {
+                makeToastWithStringRes(requireContext(), R.string.error)
+            }
         }
     }
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SubscriptionUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(userId: String, groupId: String): Flow<Boolean> {
+    suspend fun invoke(userId: String, groupId: String) {
         return groupRepository.subscription(userId, groupId)
     }
 }
