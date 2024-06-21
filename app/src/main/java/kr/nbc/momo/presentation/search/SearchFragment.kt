@@ -22,9 +22,11 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -80,7 +82,7 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        bottomNavHide()
+        hideNav()
     }
 
     override fun onDestroyView() {
@@ -90,7 +92,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        bottomNavShow()
+        showNav()
     }
 
     private fun initView() {
@@ -210,15 +212,5 @@ class SearchFragment : Fragment() {
             addToBackStack("Read")
             commit()
         }
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.GONE
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.VISIBLE
     }
 }
