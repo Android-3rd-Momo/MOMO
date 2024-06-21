@@ -1,7 +1,6 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -248,10 +247,19 @@ class GroupRepositoryImpl @Inject constructor(
             awaitClose()
         }
 
-    override suspend fun getGroupList(): Flow<List<GroupEntity>> = flow {
-        val snapshot = fireStore.collection("groups").get().await()
-        val response = snapshot.toObjects<GroupResponse>()
-        emit(response.map { it.toEntity() })
+    override suspend fun getGroupList(): Flow<List<GroupEntity>> = callbackFlow {
+        val list = listOf<GroupResponse>().toMutableList()
+        val ref = fireStore.collection("groups")
+        ref.get()
+            .addOnSuccessListener { snapshot ->
+                for (i in snapshot.documents) {
+                    i.toObject<GroupResponse>()?.let { list.add(it) }
+                }
+                trySend(list.map { it.toEntity() })
+            }.addOnFailureListener{ e ->
+                close(e)
+            }
+        awaitClose()
     }
 
     override suspend fun changeLeader(groupId: String, leaderId: String): Flow<Boolean> =
