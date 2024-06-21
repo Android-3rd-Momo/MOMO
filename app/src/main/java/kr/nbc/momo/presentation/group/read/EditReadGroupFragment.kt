@@ -402,6 +402,7 @@ class EditReadGroupFragment : Fragment() {
                 dialogBuilder.dismiss()
                 try {
                     viewModel.leaderChange(groupId, userId)
+                    parentFragmentManager.popBackStack()
                 } catch (e : Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
