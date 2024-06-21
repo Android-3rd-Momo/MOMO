@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -18,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,11 +31,14 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
+import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class EditMyPageFragment : Fragment() {
@@ -86,8 +91,14 @@ class EditMyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideNav()
         observeUserProfile()
         initEventHandlers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideNav()
     }
 
     private fun observeUserProfile() { //todo
@@ -96,38 +107,45 @@ class EditMyPageFragment : Fragment() {
                 sharedViewModel.currentUser.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            // todo
+                            binding.includeUiState.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
                         }
                         is UiState.Success -> {
+                            binding.includeUiState.setVisibleToGone()
                             if (state.data != null) {
                                 currentUser = state.data
                                 initView(state.data)
-                            } else {
                             }
+                            binding.scrollView.setVisibleToVisible()
                         }
                         is UiState.Error -> {
-                            // todo
+                            binding.includeUiState.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
                         }
                     }
                 }
             }
         }
     }
-    private fun observeUserProfileUpdate() { //todo
+    private fun observeUserProfileUpdate() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userProfileUpdate.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
+                            //todo
+                            binding.includeUiState.setVisibleToVisible()
+                            binding.scrollView.setVisibleToGone()
                         }
 
                         is UiState.Success -> {
-                            Log.d("test", "Success")
-                            binding.scrollView.setVisibleToVisible()
+                            (parentFragment as? MyPageContainerFragment)?.switchToMyPage()
                         }
 
                         is UiState.Error -> {
-                            Log.d("test", "Error")
+                            //todo 변경 실패 관련 Toast?
+                            binding.includeUiState.setVisibleToError()
+                            binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
                         }
                     }
@@ -146,21 +164,8 @@ class EditMyPageFragment : Fragment() {
             ivBackProfileThumbnail.load(user.userBackgroundThumbnailUrl)
             ivPortfolioImage.setUploadImageByUrlOrDefault(user.userPortfolioImageUrl)
 
-            if (user.typeOfDevelopment.isEmpty()) {
-                tvEmptyTypeTag.setVisibleToVisible()
-                cgTypeTag.setVisibleToGone()
-            } else {
-                tvEmptyTypeTag.setVisibleToGone()
-                setSelectedChips(cgTypeTag, user.typeOfDevelopment)
-            }
-
-            if (user.programOfDevelopment.isEmpty()) {
-                tvEmptyProgramTag.setVisibleToVisible()
-                cgProgramTag.setVisibleToGone()
-            } else {
-                tvEmptyProgramTag.setVisibleToGone()
-                setSelectedChips(cgProgramTag, user.programOfDevelopment)
-            }
+            setChipGroup(resources.getStringArray(R.array.chipGroupDevelopmentOccupations), cgTypeTag, user.typeOfDevelopment)
+            setChipGroup(resources.getStringArray(R.array.chipProgramingLanguage), cgProgramTag, user.programOfDevelopment)
         }
 
         binding.etStackOfDevelopment.addTextWatcherWithError(500, "기술스택", binding.btnCompleteEdit, binding.tvCountStackEditText)
@@ -198,7 +203,6 @@ class EditMyPageFragment : Fragment() {
                 saveProfileInfo()
                 requireActivity().hideKeyboard()
                 observeUserProfileUpdate()
-                (parentFragment as? MyPageContainerFragment)?.switchToMyPage()
             }
         }
     }
@@ -260,22 +264,23 @@ class EditMyPageFragment : Fragment() {
         return userName.matches(usernamePattern.toRegex())
     }
 
-    private fun setSelectedChips(chipGroup: ChipGroup, selectedChips: List<String>) {
+    private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, selectedChips: List<String>) {
         chipGroup.removeAllViews()
-        selectedChips.forEach { chipText ->
-            chipGroup.addView(Chip(requireContext()).apply {
+        chipList.forEach { chipText ->
+            val chip = Chip(requireContext()).apply {
                 text = chipText
                 isCheckable = true
-                isChecked = true
-                updateChipAppearance(this, true)
+                isChecked = selectedChips.contains(chipText)
                 setOnCheckedChangeListener { _, isChecked ->
-                    updateChipAppearance(this, isChecked)
+                    isChipSelected(this, isChecked)
                 }
-            })
+                isChipSelected(this, isChecked)
+            }
+            chipGroup.addView(chip)
         }
     }
 
-    private fun updateChipAppearance(chip: Chip, isChecked: Boolean) {
+    private fun isChipSelected(chip: Chip, isChecked: Boolean) {
         chip.setTextColor(
             ContextCompat.getColorStateList(
                 requireContext(),
@@ -285,6 +290,11 @@ class EditMyPageFragment : Fragment() {
         chip.setChipBackgroundColorResource(
             if (isChecked) R.color.blue else R.color.bg_chip_state_color
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        showNav()
     }
 
     override fun onDestroyView() {

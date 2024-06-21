@@ -6,10 +6,13 @@ import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import coil.load
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.UiStateLoadingBinding
 import kr.nbc.momo.databinding.UiStateNoResultBinding
+import java.security.SecureRandom
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Period
@@ -96,10 +99,11 @@ fun String.getTimeGap(): String {
 //}
 
 
-fun String.randomStr() : String {
+fun randomStr() : String {
     val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    val secureRandom = SecureRandom()
     return (1..15)
-        .map { charset.random() }
+        .map { charset[secureRandom.nextInt(charset.size)] }
         .joinToString("")
 }
 
@@ -161,4 +165,13 @@ fun UiStateNoResultBinding.setVisibleToGone() {
 fun Activity.hideKeyboard() {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
+}
+fun Fragment.showNav() {
+    val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+    nav.setVisibleToVisible()
+}
+
+fun Fragment.hideNav() {
+    val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
+    nav.setVisibleToGone()
 }

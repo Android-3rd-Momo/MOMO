@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.mypage
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,12 +22,14 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class MyPageFragment : Fragment() {
@@ -124,6 +128,10 @@ class MyPageFragment : Fragment() {
     private fun initEventHandler() {
         binding.ivEditProfile.setOnClickListener {
             (parentFragment as? MyPageContainerFragment)?.switchToEditPage()
+        }
+        binding.btnGoOnBoarding.setOnClickListener {
+            val intent = Intent(requireActivity(), GetStartedActivity::class.java)
+            startActivity(intent)
         }
     }
 

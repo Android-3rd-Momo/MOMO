@@ -20,9 +20,11 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class ChattingRoomFragment : Fragment() {
@@ -211,16 +213,5 @@ class ChattingRoomFragment : Fragment() {
                 }
             }
         }
-    }
-
-
-    private fun showNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToVisible()
-    }
-
-    private fun hideNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToGone()
     }
 }

@@ -43,8 +43,10 @@ import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.randomStr
+import kr.nbc.momo.util.showNav
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -83,7 +85,7 @@ class CreateGroupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
+        hideNav()
         observeUserProfile()
         observeCreateGroup()
     }
@@ -91,17 +93,7 @@ class CreateGroupFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-        bottomNavShow()
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.GONE
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.VISIBLE
+        showNav()
     }
 
     private fun observeUserProfile() {
@@ -310,7 +302,8 @@ class CreateGroupFragment : Fragment() {
                 firstMaxTimeInMillis = selectedCalendar.timeInMillis
             }
         }
-        var picker = DatePickerDialog(requireContext(), listener, year, month, day)
+        //val picker = DatePickerDialog(requireContext(), R.style.CustomDatePicker, listener, year, month, day)
+        val picker = DatePickerDialog(requireContext(), listener, year, month, day)
 
         // 선택 전
         if (value == Value.First) {
@@ -331,7 +324,7 @@ class CreateGroupFragment : Fragment() {
         )
 
         val image = if (imageUri != null) imageUri.toString() else null
-        val groupId = binding.groupName.text.toString().randomStr()
+        val groupId = randomStr()
         val group = GroupModel(
             groupId,
             binding.groupName.text.toString(),

@@ -28,6 +28,7 @@ import kr.nbc.momo.presentation.mypage.adapter.MemberSubAdapter
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class MyGroupFragment : Fragment() {
@@ -187,8 +188,9 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
+                        binding.prCircularMember.setVisibleToGone()
+                        binding.includeNoResultMember.setVisibleToVisible()
+                        binding.rvMember.setVisibleToInvisible()
                     }
                 }
             }

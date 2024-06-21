@@ -48,11 +48,13 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.GetStartedActivity
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -97,23 +99,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onResume() {
         super.onResume()
-        bottomNavHide()
+        hideNav()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bottomNavShow()
+        showNav()
         _binding = null
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToGone()
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToVisible()
     }
 
     private fun observeUserProfile() {
@@ -457,7 +449,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
 
     private fun showPopup(v: View) {
-        val popup = PopupMenu(requireContext(), v)
+        val popup = PopupMenu(requireContext(), v, 0, 0, R.style.CustomPopupMenu)
         popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
         popup.setOnMenuItemClickListener(this)
         popup.show() // 팝업 보여주기

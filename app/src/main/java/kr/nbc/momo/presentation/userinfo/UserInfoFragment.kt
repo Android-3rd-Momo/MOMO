@@ -24,10 +24,12 @@ import kr.nbc.momo.databinding.FragmentUserInfoBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
@@ -47,7 +49,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
+        hideNav()
         initUser()
         observeUserState()
         observeReportUser()
@@ -57,7 +59,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        bottomNavShow()
+        showNav()
     }
 
     private fun observeReportUser() {
@@ -210,7 +212,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     }
 
     private fun showPopup(v: View) {
-        val popup = PopupMenu(requireContext(), v)
+        val popup = PopupMenu(requireContext(), v, 0, 0, R.style.CustomPopupMenu)
         popup.menuInflater.inflate(R.menu.popoup_menu_user, popup.menu)
         popup.setOnMenuItemClickListener(this)
         popup.show() // 팝업 보여주기
@@ -230,16 +232,4 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
 
         return item != null
     }
-
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToGone()
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToVisible()
-    }
-
 }

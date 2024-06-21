@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/grey">
 
+    <include
+        android:id="@+id/includeUiState"
+        layout="@layout/ui_state_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -32,18 +39,20 @@
 
             <ImageView
                 android:id="@+id/ivEditBackProfileThumbnail"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="20dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/icon_camera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/ivDeleteBackProfileThumbnail"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="20dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp"
                 android:src="@drawable/icon_delete"
                 app:layout_constraintEnd_toStartOf="@id/ivEditBackProfileThumbnail"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,15 +64,14 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="53dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/bg_layout_corners"
-                android:elevation="5dp"
+                android:background="@drawable/bg_layout_corner_stroke"
                 android:minHeight="95dp"
                 app:layout_constraintTop_toTopOf="@id/ivBackProfileThumbnail">
 
                 <FrameLayout
                     android:id="@+id/llProfileImage"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
                     android:layout_marginStart="17dp"
                     android:background="@drawable/circle_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -72,8 +80,8 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cvProfileImage"
-                        android:layout_width="58dp"
-                        android:layout_height="58dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center"
                         app:cardCornerRadius="50dp">
 
@@ -133,7 +141,8 @@
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:hint="@string/name"
-                    android:textSize="16dp"
+                    android:textColorHint="@color/hint_grey"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/llProfileImage"
@@ -147,7 +156,8 @@
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/sfprodisplaymedium"
                     android:hint="@string/please_edit_introduce"
-                    android:textSize="12dp"
+                    android:textColorHint="@color/hint_grey"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/etUserName"
                     app:layout_constraintTop_toBottomOf="@id/etUserName" />
@@ -165,7 +175,7 @@
                 android:backgroundTint="@color/blue"
                 android:fontFamily="@font/sfproiddisplaybold"
                 android:text="@string/do_login"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:visibility="gone"
                 app:cornerRadius="8dp"
                 app:layout_constraintTop_toBottomOf="@id/clUserInfo" />
@@ -178,7 +188,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/clUserInfo">
 
                 <TextView
@@ -187,35 +196,18 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:text="@string/dev_occupation"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/clTypeTag"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cgTypeTag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/typeOfDevelopment">
-
-                    <TextView
-                        android:id="@+id/tvEmptyTypeTag"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/sfprodisplaymedium"
-                        android:text="@string/please_pick_occupation"
-                        android:textSize="14dp"
-                        android:visibility="gone" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cgTypeTag"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:chipSpacing="8dp"
-                        app:chipSpacingHorizontal="4dp"
-                        app:chipSpacingVertical="0dp" />
-                </LinearLayout>
+                    app:chipSpacing="8dp"
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="0dp"
+                    app:layout_constraintTop_toBottomOf="@id/typeOfDevelopment" />
 
                 <TextView
                     android:id="@+id/programOfDevelopment"
@@ -224,35 +216,18 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:text="@string/dev_lang"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/clTypeTag" />
+                    app:layout_constraintTop_toBottomOf="@id/cgTypeTag" />
 
 
-                <LinearLayout
-                    android:id="@+id/clProgramTag"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cgProgramTag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/programOfDevelopment">
-
-                    <TextView
-                        android:id="@+id/tvEmptyProgramTag"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/sfprodisplaymedium"
-                        android:text="@string/please_pick_dev_lang"
-                        android:textSize="14dp"
-                        android:visibility="gone" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cgProgramTag"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:chipSpacingHorizontal="4dp"
-                        app:chipSpacingVertical="0dp" />
-                </LinearLayout>
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="0dp"
+                    app:layout_constraintTop_toBottomOf="@id/programOfDevelopment" />
 
                 <TextView
                     android:id="@+id/stackOfDevelopment"
@@ -261,9 +236,9 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:text="@string/stack"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/clProgramTag" />
+                    app:layout_constraintTop_toBottomOf="@id/cgProgramTag" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -282,10 +257,11 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:fontFamily="@font/sfprodisplaymedium"
+                        android:gravity="top"
                         android:hint="@string/please_edit_stack"
                         android:minHeight="95dp"
                         android:padding="10dp"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -295,7 +271,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/sfprodisplaymedium"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:text="000/500" />
@@ -310,7 +286,7 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/sfproiddisplaybold"
                     android:text="@string/portfolio"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/clStackOfDevelopment" />
 
@@ -329,15 +305,16 @@
                         android:id="@+id/ivPortfolioImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/bg_layout_corner_stroke"
                         android:scaleType="fitXY"
                         android:src="@drawable/image_default_upload" />
                 </androidx.cardview.widget.CardView>
 
                 <ImageView
                     android:id="@+id/ivDeletePortfolioImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
                     android:src="@drawable/icon_delete"
                     app:layout_constraintBottom_toBottomOf="@id/cvPortfolioImage"
                     app:layout_constraintStart_toEndOf="@id/cvPortfolioImage" />
@@ -359,10 +336,12 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:fontFamily="@font/sfprodisplaymedium"
+                        android:gravity="top"
                         android:hint="@string/please_edit_portfolio"
                         android:minHeight="95dp"
                         android:padding="10dp"
-                        android:textSize="14dp"
+                        android:textColorHint="@color/hint_grey"
+                        android:textSize="14sp"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -372,7 +351,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/sfprodisplaymedium"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:text="000/500" />
@@ -382,7 +361,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="70dp"
                     app:layout_constraintTop_toBottomOf="@id/clPortfolio" />
 
 
@@ -403,7 +382,7 @@
         android:fontFamily="@font/sfproiddisplaybold"
         android:text="@string/confirm_edit"
         android:textColor="@color/white"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
