@@ -1,7 +1,7 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
-import android.util.Log
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -23,44 +23,44 @@ class GroupRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : GroupRepository {
-    override suspend fun createGroup(groupEntity: GroupEntity): Flow<Boolean> = callbackFlow {
-        val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-        if (groupEntity.groupThumbnail != null) {
-            // 썸네일 있을 때
-            val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
-            uploadTask.continueWithTask { ref.downloadUrl }
-                .addOnCompleteListener { task ->
-                    val downloadUri = task.result
-                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-                    fireStore.collection("groups")
-                        .document(groupResponse.groupId)
-                        .set(groupResponse)
-                        .addOnSuccessListener {
-                            trySend(true)
-                        }.addOnFailureListener { e ->
-                            close(e)
-                        }
-                }
-        } else {
-            // 썸네일 없을 때
-            val groupResponse = groupEntity.toGroupResponse(null)
-            fireStore.collection("groups")
-                .document(groupResponse.groupId)
-                .set(groupResponse)
-                .addOnSuccessListener {
-                    trySend(true)
-                }.addOnFailureListener { e ->
-                    close(e)
-                }
+    private val groupRef = fireStore.collection("groups")
+    private val userRef = fireStore.collection("userInfo")
+
+    private suspend fun uploadThumbnail(groupEntity: GroupEntity): String? {
+        groupEntity.groupThumbnail?.let {
+            val query = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+            val uploadTask = query.putFile(Uri.parse(it))
+            val downloadUrl = uploadTask.continueWithTask { query.downloadUrl }.await()
+            return downloadUrl.toString()
         }
+        return null
+    }
 
+    private suspend fun updateGroupFields(ref: DocumentReference, groupResponse: GroupResponse) {
+        fireStore.runTransaction { transaction ->
+            transaction.update(ref, mapOf(
+                "groupName" to groupResponse.groupName,
+                "groupOneLineDescription" to groupResponse.groupOneLineDescription,
+                "groupDescription" to groupResponse.groupDescription,
+                "firstDate" to groupResponse.firstDate,
+                "lastDate" to groupResponse.lastDate,
+                "category" to groupResponse.category,
+                "groupThumbnail" to groupResponse.groupThumbnail,
+                "limitPerson" to groupResponse.limitPerson
+            ))
+        }.await()
+    }
+    override suspend fun createGroup(groupEntity: GroupEntity): Flow<Boolean> = callbackFlow {
+        val thumbnailUrl = uploadThumbnail(groupEntity)
+        val groupResponse = groupEntity.toGroupResponse(thumbnailUrl)
+        fireStore.collection("groups").document(groupResponse.groupId).set(groupResponse).await()
+        trySend(true)
         awaitClose()
-
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
-        val query = fireStore.collection("groups").document(groupId)
-        val registration  = query.addSnapshotListener{ value, e ->
+        val ref = groupRef.document(groupId)
+        val registration  = ref.addSnapshotListener{ value, e ->
                 if (e != null) {
                     close(e)
                 }
@@ -79,77 +79,29 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?): Flow<GroupEntity> =
         callbackFlow {
-            if (imageUri == null) {
-                val groupResponse =
-                    groupEntity.toGroupResponse(groupEntity.groupThumbnail.toString())
-                val ref = fireStore.collection("groups").document(groupResponse.groupId)
-                fireStore.runTransaction { transaction ->
-                    transaction.update(ref, "groupName", groupResponse.groupName)
-                    transaction.update(
-                        ref,
-                        "groupOneLineDescription",
-                        groupResponse.groupOneLineDescription
-                    )
-                    transaction.update(ref, "groupDescription", groupResponse.groupDescription)
-                    transaction.update(ref, "firstDate", groupResponse.firstDate)
-                    transaction.update(ref, "lastDate", groupResponse.lastDate)
-                    transaction.update(ref, "category", groupResponse.category)
-                    transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
-                    transaction.update(ref, "limitPerson", groupResponse.limitPerson)
-                    trySend(groupResponse.toEntity())
-                }
-                awaitClose()
-            } else {
+            val ref = groupRef.document(groupEntity.groupId)
+            val thumbnailUrl = imageUri?.let {
                 val storageRef =
                     storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-                val uploadTask = storageRef.putFile(imageUri)
-                uploadTask.continueWithTask { storageRef.downloadUrl }
-                    .addOnCompleteListener { task ->
-                        val downloadUri = task.result
-                        val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
-                        val ref = fireStore.collection("groups").document(groupResponse.groupId)
-                        fireStore.runTransaction { transaction ->
-                            transaction.update(ref, "groupName", groupResponse.groupName)
-                            transaction.update(
-                                ref,
-                                "groupOneLineDescription",
-                                groupResponse.groupOneLineDescription
-                            )
-                            transaction.update(
-                                ref,
-                                "groupDescription",
-                                groupResponse.groupDescription
-                            )
-                            transaction.update(ref, "firstDate", groupResponse.firstDate)
-                            transaction.update(ref, "lastDate", groupResponse.lastDate)
-                            transaction.update(ref, "category", groupResponse.category)
-                            transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
-                            transaction.update(ref, "limitPerson", groupResponse.limitPerson)
-                            trySend(groupResponse.toEntity())
-                        }
-                    }
-                awaitClose()
-            }
+                val uploadTask = storageRef.putFile(it)
+                uploadTask.continueWithTask { storageRef.downloadUrl }.await().toString()
+            } ?: groupEntity.groupThumbnail
+
+            val groupResponse = groupEntity.toGroupResponse(thumbnailUrl)
+            updateGroupFields(ref, groupResponse)
+            trySend(groupResponse.toEntity())
+
+            awaitClose()
 
         }
 
     override suspend fun addUser(userId: String, groupId: String): Flow<Boolean> = callbackFlow {
-        val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+        val query = userRef.whereEqualTo("userId", userId)
         query.get().addOnSuccessListener { snapshot ->
             for (document in snapshot.documents) {
                 fireStore.runTransaction { transaction ->
-                    transaction.update(
-                        document.reference,
-                        "subscriptionList",
-                        FieldValue.arrayRemove(groupId)
-                    )
-                    transaction.update(
-                        document.reference,
-                        "userGroup",
-                        FieldValue.arrayUnion(groupId)
-                    )
-                }.addOnFailureListener { e ->
-                    close(e)
+                    transaction.update(document.reference, "subscriptionList", FieldValue.arrayRemove(groupId))
+                    transaction.update(document.reference, "userGroup", FieldValue.arrayUnion(groupId))
                 }
             }
         }
@@ -158,8 +110,6 @@ class GroupRepositoryImpl @Inject constructor(
         fireStore.runTransaction { transaction ->
             transaction.update(ref, "subscriptionList", FieldValue.arrayRemove(userId))
             transaction.update(ref, "userList", FieldValue.arrayUnion(userId))
-        }.addOnFailureListener { e ->
-            close(e)
         }
 
         trySend(true)
@@ -168,15 +118,13 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun subscription(userId: String, groupId: String): Flow<Boolean> =
         callbackFlow {
-            val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+            val query = userRef.whereEqualTo("userId", userId)
             query.get().addOnSuccessListener { snapshot ->
                 for (document in snapshot.documents) {
                     fireStore.runTransaction { transaction ->
                         transaction.update(
                             document.reference, "subscriptionList", FieldValue.arrayUnion(groupId)
                         )
-                    }.addOnFailureListener { e ->
-                        close(e)
                     }
                 }
             }
@@ -184,8 +132,6 @@ class GroupRepositoryImpl @Inject constructor(
             val ref = fireStore.collection("groups").document(groupId)
             fireStore.runTransaction { transaction ->
                 transaction.update(ref, "subscriptionList", FieldValue.arrayUnion(userId))
-            }.addOnFailureListener { e ->
-                close(e)
             }
 
             trySend(true)
@@ -194,7 +140,7 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun rejectionSubscription(userId: String, groupId: String): Flow<Boolean> =
         callbackFlow {
-            val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
+            val query = userRef.whereEqualTo("userId", userId)
             query.get().addOnSuccessListener { snapshot ->
                 for (document in snapshot.documents) {
                     fireStore.runTransaction { transaction ->
@@ -203,17 +149,13 @@ class GroupRepositoryImpl @Inject constructor(
                             "subscriptionList",
                             FieldValue.arrayRemove(groupId)
                         )
-                    }.addOnFailureListener { e ->
-                        close(e)
                     }
                 }
             }
 
-            val ref = fireStore.collection("groups").document(groupId)
+            val ref = groupRef.document(groupId)
             fireStore.runTransaction { transaction ->
                 transaction.update(ref, "subscriptionList", FieldValue.arrayRemove(userId))
-            }.addOnFailureListener { e ->
-                close(e)
             }
 
             trySend(true)
@@ -222,25 +164,16 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun deleteGroup(groupId: String, userList: List<String>): Flow<Boolean> =
         callbackFlow {
-            val query = fireStore.collection("userInfo").whereIn("userId", userList)
+            val query = userRef.whereIn("userId", userList)
 
             query.get()
                 .addOnSuccessListener { querySnapshot ->
                     for (document in querySnapshot.documents) {
                         fireStore.runTransaction { transaction ->
-                            transaction.update(
-                                document.reference,
-                                "userGroup",
-                                FieldValue.arrayRemove(groupId)
-                            )
-                        }.addOnFailureListener { e ->
-                            close(e)
+                            transaction.update(document.reference, "userGroup", FieldValue.arrayRemove(groupId))
                         }
                     }
                     fireStore.collection("groups").document(groupId).delete()
-                        .addOnFailureListener { e ->
-                            close(e)
-                        }
 
                     trySend(true)
                 }
@@ -248,30 +181,29 @@ class GroupRepositoryImpl @Inject constructor(
             awaitClose()
         }
 
+
     override suspend fun getGroupList(): Flow<List<GroupEntity>> = flow {
-        val snapshot = fireStore.collection("groups").get().await()
+        val snapshot = groupRef.get().await()
         val response = snapshot?.toObjects<GroupResponse>() ?: listOf()
         emit(response.map { it.toEntity() })
+
     }
 
     override suspend fun changeLeader(groupId: String, leaderId: String): Flow<Boolean> =
         callbackFlow {
-            val ref = fireStore.collection("groups").document(groupId)
+            val ref = groupRef.document(groupId)
             fireStore.runTransaction { transaction ->
                 transaction.update(ref, "leaderId", leaderId)
-                null
             }.addOnSuccessListener {
                 trySend(true)
-            }.addOnFailureListener { e ->
-                close(e)
             }
 
             awaitClose()
         }
 
     override suspend fun searchLeader(userId: String): Flow<List<String>> = callbackFlow {
-        val ref = fireStore.collection("groups").whereEqualTo("leaderId", userId)
-        ref.get()
+        val query = groupRef.whereEqualTo("leaderId", userId)
+        query.get()
             .addOnSuccessListener { querySnapshot ->
                 val list = emptyList<String>().toMutableList()
                 for (document in querySnapshot.documents) {
@@ -279,51 +211,27 @@ class GroupRepositoryImpl @Inject constructor(
                 }
                 trySend(list)
             }
-            .addOnFailureListener { e ->
-                close(e)
-            }
         awaitClose()
     }
 
     override suspend fun deleteUser(userId: String, groupId: String): Flow<List<String>> =
         callbackFlow {
-            val ref = fireStore.collection("groups").document(groupId)
-            ref.update("userList", FieldValue.arrayRemove(userId))
-                .addOnSuccessListener {
-                    val query = fireStore.collection("userInfo").whereEqualTo("userId", userId)
-                    query.get().addOnSuccessListener { querySnapshot ->
-                        for (document in querySnapshot) {
-                            document.reference.update("userGroup", FieldValue.arrayRemove(groupId))
-                                .addOnSuccessListener {
-                                    ref.get().addOnSuccessListener {
-                                        it.toObject<GroupResponse>()?.userList?.let { it1 ->
-                                            trySend(
-                                                it1
-                                            )
-                                        }
-                                    }.addOnFailureListener { e ->
-                                        close(e)
-                                    }
-
-                                }.addOnFailureListener { e ->
-                                    close(e)
-                                }
-                        }
-
-                    }.addOnFailureListener { e ->
-                        close(e)
-                    }
-
-                }.addOnFailureListener { e ->
-                    close(e)
-                }
+            val ref = groupRef.document(groupId)
+            ref.update("userList", FieldValue.arrayRemove(userId)).await()
+            val query = userRef.whereEqualTo("userId", userId)
+            query.get().await().documents.forEach { document ->
+                document.reference.update("userGroup", FieldValue.arrayRemove(groupId)).await()
+            }
+            val updatedGroup = ref.get().await().toObject<GroupResponse>()?.userList ?: listOf()
+            trySend(updatedGroup)
 
             awaitClose()
         }
 
+
     override suspend fun getSubscriptionList(userId: String): Flow<List<GroupEntity>> =
         callbackFlow {
-            val query = fireStore.collection("groups").whereEqualTo("leaderId", userId)
+            val query = groupRef.whereEqualTo("leaderId", userId)
             val registration = query.addSnapshotListener { value, e ->
                 if (e != null) {
                     close(e)
@@ -346,7 +254,7 @@ class GroupRepositoryImpl @Inject constructor(
         userId: String
     ): Flow<List<GroupEntity>> =
         callbackFlow {
-            val query = fireStore.collection("groups").whereIn("groupId", groupList)
+            val query = groupRef.whereIn("groupId", groupList)
             val registration = query.addSnapshotListener { value, e ->
                 if (e != null) {
                     close(e)
@@ -365,7 +273,7 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getAppliedGroup(userId: String): Flow<List<GroupEntity>> =
         callbackFlow {
-            val query = fireStore.collection("groups").whereArrayContains("subscriptionList", userId)
+            val query = groupRef.whereArrayContains("subscriptionList", userId)
             val registration = query.addSnapshotListener { value, e ->
                 if (e != null) {
                     close(e)
