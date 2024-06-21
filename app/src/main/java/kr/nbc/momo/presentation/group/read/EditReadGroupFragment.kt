@@ -239,6 +239,7 @@ class EditReadGroupFragment : Fragment() {
             btnDelete.setOnClickListener {
                 try {
                     viewModel.deleteGroup(data.groupId, data.userList)
+                    parentFragmentManager.popBackStack("Read", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 } catch (e : Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
@@ -282,6 +283,7 @@ class EditReadGroupFragment : Fragment() {
                     groupThumbnail = updatedGroupThumbnail,
                 ), imageUri
             )
+            parentFragmentManager.popBackStack()
         } catch (e : Exception) {
             makeToastWithStringRes(requireContext(), R.string.error)
         }
