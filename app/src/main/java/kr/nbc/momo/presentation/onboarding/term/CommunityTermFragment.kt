@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentCommunutyTermBinding
 
 class CommunityTermFragment : BottomSheetDialogFragment() {

@@ -38,7 +38,6 @@ class SignInFragment : BottomSheetDialogFragment() {
 
         setOnClickListener()
         observeLoginViewModel()
-
     }
 
     private fun setOnClickListener() {
