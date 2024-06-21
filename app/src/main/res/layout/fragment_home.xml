@@ -53,6 +53,18 @@
             app:layout_constraintEnd_toStartOf="@+id/ivSearch"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tvNotificationCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red_error"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_notification"
+            app:layout_constraintEnd_toEndOf="@+id/iv_notification"
+            app:layout_constraintStart_toStartOf="@+id/iv_notification"
+            app:layout_constraintTop_toTopOf="@+id/iv_notification" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
