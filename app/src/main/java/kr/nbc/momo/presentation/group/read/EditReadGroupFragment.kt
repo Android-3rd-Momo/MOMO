@@ -153,7 +153,7 @@ class EditReadGroupFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
+                        makeToastWithStringRes(requireContext(), R.string.user_ban_success)
 //                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                         initUserList(uiState.data)
 

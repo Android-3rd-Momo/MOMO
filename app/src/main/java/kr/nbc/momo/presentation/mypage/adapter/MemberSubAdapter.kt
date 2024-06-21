@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setVisibleToVisible
 
 class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberSubAdapter.Holder>() {
     interface ItemClick{
@@ -13,11 +14,17 @@ class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapte
     }
     var itemClick: ItemClick? = null
 
+    interface ExitClick{
+        fun exitClick(groupId: String)
+    }
+    var exitClick: ExitClick? = null
+
     class Holder(binding: RvItemHomeVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivGroupImage
         val name = binding.tvName
         val description = binding.tvDescription
         val category = binding.tvCategory
+        val exit = binding.ivExit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -32,6 +39,10 @@ class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
+        }
+        holder.exit.setVisibleToVisible()
+        holder.exit.setOnClickListener {
+            exitClick?.exitClick(items[position].groupId)
         }
         holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].groupName

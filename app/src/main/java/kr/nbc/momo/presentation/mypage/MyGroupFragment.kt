@@ -66,36 +66,35 @@ class MyGroupFragment : Fragment() {
 
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.currentUser.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Loading -> {
-                            //No action needed
-                        }
+            sharedViewModel.currentUser.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        //No action needed
+                    }
 
-                        is UiState.Success -> {
-                            if (uiState.data != null) {
-                                Log.d("currentUser", uiState.data.userId)
-                                currentUser = uiState.data.userId
-                                userGroup = uiState.data.userGroup
-                                initGroupList(uiState.data.userId, uiState.data.userGroup)
-                            } else {
-                                with(binding) {
-                                    prCircularLeader.setVisibleToGone()
-                                    includeNoResultLeader.setVisibleToVisible()
-                                    rvLeader.setVisibleToInvisible()
-                                    prCircularMember.setVisibleToGone()
-                                    includeNoResultMember.setVisibleToVisible()
-                                    rvMember.setVisibleToInvisible()
-                                }
+                    is UiState.Success -> {
+                        if (uiState.data != null) {
+                            Log.d("currentUser", uiState.data.userId)
+                            currentUser = uiState.data.userId
+                            userGroup = uiState.data.userGroup
+                            initGroupList(uiState.data.userId, uiState.data.userGroup)
+                        } else {
+                            with(binding) {
+                                prCircularLeader.setVisibleToGone()
+                                includeNoResultLeader.setVisibleToVisible()
+                                rvLeader.setVisibleToInvisible()
+                                prCircularMember.setVisibleToGone()
+                                includeNoResultMember.setVisibleToVisible()
+                                rvMember.setVisibleToInvisible()
                             }
                         }
+                    }
 
-                        is UiState.Error -> {
+                    is UiState.Error -> {
 
-                        }
                     }
                 }
+
             }
         }
     }
@@ -179,6 +178,19 @@ class MyGroupFragment : Fragment() {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
                                 (activity as? MainActivity)?.beginTransactionRead()
+                            }
+                        }
+
+                        memberSubAdapter.exitClick = object : MemberSubAdapter.ExitClick {
+                            override fun exitClick(groupId: String) {
+                                lifecycleScope.launch {
+                                    try {
+                                        currentUser?.let { viewModel.rejectUser(it, groupId) }
+                                        currentUser?.let { initGroupList(it, userGroup) }
+                                    } catch (e : Exception) {
+                                        makeToastWithStringRes(requireContext(), R.string.error)
+                                    }
+                                }
                             }
                         }
 

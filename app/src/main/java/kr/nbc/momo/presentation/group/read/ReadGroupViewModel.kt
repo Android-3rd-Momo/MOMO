@@ -31,9 +31,13 @@ class ReadGroupViewModel @Inject constructor(
     private val deleteGroupUseCase: DeleteGroupUseCase,
     private val reportUserUseCase: ReportUserUseCase,
     private val blockUserUseCase: BlockUserUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
     private val _groupState = MutableStateFlow<UiState<GroupModel>>(UiState.Loading)
     val groupState: StateFlow<UiState<GroupModel>> get() = _groupState
+
+    private val _userDeleteState = MutableStateFlow<UiState<List<String>>>(UiState.Loading)
+    val userDeleteState: StateFlow<UiState<List<String>>> get() = _userDeleteState
 
     fun readGroup(groupId: String) {
         viewModelScope.launch {
@@ -51,6 +55,20 @@ class ReadGroupViewModel @Inject constructor(
                     }
                 }
 
+        }
+    }
+
+    fun deleteUser(userId: String, groupId: String) {
+        viewModelScope.launch {
+            _userDeleteState.value = UiState.Loading
+
+            deleteUserUseCase.invoke(userId, groupId)
+                .catch { e ->
+                    _userDeleteState.value = UiState.Error(e.toString())
+                }
+                .collect { data ->
+                    _userDeleteState.value = UiState.Success(data)
+                }
         }
     }
 

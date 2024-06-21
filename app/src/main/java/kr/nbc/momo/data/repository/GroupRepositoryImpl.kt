@@ -260,4 +260,18 @@ class GroupRepositoryImpl @Inject constructor(
 
             awaitClose { registration.remove() }
         }
+
+    override suspend fun getNotificationCount(userId: String): Flow<Int> =
+        callbackFlow {
+            val query = groupRef.whereEqualTo("leaderId", userId)
+            val registration = query.addSnapshotListener { value, e ->
+                if (e != null) {
+                    close(e)
+                }
+
+                val count = value?.documents?.size ?: 0
+                trySend(count)
+            }
+            awaitClose { registration.remove() }
+        }
 }

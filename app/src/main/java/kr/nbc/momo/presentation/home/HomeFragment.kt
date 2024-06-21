@@ -23,6 +23,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.notification.NotificationFragment
 import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
@@ -55,6 +56,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeUserProfile()
+        observeNotificationCount()
         initGroupList()
         initView()
     }
@@ -111,6 +113,13 @@ class HomeFragment : Fragment() {
 
         }
 
+        binding.ivNotification.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, NotificationFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     private fun observeUserProfile() {
@@ -132,6 +141,7 @@ class HomeFragment : Fragment() {
                                 currentUserCategory = state.data.typeOfDevelopment + state.data.programOfDevelopment
                                 blackList = state.data.blackList
                                 binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
+                                initCount()
                             } else {
                                 currentUser = ""
                                 currentUserCategory = listOf()
@@ -150,6 +160,29 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    private fun observeNotificationCount() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                //fragment의 수명주기가 해당 상태일 때만 실행되도록 보장
+                viewModel.getNotificationCount.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            //No action needed
+                        }
+
+                        is UiState.Success -> {
+                            binding.tvNotificationCount.text = state.data.toString()
+                        }
+
+                        is UiState.Error -> {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun initGroupList() {
         lifecycleScope.launch {
@@ -246,6 +279,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun initCount() {
+        lifecycleScope.launch {
+            viewModel.getNotificationCount(currentUser)
+        }
+    }
+
     private fun onClick(
         latestGroupList: List<GroupModel>,
         myGroupList: List<GroupModel>,
@@ -288,7 +327,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun getCurrentTime(): String {
+    private fun getCurrentTime(): String {
         val format = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
         format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
         return format.format(Date().time)
