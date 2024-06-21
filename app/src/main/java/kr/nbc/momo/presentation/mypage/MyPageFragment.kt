@@ -31,7 +31,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
@@ -240,7 +240,7 @@ class MyPageFragment : Fragment() {
             pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
         binding.btnGoOnBoarding.setOnClickListener {
-            val intent = Intent(requireActivity(), GetStartedActivity::class.java)
+            val intent = Intent(requireActivity(), OnBoardingActivity::class.java)
             startActivity(intent)
         }
         binding.ivDeleteProfileImage.setOnClickListener {

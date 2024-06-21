@@ -42,27 +42,29 @@ class SignInFragment : BottomSheetDialogFragment() {
     }
 
     private fun setOnClickListener() {
-        binding.btnSignUp.setOnClickListener {
-            val email = binding.etId.text.toString()
-            val password = binding.etPassWord.text.toString()
-            if (email.isEmpty() || password.isEmpty()) {
-                makeToastWithStringRes(requireContext(), R.string.email_or_password_blank_error)
-                //Toast.makeText(requireContext(), "이메일 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            } else {
-                signInViewModel.signIn(email, password)
+        with(binding){
+            btnSignUp.setOnClickListener {
+                val email = etId.text.toString()
+                val password = etPassWord.text.toString()
+                if (email.isEmpty() || password.isEmpty()) {
+                    makeToastWithStringRes(requireContext(), R.string.email_or_password_blank_error)
+                    return@setOnClickListener
+                } else {
+                    signInViewModel.signIn(email, password)
+                }
+            }
+
+            btnSignIn.setOnClickListener {
+                val fragmentTerm = TermFragment()
+                fragmentTerm.setStyle(
+                    STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+                fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
+                dismiss()
             }
         }
 
-        binding.btnSignIn.setOnClickListener {
-            val fragmentTerm = TermFragment()
-            fragmentTerm.setStyle(
-                STYLE_NORMAL,
-                R.style.AppBottomSheetDialogBorder20WhiteTheme
-            )
-            fragmentTerm.show(parentFragmentManager, fragmentTerm.tag)
-            dismiss()
-        }
     }
 
     private fun observeLoginViewModel() {
@@ -81,7 +83,6 @@ class SignInFragment : BottomSheetDialogFragment() {
 
                     is UiState.Error -> {
                         makeToastWithStringRes(requireContext(), R.string.email_or_password_error)
-//                        Toast.makeText(requireContext(), "이메일 또는 비밀번호를 다시 입력해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

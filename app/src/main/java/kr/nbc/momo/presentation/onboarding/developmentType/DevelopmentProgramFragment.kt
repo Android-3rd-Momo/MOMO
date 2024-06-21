@@ -38,6 +38,11 @@ class DevelopmentProgramFragment : Fragment() {
         initView()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initView() {
         val ssb = SpannableStringBuilder(getString(R.string.please_pick_your_dev_lang))
         val blue = Color.parseColor("#2D64CF")
@@ -50,12 +55,6 @@ class DevelopmentProgramFragment : Fragment() {
         binding.tvSubtitle.text = ssb
         val developLanguage = resources.getStringArray(R.array.chipProgramingLanguage)
         setChipGroup(developLanguage, binding.chipGroup)
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) {

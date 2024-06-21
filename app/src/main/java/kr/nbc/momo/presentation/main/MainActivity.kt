@@ -11,7 +11,7 @@ import kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.home.HomeFragment
 import kr.nbc.momo.presentation.mypage.RootFragment
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 
 @AndroidEntryPoint
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 editor.putBoolean("firstLaunch", false)
                 editor.apply()
 
-                val intent = Intent(this, GetStartedActivity::class.java)
+                val intent = Intent(this, OnBoardingActivity::class.java)
                 startActivity(intent)
             } else {
                 setContentView(binding.root)

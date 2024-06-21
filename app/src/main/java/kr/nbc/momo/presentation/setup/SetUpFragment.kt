@@ -19,7 +19,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -125,7 +125,7 @@ class SetUpFragment : Fragment() {
     }
 
     private fun goOnboarding(){
-        val intent = Intent(activity, GetStartedActivity::class.java)
+        val intent = Intent(activity, OnBoardingActivity::class.java)
         startActivity(intent)
         activity?.finish()
     }
