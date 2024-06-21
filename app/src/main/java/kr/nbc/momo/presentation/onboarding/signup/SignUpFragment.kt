@@ -150,6 +150,7 @@ class SignUpFragment : Fragment() {
                 binding.etId.error = null
             }
             if (isValid) {
+                binding.btnSignUp.isEnabled = false
                 val user = UserModel(email, name, number, id)
                 viewModel.signUp(email, password, user)
             }
@@ -237,6 +238,7 @@ class SignUpFragment : Fragment() {
                         } else {
                             Log.d("SignUp error",state.message)
                         }
+                        binding.btnSignUp.isEnabled = true
                     }
                 }
             }
