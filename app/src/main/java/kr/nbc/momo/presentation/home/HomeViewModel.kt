@@ -1,5 +1,6 @@
 package kr.nbc.momo.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,7 @@ class HomeViewModel @Inject constructor(
 
             getGroupListUseCase.invoke()
                 .catch { e ->
+                    Log.e("HomeViewModel", "Error fetching group list", e)
                     _getGroupList.value = UiState.Error(e.toString())
                 }
                 .collect { data ->
