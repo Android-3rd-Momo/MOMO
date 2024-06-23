@@ -20,6 +20,7 @@ class DevelopmentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDevelopmentBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         viewPagerAdapter = DevelopmentViewPagerAdapter(this)
