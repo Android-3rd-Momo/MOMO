@@ -19,4 +19,5 @@ interface GroupRepository {
     suspend fun getSubscriptionList(userId: String): Flow<List<GroupEntity>>
     suspend fun getUserGroupList(groupList: List<String>, userId: String): Flow<List<GroupEntity>>
     suspend fun getAppliedGroup(userId: String): Flow<List<GroupEntity>>
+    suspend fun getNotificationCount(userId: String): Flow<Int>
 }

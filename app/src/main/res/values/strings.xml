@@ -253,6 +253,8 @@
     <string name="please_edit_portfolio">간단한 포트폴리오를 작성해 보세요!</string>
     <string name="confirm_edit">편집 완료</string>
     <!--로그인 문자모음-->
+    <string name="notification">알림</string>
+    <!--로그인 문자모음-->
     <string name="use_app_without_login">로그인 없이 앱 이용하기</string>
     <string name="check">확인</string>
     <!--리드그룹 문자모음-->
@@ -307,14 +309,17 @@
     <string name="delete_group_success">모임 삭제 성공</string>
     <string name="user_report_success">유저 신고 성공</string>
     <string name="user_block_success">유저 차단 성공</string>
+    <string name="exit_group_success">모임 탈퇴 성공</string>
     <string name="change_leader_success">리더 변경 성공</string>
     <string name="user_ban_success">유저 강퇴 성공</string>
     <string name="move_to_chatting">채팅방 이동</string>
     <string name="over_max_user">참가 인원 수 초과</string>
+    <string name="subscription_group_success">모임 참가 신청되었습니다.</string>
     <string name="change_leader">리더를 %1$s 님으로 변경합니다.</string>
     <string name="ban_user">%1$s 님을 모임에서 추방합니다.</string>
     <string name="ask_join_group">모임에 참여하시겠습니까?</string>
     <string name="go_to_login">로그인 페이지로 이동합니다.</string>
+    <string name="exit_group">그룹을 탈퇴합니다.</string>
     <string name="no_recommend">추천 그룹이 없습니다.\n정보를 수정해주세요</string>
     <string name="no_joined">가입한 그룹이 없습니다.</string>
     <string name="introduce_yourself">자신을 소개해보세요!</string>
@@ -374,13 +379,8 @@
     <string name="content_desc_check_number">전화번호 중복 확인</string>
     <string name="group">모임</string>
     <string name="content_desc_rv_chat">채팅 리스트</string>
-
-
-
-
-
-
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

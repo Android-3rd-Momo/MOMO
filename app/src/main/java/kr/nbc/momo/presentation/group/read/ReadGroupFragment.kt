@@ -67,6 +67,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         observeGroupState()
         observeUserProfile()
+        observeDeleteUser()
     }
 
     override fun onStart() {
@@ -151,6 +152,30 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
+    private fun observeDeleteUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.userDeleteState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        makeToastWithStringRes(requireContext(), R.string.exit_group_success)
+//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
+                        initUserList(uiState.data)
+
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
     private fun initGroup() {
         lifecycleScope.launch {
             sharedViewModel.groupId.collectLatest { groupId ->
@@ -179,10 +204,23 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             initChip(chipProgramingLanguage, data.category.programingLanguage)
 
             if (data.userList.contains(currentUser)) btnJoinProject.setText(R.string.move_to_chatting)
-            if (data.leaderId == currentUser) {
-                btnEdit.setVisibleToVisible()
-                btnPopUp.setVisibleToGone()
+
+            if (userList.contains(currentUser)) {
+                if (data.leaderId == currentUser) {
+                    btnEdit.setVisibleToVisible()
+                    btnPopUp.setVisibleToGone()
+                    btnExit.setVisibleToGone()
+                } else {
+                    btnEdit.setVisibleToGone()
+                    btnPopUp.setVisibleToGone()
+                    btnExit.setVisibleToVisible()
+                }
+            } else {
+                btnEdit.setVisibleToGone()
+                btnPopUp.setVisibleToVisible()
+                btnExit.setVisibleToGone()
             }
+
 
             ivReturn.setOnClickListener {
                 parentFragmentManager.popBackStack()
@@ -192,6 +230,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
+            btnExitClickListener()
         }
     }
 
@@ -296,6 +335,32 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
+    private fun btnExitClickListener() {
+        binding.btnExit.setOnClickListener {
+
+            val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogBinding.root)
+                .setCancelable(false)
+                .create()
+
+            dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialogBinding.tvClose.setText(R.string.exit_group)
+            dialogBinding.btnConfirm.setOnClickListener {
+                dialog.dismiss()
+
+                currentUser?.let { it1 -> viewModel.deleteUser(it1, groupId) }
+
+            }
+
+            dialogBinding.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+    }
+
 
 
     private fun showDialog(loginBoolean: Boolean, data: GroupModel, currentUser: String?) {
@@ -315,6 +380,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     try {
                         if (currentUser != null) {
                             viewModel.subscription(currentUser, data.groupId)
+                            makeToastWithStringRes(requireContext(), R.string.subscription_group_success)
                         }
                     } catch (e : Exception) {
                         makeToastWithStringRes(requireContext(), R.string.error)
