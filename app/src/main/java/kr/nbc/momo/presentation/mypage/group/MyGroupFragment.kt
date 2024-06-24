@@ -69,16 +69,26 @@ class MyGroupFragment : Fragment() {
                 when (uiState) {
                     is UiState.Loading -> {
                         //No action needed
+                        Log.d("UserGroups", "loading")
+                        with(binding) {
+                            prCircularLeader.setVisibleToVisible()
+                            includeNoResultLeader.setVisibleToGone()
+                            rvLeader.setVisibleToInvisible()
+                            prCircularMember.setVisibleToVisible()
+                            includeNoResultMember.setVisibleToGone()
+                            rvMember.setVisibleToInvisible()
+                        }
                     }
 
                     is UiState.Success -> {
                         if (uiState.data != null) {
-                            Log.d("currentUser", uiState.data.userId)
+                            Log.d("UserGroups", "success not null")
                             currentUser = uiState.data.userId
                             userGroup = uiState.data.userGroup
                             initGroupList(uiState.data.userId, uiState.data.userGroup)
                         } else {
                             with(binding) {
+                                Log.d("UserGroups", "success null")
                                 prCircularLeader.setVisibleToGone()
                                 includeNoResultLeader.setVisibleToVisible()
                                 rvLeader.setVisibleToInvisible()
@@ -90,7 +100,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-
+                        Log.d("UserGroups", "error")
                     }
                 }
 
@@ -104,11 +114,13 @@ class MyGroupFragment : Fragment() {
             viewModel.userGroupList.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
+/*
                         with(binding) {
                             prCircularMember.setVisibleToVisible()
                             includeNoResultMember.setVisibleToGone()
                             rvMember.setVisibleToInvisible()
                         }
+*/
 
                     }
 
@@ -208,11 +220,11 @@ class MyGroupFragment : Fragment() {
             viewModel.subscriptionListState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        with(binding) {
+/*                        with(binding) {
                             prCircularLeader.setVisibleToVisible()
                             includeNoResultLeader.setVisibleToGone()
                             rvLeader.setVisibleToInvisible()
-                        }
+                        }*/
 
                     }
 
