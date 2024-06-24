@@ -269,7 +269,16 @@ class GroupRepositoryImpl @Inject constructor(
                     close(e)
                 }
 
-                val count = value?.documents?.size ?: 0
+                val list = listOf<GroupResponse>().toMutableList()
+                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }
+
+                var count: Int = 0
+                list.forEach { count += it.subscriptionList.size }
+
                 trySend(count)
             }
             awaitClose { registration.remove() }

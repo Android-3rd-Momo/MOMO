@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -172,6 +173,14 @@ class HomeFragment : Fragment() {
 
                         is UiState.Success -> {
                             binding.tvNotificationCount.text = state.data.toString()
+
+                            if (state.data == 0) {
+                                binding.ivNotification.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_notification))
+                                binding.tvNotificationCount.setVisibleToGone()
+                            } else {
+                                binding.ivNotification.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_notification_mark))
+                                binding.tvNotificationCount.setVisibleToVisible()
+                            }
                         }
 
                         is UiState.Error -> {
