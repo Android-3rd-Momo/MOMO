@@ -63,11 +63,7 @@ class GroupRepositoryImpl @Inject constructor(
                 } else {
                     trySend(GroupEntity(groupId = "error"))
                 }
-            }.addOnFailureListener {
-                trySend(GroupEntity(groupId = "error"))
             }
-
-
         }
         awaitClose { registration.remove() }
     }
