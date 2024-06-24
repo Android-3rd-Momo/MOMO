@@ -294,6 +294,7 @@ class CreateGroupFragment : Fragment() {
         )
 
         val image = if (imageUri != null) imageUri.toString() else null
+        Log.d("imageUri", "$imageUri")
         val groupId = randomStr()
         val group = GroupModel(
             groupId,
