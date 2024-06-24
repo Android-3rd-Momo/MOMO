@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.group
 
 import android.os.Bundle
 import android.util.Log
@@ -21,15 +21,14 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.mypage.adapter.LeaderGroupAdapter
-import kr.nbc.momo.presentation.mypage.adapter.LeaderSubAdapter
-import kr.nbc.momo.presentation.mypage.adapter.MemberGroupAdapter
-import kr.nbc.momo.presentation.mypage.adapter.MemberSubAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.LeaderGroupAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.LeaderSubAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.MemberGroupAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.MemberSubAdapter
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
-import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class MyGroupFragment : Fragment() {

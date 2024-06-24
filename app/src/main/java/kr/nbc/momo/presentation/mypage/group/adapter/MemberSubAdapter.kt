@@ -1,25 +1,27 @@
-package kr.nbc.momo.presentation.mypage.adapter
+package kr.nbc.momo.presentation.mypage.group.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.nbc.momo.databinding.RvItemHomeHorizontalBinding
+import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 
-class MemberGroupAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberGroupAdapter.Holder>() {
+class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberSubAdapter.Holder>() {
     interface ItemClick{
         fun itemClick(position: Int)
     }
     var itemClick: ItemClick? = null
 
-    class Holder(binding: RvItemHomeHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
+    class Holder(binding: RvItemHomeVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivGroupImage
-        val name = binding.tvGroupName
+        val name = binding.tvName
+        val description = binding.tvDescription
+        val category = binding.tvCategory
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val binding = RvItemHomeHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RvItemHomeVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(binding)
     }
 
@@ -31,9 +33,10 @@ class MemberGroupAdapter(private var items: List<GroupModel>): RecyclerView.Adap
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }
-        holder.image.clipToOutline = true
         holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].groupName
+        holder.description.text = items[position].groupOneLineDescription
+        holder.category.text = items[position].category.classification
     }
 
 }

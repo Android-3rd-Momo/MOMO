@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.profile
 
 import android.app.AlertDialog
 import android.net.Uri
@@ -50,6 +50,10 @@ class EditMyPageFragment : Fragment() {
     private var isProfileImageChange = false
     private var isBackgroundImageChange = false
     private var isPortfolioImageChange = false
+
+    private enum class ImageType {
+        PROFILE, BACKGROUND, PORTFOLIO
+    }
 
     private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {

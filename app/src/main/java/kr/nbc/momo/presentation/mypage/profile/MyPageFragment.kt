@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -130,26 +130,13 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun updateChipAppearance(chip: Chip, isChecked: Boolean) {
-        chip.setTextColor(
-            ContextCompat.getColorStateList(
-                requireContext(),
-                if (isChecked) R.color.white else R.color.tv_chip_state_color
-            )
-        )
-        chip.setChipBackgroundColorResource(
-            if (isChecked) R.color.blue else R.color.bg_chip_state_color
-        )
-    }
-
     private fun setSelectedChips(chipGroup: ChipGroup, selectedChips: List<String>) {
         chipGroup.removeAllViews()
         selectedChips.forEach { chipText ->
             chipGroup.addView(Chip(requireContext()).apply {
                 text = chipText
                 isCheckable = false
-                isChecked = true
-                updateChipAppearance(this, true)
+                setChipBackgroundColorResource(R.color.white)
             })
         }
     }
