@@ -79,6 +79,7 @@ class GroupRepositoryImpl @Inject constructor(
                 transaction.update(ref, "lastDate", groupResponse.lastDate)
                 transaction.update(ref, "category", groupResponse.category)
                 transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                transaction.update(ref, "limitPerson", groupResponse.limitPerson)
             }
         } else {
             val storageRef = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
@@ -96,6 +97,7 @@ class GroupRepositoryImpl @Inject constructor(
                         transaction.update(ref, "lastDate", groupResponse.lastDate)
                         transaction.update(ref, "category", groupResponse.category)
                         transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                        transaction.update(ref, "limitPerson", groupResponse.limitPerson)
                     }
                 }
         }
