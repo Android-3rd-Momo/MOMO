@@ -68,6 +68,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeGroupState()
         observeUserProfile()
         observeDeleteUser()
+        btnSetOnclickListener()
     }
 
     override fun onStart() {
@@ -221,15 +222,16 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
 
 
-            ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
-
-
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
             btnExitClickListener()
+        }
+    }
+
+    private fun btnSetOnclickListener() {
+        binding.ivReturn.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
     }
 
