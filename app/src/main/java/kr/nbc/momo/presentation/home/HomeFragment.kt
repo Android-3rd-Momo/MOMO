@@ -143,6 +143,7 @@ class HomeFragment : Fragment() {
                                 blackList = state.data.blackList
                                 binding.tvUserGroupList.text = state.data.userName.plus("님의 가입모임")
                                 initCount()
+                                viewModel.getGroupList
                             } else {
                                 currentUser = ""
                                 currentUserCategory = listOf()

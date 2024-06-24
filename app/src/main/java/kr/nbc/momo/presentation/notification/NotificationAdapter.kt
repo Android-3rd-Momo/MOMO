@@ -7,7 +7,7 @@ import kr.nbc.momo.databinding.RvItemSubscriptionBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 class NotificationAdapter(private var items: MutableList<Pair<GroupModel, String>>): RecyclerView.Adapter<NotificationAdapter.Holder>() {
     interface Confirm{
-        fun confirm(groupId: String, userId: String)
+        fun confirm(groupId: String, userId: String, limitPerson: Int, userListSize: Int)
     }
     var confirm: Confirm? = null
 
@@ -42,7 +42,7 @@ class NotificationAdapter(private var items: MutableList<Pair<GroupModel, String
         holder.groupId.text = items[position].first.groupName
         holder.userId.text = items[position].second
         holder.btnConfirm.setOnClickListener {
-            confirm?.confirm(items[position].first.groupId, items[position].second)
+            confirm?.confirm(items[position].first.groupId, items[position].second, items[position].first.limitPerson.toInt(), items[position].first.userList.size)
         }
 
         holder.btnReject.setOnClickListener {

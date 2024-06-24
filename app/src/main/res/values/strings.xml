@@ -291,6 +291,7 @@
     <string name="loading">Loading…</string>
     <string name="error">Error</string>
     <string name="no_result">결과가 없습니다</string>
+    <string name="exceeded_Number">참가 인원 초과</string>
     <!--팝업메뉴 문자모음-->
     <string name="home">홈</string>
     <string name="chatting">채팅</string>

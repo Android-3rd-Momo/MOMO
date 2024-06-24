@@ -99,11 +99,21 @@ class NotificationFragment : Fragment() {
                         binding.rvLeaderSub.layoutManager = LinearLayoutManager(requireContext())
 
                         notificationAdapter.confirm = object : NotificationAdapter.Confirm {
-                            override fun confirm(groupId: String, userId: String) {
+
+                            override fun confirm(
+                                groupId: String,
+                                userId: String,
+                                limitPerson: Int,
+                                userListSize: Int
+                            ) {
                                 lifecycleScope.launch {
                                     try {
-                                        viewModel.addUser(userId, groupId)
-                                        currentUser?.let { initGroupList(it) }
+                                        if (userListSize < limitPerson) {
+                                            viewModel.addUser(userId, groupId)
+                                            currentUser?.let { initGroupList(it) }
+                                        } else {
+                                            makeToastWithStringRes(requireContext(), R.string.exceeded_Number)
+                                        }
                                     } catch (e : Exception) {
                                         makeToastWithStringRes(requireContext(), R.string.error)
                                     }
