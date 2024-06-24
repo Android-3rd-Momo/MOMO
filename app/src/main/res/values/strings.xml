@@ -252,6 +252,7 @@
     <string name="portfolio">포트폴리오</string>
     <string name="please_edit_portfolio">간단한 포트폴리오를 작성해 보세요!</string>
     <string name="confirm_edit">편집 완료</string>
+    <string name="exit">신청 취소</string>
     <!--로그인 문자모음-->
     <string name="notification">알림</string>
     <!--로그인 문자모음-->

@@ -24,7 +24,7 @@ class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapte
         val name = binding.tvName
         val description = binding.tvDescription
         val category = binding.tvCategory
-        val exit = binding.ivExit
+        val exit = binding.tvExit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
