@@ -108,7 +108,7 @@ class NotificationFragment : Fragment() {
                             ) {
                                 lifecycleScope.launch {
                                     try {
-                                        if (limitPerson < userListSize) {
+                                        if (userListSize < limitPerson) {
                                             viewModel.addUser(userId, groupId)
                                             currentUser?.let { initGroupList(it) }
                                         } else {

@@ -408,37 +408,32 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu1 -> {
-                lifecycleScope.launch {
-                    try {
-                        viewModel.deleteGroup(groupId, userList)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
-                        makeToastWithStringRes(requireContext(), R.string.error)
-                    }
+            R.id.report_group -> {
+                try {
+                    viewModel.deleteGroup(groupId, userList)
+                    parentFragmentManager.popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
 
-            R.id.menu2 -> {
-                lifecycleScope.launch {
-                    try {
-                        viewModel.reportUser(leaderId)
-                        viewModel.blockUser(leaderId)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
-                        makeToastWithStringRes(requireContext(), R.string.error)
-                    }
+            R.id.report_user -> {
+                try {
+                    viewModel.reportUser(leaderId)
+                    viewModel.blockUser(leaderId)
+                    parentFragmentManager.popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
                 }
+
             }
 
-            R.id.menu3 -> {
-                lifecycleScope.launch {
-                    try {
-                        viewModel.blockUser(leaderId)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
-                        makeToastWithStringRes(requireContext(), R.string.error)
-                    }
+            R.id.block_user -> {
+                try {
+                    viewModel.blockUser(leaderId)
+                    parentFragmentManager.popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
         }
