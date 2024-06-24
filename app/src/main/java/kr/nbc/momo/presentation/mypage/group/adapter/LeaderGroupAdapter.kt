@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage.adapter
+package kr.nbc.momo.presentation.mypage.group.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeHorizontalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
-
-class MemberGroupAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberGroupAdapter.Holder>() {
+class LeaderGroupAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<LeaderGroupAdapter.Holder>() {
     interface ItemClick{
         fun itemClick(position: Int)
     }

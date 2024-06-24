@@ -22,8 +22,6 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.home.HomeViewModel
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.mypage.adapter.LeaderGroupAdapter
-import kr.nbc.momo.presentation.mypage.adapter.LeaderSubAdapter
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible

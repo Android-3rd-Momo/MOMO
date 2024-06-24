@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
