@@ -1,5 +1,6 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.profile
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -48,6 +50,10 @@ class EditMyPageFragment : Fragment() {
     private var isProfileImageChange = false
     private var isBackgroundImageChange = false
     private var isPortfolioImageChange = false
+
+    private enum class ImageType {
+        PROFILE, BACKGROUND, PORTFOLIO
+    }
 
     private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -96,7 +102,7 @@ class EditMyPageFragment : Fragment() {
         hideNav()
     }
 
-    private fun observeUserProfile() { //todo
+    private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.currentUser.collect { state ->
@@ -105,6 +111,7 @@ class EditMyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
                         }
+
                         is UiState.Success -> {
                             binding.includeUiState.setVisibleToGone()
                             if (state.data != null) {
@@ -113,6 +120,7 @@ class EditMyPageFragment : Fragment() {
                             }
                             binding.scrollView.setVisibleToVisible()
                         }
+
                         is UiState.Error -> {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
@@ -122,13 +130,13 @@ class EditMyPageFragment : Fragment() {
             }
         }
     }
+
     private fun observeUserProfileUpdate() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userProfileUpdate.collect { state ->
                     when (state) {
                         is UiState.Loading -> {
-                            //todo
                             binding.includeUiState.setVisibleToVisible()
                             binding.scrollView.setVisibleToGone()
                         }
@@ -138,7 +146,6 @@ class EditMyPageFragment : Fragment() {
                         }
 
                         is UiState.Error -> {
-                            //todo 변경 실패 관련 Toast?
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
@@ -170,34 +177,63 @@ class EditMyPageFragment : Fragment() {
 
     private fun initEventHandlers() {
         binding.ivEditBackProfileThumbnail.setOnClickListener {
-            pickBackgroundImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
-        binding.ivDeleteBackProfileThumbnail.setOnClickListener {
-            backgroundImageUri = null
-            isBackgroundImageChange = true
-            binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
+            showImageOptionDialog(ImageType.BACKGROUND)
         }
         binding.ivEditProfileImage.setOnClickListener {
-            pickProfileImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-        }
-        binding.ivDeleteProfileImage.setOnClickListener {
-            profileImageUri = null
-            isProfileImageChange = true
-            binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
-        }
-        binding.ivDeletePortfolioImage.setOnClickListener {
-            portfolioImageUri = null
-            isPortfolioImageChange = true
-            binding.ivPortfolioImage.setUploadImageByUrlOrDefault(null)
+            showImageOptionDialog(ImageType.PROFILE)
         }
         binding.ivPortfolioImage.setOnClickListener {
-            pickPortfolioImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            showImageOptionDialog(ImageType.PORTFOLIO)
         }
         binding.btnCompleteEdit.setOnClickListener {
             if (validName()) {
                 saveProfileInfo()
                 requireActivity().hideKeyboard()
                 observeUserProfileUpdate()
+            }
+        }
+    }
+
+    private fun showImageOptionDialog(imageType: ImageType) {
+        val options = resources.getStringArray(R.array.image_edit)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setItems(options) { _, position ->
+            when (position) {
+                0 -> pickImage(imageType)
+                1 -> deleteImage(imageType)
+            }
+        }
+        builder.show()
+    }
+
+    private fun pickImage(imageType: ImageType) {
+        when (imageType) {
+            ImageType.PROFILE -> pickVisualMediaRequest(pickProfileImage)
+            ImageType.BACKGROUND -> pickVisualMediaRequest(pickBackgroundImage)
+            ImageType.PORTFOLIO -> pickVisualMediaRequest(pickPortfolioImage)
+        }
+    }
+
+    private fun pickVisualMediaRequest(launcher: ActivityResultLauncher<PickVisualMediaRequest>) {
+        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+    }
+
+    private fun deleteImage(imageType: ImageType) {
+        when (imageType) {
+            ImageType.PROFILE -> {
+                profileImageUri = null
+                isProfileImageChange = true
+                binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
+            }
+            ImageType.BACKGROUND -> {
+                backgroundImageUri = null
+                isBackgroundImageChange = true
+                binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
+            }
+            ImageType.PORTFOLIO -> {
+                portfolioImageUri = null
+                isPortfolioImageChange = true
+                binding.ivPortfolioImage.setUploadImageByUrlOrDefault(null)
             }
         }
     }
@@ -211,12 +247,9 @@ class EditMyPageFragment : Fragment() {
                 userPortfolioText = binding.etPortfolio.text.toString(),
                 typeOfDevelopment = getChipText(binding.cgTypeTag),
                 programOfDevelopment = getChipText(binding.cgProgramTag),
-                userProfileThumbnailUrl = if (isProfileImageChange) profileImageUri?.toString() ?: ""
-                else currentUser.userProfileThumbnailUrl,
-                userBackgroundThumbnailUrl = if (isBackgroundImageChange) backgroundImageUri?.toString() ?: ""
-                else currentUser.userBackgroundThumbnailUrl,
-                userPortfolioImageUrl = if (isPortfolioImageChange) portfolioImageUri?.toString() ?: ""
-                else currentUser.userPortfolioImageUrl
+                userProfileThumbnailUrl = if (isProfileImageChange) profileImageUri?.toString() ?: "" else currentUser.userProfileThumbnailUrl,
+                userBackgroundThumbnailUrl = if (isBackgroundImageChange) backgroundImageUri?.toString() ?: "" else currentUser.userBackgroundThumbnailUrl,
+                userPortfolioImageUrl = if (isPortfolioImageChange) portfolioImageUri?.toString() ?: "" else currentUser.userPortfolioImageUrl
             )
             viewModel.saveUserProfile(updatedUserModel)
             sharedViewModel.updateUser(updatedUserModel)

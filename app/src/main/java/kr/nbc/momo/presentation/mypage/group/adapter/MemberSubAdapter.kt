@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage.adapter
+package kr.nbc.momo.presentation.mypage.group.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

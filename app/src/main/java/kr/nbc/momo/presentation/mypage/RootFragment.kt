@@ -17,7 +17,8 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentRootBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.mypage.adapter.ViewPagerAdapter
+import kr.nbc.momo.presentation.mypage.group.MyGroupFragment
+import kr.nbc.momo.presentation.mypage.profile.MyPageContainerFragment
 import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.util.setVisibleToGone
 
