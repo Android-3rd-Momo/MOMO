@@ -40,6 +40,8 @@ import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.getAfterOneMonthTimeMillis
+import kr.nbc.momo.util.getCurrentTimeMillis
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
@@ -59,10 +61,10 @@ class EditReadGroupFragment : Fragment() {
     private var imageUri: Uri? = null
     private var groupId: String = ""
     private var leaderId: String = ""
-    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
-    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
+    private var firstMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var firstMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
+    private var lastMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var lastMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
