@@ -162,7 +162,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                     is UiState.Success -> {
                         makeToastWithStringRes(requireContext(), R.string.exit_group_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                         initUserList(uiState.data)
 
                     }
@@ -293,7 +292,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    //sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
                     val chattingRoomFragment = ChattingRoomFragment()
                     parentFragmentManager.popBackStack()
                     parentFragmentManager.beginTransaction()
@@ -307,7 +305,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         showDialog(true, data, currentUser)
                     } else {
                         makeToastWithStringRes(requireContext(), R.string.over_max_user)
-//                        Toast.makeText(requireContext(), getString(R.string.over_max_user), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -330,7 +327,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         } else {
             binding.btnPopUp.setOnClickListener{
                 makeToastWithStringRes(requireContext(), R.string.need_login)
-//                Toast.makeText(requireContext(), getString(R.string.need_login), Toast.LENGTH_SHORT).show()
             }
         }
     }
