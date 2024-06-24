@@ -29,7 +29,7 @@ class NotificationViewModel @Inject constructor(
         viewModelScope.launch {
             _subscriptionListState.value = UiState.Loading
 
-            getSubscriptionListUseCase.invoke(userId)
+            getSubscriptionListUseCase(userId)
                 .catch { e ->
                     _subscriptionListState.value = UiState.Error(e.toString())
                 }
@@ -42,13 +42,13 @@ class NotificationViewModel @Inject constructor(
 
     fun addUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            addUserUseCase.invoke(userId, groupId)
+            addUserUseCase(userId, groupId)
         }
     }
 
     fun rejectUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            rejectionSubscriptionUseCase.invoke(userId, groupId)
+            rejectionSubscriptionUseCase(userId, groupId)
         }
     }
 }

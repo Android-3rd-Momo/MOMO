@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DeleteUserUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(userId: String, groupId: String): Flow<List<String>> {
+    suspend operator fun invoke(userId: String, groupId: String): Flow<List<String>> {
         return groupRepository.deleteUser(userId, groupId)
     }
 }

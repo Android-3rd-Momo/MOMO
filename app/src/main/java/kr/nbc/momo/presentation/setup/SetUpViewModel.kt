@@ -28,7 +28,7 @@ class SetUpViewModel @Inject constructor(
         viewModelScope.launch {
             _searchLeaderState.value = UiState.Loading
 
-            searchLeaderUseCase.invoke(userId)
+            searchLeaderUseCase(userId)
                 .catch { e ->
                     _searchLeaderState.value = UiState.Error(e.toString())
                 }

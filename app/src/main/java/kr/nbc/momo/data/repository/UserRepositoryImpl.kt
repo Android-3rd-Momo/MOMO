@@ -6,11 +6,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.UserResponse
@@ -30,10 +28,10 @@ class UserRepositoryImpl @Inject constructor(
     val currentUser: StateFlow<UserEntity?> = _currentUser
 
     init {
-        setUserListener()
+        collectUserData()
     }
 
-    private fun setUserListener() {
+    private fun collectUserData() {
         auth.currentUser?.let { it ->
             fireStore.collection("userInfo").document(it.uid)
                 .addSnapshotListener { snapshot, e -> //실시간 업데이트
@@ -56,7 +54,6 @@ class UserRepositoryImpl @Inject constructor(
         val currentUserUid = getCurrentUserUid()
         val userResponse = user.toUserResponse()
         fireStore.collection("userInfo").document(currentUserUid).set(userResponse).await()
-//        userPreferences.saveUserInfo(user)
         _currentUser.value = user
     }
 
@@ -64,7 +61,7 @@ class UserRepositoryImpl @Inject constructor(
         return try {
             auth.createUserWithEmailAndPassword(email, password).await()
             saveUserInfo(user)
-            user  //useEntity 반환
+            user  //userEntity 반환
         } catch (e: Exception) {
             throw e
         }
@@ -75,7 +72,8 @@ class UserRepositoryImpl @Inject constructor(
             auth.signInWithEmailAndPassword(email, password).await()
             val currentUserUid = getCurrentUserUid()
             val snapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
-            val userResponse = snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
+            val userResponse =
+                snapshot.toObject(UserResponse::class.java) ?: throw Exception("Do not log in")
             _currentUser.value = userResponse.toEntity()
             userResponse.toEntity()
         } catch (e: Exception) {
@@ -86,9 +84,18 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun saveUserProfile(user: UserEntity) { //저장
         try {
             val updateUser = user.copy(
-                userProfileThumbnailUrl = uploadImageToStorage(user.userProfileThumbnailUrl, "profile"),
-                userBackgroundThumbnailUrl = uploadImageToStorage(user.userBackgroundThumbnailUrl, "background"),
-                userPortfolioImageUrl = uploadImageToStorage(user.userPortfolioImageUrl, "portfolio")
+                userProfileThumbnailUrl = uploadImageToStorage(
+                    user.userProfileThumbnailUrl,
+                    "profile"
+                ),
+                userBackgroundThumbnailUrl = uploadImageToStorage(
+                    user.userBackgroundThumbnailUrl,
+                    "background"
+                ),
+                userPortfolioImageUrl = uploadImageToStorage(
+                    user.userPortfolioImageUrl,
+                    "portfolio"
+                )
             )
             saveUserInfo(updateUser)
         } catch (e: Exception) {
@@ -160,18 +167,20 @@ class UserRepositoryImpl @Inject constructor(
         try {
             val currentUserUid = getCurrentUserUid()
             //userGroup을 가져와서 속한 그룹을 돌면서 아이디 삭제하기
-            val userSnapshot = fireStore.collection("userInfo").document(currentUserUid).get().await()
+            val userSnapshot =
+                fireStore.collection("userInfo").document(currentUserUid).get().await()
             val userGroupIdList = userSnapshot.get("userGroup") as? List<String> ?: emptyList()
 
             //groups에서 userId 삭제
-            for(groupId in userGroupIdList){
+            for (groupId in userGroupIdList) {
                 val groupRef = fireStore.collection("groups").document(groupId)
                 fireStore.runTransaction { transaction ->
                     val groupSnapshot = transaction.get(groupRef)
-                    val userList = groupSnapshot.get("userList") as? MutableList<String> ?: mutableListOf()
+                    val userList =
+                        groupSnapshot.get("userList") as? MutableList<String> ?: mutableListOf()
                     val userId = userSnapshot.getString("userId") ?: ""
 
-                    if(userList.contains(userId)){
+                    if (userList.contains(userId)) {
                         userList.remove(userId)
                         transaction.update(groupRef, "userList", userList)
                     }
