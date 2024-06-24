@@ -368,13 +368,6 @@ class EditReadGroupFragment : Fragment() {
     }
 
     private fun showDialogNumberPicker(textView: TextView, size: Int) {
-        var arr: Array<String> = arrayOf()
-        arr = if (size < 5) {
-            Array(100) { (it + 5).toString() }
-        } else {
-            Array(100) { (it + size).toString() }
-        }
-
         val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -382,8 +375,7 @@ class EditReadGroupFragment : Fragment() {
             .create()
 
         dialogBinding.numberPicker.minValue = if (size < 5) 5 else size
-        dialogBinding.numberPicker.maxValue = arr.size
-        dialogBinding.numberPicker.displayedValues = arr
+        dialogBinding.numberPicker.maxValue = 100
         dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
