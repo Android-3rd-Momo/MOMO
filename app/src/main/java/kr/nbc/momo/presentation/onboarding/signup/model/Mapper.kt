@@ -1,6 +1,5 @@
 package kr.nbc.momo.presentation.onboarding.signup.model
 
-import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.domain.model.UserEntity
 
 fun UserEntity.toModel(): UserModel {

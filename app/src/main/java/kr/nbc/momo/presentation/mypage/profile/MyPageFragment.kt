@@ -21,7 +21,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
@@ -114,7 +114,7 @@ class MyPageFragment : Fragment() {
             (parentFragment as? MyPageContainerFragment)?.switchToEditPage()
         }
         binding.btnGoOnBoarding.setOnClickListener {
-            val intent = Intent(requireActivity(), GetStartedActivity::class.java)
+            val intent = Intent(requireActivity(), OnBoardingActivity::class.java)
             startActivity(intent)
         }
     }

@@ -3,27 +3,24 @@ package kr.nbc.momo.presentation.setup
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
-import kr.nbc.momo.util.setVisibleToGone
-import kr.nbc.momo.util.setVisibleToVisible
 import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
@@ -127,7 +124,7 @@ class SetUpFragment : Fragment() {
     }
 
     private fun goOnboarding(){
-        val intent = Intent(activity, GetStartedActivity::class.java)
+        val intent = Intent(activity, OnBoardingActivity::class.java)
         startActivity(intent)
         activity?.finish()
     }
