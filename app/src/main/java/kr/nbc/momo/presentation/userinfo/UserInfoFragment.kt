@@ -1,7 +1,6 @@
 package kr.nbc.momo.presentation.userinfo
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +30,7 @@ import kr.nbc.momo.util.setVisibleToVisible
 import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
-class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
+class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var _binding: FragmentUserInfoBinding? = null
     private val binding get() = _binding!!
     private val viewModel: UserInfoViewModel by viewModels()
@@ -54,6 +52,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
         observeUserState()
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -98,7 +97,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     }
 
     private fun initView(data: UserModel) {
-        with(binding){
+        with(binding) {
             if (data.userBackgroundThumbnailUrl.isNotEmpty()) {
                 ivBackProfileThumbnail.load(data.userBackgroundThumbnailUrl)
             }
@@ -144,7 +143,6 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
     }
 
 
-
     private fun initChip(chipGroup: ChipGroup, chipList: List<String>) {
         for (chipText in chipList) {
             val chip = Chip(requireContext()).apply {
@@ -175,25 +173,61 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener  {
             R.id.menu1 -> {
                 lifecycleScope.launch {
                     try {
-                        viewModel.reportUser(userId)
-                        viewModel.blockUser(userId)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
+                        sharedViewModel.currentUser.collectLatest { uiState ->
+                            when (uiState) {
+                                is UiState.Success -> {
+                                    if (uiState.data != null) {
+                                        viewModel.reportUser(userId)
+                                        viewModel.blockUser(userId)
+                                        parentFragmentManager.popBackStack()
+                                    } else {
+                                        makeToastWithStringRes(
+                                            requireContext(),
+                                            R.string.need_login
+                                        )
+                                    }
+                                }
+
+                                else -> {
+                                    makeToastWithStringRes(requireContext(), R.string.error)
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
                         makeToastWithStringRes(requireContext(), R.string.error)
                     }
                 }
             }
 
             R.id.menu2 -> {
-                try {
-                    viewModel.blockUser(userId)
-                    parentFragmentManager.popBackStack()
-                } catch (e : Exception) {
-                    makeToastWithStringRes(requireContext(), R.string.error)
+                lifecycleScope.launch {
+                    try {
+                        sharedViewModel.currentUser.collectLatest { uiState ->
+                            when (uiState) {
+                                is UiState.Success -> {
+                                    if (uiState.data != null) {
+                                        viewModel.blockUser(userId)
+                                        parentFragmentManager.popBackStack()
+                                    } else {
+                                        makeToastWithStringRes(
+                                            requireContext(),
+                                            R.string.need_login
+                                        )
+                                    }
+                                }
+
+                                else -> {
+                                    makeToastWithStringRes(requireContext(), R.string.error)
+                                }
+                            }
+                        }
+
+                    } catch (e: Exception) {
+                        makeToastWithStringRes(requireContext(), R.string.error)
+                    }
                 }
             }
         }
-
         return item != null
     }
 }
