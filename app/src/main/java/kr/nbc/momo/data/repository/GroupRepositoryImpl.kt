@@ -1,6 +1,7 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,34 +28,24 @@ class GroupRepositoryImpl @Inject constructor(
     private val groupRef = fireStore.collection("groups")
     private val userRef = fireStore.collection("userInfo")
 
-    private suspend fun uploadThumbnail(groupEntity: GroupEntity): String? {
-        groupEntity.groupThumbnail?.let {
-            val query = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-            val uploadTask = query.putFile(Uri.parse(it))
-            val downloadUrl = uploadTask.continueWithTask { query.downloadUrl }.await()
-            return downloadUrl.toString()
-        }
-        return null
-    }
-
-    private suspend fun updateGroupFields(ref: DocumentReference, groupResponse: GroupResponse) {
-        fireStore.runTransaction { transaction ->
-            transaction.update(ref, mapOf(
-                "groupName" to groupResponse.groupName,
-                "groupOneLineDescription" to groupResponse.groupOneLineDescription,
-                "groupDescription" to groupResponse.groupDescription,
-                "firstDate" to groupResponse.firstDate,
-                "lastDate" to groupResponse.lastDate,
-                "category" to groupResponse.category,
-                "groupThumbnail" to groupResponse.groupThumbnail,
-                "limitPerson" to groupResponse.limitPerson
-            ))
-        }.await()
-    }
     override suspend fun createGroup(groupEntity: GroupEntity){
-        val thumbnailUrl = uploadThumbnail(groupEntity)
-        val groupResponse = groupEntity.toGroupResponse(thumbnailUrl)
-        fireStore.collection("groups").document(groupResponse.groupId).set(groupResponse)
+        val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+        if (groupEntity.groupThumbnail != null) {
+            val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
+            uploadTask.continueWithTask { ref.downloadUrl }
+                .addOnCompleteListener { task ->
+                    val downloadUri = task.result
+                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                    fireStore.collection("groups")
+                        .document(groupResponse.groupId)
+                        .set(groupResponse)
+                }
+        } else {
+            val groupResponse = groupEntity.toGroupResponse(null)
+            fireStore.collection("groups")
+                .document(groupResponse.groupId)
+                .set(groupResponse)
+        }
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
@@ -77,17 +68,39 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?) {
-            val ref = groupRef.document(groupEntity.groupId)
-            val thumbnailUrl = imageUri?.let {
-                val storageRef =
-                    storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
-                val uploadTask = storageRef.putFile(it)
-                uploadTask.continueWithTask { storageRef.downloadUrl }.await().toString()
-            } ?: groupEntity.groupThumbnail
-
-            val groupResponse = groupEntity.toGroupResponse(thumbnailUrl)
-            updateGroupFields(ref, groupResponse)
+        if (imageUri == null) {
+            val groupResponse = groupEntity.toGroupResponse(groupEntity.groupThumbnail.toString())
+            val ref = groupRef.document(groupResponse.groupId)
+            fireStore.runTransaction { transaction ->
+                transaction.update(ref, "groupName", groupResponse.groupName)
+                transaction.update(ref, "groupOneLineDescription", groupResponse.groupOneLineDescription)
+                transaction.update(ref, "groupDescription", groupResponse.groupDescription)
+                transaction.update(ref, "firstDate", groupResponse.firstDate)
+                transaction.update(ref, "lastDate", groupResponse.lastDate)
+                transaction.update(ref, "category", groupResponse.category)
+                transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+            }
+        } else {
+            val storageRef = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
+            val uploadTask = storageRef.putFile(imageUri)
+            uploadTask.continueWithTask { storageRef.downloadUrl }
+                .addOnCompleteListener { task ->
+                    val downloadUri = task.result
+                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                    val ref = fireStore.collection("groups").document(groupResponse.groupId)
+                    fireStore.runTransaction { transaction ->
+                        transaction.update(ref, "groupName", groupResponse.groupName)
+                        transaction.update(ref, "groupOneLineDescription", groupResponse.groupOneLineDescription)
+                        transaction.update(ref, "groupDescription", groupResponse.groupDescription)
+                        transaction.update(ref, "firstDate", groupResponse.firstDate)
+                        transaction.update(ref, "lastDate", groupResponse.lastDate)
+                        transaction.update(ref, "category", groupResponse.category)
+                        transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                    }
+                }
         }
+
+    }
 
     override suspend fun addUser(userId: String, groupId: String) {
         val query = userRef.whereEqualTo("userId", userId)
