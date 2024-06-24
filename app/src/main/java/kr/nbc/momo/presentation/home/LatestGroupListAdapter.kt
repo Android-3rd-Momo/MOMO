@@ -7,29 +7,29 @@ import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 
-class LatestGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<LatestGroupListAdapter.Holder>() {
+class LatestGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<LatestGroupListAdapter.LatestGroupListAdapterHolder>() {
     interface ItemClick{
         fun itemClick(position: Int)
     }
     var itemClick: ItemClick? = null
 
-    class Holder(binding: RvItemHomeVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
+    class LatestGroupListAdapterHolder(binding: RvItemHomeVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivGroupImage
         val name = binding.tvName
         val description = binding.tvDescription
         val category = binding.tvCategory
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestGroupListAdapterHolder {
         val binding = RvItemHomeVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Holder(binding)
+        return LatestGroupListAdapterHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(holder: LatestGroupListAdapterHolder, position: Int) {
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }

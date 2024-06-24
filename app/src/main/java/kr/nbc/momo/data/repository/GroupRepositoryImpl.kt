@@ -50,11 +50,13 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
         val ref = groupRef.document(groupId)
-        val registration  = ref.addSnapshotListener{ value, e ->
-                if (e != null) {
-                    close(e)
-                }
 
+        val registration = ref.addSnapshotListener { value, e ->
+            if (e != null) {
+                close(e)
+            }
+
+            ref.get().addOnSuccessListener {
                 val response = value?.toObject<GroupResponse>()
                 if (response != null) {
                     trySend(response.toEntity())
@@ -62,9 +64,8 @@ class GroupRepositoryImpl @Inject constructor(
                     trySend(GroupEntity(groupId = "error"))
                 }
             }
-
+        }
         awaitClose { registration.remove() }
-
     }
 
     override suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?) {
