@@ -10,7 +10,7 @@ import kr.nbc.momo.databinding.GridviewItemBinding
 import kr.nbc.momo.util.setVisibleToVisible
 
 class EditUserListAdapter(private val userList: List<String>, private val leaderId: String, private val context: Context) :
-    RecyclerView.Adapter<EditUserListAdapter.Holder>() {
+    RecyclerView.Adapter<EditUserListAdapter.EditUserListAdapterHolder>() {
     interface LongClick {
         fun longClick(userId: String)
     }
@@ -23,22 +23,22 @@ class EditUserListAdapter(private val userList: List<String>, private val leader
 
     var onClick: OnClick? = null
 
-    class Holder(binding: GridviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class EditUserListAdapterHolder(binding: GridviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val userId = binding.tvUserId
         val btnDelete = binding.ivDelete
         val root = binding.clAdapterItem
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditUserListAdapterHolder {
         val binding = GridviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Holder(binding)
+        return EditUserListAdapterHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return userList.size
     }
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(holder: EditUserListAdapterHolder, position: Int) {
         if (leaderId == userList[position]) {
             holder.userId.setTextColor(ContextCompat.getColor(context, R.color.white))
             holder.root.setBackgroundResource(R.drawable.bg_layout_corner_stroke_blue)

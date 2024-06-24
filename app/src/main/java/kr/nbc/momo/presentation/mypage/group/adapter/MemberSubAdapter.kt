@@ -8,7 +8,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToVisible
 
-class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberSubAdapter.Holder>() {
+class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberSubAdapter.MemberSubAdapterHolder>() {
     interface ItemClick{
         fun itemClick(position: Int)
     }
@@ -19,7 +19,7 @@ class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapte
     }
     var exitClick: ExitClick? = null
 
-    class Holder(binding: RvItemHomeVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MemberSubAdapterHolder(binding: RvItemHomeVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivGroupImage
         val name = binding.tvName
         val description = binding.tvDescription
@@ -27,16 +27,16 @@ class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapte
         val exit = binding.tvExit
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberSubAdapterHolder {
         val binding = RvItemHomeVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Holder(binding)
+        return MemberSubAdapterHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(holder: MemberSubAdapterHolder, position: Int) {
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }
