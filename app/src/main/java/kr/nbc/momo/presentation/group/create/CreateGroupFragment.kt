@@ -27,7 +27,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +41,13 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.NUM_FIVE
+import kr.nbc.momo.util.NUM_ONE
+import kr.nbc.momo.util.NUM_ONE_HUNDRED
+import kr.nbc.momo.util.NUM_TEN
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.getAfterOneMonthTimeMillis
+import kr.nbc.momo.util.getCurrentTimeMillis
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.randomStr
@@ -61,10 +66,10 @@ class CreateGroupFragment : Fragment() {
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var categoryText: String = ""
-    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
-    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
+    private var firstMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var firstMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
+    private var lastMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var lastMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
     private lateinit var currentUser: String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -181,7 +186,7 @@ class CreateGroupFragment : Fragment() {
                 ) {
                     makeToastWithStringRes(requireContext(), R.string.blank_contain)
                     //Toast.makeText(requireContext(), getString(R.string.blank_contain), Toast.LENGTH_SHORT).show()
-                } else if (categoryText == "카테고리" ||
+                } else if (categoryText == getString(R.string.category) ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
                     binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
                 ) {
@@ -225,7 +230,7 @@ class CreateGroupFragment : Fragment() {
             }
         //todo
         spinnerAdapter.addAll(items.toMutableList())
-        spinnerAdapter.add("카테고리")
+        spinnerAdapter.add(getString(R.string.category))
         binding.categorySpinner.adapter = spinnerAdapter
         binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
@@ -250,12 +255,12 @@ class CreateGroupFragment : Fragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val listener = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
-            val mon = month + 1
-            val monthText = if (mon < 10) {
+            val mon = month + NUM_ONE
+            val monthText = if (mon < NUM_TEN) {
                 "0$mon"
             } else mon.toString()
 
-            val dayText = if (day < 10) {
+            val dayText = if (day < NUM_TEN) {
                 "0$day"
             } else day.toString()
 
@@ -353,7 +358,7 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun showDialogNumberPicker(textView: TextView) {
-        val arr =  Array(100) { (it + 5).toString() }
+        val arr =  Array(NUM_ONE_HUNDRED) { (it + NUM_FIVE).toString() }
         val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
