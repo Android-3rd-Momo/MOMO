@@ -1,10 +1,9 @@
 package kr.nbc.momo.presentation.onboarding.developmentType
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class DevelopmentViewPagerAdapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class DevelopmentViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private val fragmentList: MutableList<Fragment> = mutableListOf()
 
     override fun getItemCount(): Int = fragmentList.size

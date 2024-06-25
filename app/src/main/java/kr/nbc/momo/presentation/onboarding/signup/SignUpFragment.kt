@@ -1,6 +1,6 @@
 package kr.nbc.momo.presentation.onboarding.signup
 
-import android.content.Intent
+
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +18,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSignUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentActivity
+import kr.nbc.momo.presentation.onboarding.developmentType.DevelopmentFragment
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.addValidationTextWatcher
 import kr.nbc.momo.util.checkDuplicate
@@ -200,9 +200,10 @@ class SignUpFragment : Fragment() {
                     is UiState.Success -> {
                         sharedViewModel.updateUser(state.data)
                         makeToastWithStringRes(requireContext(), R.string.sign_up_success)
-                        val intent = Intent(requireActivity(), DevelopmentActivity::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView, DevelopmentFragment())
+                            .addToBackStack(null)
+                            .commit()
                     }
 
                     is UiState.Error -> {
