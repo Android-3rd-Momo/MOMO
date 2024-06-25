@@ -88,10 +88,13 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initUser() {
         lifecycleScope.launch {
-            sharedViewModel.userId.collectLatest {
-                if (it != null) {
+            sharedViewModel.userId.collectLatest { data ->
+                data?.let {
                     viewModel.userInfo(it)
                 }
+/*                if (it != null) {
+                    viewModel.userInfo(it)
+                }*/
             }
         }
     }

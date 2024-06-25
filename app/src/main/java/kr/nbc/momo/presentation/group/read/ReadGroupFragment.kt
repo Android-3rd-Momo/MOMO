@@ -100,13 +100,17 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         }
 
                         is UiState.Success -> {
-                            if (uiState.data != null) {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+                            initGroup()
+/*                            if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
                                 initGroup()
                             }else{
                                 initGroup()
-                            }
+                            }*/
                         }
 
                         is UiState.Error -> {
@@ -179,9 +183,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun initGroup() {
         lifecycleScope.launch {
             sharedViewModel.groupId.collectLatest { groupId ->
-                if (groupId != null) {
-                    viewModel.readGroup(groupId)
+                groupId?.let {
+                    viewModel.readGroup(it)
                 }
+/*                if (groupId != null) {
+                    viewModel.readGroup(groupId)
+                }*/
             }
         }
     }

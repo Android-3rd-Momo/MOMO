@@ -236,9 +236,12 @@ class CreateGroupFragment : Fragment() {
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p0 != null) {
+                    p0?.let {
                         categoryText = p0.getItemAtPosition(p2).toString()
                     }
+/*                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }*/
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {

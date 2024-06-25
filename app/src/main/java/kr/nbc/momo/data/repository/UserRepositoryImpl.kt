@@ -35,10 +35,14 @@ class UserRepositoryImpl @Inject constructor(
         auth.currentUser?.let { it ->
             fireStore.collection("userInfo").document(it.uid)
                 .addSnapshotListener { snapshot, e -> //실시간 업데이트
-                    if (e != null) {
+                    e?.let {
                         _currentUser.value = null
                         return@addSnapshotListener
                     }
+/*                    if (e != null) {
+                        _currentUser.value = null
+                        return@addSnapshotListener
+                    }*/
                     snapshot?.toObject(UserResponse::class.java)?.toEntity()?.let {
                         _currentUser.value = it
                     }

@@ -208,6 +208,7 @@ class SignUpFragment : Fragment() {
                         }
                     } catch (e: Exception) {
                         Log.e("SignUp", "Failed to Check UserNumber Validity", e)
+
                     }
                 }
             }
