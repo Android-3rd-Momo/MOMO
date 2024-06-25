@@ -41,6 +41,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.getAfterOneMonthTimeMillis
 import kr.nbc.momo.util.getCurrentTimeMillis
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToVisible
@@ -114,6 +115,7 @@ class EditReadGroupFragment : Fragment() {
                         is UiState.Error -> {
                             Log.d("error", uiState.message)
                             initGroup()
+                            makeToastWithString(requireContext(), uiState.message)
                         }
                     }
                 }
@@ -138,7 +140,7 @@ class EditReadGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 
@@ -165,6 +167,7 @@ class EditReadGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 

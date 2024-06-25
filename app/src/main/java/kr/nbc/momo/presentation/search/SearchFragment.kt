@@ -2,17 +2,16 @@ package kr.nbc.momo.presentation.search
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,6 +22,7 @@ import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -195,6 +195,7 @@ class SearchFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
+                        makeToastWithString(requireContext(), it.message)
                         binding.rvSearchResult.setVisibleToGone()
                         binding.prCircular.setVisibleToError()
                         binding.includeNoResult.setVisibleToGone()

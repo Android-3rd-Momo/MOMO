@@ -36,6 +36,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
@@ -115,6 +116,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
                         is UiState.Error -> {
                             Log.d("error", uiState.message)
+                            makeToastWithString(requireContext(), uiState.message)
                             initGroup()
                         }
                     }
@@ -148,6 +150,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     is UiState.Error -> {
                         // 오류 메시지 표시
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                         binding.prCircular.setVisibleToError()
                         binding.svRead.setVisibleToGone()
                     }
@@ -172,6 +175,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Error -> {
+                        makeToastWithString(requireContext(), uiState.message)
                         Log.d("error", uiState.message)
                     }
                 }
