@@ -8,7 +8,7 @@ import javax.inject.Inject
 class CreateGroupUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(groupEntity: GroupEntity) {
+    suspend fun invoke(groupEntity: GroupEntity): Flow<Boolean> {
         return groupRepository.createGroup(groupEntity)
     }
 }

@@ -28,24 +28,27 @@ class GroupRepositoryImpl @Inject constructor(
     private val groupRef = fireStore.collection("groups")
     private val userRef = fireStore.collection("userInfo")
 
-    override suspend fun createGroup(groupEntity: GroupEntity){
+    override suspend fun createGroup(groupEntity: GroupEntity): Flow<Boolean> = callbackFlow {
         val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
         if (groupEntity.groupThumbnail != null) {
             val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
             uploadTask.continueWithTask { ref.downloadUrl }
                 .addOnCompleteListener { task ->
-                    val downloadUri = task.result
-                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                    val downloadUri = task.result.toString()
+                    val groupResponse = groupEntity.toGroupResponse(downloadUri)
                     fireStore.collection("groups")
                         .document(groupResponse.groupId)
                         .set(groupResponse)
+                    trySend(true)
                 }
         } else {
             val groupResponse = groupEntity.toGroupResponse(null)
             fireStore.collection("groups")
                 .document(groupResponse.groupId)
                 .set(groupResponse)
+            trySend(true)
         }
+        awaitClose()
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
@@ -56,22 +59,14 @@ class GroupRepositoryImpl @Inject constructor(
                 close(e)
             }
 
-            ref.get().addOnSuccessListener {
-                val response = value?.toObject<GroupResponse>()
-                if (response != null) {
-                    if (response.groupThumbnail != null) {
-                        storage.reference.child("groupImage").child(response.groupId.plus(".jpeg")).downloadUrl.addOnSuccessListener {
-                            trySend(response.toEntity())
-                        }
-                    } else {
-                        trySend(response.toEntity())
-                    }
-
-                } else {
-                    trySend(GroupEntity(groupId = "error"))
-                }
+            val response = value?.toObject<GroupResponse>()
+            if (response != null) {
+                trySend(response.toEntity())
+            } else {
+                trySend(GroupEntity(groupId = "error"))
             }
         }
+
         awaitClose { registration.remove() }
     }
 

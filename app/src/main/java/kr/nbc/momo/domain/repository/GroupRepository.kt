@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kr.nbc.momo.domain.model.GroupEntity
 
 interface GroupRepository {
-    suspend fun createGroup(groupEntity: GroupEntity)
+    suspend fun createGroup(groupEntity: GroupEntity): Flow<Boolean>
     suspend fun readGroup(groupId: String): Flow<GroupEntity>
     suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?)
     suspend fun addUser(userId: String, groupId: String)
