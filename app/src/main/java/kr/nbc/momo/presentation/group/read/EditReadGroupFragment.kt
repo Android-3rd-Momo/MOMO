@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -34,7 +34,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentEditReadGroupBinding
-import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
@@ -42,10 +41,9 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.getAfterOneMonthTimeMillis
 import kr.nbc.momo.util.getCurrentTimeMillis
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
-import kr.nbc.momo.util.setVisibleToError
-import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 import java.util.Calendar
 
@@ -117,6 +115,7 @@ class EditReadGroupFragment : Fragment() {
                         is UiState.Error -> {
                             Log.d("error", uiState.message)
                             initGroup()
+                            makeToastWithString(requireContext(), uiState.message)
                         }
                     }
                 }
@@ -141,7 +140,7 @@ class EditReadGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 
@@ -168,6 +167,7 @@ class EditReadGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 

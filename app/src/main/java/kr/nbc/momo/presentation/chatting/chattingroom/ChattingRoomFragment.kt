@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -21,6 +20,7 @@ import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -102,7 +102,8 @@ class ChattingRoomFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        Log.d("ChattingRoom", "${it.message}")
+                        Log.d("ChattingRoom", it.message)
+                        makeToastWithString(requireContext(), it.message)
                     }
                 }
             }
@@ -151,6 +152,7 @@ class ChattingRoomFragment : Fragment() {
                         binding.rvChatMessage.setVisibleToGone()
                         binding.prCircular.setVisibleToError()
                         Log.d("error", chatMessages.message)
+                        makeToastWithString(requireContext(), chatMessages.message)
                     }
                 }
             }
@@ -221,7 +223,7 @@ class ChattingRoomFragment : Fragment() {
 
                     is UiState.Error -> {
                         //nothing to do
-                        Log.d("ChattingRoom", "${it.message}")
+                        Log.d("ChattingRoom", it.message)
                     }
                 }
             }
