@@ -92,6 +92,7 @@ class CreateGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         hideNav()
         observeUserProfile()
+        observeCreate()
     }
 
     override fun onDestroyView() {
@@ -133,6 +134,34 @@ class CreateGroupFragment : Fragment() {
             }
         }
     }
+
+    private fun observeCreate() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.createState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        // 로딩 처리 (필요한 경우)
+                    }
+
+                    is UiState.Success -> {
+                        makeToastWithStringRes(requireContext(), R.string.create_success)
+                        parentFragmentManager.popBackStack()
+                        val readGroupFragment = ReadGroupFragment()
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, readGroupFragment)
+                            .addToBackStack("Read")
+                            .commit()
+                    }
+
+                    is UiState.Error -> {
+                        Log.d("error", uiState.message)
+                    }
+                }
+
+            }
+        }
+    }
+
 
     private fun initView() {
         with(binding) {
@@ -325,14 +354,6 @@ class CreateGroupFragment : Fragment() {
                 viewModel.createGroup(group)
                 sharedViewModel.getGroupId(groupId)
                 viewModel.joinGroup(groupId)
-
-                makeToastWithStringRes(requireContext(), R.string.create_success)
-                parentFragmentManager.popBackStack()
-                val readGroupFragment = ReadGroupFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, readGroupFragment)
-                    .addToBackStack("Read")
-                    .commit()
             } catch (e : Exception) {
                 makeToastWithStringRes(requireContext(), R.string.error)
             }
