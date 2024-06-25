@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(
 
     private val _getNotificationCount = MutableStateFlow<UiState<Int>>(UiState.Loading)
     val getNotificationCount: StateFlow<UiState<Int>> get() = _getNotificationCount
+
     init {
         getGroupList()
     }
