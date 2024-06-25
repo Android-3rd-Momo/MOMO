@@ -243,6 +243,7 @@
     <string name="floating_btn_create_group">+ 모임 생성</string>
     <!--마이페이지 문자모음-->
     <string name="name">이름</string>
+    <string name="self_introduce">자기소개</string>
     <string name="please_edit_introduce">자기소개를 작성해주세요</string>
     <string name="do_login">로그인 하기</string>
     <string name="please_pick_dev_lang">사용하시는 개발 언어를 선택해보세요!</string>
@@ -253,9 +254,11 @@
     <string name="please_edit_portfolio">간단한 포트폴리오를 작성해 보세요!</string>
     <string name="confirm_edit">편집 완료</string>
     <string name="exit">신청 취소</string>
+    <string name="pick_image">앨범에서 사진 선택</string>
+    <string name="delete_image">기본 이미지 적용</string>
     <string-array name="image_edit">
-        <item>앨범에서 사진 선택</item>
-        <item>기본 이미지 적용</item>
+        <item>@string/pick_image</item>
+        <item>@string/delete_image</item>
     </string-array>
     <!--로그인 문자모음-->
     <string name="notification">알림</string>
@@ -359,14 +362,15 @@
     <string name="phone_regex_error">000–0000–0000 형식을 맞춰주세요.</string>
     <string name="phone_check_error">전화번호 중복을 확인해주세요.</string>
     <string name="id_check_error">아이디 중복을 확인해주세요.</string>
-    <string name="id_duplication_error">이미 사용 중인 아이디입니다.</string>
+    <string name="duplication_error">이미 사용 중입니다.</string>
     <string name="id_can_use">사용 가능한 아이디입니다.</string>
-    <string name="phone_duplication_error">이미 사용 중인 전화번호입니다.</string>
     <string name="phone_can_use">사용 가능한 전화번호입니다.</string>
     <string name="sign_up_success">회원가입에 성공하였습니다.</string>
     <string name="email_duplication_error">이미 가입된 이메일 입니다.</string>
     <string name="email_or_password_blank_error">이메일 또는 비밀번호를 입력해주세요.</string>
     <string name="email_or_password_error">이메일 또는 비밀번호를 다시 입력해주세요.</string>
+    <string name="check_Duplicate">중복을 확인해 주세요.</string>
+    <string name="network_error">네트워크 상태를 확인해주세요.</string>
     <string name="apply_success">가입 신청 성공</string>
 
     <string name="content_desc_on_boarding">모이개에 오신것을 환영합니다!</string>
@@ -384,8 +388,6 @@
     <string name="content_desc_check_number">전화번호 중복 확인</string>
     <string name="group">모임</string>
     <string name="content_desc_rv_chat">채팅 리스트</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

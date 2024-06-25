@@ -49,16 +49,16 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-fun updateUser(user: UserModel) {
-    viewModelScope.launch {
-        _updateUserState.value = UiState.Loading
-        try {
-            _currentUser.value = UiState.Success(user)
-        } catch (e: Exception) {
-            _updateUserState.value = UiState.Error(e.message.toString())
+    fun updateUser(user: UserModel) {
+        viewModelScope.launch {
+            _updateUserState.value = UiState.Loading
+            try {
+                _currentUser.value = UiState.Success(user)
+            } catch (e: Exception) {
+                _updateUserState.value = UiState.Error(e.message.toString())
+            }
         }
     }
-}
 
     fun getGroupId(groupId: String) {
         _groupId.value = groupId
