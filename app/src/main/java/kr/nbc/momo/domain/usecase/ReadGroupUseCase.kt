@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ReadGroupUseCase@Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(groupId: String): Flow<GroupEntity> {
+    suspend operator fun invoke(groupId: String): Flow<GroupEntity> {
         return groupRepository.readGroup(groupId)
     }
 }

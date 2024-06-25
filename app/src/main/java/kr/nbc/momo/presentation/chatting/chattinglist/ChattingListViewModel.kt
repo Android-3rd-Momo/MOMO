@@ -23,7 +23,7 @@ class ChattingListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _chattingList.value =
-                    UiState.Success(chattingListUseCase.invoke(list, userId).map { it.toModel() })
+                    UiState.Success(chattingListUseCase(list, userId).map { it.toModel() })
             } catch (e: Exception) {
                 _chattingList.value = UiState.Error(e.toString())
             }

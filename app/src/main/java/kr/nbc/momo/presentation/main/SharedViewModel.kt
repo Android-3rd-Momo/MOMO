@@ -71,7 +71,7 @@ class SharedViewModel @Inject constructor(
 
     fun setLastViewedChat(groupId: String, userId: String, userName: String, url: String) {
         viewModelScope.launch {
-            setLastViewedChatUseCase.invoke(groupId, userId, userName, url)
+            setLastViewedChatUseCase(groupId, userId, userName, url)
         }
     }
 

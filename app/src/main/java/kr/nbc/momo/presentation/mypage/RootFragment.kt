@@ -1,11 +1,10 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +19,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.mypage.group.MyGroupFragment
 import kr.nbc.momo.presentation.mypage.profile.MyPageContainerFragment
 import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 
 @AndroidEntryPoint
@@ -58,15 +58,19 @@ class RootFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            if (uiState.data != null) {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+/*                            if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
-                            }
+                            }*/
                             initView(currentUser)
                         }
 
                         is UiState.Error -> {
                             initView(currentUser)
+                            makeToastWithString(requireContext(), uiState.message)
                         }
                     }
                 }

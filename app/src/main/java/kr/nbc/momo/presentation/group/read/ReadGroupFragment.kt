@@ -36,6 +36,7 @@ import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
@@ -68,6 +69,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         observeGroupState()
         observeUserProfile()
         observeDeleteUser()
+        btnSetOnclickListener()
     }
 
     override fun onStart() {
@@ -99,17 +101,22 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         }
 
                         is UiState.Success -> {
-                            if (uiState.data != null) {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+                            initGroup()
+/*                            if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
                                 initGroup()
                             }else{
                                 initGroup()
-                            }
+                            }*/
                         }
 
                         is UiState.Error -> {
                             Log.d("error", uiState.message)
+                            makeToastWithString(requireContext(), uiState.message)
                             initGroup()
                         }
                     }
@@ -143,6 +150,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     is UiState.Error -> {
                         // 오류 메시지 표시
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                         binding.prCircular.setVisibleToError()
                         binding.svRead.setVisibleToGone()
                     }
@@ -167,6 +175,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Error -> {
+                        makeToastWithString(requireContext(), uiState.message)
                         Log.d("error", uiState.message)
                     }
                 }
@@ -178,9 +187,12 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun initGroup() {
         lifecycleScope.launch {
             sharedViewModel.groupId.collectLatest { groupId ->
-                if (groupId != null) {
-                    viewModel.readGroup(groupId)
+                groupId?.let {
+                    viewModel.readGroup(it)
                 }
+/*                if (groupId != null) {
+                    viewModel.readGroup(groupId)
+                }*/
             }
         }
     }
@@ -221,15 +233,16 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
 
 
-            ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
-
-
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
             btnExitClickListener()
+        }
+    }
+
+    private fun btnSetOnclickListener() {
+        binding.ivReturn.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
     }
 
@@ -408,37 +421,32 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu1 -> {
-                lifecycleScope.launch {
-                    try {
-                        viewModel.deleteGroup(groupId, userList)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
-                        makeToastWithStringRes(requireContext(), R.string.error)
-                    }
+            R.id.report_group -> {
+                try {
+                    viewModel.deleteGroup(groupId, userList)
+                    parentFragmentManager.popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
 
-            R.id.menu2 -> {
-                lifecycleScope.launch {
-                    try {
-                        viewModel.reportUser(leaderId)
-                        viewModel.blockUser(leaderId)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
-                        makeToastWithStringRes(requireContext(), R.string.error)
-                    }
+            R.id.report_user -> {
+                try {
+                    viewModel.reportUser(leaderId)
+                    viewModel.blockUser(leaderId)
+                    parentFragmentManager.popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
                 }
+
             }
 
-            R.id.menu3 -> {
-                lifecycleScope.launch {
-                    try {
-                        viewModel.blockUser(leaderId)
-                        parentFragmentManager.popBackStack()
-                    } catch (e : Exception) {
-                        makeToastWithStringRes(requireContext(), R.string.error)
-                    }
+            R.id.block_user -> {
+                try {
+                    viewModel.blockUser(leaderId)
+                    parentFragmentManager.popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
         }

@@ -27,10 +27,13 @@ import kr.nbc.momo.databinding.FragmentEditMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.MY_PAGE_TEXT_MAX_LENGTH
+import kr.nbc.momo.util.SELF_INTRODUCE_MAX_LENGTH
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.isValidName
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
@@ -38,9 +41,7 @@ import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 import kr.nbc.momo.util.showNav
 
-const val STACK_MAX_LENGTH = 500
-const val PORTFOLIO_MAX_LENGTH = 500
-const val SELF_INTRODUCE_MAX_LENGTH = 60
+
 @AndroidEntryPoint
 class EditMyPageFragment : Fragment() {
     private var _binding: FragmentEditMyPageBinding? = null
@@ -111,14 +112,19 @@ class EditMyPageFragment : Fragment() {
 
                         is UiState.Success -> {
                             binding.includeUiState.setVisibleToGone()
-                            if (state.data != null) {
+                            state.data?.let { data ->
+                                currentUser = data
+                                initView(data)
+                            }
+/*                            if (state.data != null) {
                                 currentUser = state.data
                                 initView(state.data)
-                            }
+                            }*/
                             binding.scrollView.setVisibleToVisible()
                         }
 
                         is UiState.Error -> {
+                            makeToastWithString(requireContext(), state.message)
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                         }
@@ -146,6 +152,7 @@ class EditMyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -167,8 +174,8 @@ class EditMyPageFragment : Fragment() {
             setChipGroup(resources.getStringArray(R.array.chipProgramingLanguage), cgProgramTag, user.programOfDevelopment)
         }
 
-        binding.etStackOfDevelopment.addTextWatcherWithError(STACK_MAX_LENGTH, getString(R.string.stack), binding.btnCompleteEdit, binding.tvCountStackEditText)
-        binding.etPortfolio.addTextWatcherWithError(PORTFOLIO_MAX_LENGTH, getString(R.string.portfolio), binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
+        binding.etStackOfDevelopment.addTextWatcherWithError(MY_PAGE_TEXT_MAX_LENGTH, getString(R.string.stack), binding.btnCompleteEdit, binding.tvCountStackEditText)
+        binding.etPortfolio.addTextWatcherWithError(MY_PAGE_TEXT_MAX_LENGTH, getString(R.string.portfolio), binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
         binding.etUserSelfIntroduction.addTextWatcherWithError(SELF_INTRODUCE_MAX_LENGTH, getString(R.string.self_introduce), binding.btnCompleteEdit)
     }
 

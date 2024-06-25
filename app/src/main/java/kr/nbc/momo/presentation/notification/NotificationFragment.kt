@@ -2,11 +2,10 @@ package kr.nbc.momo.presentation.notification
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,18 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
-import kr.nbc.momo.databinding.FragmentHomeBinding
-import kr.nbc.momo.databinding.FragmentMyGroupBinding
 import kr.nbc.momo.databinding.FragmentNotificationBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.home.HomeViewModel
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
-import kr.nbc.momo.util.setVisibleToGone
-import kr.nbc.momo.util.setVisibleToInvisible
-import kr.nbc.momo.util.setVisibleToVisible
 
 @AndroidEntryPoint
 class NotificationFragment : Fragment() {
@@ -99,11 +93,21 @@ class NotificationFragment : Fragment() {
                         binding.rvLeaderSub.layoutManager = LinearLayoutManager(requireContext())
 
                         notificationAdapter.confirm = object : NotificationAdapter.Confirm {
-                            override fun confirm(groupId: String, userId: String) {
+
+                            override fun confirm(
+                                groupId: String,
+                                userId: String,
+                                limitPerson: Int,
+                                userListSize: Int
+                            ) {
                                 lifecycleScope.launch {
                                     try {
-                                        viewModel.addUser(userId, groupId)
-                                        currentUser?.let { initGroupList(it) }
+                                        if (userListSize < limitPerson) {
+                                            viewModel.addUser(userId, groupId)
+                                            currentUser?.let { initGroupList(it) }
+                                        } else {
+                                            makeToastWithStringRes(requireContext(), R.string.exceeded_Number)
+                                        }
                                     } catch (e : Exception) {
                                         makeToastWithStringRes(requireContext(), R.string.error)
                                     }
@@ -136,6 +140,7 @@ class NotificationFragment : Fragment() {
                     is UiState.Error -> {
                         // 오류 메시지 표시
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
             }

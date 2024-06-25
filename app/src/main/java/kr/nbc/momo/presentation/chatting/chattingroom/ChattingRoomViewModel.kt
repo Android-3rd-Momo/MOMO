@@ -32,7 +32,7 @@ class ChattingRoomViewModel @Inject constructor(
 
     fun getChatMessages(groupId: String) {
         viewModelScope.launch {
-            getChattingUseCase.invoke(groupId).catch{
+            getChattingUseCase(groupId).catch{
                 _chatMessages.value = UiState.Error(it.toString())
             }.collectLatest {
                 _chatMessages.value = UiState.Success(it.toModel())
@@ -42,13 +42,13 @@ class ChattingRoomViewModel @Inject constructor(
 
     fun sendChat(groupId: String, userId: String, text: String, userName: String, groupName: String, url: String){
         viewModelScope.launch{
-            sendChatUseCase.invoke(groupId, userId, text, userName, groupName, url)
+            sendChatUseCase(groupId, userId, text, userName, groupName, url)
         }
     }
 
     fun getChatListItemById(groupId: String){
         viewModelScope.launch{
-            _chatListItem.value = UiState.Success(getChattingListByIdUseCase.invoke(groupId).toModel())
+            _chatListItem.value = UiState.Success(getChattingListByIdUseCase(groupId).toModel())
         }
     }
 }

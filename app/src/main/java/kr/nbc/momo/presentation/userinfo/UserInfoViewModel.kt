@@ -26,7 +26,7 @@ class UserInfoViewModel  @Inject constructor(
         viewModelScope.launch {
             _userState.value = UiState.Loading
 
-            userInfoUseCase.invoke(userId)
+            userInfoUseCase(userId)
                 .catch { e ->
                     _userState.value = UiState.Error(e.toString())
                 }
@@ -38,13 +38,13 @@ class UserInfoViewModel  @Inject constructor(
 
     fun reportUser(reportedUser: String) {
         viewModelScope.launch {
-            reportUserUseCase.invoke(reportedUser)
+            reportUserUseCase(reportedUser)
         }
     }
 
     fun blockUser(blockUser: String) {
         viewModelScope.launch {
-            blockUserUseCase.invoke(blockUser)
+            blockUserUseCase(blockUser)
         }
     }
 }

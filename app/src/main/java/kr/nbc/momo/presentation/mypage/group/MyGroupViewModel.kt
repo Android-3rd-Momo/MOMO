@@ -39,7 +39,7 @@ class MyGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _subscriptionListState.value = UiState.Loading
 
-            getSubscriptionListUseCase.invoke(userId)
+            getSubscriptionListUseCase(userId)
                 .catch { e ->
                     _subscriptionListState.value = UiState.Error(e.toString())
                 }
@@ -54,7 +54,7 @@ class MyGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _userAppliedGroupList.value = UiState.Loading
 
-            getAppliedUseCase.invoke(userId)
+            getAppliedUseCase(userId)
                 .catch { e ->
                     _userAppliedGroupList.value = UiState.Error(e.toString())
                 }
@@ -70,7 +70,7 @@ class MyGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _userGroupList.value = UiState.Loading
 
-            getUserGroupListUseCase.invoke(groupList, userId)
+            getUserGroupListUseCase(groupList, userId)
                 .catch { e ->
                     _userGroupList.value = UiState.Error(e.toString())
                 }
@@ -83,13 +83,13 @@ class MyGroupViewModel @Inject constructor(
 
     fun addUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            addUserUseCase.invoke(userId, groupId)
+            addUserUseCase(userId, groupId)
         }
     }
 
     fun rejectUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            rejectionSubscriptionUseCase.invoke(userId, groupId)
+            rejectionSubscriptionUseCase(userId, groupId)
         }
     }
 }

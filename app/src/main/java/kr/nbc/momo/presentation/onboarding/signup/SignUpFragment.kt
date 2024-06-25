@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +52,7 @@ class SignUpFragment : Fragment() {
         initObservers()
         initCheckDuplicate()
         setUpTextWatcher()
-        updateSignUpButtonState()
+        setUpSignUpButtonState()
     }
 
 
@@ -61,7 +60,6 @@ class SignUpFragment : Fragment() {
         binding.btnSignUp.setOnClickListener {
             val email = binding.etEmail.text.toString()
             val password = binding.etPassWord.text.toString()
-//            val checkPassword = binding.etCheckPassWord.text.toString()
             val name = binding.etName.text.toString()
             val number = binding.etNumber.text.toString()
             val id = binding.etId.text.toString()
@@ -121,15 +119,14 @@ class SignUpFragment : Fragment() {
                 if (binding.etNumber.hasFocus()) {
                     isNumberChecked = false
                 }
-                updateSignUpButtonState()
-                updateNotifyDuplicateVisibility()
+                setUpSignUpButtonState()
+                setUpDuplicateCheck()
             }
 
             override fun afterTextChanged(s: Editable?) {
                 //No action needed
             }
         }
-
         binding.etEmail.addTextChangedListener(textWatcher)
         binding.etPassWord.addTextChangedListener(textWatcher)
         binding.etCheckPassWord.addTextChangedListener(textWatcher)
@@ -149,12 +146,11 @@ class SignUpFragment : Fragment() {
                 binding.etId,
                 {
                     isIdChecked = true
-                    updateSignUpButtonState()
-                    updateNotifyDuplicateVisibility()
+                    setUpSignUpButtonState()
+                    setUpDuplicateCheck()
                 },
                 R.string.id_can_use
             )
-            Log.d("isIdChecked", "$isIdChecked")
         }
         binding.btnCheckNumber.setOnClickListener {
             checkDuplicate(
@@ -165,15 +161,15 @@ class SignUpFragment : Fragment() {
                 binding.etNumber,
                 {
                     isNumberChecked = true
-                    updateSignUpButtonState()
-                    updateNotifyDuplicateVisibility()
+                    setUpSignUpButtonState()
+                    setUpDuplicateCheck()
                 },
                 R.string.phone_can_use
             )
         }
     }
 
-    private fun updateSignUpButtonState() {
+    private fun setUpSignUpButtonState() {
         val allFieldsValid = validMap.values.all { it }
         val allChecksPassed = isIdChecked && isNumberChecked
         val areAllFieldsNotEmpty = listOf(
@@ -186,10 +182,10 @@ class SignUpFragment : Fragment() {
         binding.btnSignUp.isEnabled = isSignUpEnabled
     }
 
-    private fun updateNotifyDuplicateVisibility() {
-        val isIdTextNotEmpty = binding.etId.text?.isNotEmpty() ?: false
-        val isNumberTextNotEmpty = binding.etNumber.text?.isNotEmpty() ?: false
-        val shouldShowNotifyDuplicate = (isIdTextNotEmpty && !isIdChecked) || (isNumberTextNotEmpty && !isNumberChecked)
+    private fun setUpDuplicateCheck() {
+        val etId = binding.etId.text?.isNotEmpty() ?: false
+        val etNumber = binding.etNumber.text?.isNotEmpty() ?: false
+        val shouldShowNotifyDuplicate = (etId && !isIdChecked) || (etNumber && !isNumberChecked)
         binding.tvNotifyDuplicate.visibility = if (shouldShowNotifyDuplicate) View.VISIBLE else View.GONE
     }
 
@@ -213,9 +209,9 @@ class SignUpFragment : Fragment() {
                         if (state.message.contains("The email address is already in use by another account")) {
                             binding.etEmail.error = getString(R.string.email_duplication_error)
                         } else {
-                            makeToastWithStringRes(requireContext(), R.string.email_or_password_error)
+                            makeToastWithStringRes(requireContext(), R.string.sign_up_failed)
                         }
-                        binding.btnSignUp.isEnabled = true
+//                        binding.btnSignUp.isEnabled = true
                     }
                 }
             }

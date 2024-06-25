@@ -30,9 +30,7 @@ class HomeViewModel @Inject constructor(
     }
     fun getGroupList() {
         viewModelScope.launch {
-            _getGroupList.value = UiState.Loading
-
-            getGroupListUseCase.invoke()
+            getGroupListUseCase()
                 .catch { e ->
                     Log.e("HomeViewModel", "Error fetching group list", e)
                     _getGroupList.value = UiState.Error(e.toString())
@@ -45,9 +43,7 @@ class HomeViewModel @Inject constructor(
 
     fun getNotificationCount(userId: String) {
         viewModelScope.launch {
-            _getGroupList.value = UiState.Loading
-
-            getNotificationCountUseCase.invoke(userId)
+            getNotificationCountUseCase(userId)
                 .catch { e ->
                     Log.e("HomeViewModel", "Error fetching group list", e)
                     _getNotificationCount.value = UiState.Error(e.toString())

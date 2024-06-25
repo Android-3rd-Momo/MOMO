@@ -57,6 +57,7 @@ class SetUpFragment : Fragment() {
                         }
                         is UiState.Error -> {
                             // Handle error state
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -85,6 +86,7 @@ class SetUpFragment : Fragment() {
                         }
                         is UiState.Error -> {
                             // Handle error state
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }

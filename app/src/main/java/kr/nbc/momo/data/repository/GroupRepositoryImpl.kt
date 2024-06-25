@@ -1,8 +1,6 @@
 package kr.nbc.momo.data.repository
 
 import android.net.Uri
-import android.util.Log
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -14,7 +12,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
-import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
@@ -28,43 +25,49 @@ class GroupRepositoryImpl @Inject constructor(
     private val groupRef = fireStore.collection("groups")
     private val userRef = fireStore.collection("userInfo")
 
-    override suspend fun createGroup(groupEntity: GroupEntity){
+    override suspend fun createGroup(groupEntity: GroupEntity): Flow<Boolean> = callbackFlow {
         val ref = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
         if (groupEntity.groupThumbnail != null) {
             val uploadTask = ref.putFile(Uri.parse(groupEntity.groupThumbnail))
             uploadTask.continueWithTask { ref.downloadUrl }
                 .addOnCompleteListener { task ->
-                    val downloadUri = task.result
-                    val groupResponse = groupEntity.toGroupResponse(downloadUri.toString())
+                    val downloadUri = task.result.toString()
+                    val groupResponse = groupEntity.toGroupResponse(downloadUri)
                     fireStore.collection("groups")
                         .document(groupResponse.groupId)
                         .set(groupResponse)
+                    trySend(true)
                 }
         } else {
             val groupResponse = groupEntity.toGroupResponse(null)
             fireStore.collection("groups")
                 .document(groupResponse.groupId)
                 .set(groupResponse)
+            trySend(true)
         }
+        awaitClose()
     }
 
     override suspend fun readGroup(groupId: String): Flow<GroupEntity> = callbackFlow {
         val ref = groupRef.document(groupId)
-        val registration  = ref.addSnapshotListener{ value, e ->
-                if (e != null) {
-                    close(e)
-                }
 
-                val response = value?.toObject<GroupResponse>()
-                if (response != null) {
-                    trySend(response.toEntity())
-                } else {
-                    trySend(GroupEntity(groupId = "error"))
-                }
+        val registration = ref.addSnapshotListener { value, e ->
+/*            if (e != null) {
+                close(e)
+            }*/
+            e?.let {
+                close(it)
             }
 
-        awaitClose { registration.remove() }
+            val response = value?.toObject<GroupResponse>()
+            if (response != null) {
+                trySend(response.toEntity())
+            } else {
+                trySend(GroupEntity(groupId = "error"))
+            }
+        }
 
+        awaitClose { registration.remove() }
     }
 
     override suspend fun updateGroup(groupEntity: GroupEntity, imageUri: Uri?) {
@@ -79,6 +82,7 @@ class GroupRepositoryImpl @Inject constructor(
                 transaction.update(ref, "lastDate", groupResponse.lastDate)
                 transaction.update(ref, "category", groupResponse.category)
                 transaction.update(ref, "groupThumbnail", groupResponse.groupThumbnail)
+                transaction.update(ref, "limitPerson", groupResponse.limitPerson)
             }
         } else {
             val storageRef = storage.reference.child("groupImage").child("${groupEntity.groupId}.jpeg")
@@ -219,16 +223,24 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereEqualTo("leaderId", userId)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = emptyList<GroupResponse>().toMutableList()
-                if (value != null) {
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
 
                 trySend(list.map { it.toEntity() })
             }
@@ -239,16 +251,24 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereIn("groupId", groupList)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = listOf<GroupResponse>().toMutableList()
-                if (value != null) {
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
                 trySend(list.map { it.toEntity() })
             }
             awaitClose { registration.remove() }
@@ -258,16 +278,24 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereArrayContains("subscriptionList", userId)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = listOf<GroupResponse>().toMutableList()
-                if (value != null) {
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
                 trySend(list.map { it.toEntity() })
             }
 
@@ -278,16 +306,25 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereEqualTo("leaderId", userId)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = listOf<GroupResponse>().toMutableList()
-                if (value != null) {
+
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
 
                 var count: Int = 0
                 list.forEach { count += it.subscriptionList.size }

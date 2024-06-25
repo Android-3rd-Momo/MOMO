@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "kr.nbc.momo"
-        minSdk = 33
+        minSdk = 30
         targetSdk = 34
         versionCode = 4
         versionName = "1.0.2"

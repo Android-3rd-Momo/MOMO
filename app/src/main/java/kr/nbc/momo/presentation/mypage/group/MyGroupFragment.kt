@@ -9,9 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,6 +23,7 @@ import kr.nbc.momo.presentation.mypage.group.adapter.LeaderGroupAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.LeaderSubAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.MemberGroupAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.MemberSubAdapter
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
@@ -101,6 +100,8 @@ class MyGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         Log.d("UserGroups", "error")
+                        makeToastWithString(requireContext(), uiState.message)
+
                     }
                 }
 
@@ -156,6 +157,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
+                        makeToastWithString(requireContext(), uiState.message)
                         binding.prCircularMember.setVisibleToGone()
                         binding.includeNoResultMember.setVisibleToVisible()
                         binding.rvMember.setVisibleToInvisible()
@@ -171,7 +173,6 @@ class MyGroupFragment : Fragment() {
             viewModel.userAppliedGroupList.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 오류 메시지 표시
 
                     }
 
@@ -208,7 +209,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
             }
@@ -243,11 +244,20 @@ class MyGroupFragment : Fragment() {
                         binding.rvLeaderSub.layoutManager = LinearLayoutManager(requireContext())
 
                         leaderSubAdapter.confirm = object : LeaderSubAdapter.Confirm {
-                            override fun confirm(groupId: String, userId: String) {
+                            override fun confirm(
+                                groupId: String,
+                                userId: String,
+                                limitPerson: Int,
+                                userListSize: Int
+                            ) {
                                 lifecycleScope.launch {
                                     try {
-                                        viewModel.addUser(userId, groupId)
-                                        currentUser?.let { initGroupList(it, userGroup) }
+                                        if (userListSize < limitPerson) {
+                                            viewModel.addUser(userId, groupId)
+                                            currentUser?.let { initGroupList(it, userGroup) }
+                                        } else {
+                                            makeToastWithStringRes(requireContext(), R.string.exceeded_Number)
+                                        }
                                     } catch (e : Exception) {
                                         makeToastWithStringRes(requireContext(), R.string.error)
                                     }
@@ -307,6 +317,7 @@ class MyGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         // 오류 메시지 표시
+                        makeToastWithString(requireContext(), uiState.message)
                         Log.d("error", uiState.message)
                     }
                 }
