@@ -59,7 +59,14 @@ class GroupRepositoryImpl @Inject constructor(
             ref.get().addOnSuccessListener {
                 val response = value?.toObject<GroupResponse>()
                 if (response != null) {
-                    trySend(response.toEntity())
+                    if (response.groupThumbnail != null) {
+                        storage.reference.child("groupImage").child(response.groupId.plus(".jpeg")).downloadUrl.addOnSuccessListener {
+                            trySend(response.toEntity())
+                        }
+                    } else {
+                        trySend(response.toEntity())
+                    }
+
                 } else {
                     trySend(GroupEntity(groupId = "error"))
                 }
