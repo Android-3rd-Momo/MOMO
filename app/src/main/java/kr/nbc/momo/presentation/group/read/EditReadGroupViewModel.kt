@@ -37,7 +37,7 @@ class EditReadGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _groupState.value = UiState.Loading
 
-            readGroupUseCase.invoke(groupId)
+            readGroupUseCase(groupId)
                 .catch { e ->
                     _groupState.value = UiState.Error(e.toString())
                 }
@@ -55,20 +55,20 @@ class EditReadGroupViewModel @Inject constructor(
 
     fun updateGroup(groupModel: GroupModel, imageUri: Uri?) {
         viewModelScope.launch {
-            updateGroupUseCase.invoke(groupModel.asGroupEntity(), imageUri)
+            updateGroupUseCase(groupModel.asGroupEntity(), imageUri)
         }
     }
 
     fun deleteGroup(groupId: String, userList: List<String>) {
         viewModelScope.launch {
-            deleteGroupUseCase.invoke(groupId, userList)
+            deleteGroupUseCase(groupId, userList)
         }
     }
 
 
     fun leaderChange(groupId: String, leaderId: String) {
         viewModelScope.launch {
-            changeLeaderUseCase.invoke(groupId, leaderId)
+            changeLeaderUseCase(groupId, leaderId)
         }
     }
 
@@ -76,7 +76,7 @@ class EditReadGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _userDeleteState.value = UiState.Loading
 
-            deleteUserUseCase.invoke(userId, groupId)
+            deleteUserUseCase(userId, groupId)
                 .catch { e ->
                     _userDeleteState.value = UiState.Error(e.toString())
                 }

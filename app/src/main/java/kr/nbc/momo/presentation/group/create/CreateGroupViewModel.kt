@@ -26,6 +26,7 @@ class CreateGroupViewModel  @Inject constructor(
 
     fun createGroup(groupModel: GroupModel) {
         viewModelScope.launch {
+
             _createState.value = UiState.Loading
 
             createGroupUseCase.invoke(groupModel.asGroupEntity())
@@ -36,12 +37,13 @@ class CreateGroupViewModel  @Inject constructor(
                     _createState.value = UiState.Success(data)
                 }
 
+
         }
     }
 
     fun joinGroup(groupId: String) {
         viewModelScope.launch {
-            joinGroupUseCase.invoke(groupId)
+            joinGroupUseCase(groupId)
         }
     }
 }

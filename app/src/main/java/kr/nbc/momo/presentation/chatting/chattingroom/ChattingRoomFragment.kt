@@ -187,8 +187,8 @@ class ChattingRoomFragment : Fragment() {
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
                     is UiState.Success -> {
-                        if (it.data != null) {
-                            if (it.data.userId != "") {
+                        it.data?.let { data ->
+                            if(data.userId.isNotEmpty()){
                                 currentUserId = it.data.userId
                                 currentUsername = it.data.userName
                                 currentUrl = it.data.userProfileThumbnailUrl
@@ -200,6 +200,19 @@ class ChattingRoomFragment : Fragment() {
                             }
                             rvAdapter.notifyDataSetChanged()
                         }
+/*                        if (it.data != null) {
+                            if (it.data.userId != "") {
+                                currentUserId = it.data.userId
+                                currentUsername = it.data.userName
+                                currentUrl = it.data.userProfileThumbnailUrl
+                                with(rvAdapter) {
+                                    currentUserId = it.data.userId
+                                    currentUrl = it.data.userProfileThumbnailUrl
+                                    currentUserName = it.data.userName
+                                }
+                            }
+                            rvAdapter.notifyDataSetChanged()
+                        }*/
                     }
 
                     is UiState.Loading -> {

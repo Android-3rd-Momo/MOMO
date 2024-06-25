@@ -100,13 +100,18 @@ class EditReadGroupFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+                            /*
                             if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
                                 initGroup()
                             }else{
                                 initGroup()
-                            }
+                            }*/
+                            initGroup()
                         }
 
                         is UiState.Error -> {
@@ -174,9 +179,12 @@ class EditReadGroupFragment : Fragment() {
     private fun initGroup() {
         lifecycleScope.launch {
             sharedViewModel.groupId.collectLatest { groupId ->
-                if (groupId != null) {
-                    viewModel.readGroup(groupId)
+                groupId?.let {
+                    viewModel.readGroup(it)
                 }
+/*                if (groupId != null) {
+                    viewModel.readGroup(groupId)
+                }*/
             }
         }
     }
@@ -340,9 +348,12 @@ class EditReadGroupFragment : Fragment() {
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p0 != null) {
-                        categoryText = p0.getItemAtPosition(p2).toString()
+                    p0?.let{
+                        categoryText = it.getItemAtPosition(p2).toString()
                     }
+/*                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }*/
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {

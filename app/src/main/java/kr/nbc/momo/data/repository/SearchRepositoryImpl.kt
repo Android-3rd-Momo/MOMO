@@ -14,39 +14,39 @@ class SearchRepositoryImpl @Inject constructor(
     private val fireStore: FirebaseFirestore
 ) : SearchRepository {
     override suspend fun getSearchResult(
-        query1: String,
-        query2: String,
-        query3: String
+        classificationQuery: String,
+        occupationQuery: String,
+        stringQuery: String
     ): List<GroupEntity> {
-        val query3List = query3.replace(" ", ",").split(",")
+        val stringQueryList = stringQuery.replace(" ", ",").split(",")
 
         var query: Query = fireStore.collection("groups")
 
-        if (query1.isNotEmpty()) {
-            query = query.whereEqualTo("category.classification", query1)
+        if (classificationQuery.isNotEmpty()) {
+            query = query.whereEqualTo("category.classification", classificationQuery)
         }
 
-        if (query2.isNotEmpty()) {
-            query = query.whereArrayContains("category.developmentOccupations", query2)
+        if (occupationQuery.isNotEmpty()) {
+            query = query.whereArrayContains("category.developmentOccupations", occupationQuery)
         }
         val storeSnapshot = query.get().await()
 
         var response = storeSnapshot.documents.map {
             it.toObject(GroupResponse::class.java) ?: GroupResponse()
         }
-        Log.d("test", "$response + $query1 + $query2 + $query3")
+        Log.d("test", "$response + $classificationQuery + $occupationQuery + $stringQuery")
 
 
-        if (query3.isNotBlank()) response =
+        if (stringQuery.isNotBlank()) response =
             response.filter { groupResponse ->
                 groupResponse.category.programingLanguage.any {
-                    it in query3List
-                } || query3List.any {
+                    it in stringQueryList
+                } || stringQueryList.any {
                     groupResponse.groupDescription.contains(it)
                             || groupResponse.groupName.contains(it)
                 }
             }
-        Log.d("test", "$response + $query1 + $query2")
+        Log.d("test", "$response + $classificationQuery + $occupationQuery")
 
         return response.map { it.toEntity() }
     }

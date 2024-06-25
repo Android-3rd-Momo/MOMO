@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UserInfoUseCase@Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend fun invoke(userId: String): Flow<UserEntity> {
+    suspend operator fun invoke(userId: String): Flow<UserEntity> {
         return userRepository.userInfo(userId)
     }
 }
