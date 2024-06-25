@@ -179,3 +179,11 @@ fun Fragment.hideNav() {
     val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
     nav.setVisibleToGone()
 }
+
+fun getCurrentTimeMillis(): Long {
+    return System.currentTimeMillis() + NUM_ONE
+}
+
+fun getAfterOneMonthTimeMillis(): Long {
+    return System.currentTimeMillis() + ONE_MONTH_MILLIS
+}
