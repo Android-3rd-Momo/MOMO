@@ -19,6 +19,7 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -99,6 +100,7 @@ class ChattingListFragment : Fragment() {
                         binding.includeNoResult.setVisibleToVisible()
                         binding.prCircular.setVisibleToGone()
                         Log.d("error", it.message)
+                        makeToastWithString(requireContext(), it.message)
                     }
                 }
             }
@@ -130,6 +132,7 @@ class ChattingListFragment : Fragment() {
                         binding.rvChattingList.setVisibleToGone()
                         binding.includeNoResult.setVisibleToGone()
                         Log.d("error", chattingList.message)
+                        makeToastWithString(requireContext(), chattingList.message)
                     }
                 }
             }

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -23,6 +22,7 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleState
@@ -74,6 +74,7 @@ class MyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }

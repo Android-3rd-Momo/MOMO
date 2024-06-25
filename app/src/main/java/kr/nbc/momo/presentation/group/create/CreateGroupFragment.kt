@@ -49,6 +49,7 @@ import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.getAfterOneMonthTimeMillis
 import kr.nbc.momo.util.getCurrentTimeMillis
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.randomStr
 import kr.nbc.momo.util.showNav
@@ -128,6 +129,7 @@ class CreateGroupFragment : Fragment() {
 
                         is UiState.Error -> {
                             Log.d("error", state.message)
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -155,6 +157,7 @@ class CreateGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 

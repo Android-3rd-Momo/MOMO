@@ -26,6 +26,7 @@ import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.notification.NotificationFragment
 import kr.nbc.momo.presentation.search.SearchFragment
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
@@ -152,6 +153,7 @@ class HomeFragment : Fragment() {
                         }
 
                         is UiState.Error -> {
+                            makeToastWithString(requireContext(), state.message)
                             Log.d("Error", state.message)
                             currentUser = ""
                             currentUserCategory = listOf()
@@ -185,7 +187,7 @@ class HomeFragment : Fragment() {
                         }
 
                         is UiState.Error -> {
-
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -200,6 +202,7 @@ class HomeFragment : Fragment() {
                 when (uiState) {
                     is UiState.Error -> {
                         Log.d("UiState", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
 
                     UiState.Loading -> {

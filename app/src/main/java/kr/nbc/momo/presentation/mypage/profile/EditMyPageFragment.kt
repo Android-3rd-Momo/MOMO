@@ -30,6 +30,7 @@ import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
@@ -126,6 +127,7 @@ class EditMyPageFragment : Fragment() {
                         }
 
                         is UiState.Error -> {
+                            makeToastWithString(requireContext(), state.message)
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                         }
@@ -153,6 +155,7 @@ class EditMyPageFragment : Fragment() {
                             binding.includeUiState.setVisibleToError()
                             binding.scrollView.setVisibleToGone()
                             Log.d("mypage error", state.message)
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
