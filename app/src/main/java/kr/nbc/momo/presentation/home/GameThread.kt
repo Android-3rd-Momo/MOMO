@@ -4,11 +4,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.SurfaceHolder
-import android.view.SurfaceView
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.model.GroupModel
 
 class GameThread(private val surfaceHolder: SurfaceHolder) : Thread() {
     var running = true
