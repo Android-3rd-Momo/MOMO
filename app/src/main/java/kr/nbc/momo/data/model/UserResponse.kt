@@ -5,7 +5,6 @@ data class UserResponse(
     val userId: String = "",
     val userName: String = "",
     val userNumber: String = "",
-    val userGithub: String = "",
     val userProfileThumbnailUrl: String = "",
     val userBackgroundThumbnailUrl: String = "",
     val userPortfolioImageUrl: String = "",

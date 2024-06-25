@@ -27,9 +27,12 @@ import kr.nbc.momo.databinding.FragmentEditMyPageBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.util.MY_PAGE_TEXT_MAX_LENGTH
+import kr.nbc.momo.util.SELF_INTRODUCE_MAX_LENGTH
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.hideKeyboard
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.isValidName
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setUploadImageByUrlOrDefault
@@ -37,6 +40,7 @@ import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 import kr.nbc.momo.util.showNav
+
 
 @AndroidEntryPoint
 class EditMyPageFragment : Fragment() {
@@ -52,37 +56,30 @@ class EditMyPageFragment : Fragment() {
     private var isBackgroundImageChange = false
     private var isPortfolioImageChange = false
 
-    private enum class ImageType {
-        PROFILE, BACKGROUND, PORTFOLIO
-    }
+    private val pickProfileImage = setUpImagePicker(ImageType.PROFILE)
+    private val pickBackgroundImage = setUpImagePicker(ImageType.BACKGROUND)
+    private val pickPortfolioImage = setUpImagePicker(ImageType.PORTFOLIO)
 
-    private val pickProfileImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            profileImageUri = uri
-            isProfileImageChange = true
-            binding.ivUserProfileImage.load(uri)
-        } else {
-            Log.d("PhotoPicker", "No media selected")
-        }
-    }
 
-    private val pickBackgroundImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            backgroundImageUri = uri
-            isBackgroundImageChange = true
-            binding.ivBackProfileThumbnail.load(uri)
-        } else {
-            Log.d("PhotoPicker", "No media selected")
-        }
-    }
-
-    private val pickPortfolioImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            portfolioImageUri = uri
-            isPortfolioImageChange = true
-            binding.ivPortfolioImage.load(uri)
-        } else {
-            Log.d("PhotoPicker", "No media selected")
+    private fun setUpImagePicker(imageType: ImageType) = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if(uri != null){
+            when (imageType){
+                ImageType.PROFILE -> {
+                    profileImageUri = uri
+                    isProfileImageChange = true
+                    binding.ivUserProfileImage.load(uri)
+                }
+                ImageType.BACKGROUND -> {
+                    backgroundImageUri = uri
+                    isBackgroundImageChange = true
+                    binding.ivBackProfileThumbnail.load(uri)
+                }
+                ImageType.PORTFOLIO -> {
+                    portfolioImageUri = uri
+                    isPortfolioImageChange = true
+                    binding.ivPortfolioImage.load(uri)
+                }
+            }
         }
     }
 
@@ -177,9 +174,9 @@ class EditMyPageFragment : Fragment() {
             setChipGroup(resources.getStringArray(R.array.chipProgramingLanguage), cgProgramTag, user.programOfDevelopment)
         }
 
-        binding.etStackOfDevelopment.addTextWatcherWithError(500, "기술스택", binding.btnCompleteEdit, binding.tvCountStackEditText)
-        binding.etPortfolio.addTextWatcherWithError(500, "포트폴리오", binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
-        binding.etUserSelfIntroduction.addTextWatcherWithError(60, "자기소개", binding.btnCompleteEdit)
+        binding.etStackOfDevelopment.addTextWatcherWithError(MY_PAGE_TEXT_MAX_LENGTH, getString(R.string.stack), binding.btnCompleteEdit, binding.tvCountStackEditText)
+        binding.etPortfolio.addTextWatcherWithError(MY_PAGE_TEXT_MAX_LENGTH, getString(R.string.portfolio), binding.btnCompleteEdit, binding.tvCountPortfolioEditText)
+        binding.etUserSelfIntroduction.addTextWatcherWithError(SELF_INTRODUCE_MAX_LENGTH, getString(R.string.self_introduce), binding.btnCompleteEdit)
     }
 
     private fun initEventHandlers() {
@@ -202,12 +199,12 @@ class EditMyPageFragment : Fragment() {
     }
 
     private fun showImageOptionDialog(imageType: ImageType) {
-        val options = resources.getStringArray(R.array.image_edit)
+        val options = ImageOption.entries.map { it.getOptionText(requireContext()) }.toTypedArray()
         val builder = AlertDialog.Builder(requireContext())
         builder.setItems(options) { _, position ->
-            when (position) {
-                0 -> pickImage(imageType)
-                1 -> deleteImage(imageType)
+            when (ImageOption.entries[position]) {
+                ImageOption.PICK_IMAGE -> pickImage(imageType)
+                ImageOption.DELETE_IMAGE -> deleteImage(imageType)
             }
         }
         builder.show()
@@ -232,11 +229,13 @@ class EditMyPageFragment : Fragment() {
                 isProfileImageChange = true
                 binding.ivUserProfileImage.setThumbnailByUrlOrDefault(null)
             }
+
             ImageType.BACKGROUND -> {
                 backgroundImageUri = null
                 isBackgroundImageChange = true
                 binding.ivBackProfileThumbnail.setImageResource(R.color.blue)
             }
+
             ImageType.PORTFOLIO -> {
                 portfolioImageUri = null
                 isPortfolioImageChange = true
@@ -284,7 +283,7 @@ class EditMyPageFragment : Fragment() {
         if (name.isEmpty()) {
             binding.etUserName.error = getString(R.string.please_edit_name)
             isValid = false
-        } else if (!isValidName(name)) {
+        } else if (!name.isValidName()) {
             binding.etUserName.error = getString(R.string.edit_name_error)
             isValid = false
         } else {
@@ -292,11 +291,6 @@ class EditMyPageFragment : Fragment() {
         }
 
         return isValid
-    }
-
-    private fun isValidName(userName: String): Boolean {
-        val usernamePattern = "^[A-Za-z가-힣]{3,20}$"
-        return userName.matches(usernamePattern.toRegex())
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, selectedChips: List<String>) {
