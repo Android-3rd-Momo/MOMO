@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetNotificationCountUseCase@Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(userId: String): Flow<Int> {
+    suspend operator fun invoke(userId: String): Flow<Int> {
         return groupRepository.getNotificationCount(userId)
     }
 }

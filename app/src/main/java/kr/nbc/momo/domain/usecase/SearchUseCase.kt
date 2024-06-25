@@ -7,7 +7,11 @@ import javax.inject.Inject
 class SearchUseCase @Inject constructor(
     private val searchRepository: SearchRepository
 ) {
-    suspend operator fun invoke(query1: String, query2: String, query3: String): List<GroupEntity> {
-        return searchRepository.getSearchResult(query1, query2, query3)
+    suspend operator fun invoke(
+        classificationQuery: String,
+        occupationQuery: String,
+        stringQuery: String
+    ): List<GroupEntity> {
+        return searchRepository.getSearchResult(classificationQuery, occupationQuery, stringQuery)
     }
 }

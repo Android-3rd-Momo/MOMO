@@ -58,10 +58,13 @@ class RootFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            if (uiState.data != null) {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+/*                            if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
-                            }
+                            }*/
                             initView(currentUser)
                         }
 

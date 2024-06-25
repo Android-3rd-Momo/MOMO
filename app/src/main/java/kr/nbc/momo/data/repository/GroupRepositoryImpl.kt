@@ -52,8 +52,11 @@ class GroupRepositoryImpl @Inject constructor(
         val ref = groupRef.document(groupId)
 
         val registration = ref.addSnapshotListener { value, e ->
-            if (e != null) {
+/*            if (e != null) {
                 close(e)
+            }*/
+            e?.let {
+                close(it)
             }
 
             ref.get().addOnSuccessListener {
@@ -221,16 +224,24 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereEqualTo("leaderId", userId)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = emptyList<GroupResponse>().toMutableList()
-                if (value != null) {
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
 
                 trySend(list.map { it.toEntity() })
             }
@@ -241,16 +252,24 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereIn("groupId", groupList)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = listOf<GroupResponse>().toMutableList()
-                if (value != null) {
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
                 trySend(list.map { it.toEntity() })
             }
             awaitClose { registration.remove() }
@@ -260,16 +279,24 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereArrayContains("subscriptionList", userId)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = listOf<GroupResponse>().toMutableList()
-                if (value != null) {
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
                 trySend(list.map { it.toEntity() })
             }
 
@@ -280,16 +307,25 @@ class GroupRepositoryImpl @Inject constructor(
         callbackFlow {
             val query = groupRef.whereEqualTo("leaderId", userId)
             val registration = query.addSnapshotListener { value, e ->
-                if (e != null) {
-                    close(e)
+                e?.let {
+                    close(it)
                 }
+/*                if (e != null) {
+                    close(e)
+                }*/
 
                 val list = listOf<GroupResponse>().toMutableList()
-                if (value != null) {
+
+                value?.let {
                     for (i in value.documents) {
                         i.toObject<GroupResponse>()?.let { list.add(it) }
                     }
                 }
+/*                if (value != null) {
+                    for (i in value.documents) {
+                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                    }
+                }*/
 
                 var count: Int = 0
                 list.forEach { count += it.subscriptionList.size }

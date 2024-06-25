@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetSubscriptionListUseCase@Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(userId: String): Flow<List<GroupEntity>> {
+    suspend operator fun invoke(userId: String): Flow<List<GroupEntity>> {
         return groupRepository.getSubscriptionList(userId)
     }
 }

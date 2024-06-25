@@ -114,10 +114,14 @@ class EditMyPageFragment : Fragment() {
 
                         is UiState.Success -> {
                             binding.includeUiState.setVisibleToGone()
-                            if (state.data != null) {
+                            state.data?.let { data ->
+                                currentUser = data
+                                initView(data)
+                            }
+/*                            if (state.data != null) {
                                 currentUser = state.data
                                 initView(state.data)
-                            }
+                            }*/
                             binding.scrollView.setVisibleToVisible()
                         }
 

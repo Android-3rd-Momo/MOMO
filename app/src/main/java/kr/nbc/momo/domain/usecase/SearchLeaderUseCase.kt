@@ -6,7 +6,7 @@ import javax.inject.Inject
 class SearchLeaderUseCase @Inject constructor(
     private val groupRepository: GroupRepository
 ) {
-    suspend fun invoke(userId: String): Flow<List<String>> {
+    suspend operator fun invoke(userId: String): Flow<List<String>> {
         return groupRepository.searchLeader(userId)
     }
 }
