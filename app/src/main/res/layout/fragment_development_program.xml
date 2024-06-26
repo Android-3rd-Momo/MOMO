@@ -31,20 +31,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
+    
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="44dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        app:chipSpacingVertical="4dp"
-        app:chipSpacingHorizontal="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
-        app:singleSelection="false">
+        app:layout_constraintBottom_toBottomOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:chipSpacingVertical="4dp"
+                app:chipSpacingHorizontal="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
+                app:singleSelection="false"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

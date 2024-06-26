@@ -38,7 +38,6 @@
         android:fontFamily="@font/sfprodisplayregular"
         android:textSize="12sp"
         android:textColor="@color/blue"
-        android:layout_marginTop="10dp"
         android:maxLines="1"
         android:maxWidth="150dp"
         android:layout_marginStart="10dp"

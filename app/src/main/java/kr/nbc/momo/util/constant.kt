@@ -7,4 +7,4 @@ const val NUM_TEN = 10
 const val NUM_ONE_HUNDRED = 100
 
 const val MY_PAGE_TEXT_MAX_LENGTH = 500
-const val SELF_INTRODUCE_MAX_LENGTH = 60
+const val SELF_INTRODUCE_MAX_LENGTH = 30
