@@ -35,6 +35,9 @@ fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Butt
             if (textLength > maxLength) {
                 this@addTextWatcherWithError.error = errorText
                 btn.isEnabled = false
+            } else if (s?.contains("\n\n\n") == true) {
+                this@addTextWatcherWithError.error = context.getString(R.string.line_change_error)
+                btn.isEnabled = false
             } else {
                 this@addTextWatcherWithError.error = null
                 btn.isEnabled = true
@@ -48,7 +51,12 @@ fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Butt
     })
 }
 
-fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Button, textNumberTextView: TextView) {
+fun TextView.addTextWatcherWithError(
+    maxLength: Int,
+    editType: String,
+    btn: Button,
+    textNumberTextView: TextView
+) {
     addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(
             s: CharSequence?,
@@ -72,10 +80,15 @@ fun TextView.addTextWatcherWithError(maxLength: Int, editType: String, btn: Butt
             if (textLength > maxLength) {
                 this@addTextWatcherWithError.error = errorText
                 btn.isEnabled = false
-            } else {
+            } else if (s?.contains("\n\n\n") == true) {
+                this@addTextWatcherWithError.error = context.getString(R.string.line_change_error)
+                btn.isEnabled = false
+            }
+            else {
                 this@addTextWatcherWithError.error = null
                 btn.isEnabled = true
             }
+
         }
 
         override fun afterTextChanged(s: Editable?) {

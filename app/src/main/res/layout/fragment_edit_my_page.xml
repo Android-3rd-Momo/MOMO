@@ -115,6 +115,7 @@
                     android:textColorHint="@color/hint_grey"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:singleLine="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/llProfileImage"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -129,6 +130,7 @@
                     android:hint="@string/please_edit_introduce"
                     android:textColorHint="@color/hint_grey"
                     android:textSize="12sp"
+                    android:singleLine="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/etUserName"
                     app:layout_constraintTop_toBottomOf="@id/etUserName" />
