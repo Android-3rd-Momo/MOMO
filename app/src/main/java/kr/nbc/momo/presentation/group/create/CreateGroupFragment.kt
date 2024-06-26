@@ -36,6 +36,7 @@ import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
+import kr.nbc.momo.presentation.group.CustomDatePickerDialog
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.group.read.ReadGroupFragment
@@ -313,7 +314,7 @@ class CreateGroupFragment : Fragment() {
             }
         }
         //val picker = DatePickerDialog(requireContext(), R.style.CustomDatePicker, listener, year, month, day)
-        val picker = DatePickerDialog(requireContext(), listener, year, month, day)
+        val picker = CustomDatePickerDialog(requireContext(), R.style.CustomDatePicker, listener, year, month, day)
 
         // 선택 전
         if (value == Value.First) {
