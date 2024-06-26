@@ -23,7 +23,6 @@ import kr.nbc.momo.presentation.mypage.group.adapter.LeaderGroupAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.LeaderSubAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.MemberGroupAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.MemberSubAdapter
-import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
@@ -100,8 +99,6 @@ class MyGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         Log.d("UserGroups", "error")
-                        makeToastWithString(requireContext(), uiState.message)
-
                     }
                 }
 
@@ -157,7 +154,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        makeToastWithString(requireContext(), uiState.message)
+                        Log.d("userGroupList",uiState.message)
                         binding.prCircularMember.setVisibleToGone()
                         binding.includeNoResultMember.setVisibleToVisible()
                         binding.rvMember.setVisibleToInvisible()
@@ -209,7 +206,7 @@ class MyGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        makeToastWithString(requireContext(), uiState.message)
+                        Log.d("userAppliedGroupList",uiState.message)
                     }
                 }
             }
@@ -317,7 +314,6 @@ class MyGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         // 오류 메시지 표시
-                        makeToastWithString(requireContext(), uiState.message)
                         Log.d("error", uiState.message)
                     }
                 }
