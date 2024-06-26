@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:textSize="12sp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvChat"
         tool:text="22:22" />

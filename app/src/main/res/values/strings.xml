@@ -25,6 +25,7 @@
     <string name="term_complete">동의 완료</string>
 
     //MyGroupFragment
+    <string name="jump_game">점프 게임</string>
     <string name="myGroupList">모임 내역</string>
     <string name="leaderGroup">진행 모임</string>
     <string name="memberGroup">참여 모임</string>
