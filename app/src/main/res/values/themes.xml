@@ -3,6 +3,12 @@
     <style name="Base.Theme.MOMO" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">#FFFFFF</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="itemBackground">@color/white</item>
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorOnPrimary">@color/blue</item>
+        <item name="colorPrimaryContainer">@color/blue</item>
+        <item name="colorOnPrimaryContainer">@color/blue</item>
     </style>
 
     <style name="Theme.MOMO" parent="Base.Theme.MOMO" />
@@ -35,7 +41,7 @@
 
     <!--데이트 피커 스타일 -->
     <style name="CustomDatePicker" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="colorAccent">@color/blue </item>
+        <item name="colorAccent">@color/blue</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="android:textColorPrimary">@color/blue</item>
         <item name="android:textColorSecondary">@color/black</item>
