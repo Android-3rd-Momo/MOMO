@@ -127,11 +127,6 @@ class HomeFragment : Fragment() {
 
     }
 
-
-    private fun setGameViewBackground() {
-         binding.gameView.background = null
-     }
-
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
