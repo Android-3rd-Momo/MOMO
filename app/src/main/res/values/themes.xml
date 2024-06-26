@@ -6,7 +6,7 @@
         <item name="android:colorBackground">@color/white</item>
         <item name="itemBackground">@color/white</item>
         <item name="colorPrimary">@color/blue</item>
-        <item name="colorOnPrimary">@color/blue</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/blue</item>
         <item name="colorOnPrimaryContainer">@color/blue</item>
     </style>
