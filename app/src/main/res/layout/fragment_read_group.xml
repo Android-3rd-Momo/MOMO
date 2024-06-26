@@ -203,7 +203,6 @@
                     android:layout_marginEnd="20dp"
                     android:text="@string/group_desc"
                     android:textSize="14sp"
-                    android:background="@drawable/bg_layout_corner_stroke"
                     android:padding="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
