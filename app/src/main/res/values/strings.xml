@@ -265,7 +265,7 @@
     <string name="use_app_without_login">로그인 없이 앱 이용하기</string>
     <string name="check">확인</string>
     <!--리드그룹 문자모음-->
-    <string name="group_information">그룹 정보</string>
+    <string name="group_information">모임 정보</string>
     <string name="category">카테고리</string>
     <string name="leader_id">리더 ID</string>
     <string name="hyphen">-</string>
@@ -327,9 +327,9 @@
     <string name="ban_user">%1$s 님을 모임에서 추방합니다.</string>
     <string name="ask_join_group">모임에 참여하시겠습니까?</string>
     <string name="go_to_login">로그인 페이지로 이동합니다.</string>
-    <string name="exit_group">그룹을 탈퇴합니다.</string>
-    <string name="no_recommend">추천 그룹이 없습니다.\n정보를 수정해주세요</string>
-    <string name="no_joined">가입한 그룹이 없습니다.</string>
+    <string name="exit_group">모임을 탈퇴합니다.</string>
+    <string name="no_recommend">추천 모임이 없습니다.\n정보를 수정해주세요</string>
+    <string name="no_joined">가입한 모임이 없습니다.</string>
     <string name="introduce_yourself">자신을 소개해보세요!</string>
     <string name="introduce_stack">사용하신 기술이 있다면 작성해보세요!</string>
     <string name="introduce_portfolio">간단한 포트폴리오를 작성해보세요!</string>
@@ -378,10 +378,10 @@
     <string name="content_desc_on_boarding">모이개에 오신것을 환영합니다!</string>
     <string name="content_desc_search_return">홈 화면으로 돌아갑니다</string>
     <string name="content_desc_go_search">검색 화면으로 이동합니다</string>
-    <string name="content_desc_no_latest">최신 그룹이 없습니다.</string>
-    <string name="content_desc_no_joined">가입 그룹이 없습니다.</string>
-    <string name="content_desc_no_recommend">추천 그룹이 없습니다.</string>
-    <string name="content_desc_no_chat_list">가입 그룹이 없습니다.</string>
+    <string name="content_desc_no_latest">최신 모임이 없습니다.</string>
+    <string name="content_desc_no_joined">가입 모임이 없습니다.</string>
+    <string name="content_desc_no_recommend">추천 모임이 없습니다.</string>
+    <string name="content_desc_no_chat_list">가입 모임이 없습니다.</string>
     <string name="content_desc_leading_group">진행 모임</string>
     <string name="content_desc_joined_group">참여 모임</string>
     <string name="content_desc_apply_group">가입 신청 목록</string>

@@ -178,7 +178,7 @@ class MyGroupFragment : Fragment() {
                         binding.rvMemberSub.adapter = memberSubAdapter
                         binding.rvMemberSub.layoutManager = LinearLayoutManager(
                             requireContext(),
-                            LinearLayoutManager.HORIZONTAL,
+                            LinearLayoutManager.VERTICAL,
                             false
                         )
 
