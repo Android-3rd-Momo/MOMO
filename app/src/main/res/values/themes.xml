@@ -9,6 +9,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/blue</item>
         <item name="colorOnPrimaryContainer">@color/blue</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
     </style>
 
     <style name="Theme.MOMO" parent="Base.Theme.MOMO" />
@@ -40,14 +41,15 @@
     </style>
 
     <!--데이트 피커 스타일 -->
-    <style name="CustomDatePicker" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+    <style name="CustomDatePicker" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorAccent">@color/blue</item>
         <item name="colorPrimary">@color/blue</item>
-        <item name="android:textColorPrimary">@color/blue</item>
-        //
-
-        <item name="colorButtonNormal">@color/blue</item>
-        <item name="android:buttonTint">@color/blue</item>
+        <item name="colorSecondary">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <!--바텀 네비게이션 스타일 -->
