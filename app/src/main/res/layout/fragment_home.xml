@@ -17,29 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <SurfaceView
-            android:id="@+id/gameView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_notification"
-            app:layout_constraintStart_toEndOf="@+id/tvCreateProject"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sfproiddisplaybold"
-            android:textColor="@color/blue"
-            android:textSize="12sp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/gameView"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tvCreateProject"
             android:layout_width="wrap_content"
@@ -264,7 +241,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvLatestGroupList" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

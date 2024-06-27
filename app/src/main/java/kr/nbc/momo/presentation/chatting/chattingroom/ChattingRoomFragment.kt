@@ -126,13 +126,13 @@ class ChattingRoomFragment : Fragment() {
                         rvAdapter.notifyDataSetChanged()
                         binding.rvChatMessage.setVisibleToVisible()
                         binding.prCircular.setVisibleToGone()
-                        binding.rvChatMessage.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                        binding.rvChatMessage.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
                             if (bottom < oldBottom) {
-                                binding.rvChatMessage.postDelayed({
+                                binding.rvChatMessage.post {
                                     if (chatMessages.data.chatList.isNotEmpty()) {
-                                        binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.size - 1)
+                                        binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
                                     }
-                                }, 100)
+                                }
                             }
                         }
 

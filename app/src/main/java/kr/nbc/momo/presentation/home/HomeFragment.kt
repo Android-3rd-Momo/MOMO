@@ -2,7 +2,9 @@ package kr.nbc.momo.presentation.home
 
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -45,7 +47,6 @@ class HomeFragment : Fragment() {
     private lateinit var latestGroupListAdapter: LatestGroupListAdapter
     private lateinit var myGroupListAdapter: MyGroupListAdapter
     private lateinit var recommendGroupListAdapter: RecommendGroupListAdapter
-    private lateinit var gameThread : GameThread
     private var currentUser: String = ""
     private var currentUserCategory: List<String> = listOf()
     private var blackList: List<String> = emptyList()
@@ -124,41 +125,7 @@ class HomeFragment : Fragment() {
                 .commit()
         }
 
-        binding.gameView.setOnClickListener {
-            createGame()
-        }
     }
-
-
-    private fun createGame() {
-        lifecycleScope.launch {
-            gameThread = GameThread(binding.gameView.holder)
-
-            binding.gameView.setOnClickListener {
-                if (gameThread.running) {
-                    gameThread.jump()
-                } else {
-                    createGame()
-                }
-            }
-
-            gameThread.start()
-            binding.tvScore.setVisibleToVisible()
-
-            delay(1000)
-            setGameViewBackground()
-        }
-
-        lifecycleScope.launch {
-            gameThread.score.collect { score ->
-                binding.tvScore.text = score.toString()
-            }
-        }
-    }
-
-     private fun setGameViewBackground() {
-         binding.gameView.background = null
-     }
 
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {

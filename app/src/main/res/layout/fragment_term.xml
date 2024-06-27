@@ -160,33 +160,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cb_term4" />
 
-    <CheckBox
-        android:id="@+id/cb_term5"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:button="@drawable/term_checkbox"
-        android:paddingStart="10dp"
-        android:text="@string/term5"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="20dp"
-        app:layout_constraintTop_toBottomOf="@id/cb_term4"
-        app:layout_constraintStart_toStartOf="parent"/>
+
 
     <Button
         android:id="@+id/btn_accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="@color/bg_btn_state_color"
         android:padding= "16dp"
+        android:enabled="false"
         android:text="@string/term_complete"
         android:textSize="16sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:cornerRadius="16dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/cb_term5" />
+        app:layout_constraintTop_toBottomOf="@id/cb_term4" />
 
     <FrameLayout
         android:layout_width="match_parent"

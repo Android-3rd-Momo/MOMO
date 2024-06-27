@@ -20,12 +20,10 @@
     <string name="term2">(필수) 서비스 이용약관 동의</string>
     <string name="term3">(필수) 개인정보 처리방침 동의</string>
     <string name="term4">(필수) 커뮤니티 이용약관 동의</string>
-    <string name="term5">(선택) 마케팅 수신 동의</string>
     <string name="see">보기</string>
     <string name="term_complete">동의 완료</string>
 
     //MyGroupFragment
-    <string name="jump_game">점프 게임</string>
     <string name="myGroupList">모임 내역</string>
     <string name="leaderGroup">진행 모임</string>
     <string name="memberGroup">참여 모임</string>
@@ -392,5 +390,5 @@
     <string name="group">모임</string>
     <string name="content_desc_rv_chat">채팅 리스트</string>
 
-
+    <string name="line_change_error">줄바꿈은 연속해서 3회 이상 입력할 수 없습니다.</string>
 </resources>
