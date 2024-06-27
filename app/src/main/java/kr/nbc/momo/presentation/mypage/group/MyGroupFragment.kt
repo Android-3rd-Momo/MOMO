@@ -18,7 +18,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.mypage.group.adapter.LeaderGroupAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.LeaderSubAdapter
@@ -148,7 +147,7 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = filterData[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 
@@ -187,7 +186,7 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 
@@ -280,7 +279,6 @@ class MyGroupFragment : Fragment() {
                             override fun userClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
                                 findNavController().navigate(R.id.action_rootFragment_to_userInfoFragment)
-                                //(activity as? MainActivity)?.beginTransactionUserInfo()
                             }
                         }
 
@@ -298,7 +296,6 @@ class MyGroupFragment : Fragment() {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
                                 findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
-                                //(activity as? MainActivity)?.beginTransactionRead()
                             }
                         }
 
