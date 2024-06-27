@@ -53,11 +53,11 @@ class MyGroupFragment : Fragment() {
         initView()
     }
 
-    private fun initGroupList(userId: String, groupList: List<String>) {
+    private fun initGroupList(userId: String) {
         lifecycleScope.launch {
             viewModel.getSubscriptionList(userId)
             viewModel.getAppliedGroupList(userId)
-            viewModel.getUserGroup(groupList, userId)
+            viewModel.getUserGroup(userId)
         }
     }
 
@@ -83,7 +83,7 @@ class MyGroupFragment : Fragment() {
                             Log.d("UserGroups", "success not null")
                             currentUser = uiState.data.userId
                             userGroup = uiState.data.userGroup
-                            initGroupList(uiState.data.userId, uiState.data.userGroup)
+                            initGroupList(uiState.data.userId)
                         } else {
                             with(binding) {
                                 Log.d("UserGroups", "success null")
@@ -195,7 +195,7 @@ class MyGroupFragment : Fragment() {
                                 lifecycleScope.launch {
                                     try {
                                         currentUser?.let { viewModel.rejectUser(it, groupId) }
-                                        currentUser?.let { initGroupList(it, userGroup) }
+                                        currentUser?.let { initGroupList(it) }
                                     } catch (e : Exception) {
                                         makeToastWithStringRes(requireContext(), R.string.error)
                                     }
@@ -251,7 +251,7 @@ class MyGroupFragment : Fragment() {
                                     try {
                                         if (userListSize < limitPerson) {
                                             viewModel.addUser(userId, groupId)
-                                            currentUser?.let { initGroupList(it, userGroup) }
+                                            currentUser?.let { initGroupList(it) }
                                         } else {
                                             makeToastWithStringRes(requireContext(), R.string.exceeded_Number)
                                         }
@@ -267,7 +267,7 @@ class MyGroupFragment : Fragment() {
                                 lifecycleScope.launch {
                                     try {
                                         viewModel.rejectUser(userId, groupId)
-                                        currentUser?.let { initGroupList(it, userGroup) }
+                                        currentUser?.let { initGroupList(it) }
                                     } catch (e : Exception) {
                                         makeToastWithStringRes(requireContext(), R.string.error)
                                     }

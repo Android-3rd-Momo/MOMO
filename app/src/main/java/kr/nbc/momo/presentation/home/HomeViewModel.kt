@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetGroupListUseCase
 import kr.nbc.momo.domain.usecase.GetNotificationCountUseCase
+import kr.nbc.momo.domain.usecase.GetUserGroupListUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.mapper.toGroupModel
 import kr.nbc.momo.presentation.group.model.GroupModel
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getGroupListUseCase: GetGroupListUseCase,
+    private val getUserGroupListUseCase: GetUserGroupListUseCase,
     private val getNotificationCountUseCase: GetNotificationCountUseCase
 ) : ViewModel() {
     private val _getGroupList = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
@@ -25,6 +27,9 @@ class HomeViewModel @Inject constructor(
 
     private val _getNotificationCount = MutableStateFlow<UiState<Int>>(UiState.Loading)
     val getNotificationCount: StateFlow<UiState<Int>> get() = _getNotificationCount
+
+    private val _userGroupList = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
+    val userGroupList: StateFlow<UiState<List<GroupModel>>> get() = _userGroupList
 
     init {
         getGroupList()
@@ -39,6 +44,21 @@ class HomeViewModel @Inject constructor(
                 .collect { data ->
                     _getGroupList.value = UiState.Success(data.map { it.toGroupModel() })
                 }
+        }
+    }
+
+    fun getUserGroup(userId: String) {
+        viewModelScope.launch {
+            _userGroupList.value = UiState.Loading
+
+            getUserGroupListUseCase(userId)
+                .catch { e ->
+                    _userGroupList.value = UiState.Error(e.toString())
+                }
+                .collect { data ->
+                    _userGroupList.value = UiState.Success(data.map { it.toGroupModel() })
+                }
+
         }
     }
 
