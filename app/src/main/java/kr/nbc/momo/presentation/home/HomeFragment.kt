@@ -53,11 +53,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeUserProfile()
-        observeNotificationCount()
-        observerUserGroup()
-        observeGroupList()
-        initView()
+        if (parentFragmentManager.backStackEntryCount == 0) {
+            observeUserProfile()
+            observeNotificationCount()
+            observerUserGroup()
+            observeGroupList()
+            initView()
+        }
     }
 
     override fun onStart() {
@@ -67,8 +69,7 @@ class HomeFragment : Fragment() {
             viewModel.getGroupList()
             viewModel.getUserGroup(currentUser)
         }
-        observeGroupList()
-        observerUserGroup()
+
     }
 
     private fun initView() {
