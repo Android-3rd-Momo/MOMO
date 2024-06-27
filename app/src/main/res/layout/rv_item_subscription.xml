@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_layout_corner_stroke"
     android:layout_width="match_parent"
+    android:layout_marginTop="8dp"
     android:layout_height="80dp">
 
     <TextView
