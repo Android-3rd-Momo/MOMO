@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.GroupResponse
+import kr.nbc.momo.data.model.UserResponse
 import kr.nbc.momo.data.model.toEntity
 import kr.nbc.momo.data.model.toGroupResponse
 import kr.nbc.momo.domain.model.GroupEntity
@@ -247,31 +248,35 @@ class GroupRepositoryImpl @Inject constructor(
             awaitClose { registration.remove() }
         }
 
-    override suspend fun getUserGroupList(groupList: List<String>, userId: String): Flow<List<GroupEntity>> =
+    override suspend fun getUserGroupList(userId: String): Flow<List<GroupEntity>> =
         callbackFlow {
-            val query = groupRef.whereIn("groupId", groupList)
-            val registration = query.addSnapshotListener { value, e ->
-                e?.let {
-                    close(it)
-                }
-/*                if (e != null) {
-                    close(e)
-                }*/
+            val userRef = userRef.whereEqualTo("userId", userId)
+            var groupList: List<String> = listOf()
+            userRef.get().addOnSuccessListener { snapshot ->
+                snapshot.documents.forEach { groupList = it.toObject<UserResponse>()?.userGroup ?: listOf() }
 
-                val list = listOf<GroupResponse>().toMutableList()
-                value?.let {
-                    for (i in value.documents) {
-                        i.toObject<GroupResponse>()?.let { list.add(it) }
+                if (groupList.isNotEmpty()) {
+                    val query = groupRef.whereIn("groupId", groupList)
+                    query.addSnapshotListener { value, e ->
+                        e?.let {
+                            close(it)
+                        }
+
+                        val list = listOf<GroupResponse>().toMutableList()
+                        value?.let {
+                            for (i in value.documents) {
+                                i.toObject<GroupResponse>()?.let { list.add(it) }
+                            }
+                        }
+
+                        trySend(list.map { it.toEntity() })
                     }
+                } else {
+                    trySend(listOf())
                 }
-/*                if (value != null) {
-                    for (i in value.documents) {
-                        i.toObject<GroupResponse>()?.let { list.add(it) }
-                    }
-                }*/
-                trySend(list.map { it.toEntity() })
             }
-            awaitClose { registration.remove() }
+
+            awaitClose()
         }
 
     override suspend fun getAppliedGroup(userId: String): Flow<List<GroupEntity>> =

@@ -66,11 +66,11 @@ class MyGroupViewModel @Inject constructor(
     }
 
 
-    fun getUserGroup(groupList: List<String>, userId: String) {
+    fun getUserGroup(userId: String) {
         viewModelScope.launch {
             _userGroupList.value = UiState.Loading
 
-            getUserGroupListUseCase(groupList, userId)
+            getUserGroupListUseCase(userId)
                 .catch { e ->
                     _userGroupList.value = UiState.Error(e.toString())
                 }

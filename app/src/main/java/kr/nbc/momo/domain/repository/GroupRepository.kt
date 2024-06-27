@@ -17,7 +17,7 @@ interface GroupRepository {
     suspend fun searchLeader(userId: String): Flow<List<String>>
     suspend fun deleteUser(userId: String, groupId: String): Flow<List<String>>
     suspend fun getSubscriptionList(userId: String): Flow<List<GroupEntity>>
-    suspend fun getUserGroupList(groupList: List<String>, userId: String): Flow<List<GroupEntity>>
+    suspend fun getUserGroupList(userId: String): Flow<List<GroupEntity>>
     suspend fun getAppliedGroup(userId: String): Flow<List<GroupEntity>>
     suspend fun getNotificationCount(userId: String): Flow<Int>
 }
