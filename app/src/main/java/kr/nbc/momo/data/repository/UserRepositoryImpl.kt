@@ -141,6 +141,7 @@ class UserRepositoryImpl @Inject constructor(
         val userSnapshot =
             fireStore.collection("userInfo").document(currentUserUid).get().await()
         val userGroupIdList = userSnapshot.get("userGroup") as? List<String> ?: emptyList()
+        val subscriptionList = userSnapshot.get("subscriptionList") as? List<String> ?: emptyList()
 
         //groups에서 userId 삭제
         for (groupId in userGroupIdList) {
@@ -154,6 +155,20 @@ class UserRepositoryImpl @Inject constructor(
                 if (userList.contains(userId)) {
                     userList.remove(userId)
                     transaction.update(groupRef, "userList", userList)
+                }
+            }.await()
+        }
+
+        for (subscriptionId in subscriptionList) {
+            val subscriptionRef = fireStore.collection("groups").document(subscriptionId)
+            fireStore.runTransaction { transaction ->
+                val subscriptionSnapshot = transaction.get(subscriptionRef)
+                val subscriptionUserList = subscriptionSnapshot.get("subscriptionList") as? MutableList<String> ?: mutableListOf()
+                val userId = userSnapshot.getString("userId") ?: ""
+
+                if (subscriptionUserList.contains(userId)) {
+                    subscriptionUserList.remove(userId)
+                    transaction.update(subscriptionRef, "subscriptionList", subscriptionUserList)
                 }
             }.await()
         }

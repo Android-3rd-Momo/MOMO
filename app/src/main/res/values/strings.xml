@@ -272,6 +272,7 @@
     <string name="group_user">참가자</string>
     <string name="default_max_user">1/15</string>
     <string name="join_group">모임 참여하기</string>
+    <string name="group_withdrawal">모임 탈퇴</string>
     <string name="zero">zero</string>
     <!--설정 문자모음-->
     <string name="option">설정</string>
