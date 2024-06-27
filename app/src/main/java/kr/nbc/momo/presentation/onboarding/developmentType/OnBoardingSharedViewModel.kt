@@ -75,7 +75,6 @@ class OnBoardingSharedViewModel @Inject constructor(
     fun saveUserProfile() {
         viewModelScope.launch {
             _saveProfileState.value = UiState.Loading
-
             try {
                 val currentUser = (_currentUser.value as? UiState.Success)?.data
                 if (currentUser != null) {
@@ -87,8 +86,6 @@ class OnBoardingSharedViewModel @Inject constructor(
                     saveUserProfileUseCase(updatedUser.toEntity())
                     _saveProfileState.value = UiState.Success(Unit)
                     updateUser(updatedUser)
-                } else {
-                    _saveProfileState.value = UiState.Error("User not found")
                 }
             } catch (e: Exception) {
                 _saveProfileState.value = UiState.Error("Failed to save user profile: ${e.message}")

@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
@@ -20,7 +21,9 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.isNetworkConnected
 import kr.nbc.momo.util.makeToastWithString
+import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
@@ -81,11 +84,9 @@ class SetUpFragment : Fragment() {
                                 }
                             } else {
                                 makeToastWithString(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)))
-                                //Toast.makeText(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)), Toast.LENGTH_SHORT).show()
                             }
                         }
                         is UiState.Error -> {
-                            // Handle error state
                             makeToastWithString(requireContext(), state.message)
                         }
                     }
@@ -97,7 +98,7 @@ class SetUpFragment : Fragment() {
     private fun eachEventHandler(userId: String) {
         with(binding){
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
             tvSignOut.setOnClickListener {
                 showConfirmationDialog(getString(R.string.check_logout)) {
@@ -106,6 +107,10 @@ class SetUpFragment : Fragment() {
                 }
             }
             tvWithdrawal.setOnClickListener {
+                if (!requireContext().isNetworkConnected()) {
+                    makeToastWithStringRes(requireContext(), R.string.network_error)
+                    return@setOnClickListener
+                }
                 viewModel.searchLeader(userId)
             }
         }

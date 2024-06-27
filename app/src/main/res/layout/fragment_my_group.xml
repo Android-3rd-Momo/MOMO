@@ -1,179 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
+    android:fillViewport="true"
     tools:context=".presentation.mypage.group.MyGroupFragment">
 
-    <TextView
-        android:id="@+id/tvGroupLeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/leaderGroup"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvLeader"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:contentDescription="@string/content_desc_leading_group"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
-
-    <include
-        android:id="@+id/prCircularLeader"
-        layout="@layout/ui_state_loading"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
-
-    <include
-        android:id="@+id/includeNoResultLeader"
-        layout="@layout/ui_state_no_result"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
-
-    <TextView
-        android:id="@+id/tvGroupMember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/memberGroup"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvLeader" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMember"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:contentDescription="@string/content_desc_joined_group"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
-
-    <include
-        android:id="@+id/prCircularMember"
-        layout="@layout/ui_state_loading"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
-
-    <include
-        android:id="@+id/includeNoResultMember"
-        layout="@layout/ui_state_no_result"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
-
-
-    <TextView
-        android:id="@+id/tvLeaderSub"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:text="@string/Approve"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMemberSub"
-        app:layout_constraintStart_toEndOf="@+id/tvMemberSub"
-        app:layout_constraintTop_toTopOf="@+id/tvMemberSub"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/tvMemberSub"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/subscription"
-        android:textColor="@color/blue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvMember" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clSubscription"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMemberSub">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMemberSub"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/content_desc_apply_group"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvLeaderSub"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:contentDescription="@string/content_desc_apply_confirm"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <TextView
+            android:id="@+id/tvGroupLeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/leaderGroup"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLeader"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/grey"
+            android:contentDescription="@string/content_desc_leading_group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
+
+        <include
+            android:id="@+id/prCircularLeader"
+            layout="@layout/ui_state_loading"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
+
+        <include
+            android:id="@+id/includeNoResultLeader"
+            layout="@layout/ui_state_no_result"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupLeader" />
+
+        <TextView
+            android:id="@+id/tvGroupMember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/memberGroup"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvLeader" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMember"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/grey"
+            android:contentDescription="@string/content_desc_joined_group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
+
+        <include
+            android:id="@+id/prCircularMember"
+            layout="@layout/ui_state_loading"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
+
+        <include
+            android:id="@+id/includeNoResultMember"
+            layout="@layout/ui_state_no_result"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGroupMember" />
+
+
+        <TextView
+            android:id="@+id/tvLeaderSub"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="15dp"
+            android:gravity="center"
+            android:text="@string/Approve"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tvMemberSub"
+            app:layout_constraintStart_toEndOf="@+id/tvMemberSub"
+            app:layout_constraintTop_toTopOf="@+id/tvMemberSub"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvMemberSub"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/subscription"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvMember" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSubscription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMemberSub">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMemberSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/content_desc_apply_group"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvLeaderSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/content_desc_apply_confirm"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

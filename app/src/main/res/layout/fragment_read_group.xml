@@ -12,7 +12,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/white"
+        android:background="@drawable/bg_toolbar"
         android:padding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,18 +32,20 @@
             android:id="@+id/btnPopUp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="15dp"
+            android:padding="12dp"
+            android:visibility="gone"
             android:src="@drawable/ic_popup_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/btnExit"
-            android:layout_width="48dp"
+        <TextView
+            android:id="@+id/tvExit"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:padding="12dp"
-            android:src="@drawable/icon_delete"
+            android:text="모임 탈퇴"
+            android:textColor="@color/red_error"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
