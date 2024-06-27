@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage.adapter
+package kr.nbc.momo.presentation.mypage
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

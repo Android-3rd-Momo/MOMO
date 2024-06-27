@@ -1,15 +1,15 @@
 package kr.nbc.momo.presentation.mypage
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -17,8 +17,9 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentRootBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.mypage.adapter.ViewPagerAdapter
-import kr.nbc.momo.presentation.setup.SetUpFragment
+import kr.nbc.momo.presentation.mypage.group.MyGroupFragment
+import kr.nbc.momo.presentation.mypage.profile.MyPageContainerFragment
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 
 @AndroidEntryPoint
@@ -57,15 +58,19 @@ class RootFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            if (uiState.data != null) {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+/*                            if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
-                            }
+                            }*/
                             initView(currentUser)
                         }
 
                         is UiState.Error -> {
                             initView(currentUser)
+                            makeToastWithString(requireContext(), uiState.message)
                         }
                     }
                 }
@@ -78,17 +83,14 @@ class RootFragment : Fragment() {
             binding.ivSetUp.setVisibleToGone()
         }
         binding.ivSetUp.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SetUpFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_rootFragment_to_setUpFragment)
         }
 
 
     }
     private fun initViewPager() {
         val viewPager = ViewPagerAdapter(this)
-        viewPager.addFragment(MyPageFragment())
+        viewPager.addFragment(MyPageContainerFragment())
         viewPager.addFragment(MyGroupFragment())
         binding.vpRoot.adapter = viewPager
         binding.vpRoot.isUserInputEnabled = false

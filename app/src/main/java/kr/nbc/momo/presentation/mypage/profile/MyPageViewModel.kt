@@ -1,6 +1,5 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.profile
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel

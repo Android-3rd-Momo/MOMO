@@ -2,18 +2,14 @@ package kr.nbc.momo.presentation.onboarding.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.auth.User
+import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kr.nbc.momo.data.repository.UserRepositoryImpl
-import kr.nbc.momo.domain.model.UserEntity
-import kr.nbc.momo.domain.repository.UserRepository
 import kr.nbc.momo.domain.usecase.SignInUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
-import kr.nbc.momo.presentation.onboarding.signup.model.toEntity
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 

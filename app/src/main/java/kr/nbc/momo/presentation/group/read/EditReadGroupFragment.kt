@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +17,13 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -34,16 +34,16 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentEditReadGroupBinding
-import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.util.getAfterOneMonthTimeMillis
+import kr.nbc.momo.util.getCurrentTimeMillis
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
-import kr.nbc.momo.util.setVisibleToError
-import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
 import java.util.Calendar
 
@@ -59,10 +59,10 @@ class EditReadGroupFragment : Fragment() {
     private var imageUri: Uri? = null
     private var groupId: String = ""
     private var leaderId: String = ""
-    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
-    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
+    private var firstMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var firstMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
+    private var lastMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var lastMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
@@ -85,10 +85,7 @@ class EditReadGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeGroupState()
         observeUserProfile()
-        observeChangeLeader()
         observeDeleteUser()
-        observeDeleteGroup()
-        observeUpdateState()
         initTextWatcher()
     }
     private fun observeUserProfile() {
@@ -101,18 +98,24 @@ class EditReadGroupFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+                            /*
                             if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
                                 initGroup()
                             }else{
                                 initGroup()
-                            }
+                            }*/
+                            initGroup()
                         }
 
                         is UiState.Error -> {
                             Log.d("error", uiState.message)
                             initGroup()
+                            makeToastWithString(requireContext(), uiState.message)
                         }
                     }
                 }
@@ -137,7 +140,7 @@ class EditReadGroupFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 
@@ -145,70 +148,6 @@ class EditReadGroupFragment : Fragment() {
         }
     }
 
-
-    private fun observeChangeLeader() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.leaderChangeState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.change_leader_success)
-//                        Toast.makeText(requireContext(), getString(R.string.change_leader_success), Toast.LENGTH_SHORT).show()
-                        parentFragmentManager.popBackStack()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
-    private fun observeUpdateState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.updateState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                    }
-
-                    is UiState.Error -> {
-                        parentFragmentManager.popBackStack()
-                    }
-                }
-            }
-        }
-    }
-    private fun observeDeleteGroup() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.deleteGroupState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack("Read", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        makeToastWithStringRes(requireContext(), R.string.delete_group_success)
-//                        Toast.makeText(requireContext(), getString(R.string.delete_group_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-            }
-        }
-    }
 
 
     private fun observeDeleteUser() {
@@ -220,7 +159,7 @@ class EditReadGroupFragment : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
+                        makeToastWithStringRes(requireContext(), R.string.user_ban_success)
 //                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
                         initUserList(uiState.data)
 
@@ -228,6 +167,7 @@ class EditReadGroupFragment : Fragment() {
 
                     is UiState.Error -> {
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 
@@ -239,9 +179,12 @@ class EditReadGroupFragment : Fragment() {
     private fun initGroup() {
         lifecycleScope.launch {
             sharedViewModel.groupId.collectLatest { groupId ->
-                if (groupId != null) {
-                    viewModel.readGroup(groupId)
+                groupId?.let {
+                    viewModel.readGroup(it)
                 }
+/*                if (groupId != null) {
+                    viewModel.readGroup(groupId)
+                }*/
             }
         }
     }
@@ -304,10 +247,15 @@ class EditReadGroupFragment : Fragment() {
                 btnCompleteEditOnClickListener(data)
             }
             btnDelete.setOnClickListener {
-                viewModel.deleteGroup(data.groupId, data.userList)
+                try {
+                    viewModel.deleteGroup(data.groupId, data.userList)
+                    findNavController().popBackStack()
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
 
             etGroupNameEdit.setText(data.groupName)
@@ -331,18 +279,25 @@ class EditReadGroupFragment : Fragment() {
         )
         val updatedGroupThumbnail = if (isGroupImageChange && imageUri == null) "" else data.groupThumbnail
         val str = binding.tvLimitPeopleEdit.text.toString().split("/")
-        viewModel.updateGroup(
-            data.copy(
-                groupName = binding.etGroupNameEdit.text.toString(),
-                groupOneLineDescription = binding.etGroupOneLineDescriptionEdit.text.toString(),
-                groupDescription = binding.etGroupDescriptionEdit.text.toString(),
-                firstDate = binding.tvFirstDateEdit.text.toString(),
-                lastDate = binding.tvLastDateEdit.text.toString(),
-                category = categoryList,
-                limitPerson = str[1],
-                groupThumbnail = updatedGroupThumbnail,
-            ), imageUri
-        )
+
+        try {
+            viewModel.updateGroup(
+                data.copy(
+                    groupName = binding.etGroupNameEdit.text.toString(),
+                    groupOneLineDescription = binding.etGroupOneLineDescriptionEdit.text.toString(),
+                    groupDescription = binding.etGroupDescriptionEdit.text.toString(),
+                    firstDate = binding.tvFirstDateEdit.text.toString(),
+                    lastDate = binding.tvLastDateEdit.text.toString(),
+                    category = categoryList,
+                    limitPerson = str[1],
+                    groupThumbnail = updatedGroupThumbnail,
+                ), imageUri
+            )
+            findNavController().popBackStack()
+        } catch (e : Exception) {
+            makeToastWithStringRes(requireContext(), R.string.error)
+        }
+
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup, category: List<String>) {
@@ -393,9 +348,12 @@ class EditReadGroupFragment : Fragment() {
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p0 != null) {
-                        categoryText = p0.getItemAtPosition(p2).toString()
+                    p0?.let{
+                        categoryText = it.getItemAtPosition(p2).toString()
                     }
+/*                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }*/
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -423,16 +381,14 @@ class EditReadGroupFragment : Fragment() {
     }
 
     private fun showDialogNumberPicker(textView: TextView, size: Int) {
-        val arr =  Array(100) { (it + 5).toString() }
         val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .setCancelable(false)
             .create()
 
-        dialogBinding.numberPicker.minValue = 5
-        dialogBinding.numberPicker.maxValue = arr.size
-        dialogBinding.numberPicker.displayedValues = arr
+        dialogBinding.numberPicker.minValue = if (size < 5) 5 else size
+        dialogBinding.numberPicker.maxValue = 100
         dialogBuilder.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
@@ -455,8 +411,12 @@ class EditReadGroupFragment : Fragment() {
             dialogBinding.tvClose.text = getString(R.string.change_leader, userId)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
-                viewModel.leaderChange(groupId, userId)
-
+                try {
+                    viewModel.leaderChange(groupId, userId)
+                    findNavController().popBackStack()
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
 
@@ -464,8 +424,11 @@ class EditReadGroupFragment : Fragment() {
             dialogBinding.tvClose.text = getString(R.string.ban_user, userId)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialogBuilder.dismiss()
-                viewModel.deleteUser(userId, groupId)
-
+                try {
+                    viewModel.deleteUser(userId, groupId)
+                } catch (e : Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
         dialogBinding.btnCancel.setOnClickListener {
@@ -515,5 +478,4 @@ class EditReadGroupFragment : Fragment() {
         }
         picker.show()
     }
-
 }

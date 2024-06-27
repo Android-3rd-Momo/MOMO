@@ -4,5 +4,9 @@ import kr.nbc.momo.domain.model.GroupEntity
 
 
 interface SearchRepository {
-    suspend fun getSearchResult(query1: String, query2: String, query3: String): List<GroupEntity>
+    suspend fun getSearchResult(
+        classificationQuery: String,
+        occupationQuery: String,
+        stringQuery: String
+    ): List<GroupEntity>
 }

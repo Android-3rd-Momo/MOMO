@@ -23,7 +23,7 @@ class SearchViewModel @Inject constructor(
     fun getSearchResult(category: String, works: String, query: String) {
         viewModelScope.launch {
             try {
-                _searchResult.value = UiState.Success(searchUseCase.invoke(category, works, query).map { it.toGroupModel() })
+                _searchResult.value = UiState.Success(searchUseCase(category, works, query).map { it.toGroupModel() })
             } catch (e: Exception) {
                 _searchResult.value = UiState.Error(e.toString())
             }

@@ -3,26 +3,28 @@ package kr.nbc.momo.presentation.setup
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSetUpBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
+import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.isNetworkConnected
 import kr.nbc.momo.util.makeToastWithString
-import kr.nbc.momo.util.setVisibleToGone
-import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.makeToastWithStringRes
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class SetUpFragment : Fragment() {
@@ -58,6 +60,7 @@ class SetUpFragment : Fragment() {
                         }
                         is UiState.Error -> {
                             // Handle error state
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -81,11 +84,10 @@ class SetUpFragment : Fragment() {
                                 }
                             } else {
                                 makeToastWithString(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)))
-                                //Toast.makeText(requireContext(), state.data.joinToString().plus(getString(R.string.you_are_leader)), Toast.LENGTH_SHORT).show()
                             }
                         }
                         is UiState.Error -> {
-                            // Handle error state
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -93,10 +95,10 @@ class SetUpFragment : Fragment() {
         }
     }
 
-    private fun eachEventHandler(userId: String) { //todo 임시 dialog
+    private fun eachEventHandler(userId: String) {
         with(binding){
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
             tvSignOut.setOnClickListener {
                 showConfirmationDialog(getString(R.string.check_logout)) {
@@ -105,6 +107,10 @@ class SetUpFragment : Fragment() {
                 }
             }
             tvWithdrawal.setOnClickListener {
+                if (!requireContext().isNetworkConnected()) {
+                    makeToastWithStringRes(requireContext(), R.string.network_error)
+                    return@setOnClickListener
+                }
                 viewModel.searchLeader(userId)
             }
         }
@@ -125,7 +131,7 @@ class SetUpFragment : Fragment() {
     }
 
     private fun goOnboarding(){
-        val intent = Intent(activity, GetStartedActivity::class.java)
+        val intent = Intent(activity, OnBoardingActivity::class.java)
         startActivity(intent)
         activity?.finish()
     }
@@ -135,15 +141,5 @@ class SetUpFragment : Fragment() {
         super.onDestroyView()
         showNav()
         _binding = null
-    }
-
-    private fun showNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToVisible()
-    }
-
-    private fun hideNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToGone()
     }
 }

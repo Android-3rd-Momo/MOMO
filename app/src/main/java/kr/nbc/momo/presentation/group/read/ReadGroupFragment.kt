@@ -1,11 +1,9 @@
 
 package kr.nbc.momo.presentation.group.read
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,24 +11,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.PopupMenu
-import android.widget.TextView
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,22 +29,19 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
-import kr.nbc.momo.databinding.DialogSelectNumberBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
-import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.onboarding.GetStartedActivity
-import kr.nbc.momo.presentation.userinfo.UserInfoFragment
-import kr.nbc.momo.util.addTextWatcherWithError
+import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
+import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setThumbnailByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
-import java.util.Calendar
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
@@ -62,13 +50,10 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private val viewModel: ReadGroupViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: String? = null
-    private var categoryText: String = ""
     private var groupLimitPeople: String = ""
     private var groupId: String = ""
     private var leaderId: String = ""
     private var userList: List<String> = listOf()
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,10 +67,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         observeGroupState()
         observeUserProfile()
-        observeUserList()
-        observeDeleteGroup()
-        observeBlockUser()
-        observeReportUser()
+        observeDeleteUser()
+        btnSetOnclickListener()
     }
 
     override fun onStart() {
@@ -98,23 +81,13 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onResume() {
         super.onResume()
-        bottomNavHide()
+        hideNav()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bottomNavShow()
+        showNav()
         _binding = null
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToGone()
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.setVisibleToVisible()
     }
 
     private fun observeUserProfile() {
@@ -127,17 +100,22 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         }
 
                         is UiState.Success -> {
-                            if (uiState.data != null) {
+                            uiState.data?.let {
+                                currentUser = it.userId
+                            }
+                            initGroup()
+/*                            if (uiState.data != null) {
                                 Log.d("currentUser", uiState.data.userId)
                                 currentUser = uiState.data.userId
                                 initGroup()
                             }else{
                                 initGroup()
-                            }
+                            }*/
                         }
 
                         is UiState.Error -> {
                             Log.d("error", uiState.message)
+                            makeToastWithString(requireContext(), uiState.message)
                             initGroup()
                         }
                     }
@@ -171,6 +149,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     is UiState.Error -> {
                         // 오류 메시지 표시
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                         binding.prCircular.setVisibleToError()
                         binding.svRead.setVisibleToGone()
                     }
@@ -180,67 +159,22 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-
-    private fun observeUserList() {
+    private fun observeDeleteUser() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.subscriptionState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-
-                    }
-
-                    is UiState.Success -> {
-                        makeToastWithStringRes(requireContext(), R.string.apply_success)
-                        //Toast.makeText(requireContext(), "가입 신청 성공", Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
-    private fun observeDeleteGroup() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.deleteGroupState.collect { uiState ->
+            viewModel.userDeleteState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
                         // 로딩 처리 (필요한 경우)
                     }
 
                     is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                        makeToastWithStringRes(requireContext(), R.string.delete_group_success)
-//                        Toast.makeText(requireContext(), getString(R.string.delete_group_success), Toast.LENGTH_SHORT).show()
+                        makeToastWithStringRes(requireContext(), R.string.exit_group_success)
+                        initUserList(uiState.data)
+
                     }
 
                     is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeReportUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.reportUserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-//                        Toast.makeText(requireContext(), getString(R.string.user_report_success), Toast.LENGTH_SHORT).show()
-                        makeToastWithStringRes(requireContext(), R.string.user_report_success)
-                    }
-
-                    is UiState.Error -> {
+                        makeToastWithString(requireContext(), uiState.message)
                         Log.d("error", uiState.message)
                     }
                 }
@@ -248,37 +182,16 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         }
     }
-
-    private fun observeBlockUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.blockUserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 로딩 처리 (필요한 경우)
-                    }
-
-                    is UiState.Success -> {
-                        parentFragmentManager.popBackStack()
-                        makeToastWithStringRes(requireContext(), R.string.user_block_success)
-//                        Toast.makeText(requireContext(), getString(R.string.user_block_success), Toast.LENGTH_SHORT).show()
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
-
-            }
-        }
-    }
-
 
     private fun initGroup() {
         lifecycleScope.launch {
             sharedViewModel.groupId.collectLatest { groupId ->
-                if (groupId != null) {
-                    viewModel.readGroup(groupId)
+                groupId?.let {
+                    viewModel.readGroup(it)
                 }
+/*                if (groupId != null) {
+                    viewModel.readGroup(groupId)
+                }*/
             }
         }
     }
@@ -301,19 +214,34 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             initChip(chipProgramingLanguage, data.category.programingLanguage)
 
             if (data.userList.contains(currentUser)) btnJoinProject.setText(R.string.move_to_chatting)
-            if (data.leaderId == currentUser) {
-                btnEdit.setVisibleToVisible()
-                btnPopUp.setVisibleToGone()
-            }
 
-            ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+            if (userList.contains(currentUser)) {
+                if (data.leaderId == currentUser) {
+                    btnEdit.setVisibleToVisible()
+                    btnPopUp.setVisibleToGone()
+                    tvExit.setVisibleToGone()
+                } else {
+                    btnEdit.setVisibleToGone()
+                    btnPopUp.setVisibleToGone()
+                    tvExit.setVisibleToVisible()
+                }
+            } else {
+                btnEdit.setVisibleToGone()
+                btnPopUp.setVisibleToVisible()
+                tvExit.setVisibleToGone()
             }
 
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
+            tvExitClickListener()
+        }
+    }
+
+    private fun btnSetOnclickListener() {
+        binding.ivReturn.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -359,11 +287,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         adapter.itemClick = object : UserListAdapter.ItemClick {
             override fun itemClick(userId: String) {
                 sharedViewModel.getUserId(userId)
-                val userInfoFragment = UserInfoFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, userInfoFragment)
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.action_readGroupFragment_to_userInfoFragment)
             }
         }
     }
@@ -376,13 +300,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    //sharedViewModel.getChattingListById(sharedViewModel.groupId.value?:"")
-                    val chattingRoomFragment = ChattingRoomFragment()
-                    parentFragmentManager.popBackStack()
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, chattingRoomFragment)
-                        .addToBackStack(null)
-                        .commit()
+                    findNavController().navigate(R.id.action_readGroupFragment_to_chattingRoomFragment)
                 }
             } else {
                 binding.btnJoinProject.setOnClickListener {
@@ -390,7 +308,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         showDialog(true, data, currentUser)
                     } else {
                         makeToastWithStringRes(requireContext(), R.string.over_max_user)
-//                        Toast.makeText(requireContext(), getString(R.string.over_max_user), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -399,11 +316,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun btnEditClickListener() {
         binding.btnEdit.setOnClickListener {
-            val editReadGroupFragment = EditReadGroupFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, editReadGroupFragment)
-                .addToBackStack("Read")
-                .commit()
+            findNavController().navigate(R.id.action_readGroupFragment_to_editReadGroupFragment)
         }
 
         if (currentUser != null) {
@@ -413,8 +326,33 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         } else {
             binding.btnPopUp.setOnClickListener{
                 makeToastWithStringRes(requireContext(), R.string.need_login)
-//                Toast.makeText(requireContext(), getString(R.string.need_login), Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun tvExitClickListener() {
+        binding.tvExit.setOnClickListener {
+
+            val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogBinding.root)
+                .setCancelable(false)
+                .create()
+
+            dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialogBinding.tvClose.setText(R.string.exit_group)
+            dialogBinding.btnConfirm.setOnClickListener {
+                dialog.dismiss()
+
+                currentUser?.let { it1 -> viewModel.deleteUser(it1, groupId) }
+
+            }
+
+            dialogBinding.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
         }
     }
 
@@ -434,18 +372,21 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
                 lifecycleScope.launch {
-                    if (currentUser != null) {
-                        viewModel.subscription(currentUser, data.groupId)
+                    try {
+                        if (currentUser != null) {
+                            viewModel.subscription(currentUser, data.groupId)
+                            makeToastWithStringRes(requireContext(), R.string.subscription_group_success)
+                        }
+                    } catch (e : Exception) {
+                        makeToastWithStringRes(requireContext(), R.string.error)
                     }
-                    //viewModel.joinGroup(data.groupId)
-
                 }
             }
         } else {
             dialogBinding.tvClose.setText(R.string.go_to_login)
             dialogBinding.btnConfirm.setOnClickListener {
                 dialog.dismiss()
-                val intent = Intent(requireActivity(), GetStartedActivity::class.java)
+                val intent = Intent(requireActivity(), OnBoardingActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -458,7 +399,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
 
     private fun showPopup(v: View) {
-        val popup = PopupMenu(requireContext(), v)
+        val popup = PopupMenu(requireContext(), v, 0, 0, R.style.CustomPopupMenu)
         popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
         popup.setOnMenuItemClickListener(this)
         popup.show() // 팝업 보여주기
@@ -466,17 +407,33 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu1 -> {
-                viewModel.deleteGroup(groupId, userList)
+            R.id.report_group -> {
+                try {
+                    viewModel.deleteGroup(groupId, userList)
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
 
-            R.id.menu2 -> {
-                viewModel.reportUser(leaderId)
-                viewModel.blockUser(leaderId)
+            R.id.report_user -> {
+                try {
+                    viewModel.reportUser(leaderId)
+                    viewModel.blockUser(leaderId)
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
+
             }
 
-            R.id.menu3 -> {
-                viewModel.blockUser(leaderId)
+            R.id.block_user -> {
+                try {
+                    viewModel.blockUser(leaderId)
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    makeToastWithStringRes(requireContext(), R.string.error)
+                }
             }
         }
 

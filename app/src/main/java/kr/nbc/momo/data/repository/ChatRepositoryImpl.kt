@@ -10,7 +10,6 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
 import kr.nbc.momo.data.model.ChatResponse
 import kr.nbc.momo.data.model.GroupChatResponse
 import kr.nbc.momo.data.model.GroupUserResponse
@@ -173,7 +172,6 @@ class ChatRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("repository", "Failed to update last viewed chat", e)
-
         }
     }
 }

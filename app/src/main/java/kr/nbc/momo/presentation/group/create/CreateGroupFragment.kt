@@ -26,8 +26,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import coil.load
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,13 +39,25 @@ import kr.nbc.momo.databinding.FragmentCreateGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.NUM_FIVE
+import kr.nbc.momo.util.NUM_ONE
+import kr.nbc.momo.util.NUM_ONE_HUNDRED
+import kr.nbc.momo.util.NUM_TEN
 import kr.nbc.momo.util.addTextWatcherWithError
-import kr.nbc.momo.util.encryptECB
+import kr.nbc.momo.util.getAfterOneMonthTimeMillis
+import kr.nbc.momo.util.getCurrentTimeMillis
+import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
+import kr.nbc.momo.util.randomStr
+import kr.nbc.momo.util.showNav
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class CreateGroupFragment : Fragment() {
@@ -55,10 +67,10 @@ class CreateGroupFragment : Fragment() {
     private var imageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var categoryText: String = ""
-    private var firstMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var firstMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
-    private var lastMinTimeInMillis: Long = System.currentTimeMillis() + 1
-    private var lastMaxTimeInMillis: Long = System.currentTimeMillis() + 2592000000 // 현재 시간 + 한달뒤
+    private var firstMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var firstMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
+    private var lastMinTimeInMillis: Long = getCurrentTimeMillis()
+    private var lastMaxTimeInMillis: Long = getAfterOneMonthTimeMillis()
     private lateinit var currentUser: String
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -79,25 +91,15 @@ class CreateGroupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomNavHide()
+        hideNav()
         observeUserProfile()
-        observeCreateGroup()
+        observeCreate()
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-        bottomNavShow()
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.GONE
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.VISIBLE
+        showNav()
     }
 
     private fun observeUserProfile() {
@@ -116,7 +118,7 @@ class CreateGroupFragment : Fragment() {
                                 currentUser = state.data.userId
                                 initView()
                             } else {
-                                parentFragmentManager.popBackStack()
+                                findNavController().popBackStack()
                                 makeToastWithStringRes(requireContext(), R.string.need_login)
 /*                                val toastText = requireContext().getString(R.string.need_login)
                                 Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT)
@@ -127,6 +129,7 @@ class CreateGroupFragment : Fragment() {
 
                         is UiState.Error -> {
                             Log.d("error", state.message)
+                            makeToastWithString(requireContext(), state.message)
                         }
                     }
                 }
@@ -134,34 +137,30 @@ class CreateGroupFragment : Fragment() {
         }
     }
 
-    private fun observeCreateGroup() {
+    private fun observeCreate() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.createGroupState.collect { uiState ->
+            viewModel.createState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
                         // 로딩 처리 (필요한 경우)
                     }
 
                     is UiState.Success -> {
-/*                        val toastText = requireContext().getString(R.string.create_success)
-                        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()*/
                         makeToastWithStringRes(requireContext(), R.string.create_success)
-                        parentFragmentManager.popBackStack()
-                        val readGroupFragment = ReadGroupFragment()
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, readGroupFragment)
-                            .addToBackStack("Read")
-                            .commit()
+                        findNavController().popBackStack()
+                        findNavController().navigate(R.id.action_homeFragment_to_readGroupFragment)
                     }
 
                     is UiState.Error -> {
                         Log.d("error", uiState.message)
+                        makeToastWithString(requireContext(), uiState.message)
                     }
                 }
 
             }
         }
     }
+
 
     private fun initView() {
         with(binding) {
@@ -215,7 +214,7 @@ class CreateGroupFragment : Fragment() {
                 ) {
                     makeToastWithStringRes(requireContext(), R.string.blank_contain)
                     //Toast.makeText(requireContext(), getString(R.string.blank_contain), Toast.LENGTH_SHORT).show()
-                } else if (categoryText == "카테고리" ||
+                } else if (categoryText == getString(R.string.category) ||
                     binding.chipProgramingLanguage.checkedChipIds.size +
                     binding.chipGroupDevelopmentOccupations.checkedChipIds.size < 1
                 ) {
@@ -227,7 +226,7 @@ class CreateGroupFragment : Fragment() {
             }
 
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
         }
         initSpinner()
@@ -259,15 +258,18 @@ class CreateGroupFragment : Fragment() {
             }
         //todo
         spinnerAdapter.addAll(items.toMutableList())
-        spinnerAdapter.add("카테고리")
+        spinnerAdapter.add(getString(R.string.category))
         binding.categorySpinner.adapter = spinnerAdapter
         binding.categorySpinner.setSelection(spinnerAdapter.count)
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if (p0 != null) {
+                    p0?.let {
                         categoryText = p0.getItemAtPosition(p2).toString()
                     }
+/*                    if (p0 != null) {
+                        categoryText = p0.getItemAtPosition(p2).toString()
+                    }*/
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -284,12 +286,12 @@ class CreateGroupFragment : Fragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val listener = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
-            val mon = month + 1
-            val monthText = if (mon < 10) {
+            val mon = month + NUM_ONE
+            val monthText = if (mon < NUM_TEN) {
                 "0$mon"
             } else mon.toString()
 
-            val dayText = if (day < 10) {
+            val dayText = if (day < NUM_TEN) {
                 "0$day"
             } else day.toString()
 
@@ -306,7 +308,7 @@ class CreateGroupFragment : Fragment() {
                 firstMaxTimeInMillis = selectedCalendar.timeInMillis
             }
         }
-        var picker = DatePickerDialog(requireContext(), listener, year, month, day)
+        val picker = DatePickerDialog(requireContext(), listener, year, month, day)
 
         // 선택 전
         if (value == Value.First) {
@@ -326,9 +328,9 @@ class CreateGroupFragment : Fragment() {
             getChipText(binding.chipProgramingLanguage)
         )
 
-
         val image = if (imageUri != null) imageUri.toString() else null
-        val groupId = binding.groupName.text.toString().encryptECB()
+        Log.d("imageUri", "$imageUri")
+        val groupId = randomStr()
         val group = GroupModel(
             groupId,
             binding.groupName.text.toString(),
@@ -341,13 +343,18 @@ class CreateGroupFragment : Fragment() {
             categoryList,
             listOf(currentUser),
             binding.tvLimitPeople.text.toString(),
-            emptyList()
+            emptyList(),
+            getFormattedDate()
         )
 
         lifecycleScope.launch {
-            viewModel.createGroup(group)
-            sharedViewModel.getGroupId(groupId)
-            viewModel.joinGroup(groupId)
+            try {
+                viewModel.createGroup(group)
+                sharedViewModel.getGroupId(groupId)
+                viewModel.joinGroup(groupId)
+            } catch (e : Exception) {
+                makeToastWithStringRes(requireContext(), R.string.error)
+            }
         }
     }
 
@@ -373,7 +380,7 @@ class CreateGroupFragment : Fragment() {
     }
 
     private fun showDialogNumberPicker(textView: TextView) {
-        val arr =  Array(100) { (it + 5).toString() }
+        val arr =  Array(NUM_ONE_HUNDRED) { (it + NUM_FIVE).toString() }
         val dialogBinding = DialogSelectNumberBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -427,5 +434,11 @@ class CreateGroupFragment : Fragment() {
     private fun hideKeyboard(activity: Activity) {
         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken, 0)
+    }
+
+    private fun getFormattedDate() : String {
+        val format = SimpleDateFormat("yyyyMMddhhmmss", Locale.KOREA)
+        format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
+        return format.format(Date().time)
     }
 }

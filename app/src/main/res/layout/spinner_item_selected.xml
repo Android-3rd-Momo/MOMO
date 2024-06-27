@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_toolbar"
     xmlns:tools="http://schemas.android.com/tools">
@@ -10,7 +12,7 @@
         android:id="@+id/tvSpinner"
         android:layout_width="120dp"
         android:layout_height="match_parent"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:maxLines="1"

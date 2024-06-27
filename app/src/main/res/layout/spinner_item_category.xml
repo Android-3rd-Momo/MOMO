@@ -3,11 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tvCategorySpinner"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:text="test"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     android:background="@color/white"
     android:paddingHorizontal="10dp"
-    android:paddingVertical="10dp"
     android:gravity="center_vertical"
     android:textColor="@color/blue"
-    android:textSize="12dp" />
+    android:fontFamily="@font/sfprodisplayregular"
+    android:textColorHint="@color/hint_grey"
+    android:textSize="16sp" />

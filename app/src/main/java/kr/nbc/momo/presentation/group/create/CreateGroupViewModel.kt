@@ -19,28 +19,30 @@ class CreateGroupViewModel  @Inject constructor(
     private val createGroupUseCase: CreateGroupUseCase,
     private val joinGroupUseCase: JoinGroupUseCase
 ) : ViewModel() {
-    private val _createGroupState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val createGroupState: StateFlow<UiState<Boolean>> get() = _createGroupState
+
+    private val _createState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
+    val createState: StateFlow<UiState<Boolean>> get() = _createState
+
     fun createGroup(groupModel: GroupModel) {
         viewModelScope.launch {
-            _createGroupState.value = UiState.Loading
+
+            _createState.value = UiState.Loading
 
             createGroupUseCase.invoke(groupModel.asGroupEntity())
                 .catch { e ->
-                    _createGroupState.value = UiState.Error(e.toString())
+                    _createState.value = UiState.Error(e.toString())
                 }
                 .collect { data ->
-                    _createGroupState.value = UiState.Success(data)
+                    _createState.value = UiState.Success(data)
                 }
+
+
         }
     }
+
     fun joinGroup(groupId: String) {
         viewModelScope.launch {
-            try {
-                joinGroupUseCase.invoke(groupId)
-            } catch (e: Exception) {
-                throw e
-            }
+            joinGroupUseCase(groupId)
         }
     }
 }

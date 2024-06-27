@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -17,8 +18,8 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -99,6 +100,7 @@ class ChattingListFragment : Fragment() {
                         binding.includeNoResult.setVisibleToVisible()
                         binding.prCircular.setVisibleToGone()
                         Log.d("error", it.message)
+                        makeToastWithString(requireContext(), it.message)
                     }
                 }
             }
@@ -130,21 +132,15 @@ class ChattingListFragment : Fragment() {
                         binding.rvChattingList.setVisibleToGone()
                         binding.includeNoResult.setVisibleToGone()
                         Log.d("error", chattingList.message)
+                        makeToastWithString(requireContext(), chattingList.message)
                     }
                 }
             }
         }
     }
 
-    //넘기는 거 미완성(conflict 가능성)
     private fun itemOnClick(chattingListModel: ChattingListModel) {
         sharedViewModel.getGroupId(chattingListModel.groupId)
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, ChattingRoomFragment())
-            addToBackStack(null)
-            commit()
-        }
-
+        findNavController().navigate(R.id.action_chattingListFragment_to_chattingRoomFragment)
     }
-
 }

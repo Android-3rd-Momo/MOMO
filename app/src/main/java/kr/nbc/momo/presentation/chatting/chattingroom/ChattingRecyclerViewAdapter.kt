@@ -74,7 +74,6 @@ class ChattingRecyclerViewAdapter() :
                         itemList.chatList[position],
                         isDateChanged(position),
                         isMinuteChanged(position),
-                        isUserIdChanged(position),
                         isNextUserChanged(position)
                     )
             }
@@ -160,38 +159,28 @@ class ChattingRecyclerViewAdapter() :
                 tvUserName.text = chatModel.userName
                 ivProfile.setThumbnailByUrlOrDefault(userModel.userProfileUrl)
                 //유저 바뀌면 이름 보여주기
-                if (isUserChanged) {
-                    cardView.setVisibleToVisible()
-                    tvUserName.setVisibleToVisible()
-                    tvTime.setVisibleToVisible()
-                } else {
-                    cardView.setVisibleToInvisible()
-                    tvUserName.setVisibleToGone()
-                    tvTime.setVisibleToGone()
-                }
-                if (isMinuteChanged) {
-                    tvTime.setVisibleToVisible()
-                } else {
-                    tvTime.setVisibleToGone()
+                val isUserNameVisible = isUserChanged || isPrevMinuteChanged || isDateChanged
+                val isCardViewVisible = isUserChanged || isPrevMinuteChanged || isDateChanged
+                val isTimeVisible = isNextUserChanged || isMinuteChanged
+
+                tvUserName.apply {
+                    if (isUserNameVisible) setVisibleToVisible()
+                    else setVisibleToGone()
                 }
 
-                if (isNextUserChanged) {
-                    tvTime.setVisibleToVisible()
-                }
-                if (isPrevMinuteChanged) {
-                    cardView.setVisibleToVisible()
-                    tvUserName.setVisibleToVisible()
+                tvTime.apply {
+                    if (isTimeVisible) setVisibleToVisible()
+                    else setVisibleToGone()
                 }
 
-                if (isDateChanged) {
-                    cardView.setVisibleToVisible()
-                    tvUserName.setVisibleToVisible()
-                    tvTime.setVisibleToVisible()
-                    tvDivider.setVisibleToVisible()
-                    if (!isMinuteChanged) tvTime.setVisibleToGone()
+                cardView.apply {
+                    if (isCardViewVisible) setVisibleToVisible()
+                    else setVisibleToInvisible()
+                }
 
-                } else {
-                    tvDivider.setVisibleToGone()
+                tvDivider.apply {
+                    if (isDateChanged) setVisibleToVisible()
+                    else setVisibleToGone()
                 }
 
                 ivProfile.setOnClickListener {
@@ -208,31 +197,24 @@ class ChattingRecyclerViewAdapter() :
             chatModel: ChatModel,
             isDateChanged: Boolean,
             isMinuteChanged: Boolean,
-            isUserChanged: Boolean,
             isNextUserChanged: Boolean
         ) {
             with(binding) {
                 tvChat.text = chatModel.text
                 tvTime.text = chatModel.dateTime.setDateTimeFormatToMMDD()
                 tvDivider.text = chatModel.dateTime.setDateTimeFormatToYYYYmmDD()
-
                 tvUserName.setVisibleToGone()
-                if (isUserChanged) {
-                    tvTime.setVisibleToVisible()
+
+                val isTimeVisible = isMinuteChanged || isNextUserChanged
+
+                tvTime.apply {
+                    if (isTimeVisible) setVisibleToVisible()
+                    else setVisibleToGone()
                 }
 
-                if (isMinuteChanged) {
-                    tvTime.setVisibleToVisible()
-                } else {
-                    if (isNextUserChanged) tvTime.setVisibleToVisible()
-                    else tvTime.setVisibleToGone()
-                }
-
-                //날 바뀌면 divider 보여주기
-                if (isDateChanged) {
-                    tvDivider.setVisibleToVisible()
-                } else {
-                    tvDivider.setVisibleToGone()
+                tvDivider.apply {
+                    if (isDateChanged) setVisibleToVisible()
+                    else setVisibleToGone()
                 }
             }
         }

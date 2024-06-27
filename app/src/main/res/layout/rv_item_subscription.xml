@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_layout_corner_stroke"
     android:layout_width="match_parent"
+    android:layout_marginTop="8dp"
     android:layout_height="80dp">
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:text="TextView"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:maxLines="1"
         android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginStart="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +46,7 @@
         android:text="@string/approve"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:background="@drawable/bg_btn_radius_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +64,7 @@
         android:text="@string/reject"
         android:layout_marginEnd="10dp"
         android:textColor="@color/textGrey"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnConfirm"

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.mypage.RootFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/white"
-        android:padding="10dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -19,11 +18,11 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:text="@string/my_page"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/sfproiddisplaybold"
             android:gravity="center"
-            android:textSize="18dp"
+            android:text="@string/my_page"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +30,9 @@
 
         <ImageView
             android:id="@+id/ivSetUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
             android:src="@drawable/icon_setup"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,21 +40,43 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tlRoot"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:overScrollMode="never"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
-        app:tabBackground="@drawable/bg_tab"
-        app:tabIndicatorColor="@color/blue"
-        app:tabSelectedTextAppearance="@style/template_tab_text"
-        app:tabSelectedTextColor="@color/blue"
-        app:tabTextAppearance="@style/template_tab_text"
-        app:tabTextColor="@color/darkGrey">
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlRoot"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:overScrollMode="never"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorColor="@color/blue"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextAppearance="@style/template_tab_text"
+            app:tabSelectedTextColor="@color/blue"
+            app:tabTextAppearance="@style/template_tab_text"
+            app:tabTextColor="@color/darkGrey">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/profile" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/myGroupList" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vpRoot"
@@ -64,5 +86,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tlRoot" />
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

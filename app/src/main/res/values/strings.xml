@@ -20,7 +20,6 @@
     <string name="term2">(필수) 서비스 이용약관 동의</string>
     <string name="term3">(필수) 개인정보 처리방침 동의</string>
     <string name="term4">(필수) 커뮤니티 이용약관 동의</string>
-    <string name="term5">(선택) 마케팅 수신 동의</string>
     <string name="see">보기</string>
     <string name="term_complete">동의 완료</string>
 
@@ -243,6 +242,7 @@
     <string name="floating_btn_create_group">+ 모임 생성</string>
     <!--마이페이지 문자모음-->
     <string name="name">이름</string>
+    <string name="self_introduce">자기소개</string>
     <string name="please_edit_introduce">자기소개를 작성해주세요</string>
     <string name="do_login">로그인 하기</string>
     <string name="please_pick_dev_lang">사용하시는 개발 언어를 선택해보세요!</string>
@@ -252,11 +252,20 @@
     <string name="portfolio">포트폴리오</string>
     <string name="please_edit_portfolio">간단한 포트폴리오를 작성해 보세요!</string>
     <string name="confirm_edit">편집 완료</string>
+    <string name="exit">신청 취소</string>
+    <string name="pick_image">앨범에서 사진 선택</string>
+    <string name="delete_image">기본 이미지 적용</string>
+    <string-array name="image_edit">
+        <item>@string/pick_image</item>
+        <item>@string/delete_image</item>
+    </string-array>
+    <!--로그인 문자모음-->
+    <string name="notification">알림</string>
     <!--로그인 문자모음-->
     <string name="use_app_without_login">로그인 없이 앱 이용하기</string>
     <string name="check">확인</string>
     <!--리드그룹 문자모음-->
-    <string name="group_information">그룹 정보</string>
+    <string name="group_information">모임 정보</string>
     <string name="category">카테고리</string>
     <string name="leader_id">리더 ID</string>
     <string name="hyphen">-</string>
@@ -284,6 +293,7 @@
     <string name="loading">Loading…</string>
     <string name="error">Error</string>
     <string name="no_result">결과가 없습니다</string>
+    <string name="exceeded_Number">참가 인원 초과</string>
     <!--팝업메뉴 문자모음-->
     <string name="home">홈</string>
     <string name="chatting">채팅</string>
@@ -307,16 +317,19 @@
     <string name="delete_group_success">모임 삭제 성공</string>
     <string name="user_report_success">유저 신고 성공</string>
     <string name="user_block_success">유저 차단 성공</string>
+    <string name="exit_group_success">모임 탈퇴 성공</string>
     <string name="change_leader_success">리더 변경 성공</string>
     <string name="user_ban_success">유저 강퇴 성공</string>
     <string name="move_to_chatting">채팅방 이동</string>
     <string name="over_max_user">참가 인원 수 초과</string>
+    <string name="subscription_group_success">모임 참가 신청되었습니다.</string>
     <string name="change_leader">리더를 %1$s 님으로 변경합니다.</string>
     <string name="ban_user">%1$s 님을 모임에서 추방합니다.</string>
     <string name="ask_join_group">모임에 참여하시겠습니까?</string>
     <string name="go_to_login">로그인 페이지로 이동합니다.</string>
-    <string name="no_recommend">추천 그룹이 없습니다.\n정보를 수정해주세요</string>
-    <string name="no_joined">가입한 그룹이 없습니다.</string>
+    <string name="exit_group">모임을 탈퇴합니다.</string>
+    <string name="no_recommend">추천 모임이 없습니다.\n정보를 수정해주세요</string>
+    <string name="no_joined">가입한 모임이 없습니다.</string>
     <string name="introduce_yourself">자신을 소개해보세요!</string>
     <string name="introduce_stack">사용하신 기술이 있다면 작성해보세요!</string>
     <string name="introduce_portfolio">간단한 포트폴리오를 작성해보세요!</string>
@@ -349,17 +362,34 @@
     <string name="phone_regex_error">000–0000–0000 형식을 맞춰주세요.</string>
     <string name="phone_check_error">전화번호 중복을 확인해주세요.</string>
     <string name="id_check_error">아이디 중복을 확인해주세요.</string>
-    <string name="id_duplication_error">이미 사용 중인 아이디입니다.</string>
+    <string name="duplication_error">이미 사용 중입니다.</string>
     <string name="id_can_use">사용 가능한 아이디입니다.</string>
-    <string name="phone_duplication_error">이미 사용 중인 전화번호입니다.</string>
     <string name="phone_can_use">사용 가능한 전화번호입니다.</string>
     <string name="sign_up_success">회원가입에 성공하였습니다.</string>
+    <string name="sign_up_failed">회원가입에 실패하였습니다.</string>
     <string name="email_duplication_error">이미 가입된 이메일 입니다.</string>
     <string name="email_or_password_blank_error">이메일 또는 비밀번호를 입력해주세요.</string>
     <string name="email_or_password_error">이메일 또는 비밀번호를 다시 입력해주세요.</string>
+    <string name="check_Duplicate">중복을 확인해 주세요.</string>
+    <string name="network_error">네트워크 상태를 확인해주세요.</string>
+    <string name="unknown_error">오류 발생</string>
     <string name="apply_success">가입 신청 성공</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="content_desc_on_boarding">모이개에 오신것을 환영합니다!</string>
+    <string name="content_desc_search_return">홈 화면으로 돌아갑니다</string>
+    <string name="content_desc_go_search">검색 화면으로 이동합니다</string>
+    <string name="content_desc_no_latest">최신 모임이 없습니다.</string>
+    <string name="content_desc_no_joined">가입 모임이 없습니다.</string>
+    <string name="content_desc_no_recommend">추천 모임이 없습니다.</string>
+    <string name="content_desc_no_chat_list">가입 모임이 없습니다.</string>
+    <string name="content_desc_leading_group">진행 모임</string>
+    <string name="content_desc_joined_group">참여 모임</string>
+    <string name="content_desc_apply_group">가입 신청 목록</string>
+    <string name="content_desc_apply_confirm">가입 승인 목록</string>
+    <string name="content_desc_check_id">아이디 중복 확인</string>
+    <string name="content_desc_check_number">전화번호 중복 확인</string>
+    <string name="group">모임</string>
+    <string name="content_desc_rv_chat">채팅 리스트</string>
 
+    <string name="line_change_error">줄바꿈은 연속해서 3회 이상 입력할 수 없습니다.</string>
 </resources>

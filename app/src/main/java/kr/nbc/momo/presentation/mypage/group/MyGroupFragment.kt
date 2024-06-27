@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.group
 
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -19,12 +18,12 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.mypage.adapter.LeaderGroupAdapter
-import kr.nbc.momo.presentation.mypage.adapter.LeaderSubAdapter
-import kr.nbc.momo.presentation.mypage.adapter.MemberGroupAdapter
-import kr.nbc.momo.presentation.mypage.adapter.MemberSubAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.LeaderGroupAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.LeaderSubAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.MemberGroupAdapter
+import kr.nbc.momo.presentation.mypage.group.adapter.MemberSubAdapter
+import kr.nbc.momo.util.makeToastWithStringRes
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
@@ -49,109 +48,77 @@ class MyGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeUserProfile()
         observeSubscriptionGroupList()
-        observeAddUser()
         observerUserGroup()
         observerUserAppliedGroup()
-        observeRejectUser()
         initView()
     }
 
-    private fun initGroupList(userId: String, groupList: List<String>) {
+    private fun initGroupList(userId: String) {
         lifecycleScope.launch {
             viewModel.getSubscriptionList(userId)
             viewModel.getAppliedGroupList(userId)
-            viewModel.getUserGroup(groupList, userId)
+            viewModel.getUserGroup(userId)
         }
     }
 
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.currentUser.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Loading -> {
-                            //No action needed
+            sharedViewModel.currentUser.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        //No action needed
+                        Log.d("UserGroups", "loading")
+                        with(binding) {
+                            prCircularLeader.setVisibleToVisible()
+                            includeNoResultLeader.setVisibleToGone()
+                            rvLeader.setVisibleToInvisible()
+                            prCircularMember.setVisibleToVisible()
+                            includeNoResultMember.setVisibleToGone()
+                            rvMember.setVisibleToInvisible()
                         }
+                    }
 
-                        is UiState.Success -> {
-                            if (uiState.data != null) {
-                                Log.d("currentUser", uiState.data.userId)
-                                currentUser = uiState.data.userId
-                                userGroup = uiState.data.userGroup
-                                initGroupList(uiState.data.userId, uiState.data.userGroup)
-                            } else {
-                                with(binding) {
-                                    prCircularLeader.setVisibleToGone()
-                                    includeNoResultLeader.setVisibleToVisible()
-                                    rvLeader.setVisibleToInvisible()
-                                    prCircularMember.setVisibleToGone()
-                                    includeNoResultMember.setVisibleToVisible()
-                                    rvMember.setVisibleToInvisible()
-                                }
+                    is UiState.Success -> {
+                        if (uiState.data != null) {
+                            Log.d("UserGroups", "success not null")
+                            currentUser = uiState.data.userId
+                            userGroup = uiState.data.userGroup
+                            initGroupList(uiState.data.userId)
+                        } else {
+                            with(binding) {
+                                Log.d("UserGroups", "success null")
+                                prCircularLeader.setVisibleToGone()
+                                includeNoResultLeader.setVisibleToVisible()
+                                rvLeader.setVisibleToInvisible()
+                                prCircularMember.setVisibleToGone()
+                                includeNoResultMember.setVisibleToVisible()
+                                rvMember.setVisibleToInvisible()
                             }
                         }
-
-                        is UiState.Error -> {
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeAddUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.adduserState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        // 오류 메시지 표시
-
-                    }
-                    is UiState.Success -> {
-                        currentUser?.let { initGroupList(it, userGroup) }
                     }
 
                     is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
+                        Log.d("UserGroups", "error")
                     }
                 }
-            }
-        }
 
-    }
-
-    private fun observeRejectUser() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.rejectUserState.collect() { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-
-                    }
-                    is UiState.Success -> {
-                        Log.d("Success","Success")
-                        currentUser?.let { initGroupList(it, userGroup) }
-                    }
-
-                    is UiState.Error -> {
-                        Log.d("error", uiState.message)
-                    }
-                }
             }
         }
     }
+
 
     private fun observerUserGroup() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.userGroupList.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
+/*
                         with(binding) {
                             prCircularMember.setVisibleToVisible()
                             includeNoResultMember.setVisibleToGone()
                             rvMember.setVisibleToInvisible()
                         }
+*/
 
                     }
 
@@ -180,15 +147,17 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = filterData[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 
                     }
 
                     is UiState.Error -> {
-                        // 오류 메시지 표시
-                        Log.d("error", uiState.message)
+                        Log.d("userGroupList",uiState.message)
+                        binding.prCircularMember.setVisibleToGone()
+                        binding.includeNoResultMember.setVisibleToVisible()
+                        binding.rvMember.setVisibleToInvisible()
                     }
                 }
             }
@@ -201,7 +170,6 @@ class MyGroupFragment : Fragment() {
             viewModel.userAppliedGroupList.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        // 오류 메시지 표시
 
                     }
 
@@ -210,7 +178,7 @@ class MyGroupFragment : Fragment() {
                         binding.rvMemberSub.adapter = memberSubAdapter
                         binding.rvMemberSub.layoutManager = LinearLayoutManager(
                             requireContext(),
-                            LinearLayoutManager.HORIZONTAL,
+                            LinearLayoutManager.VERTICAL,
                             false
                         )
 
@@ -218,14 +186,27 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
+                            }
+                        }
+
+                        memberSubAdapter.exitClick = object : MemberSubAdapter.ExitClick {
+                            override fun exitClick(groupId: String) {
+                                lifecycleScope.launch {
+                                    try {
+                                        currentUser?.let { viewModel.rejectUser(it, groupId) }
+                                        currentUser?.let { initGroupList(it) }
+                                    } catch (e : Exception) {
+                                        makeToastWithStringRes(requireContext(), R.string.error)
+                                    }
+                                }
                             }
                         }
 
                     }
 
                     is UiState.Error -> {
-
+                        Log.d("userAppliedGroupList",uiState.message)
                     }
                 }
             }
@@ -237,11 +218,11 @@ class MyGroupFragment : Fragment() {
             viewModel.subscriptionListState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        with(binding) {
+/*                        with(binding) {
                             prCircularLeader.setVisibleToVisible()
                             includeNoResultLeader.setVisibleToGone()
                             rvLeader.setVisibleToInvisible()
-                        }
+                        }*/
 
                     }
 
@@ -260,23 +241,44 @@ class MyGroupFragment : Fragment() {
                         binding.rvLeaderSub.layoutManager = LinearLayoutManager(requireContext())
 
                         leaderSubAdapter.confirm = object : LeaderSubAdapter.Confirm {
-                            override fun confirm(groupId: String, userId: String) {
-                                viewModel.addUser(userId, groupId)
-                                currentUser?.let { initGroupList(it, userGroup) }
+                            override fun confirm(
+                                groupId: String,
+                                userId: String,
+                                limitPerson: Int,
+                                userListSize: Int
+                            ) {
+                                lifecycleScope.launch {
+                                    try {
+                                        if (userListSize < limitPerson) {
+                                            viewModel.addUser(userId, groupId)
+                                            currentUser?.let { initGroupList(it) }
+                                        } else {
+                                            makeToastWithStringRes(requireContext(), R.string.exceeded_Number)
+                                        }
+                                    } catch (e : Exception) {
+                                        makeToastWithStringRes(requireContext(), R.string.error)
+                                    }
+                                }
                             }
                         }
 
                         leaderSubAdapter.reject = object : LeaderSubAdapter.Reject {
                             override fun reject(groupId: String, userId: String) {
-                                viewModel.rejectUser(userId, groupId)
-                                currentUser?.let { initGroupList(it, userGroup) }
+                                lifecycleScope.launch {
+                                    try {
+                                        viewModel.rejectUser(userId, groupId)
+                                        currentUser?.let { initGroupList(it) }
+                                    } catch (e : Exception) {
+                                        makeToastWithStringRes(requireContext(), R.string.error)
+                                    }
+                                }
                             }
                         }
 
                         leaderSubAdapter.userClick = object : LeaderSubAdapter.UserClick {
                             override fun userClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
-                                (activity as? MainActivity)?.beginTransactionUserInfo()
+                                findNavController().navigate(R.id.action_rootFragment_to_userInfoFragment)
                             }
                         }
 
@@ -293,7 +295,7 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 

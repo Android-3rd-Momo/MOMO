@@ -2,17 +2,17 @@ package kr.nbc.momo.presentation.search
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,11 +20,13 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSearchBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -80,7 +82,7 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        bottomNavHide()
+        hideNav()
     }
 
     override fun onDestroyView() {
@@ -90,14 +92,14 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        bottomNavShow()
+        showNav()
     }
 
     private fun initView() {
         with(binding) {
             includeNoResult.tvNoResult.setText(R.string.no_search_result)
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
             rvSearchResult.apply {
                 adapter = searchAdapter
@@ -193,6 +195,7 @@ class SearchFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
+                        makeToastWithString(requireContext(), it.message)
                         binding.rvSearchResult.setVisibleToGone()
                         binding.prCircular.setVisibleToError()
                         binding.includeNoResult.setVisibleToGone()
@@ -205,20 +208,6 @@ class SearchFragment : Fragment() {
 
     private fun searchItemOnClick(groupModel: GroupModel) {
         sharedViewModel.getGroupId(groupModel.groupId)
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, ReadGroupFragment())
-            addToBackStack("Read")
-            commit()
-        }
-    }
-
-    private fun bottomNavHide() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.GONE
-    }
-
-    private fun bottomNavShow() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav?.visibility = View.VISIBLE
+        findNavController().navigate(R.id.action_searchFragment_to_readGroupFragment)
     }
 }

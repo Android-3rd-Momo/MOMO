@@ -10,7 +10,7 @@
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDivider"
         tool:text="유저이름" />
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="날짜 바뀜" />
@@ -48,7 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
-        android:textSize="12dp"
+        android:textSize="12sp"
+        android:textColor="@color/textGrey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvChat"
         tool:text="22:22" />

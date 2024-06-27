@@ -14,16 +14,23 @@ android {
 
     defaultConfig {
         applicationId = "kr.nbc.momo"
-        minSdk = 33
+        minSdk = 30
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -84,6 +91,9 @@ dependencies {
 
     //circleIndicator
     implementation (libs.circleindicator)
+
+    //splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity.ktx)

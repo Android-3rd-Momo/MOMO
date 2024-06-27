@@ -8,24 +8,24 @@
         android:name=".MOMOApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="false"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MOMO"
-        android:enableOnBackInvokedCallback="false"
         tools:targetApi="31">
 
         <activity
             android:name=".presentation.onboarding.developmentType.DevelopmentActivity"
-            android:screenOrientation="portrait"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".presentation.onboarding.GetStartedActivity"
             android:screenOrientation="portrait"
-            android:exported="false"/>
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".presentation.onboarding.OnBoardingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
@@ -37,7 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

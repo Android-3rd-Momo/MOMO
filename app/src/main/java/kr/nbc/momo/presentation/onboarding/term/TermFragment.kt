@@ -20,7 +20,7 @@ class TermFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTermBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -28,72 +28,88 @@ class TermFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setOnClickListner()
         allTermCheck()
-        termAccept()
-        intentTermDesc()
-
-        //선택약관 동의시에 카카오톡 알람을 주게 하는 메소드 만들기
     }
 
     private fun allTermCheck() {
-        binding.cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
-            setAllCheckbox(isChecked)
-        }
+        with(binding) {
+            cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
+                setAllCheckbox(isChecked)
+            }
 
-        binding.cbTerm1.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-        binding.cbTerm2.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-        binding.cbTerm3.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-        binding.cbTerm4.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-        binding.cbTerm5.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-    }
-
-    private fun setAllCheckbox(isChecked: Boolean) {
-        binding.cbTerm1.isChecked = isChecked
-        binding.cbTerm2.isChecked = isChecked
-        binding.cbTerm3.isChecked = isChecked
-        binding.cbTerm4.isChecked = isChecked
-        binding.cbTerm5.isChecked = isChecked
-    }
-
-    private fun updateAllAcceptCheckbox() {
-        binding.cbAllAccept.setOnCheckedChangeListener(null)
-        binding.cbAllAccept.isChecked =
-            binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked && binding.cbTerm5.isChecked
-        binding.cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
-            setAllCheckbox(isChecked)
-        }
-    }
-
-    private fun termAccept() {
-        binding.btnAccept.setOnClickListener {
-            if (binding.cbTerm1.isChecked && binding.cbTerm2.isChecked && binding.cbTerm3.isChecked && binding.cbTerm4.isChecked) {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, SignUpFragment())
-                    .addToBackStack(null)
-                    .commit()
-                dismiss()
-            } else {
-                makeToastWithStringRes(requireContext(), R.string.term_title)
-                //Toast.makeText(requireContext(), "사용약관에 동의해주세요", Toast.LENGTH_SHORT).show()
+            listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).forEach { checkbox ->
+                checkbox.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
             }
         }
     }
 
-    private fun intentTermDesc() {
-        binding.tvAccept2Desc.setOnClickListener {
-            val fragmentPrivateTerm = PrivateTermFragment()
-            fragmentPrivateTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-            fragmentPrivateTerm.show(parentFragmentManager, fragmentPrivateTerm.tag)
+    private fun setAllCheckbox(isChecked: Boolean) {
+        with(binding) {
+            listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).forEach { it.isChecked = isChecked }
         }
-        binding.tvAccept3Desc.setOnClickListener {
-            val fragmentServiceTerm = ServiceTermFragment()
-            fragmentServiceTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-            fragmentServiceTerm.show(parentFragmentManager, fragmentServiceTerm.tag)
+    }
+
+    private fun updateAllAcceptCheckbox() {
+        with(binding) {
+            cbAllAccept.setOnCheckedChangeListener(null)
+            cbAllAccept.isChecked = listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).all { it.isChecked }
+            btnAccept.isEnabled = listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).all { it.isChecked }
+            cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
+                setAllCheckbox(isChecked)
+            }
         }
-        binding.tvAccept4Desc.setOnClickListener {
-            val fragmentCommunityTerm = CommunityTermFragment()
-            fragmentCommunityTerm.setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogBorder20WhiteTheme)
-            fragmentCommunityTerm.show(parentFragmentManager, fragmentCommunityTerm.tag)
+    }
+
+    private fun setOnClickListner() {
+        with(binding) {
+            val termsChecked = listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4)
+            val allTermsChecked = listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4)
+
+            cbAllAccept.setOnCheckedChangeListener(null)
+            cbAllAccept.isChecked = allTermsChecked.all { it.isChecked }
+            cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
+                setAllCheckbox(isChecked)
+            }
+
+            tvAccept2Desc.setOnClickListener {
+                val fragmentPrivateTerm = PrivateTermFragment()
+                fragmentPrivateTerm.setStyle(
+                    STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+                fragmentPrivateTerm.show(parentFragmentManager, fragmentPrivateTerm.tag)
+            }
+
+            tvAccept3Desc.setOnClickListener {
+                val fragmentServiceTerm = ServiceTermFragment()
+                fragmentServiceTerm.setStyle(
+                    STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+                fragmentServiceTerm.show(parentFragmentManager, fragmentServiceTerm.tag)
+            }
+
+            tvAccept4Desc.setOnClickListener {
+                val fragmentCommunityTerm = CommunityTermFragment()
+                fragmentCommunityTerm.setStyle(
+                    STYLE_NORMAL,
+                    R.style.AppBottomSheetDialogBorder20WhiteTheme
+                )
+                fragmentCommunityTerm.show(parentFragmentManager, fragmentCommunityTerm.tag)
+            }
+
+            btnAccept.setOnClickListener {
+                if (termsChecked.all { it.isChecked }) {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, SignUpFragment())
+                        .addToBackStack(null)
+                        .commit()
+                    dismiss()
+                } else {
+                    makeToastWithStringRes(requireContext(), R.string.term_title)
+                }
+            }
         }
     }
 

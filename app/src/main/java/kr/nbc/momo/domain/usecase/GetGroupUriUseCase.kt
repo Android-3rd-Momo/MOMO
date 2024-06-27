@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetGroupUriUseCase@Inject constructor(
     private val storageRepository: StorageRepository
 ) {
-    fun invoke(groupName: String): Flow<Uri> {
+    operator fun invoke(groupName: String): Flow<Uri> {
         return storageRepository.getGroupUri(groupName)
     }
 }

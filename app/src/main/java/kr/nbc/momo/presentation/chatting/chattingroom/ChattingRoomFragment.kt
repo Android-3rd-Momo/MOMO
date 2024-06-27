@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -19,10 +19,12 @@ import kr.nbc.momo.databinding.FragmentChattingRoomBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.userinfo.UserInfoFragment
+import kr.nbc.momo.util.hideNav
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class ChattingRoomFragment : Fragment() {
@@ -100,7 +102,8 @@ class ChattingRoomFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        Log.d("ChattingRoom", "${it.message}")
+                        Log.d("ChattingRoom", it.message)
+                        makeToastWithString(requireContext(), it.message)
                     }
                 }
             }
@@ -123,24 +126,20 @@ class ChattingRoomFragment : Fragment() {
                         rvAdapter.notifyDataSetChanged()
                         binding.rvChatMessage.setVisibleToVisible()
                         binding.prCircular.setVisibleToGone()
-                        binding.rvChatMessage.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                        binding.rvChatMessage.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
                             if (bottom < oldBottom) {
-                                binding.rvChatMessage.postDelayed({
+                                binding.rvChatMessage.post {
                                     if (chatMessages.data.chatList.isNotEmpty()) {
-                                        binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.size - 1)
+                                        binding.rvChatMessage.scrollToPosition(chatMessages.data.chatList.lastIndex)
                                     }
-                                }, 100)
+                                }
                             }
                         }
 
                         rvAdapter.itemClick = object : ChattingRecyclerViewAdapter.ItemClick {
                             override fun itemClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
-                                val userInfoFragment = UserInfoFragment()
-                                parentFragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_container, userInfoFragment)
-                                    .addToBackStack(null)
-                                    .commit()
+                                findNavController().navigate(R.id.action_chattingRoomFragment_to_userInfoFragment)
                             }
                         }
                     }
@@ -149,6 +148,7 @@ class ChattingRoomFragment : Fragment() {
                         binding.rvChatMessage.setVisibleToGone()
                         binding.prCircular.setVisibleToError()
                         Log.d("error", chatMessages.message)
+                        makeToastWithString(requireContext(), chatMessages.message)
                     }
                 }
             }
@@ -175,7 +175,7 @@ class ChattingRoomFragment : Fragment() {
                 binding.etText.text.clear()
             }
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
         }
     }
@@ -185,8 +185,8 @@ class ChattingRoomFragment : Fragment() {
             sharedViewModel.currentUser.collectLatest {
                 when (it) {
                     is UiState.Success -> {
-                        if (it.data != null) {
-                            if (it.data.userId != "") {
+                        it.data?.let { data ->
+                            if(data.userId.isNotEmpty()){
                                 currentUserId = it.data.userId
                                 currentUsername = it.data.userName
                                 currentUrl = it.data.userProfileThumbnailUrl
@@ -198,6 +198,19 @@ class ChattingRoomFragment : Fragment() {
                             }
                             rvAdapter.notifyDataSetChanged()
                         }
+/*                        if (it.data != null) {
+                            if (it.data.userId != "") {
+                                currentUserId = it.data.userId
+                                currentUsername = it.data.userName
+                                currentUrl = it.data.userProfileThumbnailUrl
+                                with(rvAdapter) {
+                                    currentUserId = it.data.userId
+                                    currentUrl = it.data.userProfileThumbnailUrl
+                                    currentUserName = it.data.userName
+                                }
+                            }
+                            rvAdapter.notifyDataSetChanged()
+                        }*/
                     }
 
                     is UiState.Loading -> {
@@ -206,21 +219,10 @@ class ChattingRoomFragment : Fragment() {
 
                     is UiState.Error -> {
                         //nothing to do
-                        Log.d("ChattingRoom", "${it.message}")
+                        Log.d("ChattingRoom", it.message)
                     }
                 }
             }
         }
-    }
-
-
-    private fun showNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToVisible()
-    }
-
-    private fun hideNav() {
-        val nav = requireActivity().findViewById<BottomNavigationView>(R.id.navigationView)
-        nav.setVisibleToGone()
     }
 }

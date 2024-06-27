@@ -1,4 +1,4 @@
-package kr.nbc.momo.presentation.mypage
+package kr.nbc.momo.presentation.mypage.group
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,12 +29,6 @@ class MyGroupViewModel @Inject constructor(
     private val _subscriptionListState = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
     val subscriptionListState: StateFlow<UiState<List<GroupModel>>> get() = _subscriptionListState
 
-    private val _adduserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val adduserState: StateFlow<UiState<Boolean>> get() = _adduserState
-
-    private val _rejectUserState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
-    val rejectUserState: StateFlow<UiState<Boolean>> get() = _rejectUserState
-
     private val _userGroupList = MutableStateFlow<UiState<List<GroupModel>>>(UiState.Loading)
     val userGroupList: StateFlow<UiState<List<GroupModel>>> get() = _userGroupList
 
@@ -45,7 +39,7 @@ class MyGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _subscriptionListState.value = UiState.Loading
 
-            getSubscriptionListUseCase.invoke(userId)
+            getSubscriptionListUseCase(userId)
                 .catch { e ->
                     _subscriptionListState.value = UiState.Error(e.toString())
                 }
@@ -60,7 +54,7 @@ class MyGroupViewModel @Inject constructor(
         viewModelScope.launch {
             _userAppliedGroupList.value = UiState.Loading
 
-            getAppliedUseCase.invoke(userId)
+            getAppliedUseCase(userId)
                 .catch { e ->
                     _userAppliedGroupList.value = UiState.Error(e.toString())
                 }
@@ -72,11 +66,11 @@ class MyGroupViewModel @Inject constructor(
     }
 
 
-    fun getUserGroup(groupList: List<String>, userId: String) {
+    fun getUserGroup(userId: String) {
         viewModelScope.launch {
             _userGroupList.value = UiState.Loading
 
-            getUserGroupListUseCase.invoke(groupList, userId)
+            getUserGroupListUseCase(userId)
                 .catch { e ->
                     _userGroupList.value = UiState.Error(e.toString())
                 }
@@ -89,31 +83,13 @@ class MyGroupViewModel @Inject constructor(
 
     fun addUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            _adduserState.value = UiState.Loading
-
-            addUserUseCase.invoke(userId, groupId)
-                .catch { e ->
-                    _adduserState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _adduserState.value = UiState.Success(data)
-                }
-
+            addUserUseCase(userId, groupId)
         }
     }
 
     fun rejectUser(userId: String, groupId: String) {
         viewModelScope.launch {
-            _rejectUserState.value = UiState.Loading
-
-            rejectionSubscriptionUseCase.invoke(userId, groupId)
-                .catch { e ->
-                    _rejectUserState.value = UiState.Error(e.toString())
-                }
-                .collect { data ->
-                    _rejectUserState.value = UiState.Success(data)
-                }
-
+            rejectionSubscriptionUseCase(userId, groupId)
         }
     }
 }

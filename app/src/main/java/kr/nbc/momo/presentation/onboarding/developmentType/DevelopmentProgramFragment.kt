@@ -38,24 +38,23 @@ class DevelopmentProgramFragment : Fragment() {
         initView()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initView() {
         val ssb = SpannableStringBuilder(getString(R.string.please_pick_your_dev_lang))
         val blue = Color.parseColor("#2D64CF")
         val black = Color.parseColor("#000000")
         ssb.setSpan(ForegroundColorSpan(black), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ssb.setSpan(ForegroundColorSpan(blue), 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ssb.setSpan(StyleSpan(Typeface.BOLD), 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ssb.setSpan(ForegroundColorSpan(black), 10, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ssb.setSpan(ForegroundColorSpan(blue), 5, 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ssb.setSpan(StyleSpan(Typeface.BOLD), 5, 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ssb.setSpan(ForegroundColorSpan(black), 11, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         binding.tvSubtitle.text = ssb
         val developLanguage = resources.getStringArray(R.array.chipProgramingLanguage)
         setChipGroup(developLanguage, binding.chipGroup)
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setChipGroup(chipList: Array<String>, chipGroup: ChipGroup) {
