@@ -29,7 +29,6 @@
 
 
 ### Coding Convention
-#### Source Code
 > Class : ParcalCase </br>
 fun, val, var : carmelCase </br>
 const val: BIG_SNAKE_CASE
@@ -41,10 +40,10 @@ target SDK: 33
 
 
 ### Git Convention
->`add` : 새로운 파일 및 폴더 추가 </br>
-`feat` : 새로운 기능 추가</br>
-`fix` : 버그 수정</br>
-`del` : 버그 수정
+>add : 새로운 파일 및 폴더 추가 </br>
+feat : 새로운 기능 추가</br>
+fix : 버그 수정</br>
+del : 버그 수정
 
 ### Gantt chart
 ![](https://velog.velcdn.com/images/qhdrb123/post/908dda56-db3a-445b-8c5e-93e0b9b7a582/image.png)
