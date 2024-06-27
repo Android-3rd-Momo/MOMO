@@ -8,14 +8,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kr.nbc.momo.domain.usecase.GetCurrentUserUseCase
+import kr.nbc.momo.domain.usecase.SaveUserProfileUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.onboarding.signup.model.UserModel
+import kr.nbc.momo.presentation.onboarding.signup.model.toEntity
 import kr.nbc.momo.presentation.onboarding.signup.model.toModel
 import javax.inject.Inject
 
 @HiltViewModel
 class OnBoardingSharedViewModel @Inject constructor(
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val saveUserProfileUseCase: SaveUserProfileUseCase
 ) : ViewModel() {
 
     private val _typeOfDevelopment = MutableStateFlow<List<String>>(emptyList())
@@ -80,6 +83,7 @@ class OnBoardingSharedViewModel @Inject constructor(
                         programOfDevelopment = _selectedProgramChipIds.value,
                         stackOfDevelopment = _stackOfDevelopment.value
                     )
+                    saveUserProfileUseCase(updatedUser.toEntity())
                     _saveProfileState.value = UiState.Success(Unit)
                     updateUser(updatedUser)
                 }
