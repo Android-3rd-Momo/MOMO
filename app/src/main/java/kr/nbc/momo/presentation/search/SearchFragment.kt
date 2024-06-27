@@ -20,7 +20,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentSearchBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString

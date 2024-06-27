@@ -19,7 +19,6 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.mypage.group.MyGroupFragment
 import kr.nbc.momo.presentation.mypage.profile.MyPageContainerFragment
-import kr.nbc.momo.presentation.setup.SetUpFragment
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 

@@ -18,7 +18,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentChattingListBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError

@@ -40,7 +40,6 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.CustomDatePickerDialog
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.group.read.Value
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.NUM_FIVE

@@ -31,11 +31,9 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
-import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes

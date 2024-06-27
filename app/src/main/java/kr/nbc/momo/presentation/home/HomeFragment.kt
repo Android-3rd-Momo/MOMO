@@ -2,9 +2,7 @@ package kr.nbc.momo.presentation.home
 
 import android.os.Bundle
 import android.util.Log
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -16,21 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.create.CreateGroupFragment
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
-import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.notification.NotificationFragment
-import kr.nbc.momo.presentation.search.SearchFragment
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
