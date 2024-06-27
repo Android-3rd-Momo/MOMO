@@ -27,6 +27,7 @@ import kr.nbc.momo.util.isValidId
 import kr.nbc.momo.util.isValidName
 import kr.nbc.momo.util.isValidPassword
 import kr.nbc.momo.util.isValidPhoneNumber
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 
 @AndroidEntryPoint
@@ -207,12 +208,11 @@ class SignUpFragment : Fragment() {
                     }
 
                     is UiState.Error -> {
-                        if (state.message.contains("The email address is already in use by another account")) {
+                        if (state.message.contains("already")) { // 이메일 중복
                             binding.etEmail.error = getString(R.string.email_duplication_error)
                         } else {
                             makeToastWithStringRes(requireContext(), R.string.sign_up_failed)
                         }
-//                        binding.btnSignUp.isEnabled = true
                     }
                 }
             }

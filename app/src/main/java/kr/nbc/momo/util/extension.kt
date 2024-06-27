@@ -2,6 +2,8 @@ package kr.nbc.momo.util
 
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -186,4 +188,11 @@ fun getCurrentTimeMillis(): Long {
 
 fun getAfterOneMonthTimeMillis(): Long {
     return System.currentTimeMillis() + ONE_MONTH_MILLIS
+}
+
+fun Context.isNetworkConnected(): Boolean { //네트워크 상태 확인
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }
