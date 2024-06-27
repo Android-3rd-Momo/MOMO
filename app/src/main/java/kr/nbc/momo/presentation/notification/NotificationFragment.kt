@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -18,8 +19,10 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
+import kr.nbc.momo.util.showNav
 
 @AndroidEntryPoint
 class NotificationFragment : Fragment() {
@@ -42,6 +45,7 @@ class NotificationFragment : Fragment() {
         observeUserProfile()
         observeSubscriptionGroupList()
         initView()
+        hideNav()
     }
 
     private fun observeUserProfile() {
@@ -131,7 +135,8 @@ class NotificationFragment : Fragment() {
                         notificationAdapter.userClick = object : NotificationAdapter.UserClick {
                             override fun userClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
-                                (activity as? MainActivity)?.beginTransactionUserInfo()
+                                findNavController().navigate(R.id.action_notificationFragment_to_userInfoFragment)
+                                //(activity as? MainActivity)?.beginTransactionUserInfo()
                             }
                         }
 
@@ -149,7 +154,7 @@ class NotificationFragment : Fragment() {
 
     private fun initView() {
         binding.ivReturn.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
     }
@@ -160,8 +165,10 @@ class NotificationFragment : Fragment() {
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
+        showNav()
         _binding = null
     }
 

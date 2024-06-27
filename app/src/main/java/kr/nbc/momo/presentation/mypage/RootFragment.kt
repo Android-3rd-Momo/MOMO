@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -83,10 +84,7 @@ class RootFragment : Fragment() {
             binding.ivSetUp.setVisibleToGone()
         }
         binding.ivSetUp.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SetUpFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_rootFragment_to_setUpFragment)
         }
 
 

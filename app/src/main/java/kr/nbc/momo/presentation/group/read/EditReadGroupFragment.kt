@@ -18,12 +18,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -249,13 +249,13 @@ class EditReadGroupFragment : Fragment() {
             btnDelete.setOnClickListener {
                 try {
                     viewModel.deleteGroup(data.groupId, data.userList)
-                    parentFragmentManager.popBackStack("Read", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    findNavController().popBackStack()
                 } catch (e : Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
 
             etGroupNameEdit.setText(data.groupName)
@@ -293,7 +293,7 @@ class EditReadGroupFragment : Fragment() {
                     groupThumbnail = updatedGroupThumbnail,
                 ), imageUri
             )
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         } catch (e : Exception) {
             makeToastWithStringRes(requireContext(), R.string.error)
         }
@@ -413,7 +413,7 @@ class EditReadGroupFragment : Fragment() {
                 dialogBuilder.dismiss()
                 try {
                     viewModel.leaderChange(groupId, userId)
-                    parentFragmentManager.popBackStack()
+                    findNavController().popBackStack()
                 } catch (e : Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_activity_navgraph"
+    android:id="@+id/main_activity_nav_graph"
     app:startDestination="@id/homeFragment">
 
     <fragment
@@ -10,12 +10,131 @@
         android:name="kr.nbc.momo.presentation.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_readGroupFragment"
+            app:destination="@id/readGroupFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chattingRoomFragment"
+            app:destination="@id/chattingRoomFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editReadGroupFragment"
+            app:destination="@id/editReadGroupFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/chattingRoomFragment"
+        android:id="@+id/chattingListFragment"
         android:name="kr.nbc.momo.presentation.chatting.chattinglist.ChattingListFragment"
         android:label="fragment_chatting_list"
-        tools:layout="@layout/fragment_chatting_list" />
+        tools:layout="@layout/fragment_chatting_list" >
+
+        <action
+            android:id="@+id/action_chattingListFragment_to_chattingRoomFragment"
+            app:destination="@id/chattingRoomFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="kr.nbc.momo.presentation.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_readGroupFragment"
+            app:destination="@id/readGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chattingRoomFragment"
+        android:name="kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment"
+        android:label="fragment_chatting_room"
+        tools:layout="@layout/fragment_chatting_room" >
+        <action
+            android:id="@+id/action_chattingRoomFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="kr.nbc.momo.presentation.group.create.CreateGroupFragment"
+        android:label="fragment_create_group"
+        tools:layout="@layout/fragment_create_group" >
+
+        <action
+            android:id="@+id/action_createGroupFragment_to_readGroupFragment"
+            app:destination="@id/readGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rootFragment"
+        android:name="kr.nbc.momo.presentation.mypage.RootFragment"
+        android:label="fragment_root"
+        tools:layout="@layout/fragment_root" >
+        <action
+            android:id="@+id/action_rootFragment_to_editMyPageFragment"
+            app:destination="@id/editMyPageFragment" />
+        <action
+            android:id="@+id/action_rootFragment_to_setUpFragment"
+            app:destination="@id/setUpFragment" />
+        <action
+            android:id="@+id/action_rootFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+        <action
+            android:id="@+id/action_rootFragment_to_readGroupFragment"
+            app:destination="@id/readGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/readGroupFragment"
+        android:name="kr.nbc.momo.presentation.group.read.ReadGroupFragment"
+        android:label="fragment_read_group"
+        tools:layout="@layout/fragment_read_group" >
+        <action
+            android:id="@+id/action_readGroupFragment_to_editReadGroupFragment"
+            app:destination="@id/editReadGroupFragment" />
+        <action
+            android:id="@+id/action_readGroupFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+        <action
+            android:id="@+id/action_readGroupFragment_to_chattingRoomFragment"
+            app:destination="@id/chattingRoomFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/editReadGroupFragment"
+        android:name="kr.nbc.momo.presentation.group.read.EditReadGroupFragment"
+        android:label="fragment_edit_read_group"
+        tools:layout="@layout/fragment_edit_read_group" >
+        <action
+            android:id="@+id/action_editReadGroupFragment_to_readGroupFragment"
+            app:destination="@id/readGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editMyPageFragment"
+        android:name="kr.nbc.momo.presentation.mypage.profile.EditMyPageFragment"
+        android:label="EditMyPageFragment" />
+    <fragment
+        android:id="@+id/setUpFragment"
+        android:name="kr.nbc.momo.presentation.setup.SetUpFragment"
+        android:label="fragment_set_up"
+        tools:layout="@layout/fragment_set_up" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="kr.nbc.momo.presentation.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/action_notificationFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="kr.nbc.momo.presentation.userinfo.UserInfoFragment"
+        android:label="UserInfoFragment" />
+
 
 </navigation>

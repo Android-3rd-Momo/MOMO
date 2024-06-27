@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -99,7 +100,7 @@ class SearchFragment : Fragment() {
         with(binding) {
             includeNoResult.tvNoResult.setText(R.string.no_search_result)
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
             rvSearchResult.apply {
                 adapter = searchAdapter
@@ -208,10 +209,6 @@ class SearchFragment : Fragment() {
 
     private fun searchItemOnClick(groupModel: GroupModel) {
         sharedViewModel.getGroupId(groupModel.groupId)
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, ReadGroupFragment())
-            addToBackStack("Read")
-            commit()
-        }
+        findNavController().navigate(R.id.action_searchFragment_to_readGroupFragment)
     }
 }

@@ -26,6 +26,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -119,7 +120,7 @@ class CreateGroupFragment : Fragment() {
                                 currentUser = state.data.userId
                                 initView()
                             } else {
-                                parentFragmentManager.popBackStack()
+                                findNavController().popBackStack()
                                 makeToastWithStringRes(requireContext(), R.string.need_login)
 /*                                val toastText = requireContext().getString(R.string.need_login)
                                 Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT)
@@ -148,12 +149,8 @@ class CreateGroupFragment : Fragment() {
 
                     is UiState.Success -> {
                         makeToastWithStringRes(requireContext(), R.string.create_success)
-                        parentFragmentManager.popBackStack()
-                        val readGroupFragment = ReadGroupFragment()
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, readGroupFragment)
-                            .addToBackStack("Read")
-                            .commit()
+                        findNavController().popBackStack()
+                        findNavController().navigate(R.id.action_homeFragment_to_readGroupFragment)
                     }
 
                     is UiState.Error -> {
@@ -231,7 +228,7 @@ class CreateGroupFragment : Fragment() {
             }
 
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
         }
         initSpinner()

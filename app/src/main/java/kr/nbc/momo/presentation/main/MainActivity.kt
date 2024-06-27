@@ -4,6 +4,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import dagger.hilt.android.AndroidEntryPoint
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.ActivityMainBinding
@@ -21,17 +24,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initFirstFragment()
-        setUpBottomNavigation()
+        //initFirstFragment()
+        //setUpBottomNavigation()
         onBoardingLaunch()
-
+        setUpNavigation()
     }
+
+    private fun setUpNavigation(){
+        val hostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navController = hostFragment.navController
+        NavigationUI.setupWithNavController(binding.navigationView, navController)
+    }
+
+
     private fun initFirstFragment() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, HomeFragment())
             commit()
         }
     }
+
 
 
     private fun setUpBottomNavigation() {

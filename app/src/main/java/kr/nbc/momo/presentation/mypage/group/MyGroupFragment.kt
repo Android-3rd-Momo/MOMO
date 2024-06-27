@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -278,7 +279,8 @@ class MyGroupFragment : Fragment() {
                         leaderSubAdapter.userClick = object : LeaderSubAdapter.UserClick {
                             override fun userClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
-                                (activity as? MainActivity)?.beginTransactionUserInfo()
+                                findNavController().navigate(R.id.action_rootFragment_to_userInfoFragment)
+                                //(activity as? MainActivity)?.beginTransactionUserInfo()
                             }
                         }
 
@@ -295,7 +297,8 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
+                                //(activity as? MainActivity)?.beginTransactionRead()
                             }
                         }
 

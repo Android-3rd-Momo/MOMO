@@ -14,7 +14,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -79,50 +81,34 @@ class HomeFragment : Fragment() {
         with(binding.includeNoResultRecommend) {
             tvNoResult.setText(R.string.no_recommend)
             tvNoResult.setOnClickListener {
-                (requireActivity() as MainActivity).selectNavigationItem(R.id.rootFragment)
+                findNavController().navigate(R.id.rootFragment)
             }
             ivNoResult.setOnClickListener {
-                (requireActivity() as MainActivity).selectNavigationItem(R.id.rootFragment)
+                findNavController().navigate(R.id.rootFragment)
             }
         }
 
         with(binding.includeNoResultJoined) {
             tvNoResult.setText(R.string.no_joined)
             tvNoResult.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, SearchFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
             }
             ivNoResult.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, SearchFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
             }
         }
 
         binding.floatingBtnCreateGroup.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CreateGroupFragment())
-                .addToBackStack(null)
-                .commit()
-
+            findNavController().navigate(R.id.action_homeFragment_to_createGroupFragment)
         }
 
         binding.ivSearch.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SearchFragment())
-                .addToBackStack(null)
-                .commit()
-
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
 
         binding.ivNotification.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, NotificationFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+
         }
 
     }
@@ -310,11 +296,7 @@ class HomeFragment : Fragment() {
             override fun itemClick(position: Int) {
                 val groupId = latestGroupList[position].groupId
                 sharedViewModel.getGroupId(groupId)
-                val readGroupFragment = ReadGroupFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, readGroupFragment)
-                    .addToBackStack("Read")
-                    .commit()
+                findNavController().navigate(R.id.action_homeFragment_to_readGroupFragment)
             }
         }
 
@@ -322,11 +304,7 @@ class HomeFragment : Fragment() {
             override fun itemClick(position: Int) {
                 val groupId = myGroupList[position].groupId
                 sharedViewModel.getGroupId(groupId)
-                val readGroupFragment = ReadGroupFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, readGroupFragment)
-                    .addToBackStack("Read")
-                    .commit()
+                findNavController().navigate(R.id.action_homeFragment_to_readGroupFragment)
             }
         }
 
@@ -334,11 +312,7 @@ class HomeFragment : Fragment() {
             override fun itemClick(position: Int) {
                 val groupId = recommendGroupList[position].groupId
                 sharedViewModel.getGroupId(groupId)
-                val readGroupFragment = ReadGroupFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, readGroupFragment)
-                    .addToBackStack("Read")
-                    .commit()
+                findNavController().navigate(R.id.action_homeFragment_to_readGroupFragment)
             }
         }
     }
