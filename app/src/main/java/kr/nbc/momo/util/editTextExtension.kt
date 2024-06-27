@@ -139,6 +139,11 @@ fun Fragment.checkDuplicate(
     onValid: () -> Unit,
     successMessage: Int,
 ) {
+    if (!requireContext().isNetworkConnected()) {
+        makeToastWithStringRes(requireContext(), R.string.network_error)
+        return
+    }
+
     val text = editText.text.toString()
     if (!validator(text)) {
         editText.error = errorText

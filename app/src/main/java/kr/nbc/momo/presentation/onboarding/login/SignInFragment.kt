@@ -15,6 +15,7 @@ import kr.nbc.momo.databinding.FragmentLoginBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.onboarding.term.TermFragment
+import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
 
 
@@ -81,7 +82,12 @@ class SignInFragment : BottomSheetDialogFragment() {
                     }
 
                     is UiState.Error -> {
-                        makeToastWithStringRes(requireContext(), R.string.email_or_password_error)
+                        val errorMessage = when {
+                            uiState.message.contains("network") -> getString(R.string.network_error)
+                            uiState.message.contains("password") -> getString(R.string.email_or_password_error)
+                            else -> getString(R.string.unknown_error)
+                        }
+                        makeToastWithString(requireContext(), errorMessage)
                     }
                 }
             }
