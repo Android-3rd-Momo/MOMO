@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -18,7 +19,6 @@ import kr.nbc.momo.databinding.FragmentChattingRoomBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
 import kr.nbc.momo.presentation.main.SharedViewModel
-import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToError
@@ -139,11 +139,7 @@ class ChattingRoomFragment : Fragment() {
                         rvAdapter.itemClick = object : ChattingRecyclerViewAdapter.ItemClick {
                             override fun itemClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
-                                val userInfoFragment = UserInfoFragment()
-                                parentFragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_container, userInfoFragment)
-                                    .addToBackStack(null)
-                                    .commit()
+                                findNavController().navigate(R.id.action_chattingRoomFragment_to_userInfoFragment)
                             }
                         }
                     }
@@ -179,7 +175,7 @@ class ChattingRoomFragment : Fragment() {
                 binding.etText.text.clear()
             }
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
         }
     }

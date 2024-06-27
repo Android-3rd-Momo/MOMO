@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -30,11 +31,9 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.DialogJoinProjectBinding
 import kr.nbc.momo.databinding.FragmentReadGroupBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.chatting.chattingroom.ChattingRoomFragment
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
-import kr.nbc.momo.presentation.userinfo.UserInfoFragment
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
@@ -242,7 +241,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun btnSetOnclickListener() {
         binding.ivReturn.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
     }
 
@@ -288,11 +287,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         adapter.itemClick = object : UserListAdapter.ItemClick {
             override fun itemClick(userId: String) {
                 sharedViewModel.getUserId(userId)
-                val userInfoFragment = UserInfoFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, userInfoFragment)
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.action_readGroupFragment_to_userInfoFragment)
             }
         }
     }
@@ -305,12 +300,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         } else {
             if (data.userList.contains(currentUser)) {
                 binding.btnJoinProject.setOnClickListener {
-                    val chattingRoomFragment = ChattingRoomFragment()
-                    parentFragmentManager.popBackStack()
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, chattingRoomFragment)
-                        .addToBackStack(null)
-                        .commit()
+                    findNavController().navigate(R.id.action_readGroupFragment_to_chattingRoomFragment)
                 }
             } else {
                 binding.btnJoinProject.setOnClickListener {
@@ -326,11 +316,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun btnEditClickListener() {
         binding.btnEdit.setOnClickListener {
-            val editReadGroupFragment = EditReadGroupFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, editReadGroupFragment)
-                .addToBackStack("Read")
-                .commit()
+            findNavController().navigate(R.id.action_readGroupFragment_to_editReadGroupFragment)
         }
 
         if (currentUser != null) {
@@ -424,7 +410,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             R.id.report_group -> {
                 try {
                     viewModel.deleteGroup(groupId, userList)
-                    parentFragmentManager.popBackStack()
+                    findNavController().popBackStack()
                 } catch (e: Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
@@ -434,7 +420,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 try {
                     viewModel.reportUser(leaderId)
                     viewModel.blockUser(leaderId)
-                    parentFragmentManager.popBackStack()
+                    findNavController().popBackStack()
                 } catch (e: Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
@@ -444,7 +430,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             R.id.block_user -> {
                 try {
                     viewModel.blockUser(leaderId)
-                    parentFragmentManager.popBackStack()
+                    findNavController().popBackStack()
                 } catch (e: Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
