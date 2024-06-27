@@ -14,13 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.presentation.UiState
-import kr.nbc.momo.presentation.group.read.ReadGroupFragment
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
@@ -73,10 +73,10 @@ class HomeFragment : Fragment() {
         with(binding.includeNoResultRecommend) {
             tvNoResult.setText(R.string.no_recommend)
             tvNoResult.setOnClickListener {
-                findNavController().navigate(R.id.rootFragment)
+                requireActivity().findViewById<BottomNavigationView>(R.id.navigationView).selectedItemId = R.id.rootFragment
             }
             ivNoResult.setOnClickListener {
-                findNavController().navigate(R.id.rootFragment)
+                requireActivity().findViewById<BottomNavigationView>(R.id.navigationView).selectedItemId = R.id.rootFragment
             }
         }
 
@@ -175,11 +175,7 @@ class HomeFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = myGroupList[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                val readGroupFragment = ReadGroupFragment()
-                                parentFragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_container, readGroupFragment)
-                                    .addToBackStack("Read")
-                                    .commit()
+                                findNavController().navigate(R.id.action_homeFragment_to_readGroupFragment)
                             }
                         }
 
