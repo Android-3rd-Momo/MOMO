@@ -170,6 +170,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     is UiState.Success -> {
                         makeToastWithStringRes(requireContext(), R.string.exit_group_success)
                         initUserList(uiState.data)
+                        initBtnJoin()
 
                     }
 
@@ -213,7 +214,7 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             initChip(chipGroupDevelopmentOccupations, data.category.developmentOccupations)
             initChip(chipProgramingLanguage, data.category.programingLanguage)
 
-            if (data.userList.contains(currentUser)) btnJoinProject.setText(R.string.move_to_chatting)
+            initBtnJoin()
 
             if (userList.contains(currentUser)) {
                 if (data.leaderId == currentUser) {
@@ -236,6 +237,14 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
             tvExitClickListener()
+        }
+    }
+
+    private fun initBtnJoin() {
+        if (userList.contains(currentUser)) {
+            binding.btnJoinProject.setText(R.string.move_to_chatting)
+        } else {
+            binding.btnJoinProject.setText(R.string.join_group)
         }
     }
 
@@ -346,7 +355,6 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 dialog.dismiss()
 
                 currentUser?.let { it1 -> viewModel.deleteUser(it1, groupId) }
-
             }
 
             dialogBinding.btnCancel.setOnClickListener {
