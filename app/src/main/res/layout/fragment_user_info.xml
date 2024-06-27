@@ -19,12 +19,16 @@
 
         <ImageView
             android:id="@+id/btnPopUp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingStart="30dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:src="@drawable/ic_popup_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <ImageView
             android:id="@+id/ivReturn"
@@ -65,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="94dp"
                 android:background="@color/blue"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -238,7 +242,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
                 android:text="@string/empty_edit"
                 android:textSize="14sp"
@@ -278,7 +281,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="10dp"
                 android:text="@string/empty_edit"
                 android:textSize="14sp"

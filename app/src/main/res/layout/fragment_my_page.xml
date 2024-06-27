@@ -44,7 +44,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="53dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/bg_layout_corner_stroke"
+                android:background="@drawable/rv_item_home_vertical_background"
                 android:minHeight="95dp"
                 app:layout_constraintTop_toTopOf="@id/ivBackProfileThumbnail">
 

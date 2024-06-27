@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kr.nbc.momo.databinding.ActivityDevelopmentBinding
 import kr.nbc.momo.databinding.FragmentDevelopmentBinding
 import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.util.setVisibleToGone

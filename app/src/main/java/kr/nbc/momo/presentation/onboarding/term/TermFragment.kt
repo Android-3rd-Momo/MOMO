@@ -20,7 +20,7 @@ class TermFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTermBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -37,29 +37,24 @@ class TermFragment : BottomSheetDialogFragment() {
             cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
                 setAllCheckbox(isChecked)
             }
-            cbTerm1.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-            cbTerm2.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-            cbTerm3.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-            cbTerm4.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
-            cbTerm5.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+
+            listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).forEach { checkbox ->
+                checkbox.setOnCheckedChangeListener { _, _ -> updateAllAcceptCheckbox() }
+            }
         }
     }
 
     private fun setAllCheckbox(isChecked: Boolean) {
         with(binding) {
-            cbTerm1.isChecked = isChecked
-            cbTerm2.isChecked = isChecked
-            cbTerm3.isChecked = isChecked
-            cbTerm4.isChecked = isChecked
-            cbTerm5.isChecked = isChecked
+            listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).forEach { it.isChecked = isChecked }
         }
     }
 
     private fun updateAllAcceptCheckbox() {
         with(binding) {
             cbAllAccept.setOnCheckedChangeListener(null)
-            cbAllAccept.isChecked = cbTerm1.isChecked && cbTerm2.isChecked && cbTerm3.isChecked && cbTerm4.isChecked && cbTerm5.isChecked
-
+            cbAllAccept.isChecked = listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).all { it.isChecked }
+            btnAccept.isEnabled = listOf(cbTerm1, cbTerm2, cbTerm3, cbTerm4).all { it.isChecked }
             cbAllAccept.setOnCheckedChangeListener { _, isChecked ->
                 setAllCheckbox(isChecked)
             }
@@ -115,7 +110,6 @@ class TermFragment : BottomSheetDialogFragment() {
                     makeToastWithStringRes(requireContext(), R.string.term_title)
                 }
             }
-
         }
     }
 
