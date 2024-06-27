@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -17,7 +18,6 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentMyGroupBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.presentation.main.MainActivity
 import kr.nbc.momo.presentation.main.SharedViewModel
 import kr.nbc.momo.presentation.mypage.group.adapter.LeaderGroupAdapter
 import kr.nbc.momo.presentation.mypage.group.adapter.LeaderSubAdapter
@@ -147,7 +147,7 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = filterData[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 
@@ -186,7 +186,7 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 
@@ -278,7 +278,7 @@ class MyGroupFragment : Fragment() {
                         leaderSubAdapter.userClick = object : LeaderSubAdapter.UserClick {
                             override fun userClick(userId: String) {
                                 sharedViewModel.getUserId(userId)
-                                (activity as? MainActivity)?.beginTransactionUserInfo()
+                                findNavController().navigate(R.id.action_rootFragment_to_userInfoFragment)
                             }
                         }
 
@@ -295,7 +295,7 @@ class MyGroupFragment : Fragment() {
                             override fun itemClick(position: Int) {
                                 val groupId = uiState.data[position].groupId
                                 sharedViewModel.getGroupId(groupId)
-                                (activity as? MainActivity)?.beginTransactionRead()
+                                findNavController().navigate(R.id.action_rootFragment_to_readGroupFragment)
                             }
                         }
 

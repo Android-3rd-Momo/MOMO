@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -76,7 +77,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     is UiState.Error -> {
-                        parentFragmentManager.popBackStack()
+                        findNavController().popBackStack()
                         makeToastWithStringRes(requireContext(), R.string.failed_get_user_info)
 //                        Toast.makeText(requireContext(), getString(R.string.failed_get_user_info), Toast.LENGTH_SHORT).show()
                     }
@@ -135,7 +136,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
 
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
 
             btnPopUp.setOnClickListener {
@@ -182,7 +183,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                     if (uiState.data != null) {
                                         viewModel.reportUser(userId)
                                         viewModel.blockUser(userId)
-                                        parentFragmentManager.popBackStack()
+                                        findNavController().popBackStack()
                                     } else {
                                         makeToastWithStringRes(
                                             requireContext(),
@@ -210,7 +211,7 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                 is UiState.Success -> {
                                     if (uiState.data != null) {
                                         viewModel.blockUser(userId)
-                                        parentFragmentManager.popBackStack()
+                                        findNavController().popBackStack()
                                     } else {
                                         makeToastWithStringRes(
                                             requireContext(),

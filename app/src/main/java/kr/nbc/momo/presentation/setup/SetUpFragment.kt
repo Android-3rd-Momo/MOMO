@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.nbc.momo.R
@@ -97,7 +98,7 @@ class SetUpFragment : Fragment() {
     private fun eachEventHandler(userId: String) {
         with(binding){
             ivReturn.setOnClickListener {
-                parentFragmentManager.popBackStack()
+                findNavController().popBackStack()
             }
             tvSignOut.setOnClickListener {
                 showConfirmationDialog(getString(R.string.check_logout)) {
