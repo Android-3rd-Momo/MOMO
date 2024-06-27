@@ -220,23 +220,23 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 if (data.leaderId == currentUser) {
                     btnEdit.setVisibleToVisible()
                     btnPopUp.setVisibleToGone()
-                    btnExit.setVisibleToGone()
+                    tvExit.setVisibleToGone()
                 } else {
                     btnEdit.setVisibleToGone()
                     btnPopUp.setVisibleToGone()
-                    btnExit.setVisibleToVisible()
+                    tvExit.setVisibleToVisible()
                 }
             } else {
                 btnEdit.setVisibleToGone()
                 btnPopUp.setVisibleToVisible()
-                btnExit.setVisibleToGone()
+                tvExit.setVisibleToGone()
             }
 
 
             initUserList(data.userList)
             btnJoinProjectClickListener(currentUser, data)
             btnEditClickListener()
-            btnExitClickListener()
+            tvExitClickListener()
         }
     }
 
@@ -344,8 +344,8 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-    private fun btnExitClickListener() {
-        binding.btnExit.setOnClickListener {
+    private fun tvExitClickListener() {
+        binding.tvExit.setOnClickListener {
 
             val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
             val dialog = AlertDialog.Builder(requireContext())

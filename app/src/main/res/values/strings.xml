@@ -372,6 +372,7 @@
     <string name="email_or_password_error">이메일 또는 비밀번호를 다시 입력해주세요.</string>
     <string name="check_Duplicate">중복을 확인해 주세요.</string>
     <string name="network_error">네트워크 상태를 확인해주세요.</string>
+    <string name="unknown_error">오류 발생</string>
     <string name="apply_success">가입 신청 성공</string>
 
     <string name="content_desc_on_boarding">모이개에 오신것을 환영합니다!</string>

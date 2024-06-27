@@ -11,7 +11,6 @@ import kr.nbc.momo.domain.usecase.CreateGroupUseCase
 import kr.nbc.momo.domain.usecase.JoinGroupUseCase
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.mapper.asGroupEntity
-import kr.nbc.momo.presentation.group.mapper.toGroupModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import javax.inject.Inject
 
