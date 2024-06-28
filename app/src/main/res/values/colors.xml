@@ -3,8 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFF</color>
     <color name="blue"> #326DF7</color>
-    <color name="sky_blue">#B7CDFF</color>
-    <color name="dark_blue">#3F51B5</color>
     <color name= "grey"> #F9F9F9</color>
     <color name="red_error">#FF0000</color>
     <color name= "darkGrey">#E9E9E9</color>
