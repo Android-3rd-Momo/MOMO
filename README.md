@@ -52,7 +52,7 @@ del : 버그 수정
 ### Gantt chart
 ![](https://velog.velcdn.com/images/qhdrb123/post/908dda56-db3a-445b-8c5e-93e0b9b7a582/image.png)
 
-## 애플리케이션 기능
+## 👍애플리케이션 기능
 - 모임 CRUD
 
 |모임생성|모임수정|
