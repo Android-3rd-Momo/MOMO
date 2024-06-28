@@ -393,4 +393,7 @@
     <string name="content_desc_rv_chat">채팅 리스트</string>
 
     <string name="line_change_error">줄바꿈은 연속해서 3회 이상 입력할 수 없습니다.</string>
+
+    <!--소스코드 시작-->
+    <string name="max_notification_number">9+</string>
 </resources>
