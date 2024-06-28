@@ -250,6 +250,7 @@ class EditReadGroupFragment : Fragment() {
                 try {
                     viewModel.deleteGroup(data.groupId, data.userList)
                     findNavController().popBackStack()
+                    findNavController().popBackStack()
                 } catch (e : Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
