@@ -98,7 +98,7 @@
                 android:textSize="16sp"
                 android:singleLine="true"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clCategoryDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/clImageViewComponent" />
 
             <EditText
                 android:id="@+id/groupOneLineDescription"
@@ -114,7 +114,7 @@
                 android:textSize="16sp"
                 android:singleLine="true"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/groupName" />
+                app:layout_constraintTop_toBottomOf="@+id/tvLimitPeople" />
 
             <EditText
                 android:id="@+id/groupDescription"
@@ -142,7 +142,7 @@
                 android:background="@drawable/bg_layout_corner_stroke"
                 android:padding="1dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clImageViewComponent">
+                app:layout_constraintTop_toBottomOf="@+id/groupName">
 
                 <Spinner
                     android:id="@+id/categorySpinner"
@@ -161,7 +161,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clCategoryDetail"
+                android:id="@+id/clCategoryOccupation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -172,61 +172,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clImageViewComponent2">
 
-                <TextView
-                    android:id="@+id/tvCategoryDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/category_info"
-                    android:textColorHint="@color/hint_grey"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvProgramingLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/dev_lang"
-                    android:textSize="16sp"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/chipGroupDevelopmentOccupations" />
-
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipProgramingLanguage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    app:chipSpacingHorizontal="4dp"
-                    app:chipSpacingVertical="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvProgramingLanguage">
-
-                </com.google.android.material.chip.ChipGroup>
 
                 <TextView
                     android:id="@+id/tvDevelopmentOccupations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
                     android:text="@string/dev_occupation"
+                    android:textColor="@color/hint_grey"
                     android:textSize="16sp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCategoryDetail" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroupDevelopmentOccupations"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:chipSpacingHorizontal="4dp"
                     app:chipSpacingVertical="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -237,7 +200,46 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clCategoryLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_layout_corner_stroke"
+                android:padding="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clCategoryOccupation">
 
+                <TextView
+                    android:id="@+id/tvProgramingLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dev_lang"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    android:textColor="@color/hint_grey"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipProgramingLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:visibility="visible"
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvProgramingLanguage">
+
+                </com.google.android.material.chip.ChipGroup>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clDateComponent"
                 android:layout_width="match_parent"
@@ -248,7 +250,7 @@
                 android:background="@drawable/bg_layout_corner_stroke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/groupDescription">
+                app:layout_constraintTop_toBottomOf="@+id/clCategoryLanguage">
 
                 <TextView
                     android:id="@+id/tvDate"
