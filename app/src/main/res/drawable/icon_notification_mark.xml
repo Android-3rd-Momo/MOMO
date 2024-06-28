@@ -15,7 +15,7 @@
       android:strokeColor="@color/black"
       android:strokeLineCap="round"/>
   <path
-      android:strokeWidth="1.5"
+      android:strokeWidth="6"
       android:pathData="M18,6m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
       android:fillColor="@color/blue"
       android:strokeColor="@color/blue"/>
