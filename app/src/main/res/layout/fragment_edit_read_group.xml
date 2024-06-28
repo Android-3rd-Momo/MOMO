@@ -95,7 +95,7 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@color/blue"
+                android:background="@drawable/bg_user_blue_gradient"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -132,7 +132,7 @@
                 <ImageView
                     android:id="@+id/ivGroupImageEdit"
                     android:layout_width="72dp"
-                    android:layout_height="65dp"
+                    android:layout_height="72dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/circle_bg"
                     android:clipToOutline="true"

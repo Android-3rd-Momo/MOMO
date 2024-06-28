@@ -40,6 +40,7 @@
         android:textColor="@color/blue"
         android:maxLines="1"
         android:maxWidth="150dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,10 +65,10 @@
         android:ellipsize = "end"
         android:textSize="12sp"
         android:fontFamily="@font/sfprodisplayregular"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginStart="10dp"
         android:textColor="#919191"
-        android:maxLines="2"
+        android:maxLines="1"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
