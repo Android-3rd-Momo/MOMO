@@ -52,7 +52,7 @@ class ChatListRepositoryImpl @Inject constructor(
             newGroupList.add(chattingListResponse)
         }
 
-        return newGroupList.map { it.toEntity() }
+        return newGroupList.map { it.toEntity() }.filter { it.groupName != "Error" }
     }
 
     override suspend fun getChattingListByGroupId(string: String): ChattingListEntity {

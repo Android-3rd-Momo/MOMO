@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 
 class LatestGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<LatestGroupListAdapter.LatestGroupListAdapterHolder>() {
     interface ItemClick{
@@ -33,7 +33,7 @@ class LatestGroupListAdapter(private var items: List<GroupModel>): RecyclerView.
         holder.itemView.setOnClickListener {
             itemClick?.itemClick(position)
         }
-        holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
+        holder.image.setGroupImageByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].groupName
         holder.description.text = items[position].groupOneLineDescription
         holder.category.text = items[position].category.classification

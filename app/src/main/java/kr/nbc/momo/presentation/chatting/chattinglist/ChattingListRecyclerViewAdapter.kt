@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemChattingListBinding
 import kr.nbc.momo.presentation.chatting.chattinglist.model.ChattingListModel
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToInvisible
 import kr.nbc.momo.util.setVisibleToVisible
 
@@ -20,7 +20,7 @@ class ChattingListRecyclerViewAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chattingListModel: ChattingListModel) {
             with(binding) {
-                ivGroupImage.setThumbnailByUrlOrDefault(chattingListModel.groupThumbnailUrl)
+                ivGroupImage.setGroupImageByUrlOrDefault(chattingListModel.groupThumbnailUrl)
                 tvGroupName.text = chattingListModel.groupName
                 tvLatestChatText.text = chattingListModel.latestChatMessage
                 tvLatestChatTime.text = chattingListModel.latestChatTimeGap

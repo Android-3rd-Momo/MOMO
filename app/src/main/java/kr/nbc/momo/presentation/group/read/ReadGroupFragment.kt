@@ -37,7 +37,7 @@ import kr.nbc.momo.presentation.onboarding.OnBoardingActivity
 import kr.nbc.momo.util.hideNav
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToError
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToVisible
@@ -276,9 +276,9 @@ class ReadGroupFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun initGroupThumbnail(groupThumbnail: String?) {
         if (groupThumbnail.isNullOrEmpty()) {
-            binding.ivGroupImage.setThumbnailByUrlOrDefault(null)
+            binding.ivGroupImage.setGroupImageByUrlOrDefault(null)
         } else {
-            binding.ivGroupImage.setThumbnailByUrlOrDefault(groupThumbnail)
+            binding.ivGroupImage.setGroupImageByUrlOrDefault(groupThumbnail)
         }
     }
 

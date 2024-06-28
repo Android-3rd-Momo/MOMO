@@ -112,7 +112,13 @@ fun randomStr() : String {
         .map { charset[secureRandom.nextInt(charset.size)] }
         .joinToString("")
 }
-
+fun ImageView.setGroupImageByUrlOrDefault(url: String?) {
+    if (url.isNullOrEmpty() || url == "null") {
+        this.load(R.drawable.icon_group_image)
+    } else {
+        this.load(url)
+    }
+}
 fun ImageView.setThumbnailByUrlOrDefault(url: String?) {
     if (url.isNullOrEmpty() || url == "null") {
         this.load(R.drawable.icon_profile)

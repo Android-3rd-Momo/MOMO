@@ -5,7 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeHorizontalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
+
 class LeaderGroupAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<LeaderGroupAdapter.LeaderGroupAdapterHolder>() {
     interface ItemClick{
         fun itemClick(position: Int)
@@ -31,7 +32,7 @@ class LeaderGroupAdapter(private var items: List<GroupModel>): RecyclerView.Adap
             itemClick?.itemClick(position)
         }
         holder.image.clipToOutline = true
-        holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
+        holder.image.setGroupImageByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].groupName
     }
 
