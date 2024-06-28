@@ -38,6 +38,8 @@ import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.group.model.CategoryModel
 import kr.nbc.momo.presentation.group.model.GroupModel
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.presentation.mypage.profile.ImageOption
+import kr.nbc.momo.presentation.mypage.profile.ImageType
 import kr.nbc.momo.util.addTextWatcherWithError
 import kr.nbc.momo.util.getAfterOneMonthTimeMillis
 import kr.nbc.momo.util.getCurrentTimeMillis
@@ -88,6 +90,7 @@ class EditReadGroupFragment : Fragment() {
         observeDeleteUser()
         initTextWatcher()
     }
+
     private fun observeUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -149,7 +152,6 @@ class EditReadGroupFragment : Fragment() {
     }
 
 
-
     private fun observeDeleteUser() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.userDeleteState.collect { uiState ->
@@ -182,9 +184,9 @@ class EditReadGroupFragment : Fragment() {
                 groupId?.let {
                     viewModel.readGroup(it)
                 }
-/*                if (groupId != null) {
-                    viewModel.readGroup(groupId)
-                }*/
+                /*                if (groupId != null) {
+                                    viewModel.readGroup(groupId)
+                                }*/
             }
         }
     }
@@ -229,13 +231,8 @@ class EditReadGroupFragment : Fragment() {
             tvLimitPeopleEdit.setOnClickListener {
                 showDialogNumberPicker(tvLimitPeopleEdit, data.userList.size)
             }
-            ivGroupImageEdit.setOnClickListener {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
-            }
-            ivDeleteGroupImage.setOnClickListener {
-                imageUri = null
-                isGroupImageChange = true
-                ivGroupImageEdit.setGroupImageByUrlOrDefault(null)
+            cvEditGroupImage.setOnClickListener {
+                showImageOptionDialog()
             }
             tvFirstDateEdit.setOnClickListener {
                 showDialog(tvFirstDateEdit, Value.First)
@@ -246,12 +243,12 @@ class EditReadGroupFragment : Fragment() {
             btnCompleteEdit.setOnClickListener {
                 btnCompleteEditOnClickListener(data)
             }
-            btnDelete.setOnClickListener {
+            tvDelete.setOnClickListener {
                 try {
                     viewModel.deleteGroup(data.groupId, data.userList)
                     findNavController().popBackStack()
                     findNavController().popBackStack()
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
@@ -295,7 +292,7 @@ class EditReadGroupFragment : Fragment() {
                 ), imageUri
             )
             findNavController().popBackStack()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             makeToastWithStringRes(requireContext(), R.string.error)
         }
 
@@ -349,12 +346,12 @@ class EditReadGroupFragment : Fragment() {
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    p0?.let{
+                    p0?.let {
                         categoryText = it.getItemAtPosition(p2).toString()
                     }
-/*                    if (p0 != null) {
-                        categoryText = p0.getItemAtPosition(p2).toString()
-                    }*/
+                    /*                    if (p0 != null) {
+                                            categoryText = p0.getItemAtPosition(p2).toString()
+                                        }*/
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -400,6 +397,7 @@ class EditReadGroupFragment : Fragment() {
         }
         dialogBuilder.show()
     }
+
     private fun showDialog(groupId: String, userId: String, anDialog: EnumDialog) {
         val dialogBinding = DialogJoinProjectBinding.inflate(layoutInflater)
         val dialogBuilder = AlertDialog.Builder(requireContext())
@@ -415,7 +413,7 @@ class EditReadGroupFragment : Fragment() {
                 try {
                     viewModel.leaderChange(groupId, userId)
                     findNavController().popBackStack()
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
@@ -427,7 +425,7 @@ class EditReadGroupFragment : Fragment() {
                 dialogBuilder.dismiss()
                 try {
                     viewModel.deleteUser(userId, groupId)
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     makeToastWithStringRes(requireContext(), R.string.error)
                 }
             }
@@ -478,5 +476,21 @@ class EditReadGroupFragment : Fragment() {
             picker.datePicker.maxDate = lastMaxTimeInMillis
         }
         picker.show()
+    }
+
+    private fun showImageOptionDialog() {
+        val options = ImageOption.entries.map { it.getOptionText(requireContext()) }.toTypedArray()
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setItems(options) { _, position ->
+            when (ImageOption.entries[position]) {
+                ImageOption.PICK_IMAGE -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+                ImageOption.DELETE_IMAGE -> {
+                    imageUri = null
+                    isGroupImageChange = true
+                    binding.ivGroupImageEdit.setGroupImageByUrlOrDefault(null)
+                }
+            }
+        }
+        builder.show()
     }
 }

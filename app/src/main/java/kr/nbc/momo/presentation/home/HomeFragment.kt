@@ -22,6 +22,7 @@ import kr.nbc.momo.R
 import kr.nbc.momo.databinding.FragmentHomeBinding
 import kr.nbc.momo.presentation.UiState
 import kr.nbc.momo.presentation.main.SharedViewModel
+import kr.nbc.momo.util.MAX_NOTIFICATION
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.setVisibleToGone
 import kr.nbc.momo.util.setVisibleToInvisible
@@ -73,10 +74,12 @@ class HomeFragment : Fragment() {
         with(binding.includeNoResultRecommend) {
             tvNoResult.setText(R.string.no_recommend)
             tvNoResult.setOnClickListener {
-                requireActivity().findViewById<BottomNavigationView>(R.id.navigationView).selectedItemId = R.id.rootFragment
+                requireActivity().findViewById<BottomNavigationView>(R.id.navigationView).selectedItemId =
+                    R.id.rootFragment
             }
             ivNoResult.setOnClickListener {
-                requireActivity().findViewById<BottomNavigationView>(R.id.navigationView).selectedItemId = R.id.rootFragment
+                requireActivity().findViewById<BottomNavigationView>(R.id.navigationView).selectedItemId =
+                    R.id.rootFragment
             }
         }
 
@@ -211,13 +214,13 @@ class HomeFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            binding.tvNotificationCount.text = state.data.toString()
+                            binding.tvNotificationCount.text = if (state.data > MAX_NOTIFICATION) getString(R.string.max_notification_number) else state.data.toString()
 
                             if (state.data == 0) {
-                                binding.ivNotification.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_notification))
+                                binding.flNotificationBackground.setVisibleToGone()
                                 binding.tvNotificationCount.setVisibleToGone()
                             } else {
-                                binding.ivNotification.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_notification_mark))
+                                binding.flNotificationBackground.setVisibleToVisible()
                                 binding.tvNotificationCount.setVisibleToVisible()
                             }
                         }

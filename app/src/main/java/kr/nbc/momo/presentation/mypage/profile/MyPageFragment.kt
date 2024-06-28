@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -137,7 +138,13 @@ class MyPageFragment : Fragment() {
             chipGroup.addView(Chip(requireContext()).apply {
                 text = chipText
                 isCheckable = false
-                setChipBackgroundColorResource(R.color.white)
+                setTextColor(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        R.color.base_chip_text
+                    )
+                )
+                setChipBackgroundColorResource(R.color.base_chip_bg)
             })
         }
     }

@@ -273,6 +273,7 @@
     <string name="default_max_user">1/15</string>
     <string name="join_group">모임 참여하기</string>
     <string name="group_withdrawal">모임 탈퇴</string>
+    <string name="group_delete">모임 삭제</string>
     <string name="zero">zero</string>
     <!--설정 문자모음-->
     <string name="option">설정</string>
@@ -393,4 +394,7 @@
     <string name="content_desc_rv_chat">채팅 리스트</string>
 
     <string name="line_change_error">줄바꿈은 연속해서 3회 이상 입력할 수 없습니다.</string>
+
+    <!--소스코드 시작-->
+    <string name="max_notification_number">9+</string>
 </resources>

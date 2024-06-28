@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.home.HomeFragment"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey">
+    android:background="@color/grey"
+    tools:context=".presentation.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -22,9 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:fontFamily="@font/sfproiddisplaybold"
             android:text="@string/app_name"
             android:textSize="18sp"
-            android:fontFamily="@font/sfproiddisplaybold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,10 +32,10 @@
             android:id="@+id/ivSearch"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="12dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/icon_search"
             android:contentDescription="@string/content_desc_go_search"
+            android:padding="12dp"
+            android:src="@drawable/icon_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,19 +51,30 @@
             app:layout_constraintEnd_toStartOf="@+id/ivSearch"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <FrameLayout
+            android:id="@+id/flNotificationBackground"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_margin="7dp"
+            android:visibility="gone"
+            android:background="@drawable/circle_blue"
+            app:layout_constraintEnd_toEndOf="@id/iv_notification"
+            app:layout_constraintTop_toTopOf="@id/iv_notification">
 
-        <TextView
-            android:id="@+id/tvNotificationCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="6sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_notification"
-            app:layout_constraintEnd_toEndOf="@+id/iv_notification"
-            app:layout_constraintHorizontal_bias="0.64"
-            app:layout_constraintStart_toStartOf="@+id/iv_notification"
-            app:layout_constraintTop_toTopOf="@+id/iv_notification"
-            app:layout_constraintVertical_bias="0.34" />
+            <TextView
+                android:id="@+id/tvNotificationCount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/sfprodisplaymedium"
+                android:padding="1dp"
+                tools:text="99+"
+                android:autoSizeMinTextSize="8dp"
+                android:autoSizeMaxTextSize="14dp"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+        </FrameLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -72,11 +82,11 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
-        android:fillViewport="true">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -89,10 +99,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/default_user_joined_group"
-                android:textSize="18sp"
                 android:fontFamily="@font/sfproiddisplaybold"
+                android:text="@string/default_user_joined_group"
                 android:textColor="@color/black"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -100,10 +110,10 @@
                 android:id="@+id/rvMyGroupList"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/grey"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
+                android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
@@ -113,10 +123,10 @@
                 layout="@layout/ui_state_loading"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/grey"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
+                android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUserGroupList" />
@@ -126,10 +136,10 @@
                 layout="@layout/ui_state_no_result"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/grey"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
+                android:background="@color/grey"
                 app:layoutDescription="@string/content_desc_no_joined"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,12 +149,12 @@
                 android:id="@+id/tvRecommendGroupList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recommend_group"
-                android:textSize="18sp"
-                android:fontFamily="@font/sfproiddisplaybold"
-                android:textColor="@color/black"
-                android:layout_marginTop="32dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/sfproiddisplaybold"
+                android:text="@string/recommend_group"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rvMyGroupList" />
 
@@ -152,10 +162,10 @@
                 android:id="@+id/rvRecommendGroupList"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/grey"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
+                android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
@@ -165,10 +175,10 @@
                 layout="@layout/ui_state_loading"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/grey"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
+                android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvRecommendGroupList" />
@@ -178,10 +188,10 @@
                 layout="@layout/ui_state_no_result"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/grey"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
+                android:background="@color/grey"
                 app:layoutDescription="@string/content_desc_no_recommend"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -191,12 +201,12 @@
                 android:id="@+id/tvLatestGroupList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/latest_group"
-                android:textSize="18sp"
-                android:fontFamily="@font/sfproiddisplaybold"
-                android:textColor="@color/black"
-                android:layout_marginTop="32dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/sfproiddisplaybold"
+                android:text="@string/latest_group"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rvRecommendGroupList" />
 
@@ -217,8 +227,8 @@
                 layout="@layout/ui_state_no_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/grey"
                 app:layoutDescription="@string/content_desc_no_latest"
@@ -232,8 +242,8 @@
                 layout="@layout/ui_state_loading"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/grey"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -249,19 +259,19 @@
         android:id="@+id/floatingBtnCreateGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/bg_btn_most_radius_blue"
         android:paddingStart="16dp"
+        android:paddingTop="10dp"
         android:paddingEnd="16dp"
         android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:background="@drawable/bg_btn_most_radius_blue"
         android:text="@string/floating_btn_create_group"
         android:textColor="@color/white"
-        android:textStyle="bold"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

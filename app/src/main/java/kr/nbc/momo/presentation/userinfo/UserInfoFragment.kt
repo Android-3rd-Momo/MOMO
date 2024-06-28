@@ -154,11 +154,11 @@ class UserInfoFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 setTextColor(
                     ContextCompat.getColorStateList(
                         requireContext(),
-                        R.color.white
+                        R.color.base_chip_text
                     )
                 )
                 setChipBackgroundColorResource(
-                    R.color.blue
+                    R.color.base_chip_bg
                 )
             }
             chipGroup.addView(chip)
