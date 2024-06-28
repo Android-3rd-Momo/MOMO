@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun onBoardingLaunch(){
         try {
             val sharedPreferences: SharedPreferences = getSharedPreferences("onBoarding", MODE_PRIVATE)
