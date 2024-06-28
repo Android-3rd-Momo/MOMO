@@ -1,6 +1,8 @@
 package kr.nbc.momo.presentation.chatting.chattingroom
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -177,6 +179,24 @@ class ChattingRoomFragment : Fragment() {
             ivReturn.setOnClickListener {
                 findNavController().popBackStack()
             }
+            etText.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s.isNullOrBlank()) ivSend.setVisibleToGone()
+                    else ivSend.setVisibleToVisible()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                }
+
+            })
         }
     }
 
