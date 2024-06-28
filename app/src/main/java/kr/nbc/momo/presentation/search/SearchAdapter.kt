@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 
 class SearchAdapter(
     private val onClick: (GroupModel) -> Unit
@@ -18,7 +18,7 @@ class SearchAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(groupModel: GroupModel) {
             with(binding) {
-                ivGroupImage.setThumbnailByUrlOrDefault(groupModel.groupThumbnail)
+                ivGroupImage.setGroupImageByUrlOrDefault(groupModel.groupThumbnail)
                 tvName.text = groupModel.groupName
                 tvDescription.text = groupModel.groupDescription
                 tvCategory.text = groupModel.category.developmentOccupations.joinToString()

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -16,13 +15,10 @@ import kr.nbc.momo.databinding.UiStateLoadingBinding
 import kr.nbc.momo.databinding.UiStateNoResultBinding
 import java.security.SecureRandom
 import java.time.Duration
-import java.time.LocalDateTime
 import java.time.Period
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
 
 fun String.setDateTimeFormatToMMDD(): String {
     val parsedKoreaTime = ZonedDateTime.parse(this)
@@ -112,7 +108,13 @@ fun randomStr() : String {
         .map { charset[secureRandom.nextInt(charset.size)] }
         .joinToString("")
 }
-
+fun ImageView.setGroupImageByUrlOrDefault(url: String?) {
+    if (url.isNullOrEmpty() || url == "null") {
+        this.load(R.drawable.icon_group_image)
+    } else {
+        this.load(url)
+    }
+}
 fun ImageView.setThumbnailByUrlOrDefault(url: String?) {
     if (url.isNullOrEmpty() || url == "null") {
         this.load(R.drawable.icon_profile)

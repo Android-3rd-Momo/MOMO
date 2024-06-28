@@ -187,21 +187,6 @@ class CreateGroupFragment : Fragment() {
                 showDialog(lastDate, Value.Last)
             }
 
-            clCategoryDetail.setOnClickListener {
-                val viewArr = listOf(
-                    chipGroupDevelopmentOccupations,
-                    chipProgramingLanguage,
-                    tvDevelopmentOccupations,
-                    tvProgramingLanguage
-                )
-                viewArr.forEach {
-                    if (it.visibility == View.GONE) {
-                        it.visibility = View.VISIBLE
-                    } else {
-                        it.visibility = View.GONE
-                    }
-                }
-            }
 
             ivGroupImage.clipToOutline = true
             ivGroupImage.setOnClickListener {

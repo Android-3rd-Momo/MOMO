@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeVerticalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToVisible
 
 class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<MemberSubAdapter.MemberSubAdapterHolder>() {
@@ -44,7 +44,7 @@ class MemberSubAdapter(private var items: List<GroupModel>): RecyclerView.Adapte
         holder.exit.setOnClickListener {
             exitClick?.exitClick(items[position].groupId)
         }
-        holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
+        holder.image.setGroupImageByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].groupName
         holder.description.text = items[position].groupOneLineDescription
         holder.category.text = items[position].category.classification

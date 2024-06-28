@@ -43,7 +43,7 @@ import kr.nbc.momo.util.getAfterOneMonthTimeMillis
 import kr.nbc.momo.util.getCurrentTimeMillis
 import kr.nbc.momo.util.makeToastWithString
 import kr.nbc.momo.util.makeToastWithStringRes
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 import kr.nbc.momo.util.setVisibleToVisible
 import java.util.Calendar
 
@@ -67,7 +67,7 @@ class EditReadGroupFragment : Fragment() {
         if (uri != null) {
             imageUri = uri
             isGroupImageChange = true
-            binding.ivGroupImageEdit.setThumbnailByUrlOrDefault(uri.toString())
+            binding.ivGroupImageEdit.setGroupImageByUrlOrDefault(uri.toString())
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -235,7 +235,7 @@ class EditReadGroupFragment : Fragment() {
             ivDeleteGroupImage.setOnClickListener {
                 imageUri = null
                 isGroupImageChange = true
-                ivGroupImageEdit.setThumbnailByUrlOrDefault(null)
+                ivGroupImageEdit.setGroupImageByUrlOrDefault(null)
             }
             tvFirstDateEdit.setOnClickListener {
                 showDialog(tvFirstDateEdit, Value.First)
@@ -263,7 +263,7 @@ class EditReadGroupFragment : Fragment() {
             etGroupOneLineDescriptionEdit.setText(data.groupOneLineDescription)
             tvLeaderIdEdit.text = data.leaderId
             etGroupDescriptionEdit.setText(data.groupDescription)
-            ivGroupImageEdit.setThumbnailByUrlOrDefault(data.groupThumbnail)
+            ivGroupImageEdit.setGroupImageByUrlOrDefault(data.groupThumbnail)
             tvLastDateEdit.text = data.lastDate
             tvFirstDateEdit.text = data.firstDate
 
@@ -364,9 +364,9 @@ class EditReadGroupFragment : Fragment() {
     }
     private fun initTextWatcher(){
         with(binding){
-            etGroupDescriptionEdit.addTextWatcherWithError(500, requireContext().getString(kr.nbc.momo.R.string.group_desc), btnCompleteEdit)
-            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, requireContext().getString(kr.nbc.momo.R.string.group_one_line_desc), btnCompleteEdit)
-            etGroupNameEdit.addTextWatcherWithError(30, requireContext().getString(kr.nbc.momo.R.string.group_name), btnCompleteEdit)
+            etGroupDescriptionEdit.addTextWatcherWithError(500, requireContext().getString(R.string.group_desc), btnCompleteEdit)
+            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_one_line_desc), btnCompleteEdit)
+            etGroupNameEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_name), btnCompleteEdit)
         }
     }
 
