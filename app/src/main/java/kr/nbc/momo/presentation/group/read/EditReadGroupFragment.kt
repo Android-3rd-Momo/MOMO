@@ -364,9 +364,9 @@ class EditReadGroupFragment : Fragment() {
     }
     private fun initTextWatcher(){
         with(binding){
-            etGroupDescriptionEdit.addTextWatcherWithError(500, requireContext().getString(kr.nbc.momo.R.string.group_desc), btnCompleteEdit)
-            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, requireContext().getString(kr.nbc.momo.R.string.group_one_line_desc), btnCompleteEdit)
-            etGroupNameEdit.addTextWatcherWithError(30, requireContext().getString(kr.nbc.momo.R.string.group_name), btnCompleteEdit)
+            etGroupDescriptionEdit.addTextWatcherWithError(500, requireContext().getString(R.string.group_desc), btnCompleteEdit)
+            etGroupOneLineDescriptionEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_one_line_desc), btnCompleteEdit)
+            etGroupNameEdit.addTextWatcherWithError(30, requireContext().getString(R.string.group_name), btnCompleteEdit)
         }
     }
 
