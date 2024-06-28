@@ -16,8 +16,8 @@ android {
         applicationId = "kr.nbc.momo"
         minSdk = 30
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.2"
+        versionCode = 7
+        versionName = "1.1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
