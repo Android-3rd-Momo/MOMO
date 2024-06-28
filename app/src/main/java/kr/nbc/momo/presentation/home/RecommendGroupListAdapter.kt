@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.nbc.momo.databinding.RvItemHomeHorizontalBinding
 import kr.nbc.momo.presentation.group.model.GroupModel
-import kr.nbc.momo.util.setThumbnailByUrlOrDefault
+import kr.nbc.momo.util.setGroupImageByUrlOrDefault
 
 class RecommendGroupListAdapter(private var items: List<GroupModel>): RecyclerView.Adapter<RecommendGroupListAdapter.RecommendGroupListAdapterHolder>() {
     interface ItemClick{
@@ -32,7 +32,7 @@ class RecommendGroupListAdapter(private var items: List<GroupModel>): RecyclerVi
             itemClick?.itemClick(position)
         }
         holder.image.clipToOutline = true
-        holder.image.setThumbnailByUrlOrDefault(items[position].groupThumbnail)
+        holder.image.setGroupImageByUrlOrDefault(items[position].groupThumbnail)
         holder.name.text = items[position].groupName
     }
 
