@@ -60,7 +60,7 @@
             app:tabSelectedTextAppearance="@style/template_tab_text"
             app:tabSelectedTextColor="@color/blue"
             app:tabTextAppearance="@style/template_tab_text"
-            app:tabTextColor="@color/darkGrey">
+            app:tabTextColor="@color/hint_grey">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
