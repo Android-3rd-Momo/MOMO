@@ -31,7 +31,7 @@
                 android:id="@+id/ivBackProfileThumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="94dp"
-                android:background="@color/blue"
+                android:background="@drawable/bg_user_blue_gradient"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
