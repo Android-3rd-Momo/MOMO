@@ -28,6 +28,30 @@
 | 이미지 로더 | <img src="https://img.shields.io/badge/Coil-18BED4?style=for-the-badge">  |
 | UI Frameworks | <img src="https://img.shields.io/badge/Fragment-492f64?style=for-the-badge"> <img src="https://img.shields.io/badge/RecyclerViewAdapter-6e3630?style=for-the-badge"> <img src="https://img.shields.io/badge/ArrayAdapter-373737?style=for-the-badge"> <img src="https://img.shields.io/badge/XML-89632a?style=for-the-badge"> <img src="https://img.shields.io/badge/MaterialDesign-757575?style=for-the-badge"> <img src="https://img.shields.io/badge/ViewPager-a0a0a0?style=for-the-badge"> <img src="https://img.shields.io/badge/Photo Picker-FF8E99?style=for-the-badge"> <img src="https://img.shields.io/badge/Date Picker-41a541?style=for-the-badge">   <img src="https://img.shields.io/badge/Number Picker-6EE0FF?style=for-the-badge">   
 
+## 👍애플리케이션 기능
+- 모임 CRUD
+
+|모임생성|모임수정|모임참여|
+|---|---|---|
+|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/151c16a4-9b7c-4fa7-b7f0-27b91073da00" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/de35a85e-ff6f-48a3-8c30-5db3ccaf538d" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/61fd9cbe-7bdb-4bc4-9c1e-097bb308cb97" width="200" height="420"/>|
+
+- 모임에 유저 추가 및 삭제
+
+|모임 가입 승인|모임 탈퇴|유저 강퇴|
+|---|---|---|
+|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/9f5ca7fd-fda3-4111-b645-730e8ba8a928" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/9f1458be-b065-4c37-9660-af6fa2dd79c2" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/c077284f-ec8e-4419-9fb4-780884a8d9ac" width="200" height="420"/>|
+
+- 그룹 채팅 & 카테고리
+
+|채팅 기능|카테고리|검색 기능|
+|---|---|---|
+|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/bad9d3ea-e163-462f-8211-5b9e6907bf28" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/e8a9b5f0-a1db-4138-aaa1-f91cc99a69b9" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/699c996e-5477-41be-91cd-ec7d11ec6927" width="200" height="420"/>|
+
+- 회원 가입 & 로그인
+
+|회원가입 & 온보딩|회원 탈퇴|로그아웃|
+|---|---|---|
+|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/989ab360-1653-4238-bba2-9626a7a6c317" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/d6910315-231f-4e33-b2ae-542b95d35412" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/41aaed19-863b-436e-b894-4dff01822c34" width="200" height="420"/>|
 
 ## 🛠프로젝트 기획
 ### 프라이머리 컬러 
@@ -60,28 +84,3 @@ del : 버그 수정
 ### 프로젝트 파일 구조
 ![image](https://github.com/Android-3rd-Momo/MOMO/assets/161282085/5064b988-8e11-4e3e-823b-5bf82b56bd14)
     
-## 👍애플리케이션 기능
-- 모임 CRUD
-
-|모임생성|모임수정|
-|---|---|
-|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/151c16a4-9b7c-4fa7-b7f0-27b91073da00" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/de35a85e-ff6f-48a3-8c30-5db3ccaf538d" width="200" height="420"/>|
-
-- 모임에 유저 추가 및 삭제
-
-|모임참여|모임 가입 승인|모임 탈퇴|유저 강퇴|
-|---|---|---|---|
-|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/61fd9cbe-7bdb-4bc4-9c1e-097bb308cb97" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/9f5ca7fd-fda3-4111-b645-730e8ba8a928" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/9f1458be-b065-4c37-9660-af6fa2dd79c2" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/c077284f-ec8e-4419-9fb4-780884a8d9ac" width="200" height="420"/>|
-
-- 그룹 채팅 & 카테고리
-
-|채팅 기능|카테고리|검색 기능|
-|---|---|---|
-|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/bad9d3ea-e163-462f-8211-5b9e6907bf28" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/e8a9b5f0-a1db-4138-aaa1-f91cc99a69b9" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/699c996e-5477-41be-91cd-ec7d11ec6927" width="200" height="420"/>|
-
-- 회원 가입 & 로그인
-
-|회원가입 & 온보딩|회원 탈퇴|로그아웃|
-|---|---|---|
-|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/989ab360-1653-4238-bba2-9626a7a6c317" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/d6910315-231f-4e33-b2ae-542b95d35412" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/41aaed19-863b-436e-b894-4dff01822c34" width="200" height="420"/>|
-
