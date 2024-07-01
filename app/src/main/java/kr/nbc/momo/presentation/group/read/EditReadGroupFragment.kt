@@ -17,6 +17,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -241,7 +243,13 @@ class EditReadGroupFragment : Fragment() {
                 showDialog(tvLastDateEdit, Value.Last)
             }
             btnCompleteEdit.setOnClickListener {
-                btnCompleteEditOnClickListener(data)
+                if (getChipText(binding.chipProgramingLanguageEdit).isEmpty() &&
+                    getChipText(binding.chipGroupDevelopmentOccupationsEdit).isEmpty()) {
+                    makeToastWithStringRes(requireContext(), R.string.empty_category)
+                } else {
+                    btnCompleteEditOnClickListener(data)
+                }
+
             }
             tvDelete.setOnClickListener {
                 try {
