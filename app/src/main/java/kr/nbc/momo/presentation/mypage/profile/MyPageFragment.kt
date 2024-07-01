@@ -138,13 +138,13 @@ class MyPageFragment : Fragment() {
             chipGroup.addView(Chip(requireContext()).apply {
                 text = chipText
                 isCheckable = false
-                setChipBackgroundColorResource(R.color.white)
                 setTextColor(
                     ContextCompat.getColorStateList(
                         requireContext(),
-                        R.color.tv_chip_state_color
+                        R.color.base_chip_text
                     )
                 )
+                setChipBackgroundColorResource(R.color.base_chip_bg)
             })
         }
     }

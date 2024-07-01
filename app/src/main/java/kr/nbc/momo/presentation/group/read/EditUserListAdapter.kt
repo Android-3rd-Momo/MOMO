@@ -40,7 +40,7 @@ class EditUserListAdapter(private val userList: List<String>, private val leader
 
     override fun onBindViewHolder(holder: EditUserListAdapterHolder, position: Int) {
         if (leaderId == userList[position]) {
-            holder.userId.setTextColor(ContextCompat.getColor(context, R.color.white))
+            holder.userId.setTextColor(ContextCompat.getColor(context, R.color.base_chip_text))
             holder.root.setBackgroundResource(R.drawable.bg_layout_corner_stroke_blue)
         }
 
