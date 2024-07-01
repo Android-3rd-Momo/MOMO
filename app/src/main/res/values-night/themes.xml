@@ -10,6 +10,7 @@
         <item name="colorPrimaryContainer">@color/blue</item>
         <item name="colorOnPrimaryContainer">@color/blue</item>
         <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Theme.MOMO" parent="Base.Theme.MOMO" />
