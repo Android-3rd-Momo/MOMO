@@ -1,7 +1,5 @@
-## 모이개 
+# 모이개 
 ![title](https://ifh.cc/g/0Fw92X.png)
-
-내일배움캠프 안드로이드 3기 최종 팀프로젝트
 
 ## 🙌프로젝트 소개
 ### **프로젝트 명 : 모이개(모여라이런개발자)**
@@ -13,6 +11,8 @@
 ### 팀원소개
 |<img src="https://img.shields.io/badge/PL-red?&logoColor=white"></br>[이성민](https://github.com/winterwood0118)  |<img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> </br> [김재혁](https://github.com/Combro-Kim) | <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[김현아](https://github.com/kmtso434) | <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[임봉규](https://github.com/bonggyulim) |
 | --- | --- | --- | --- |
+
+</br>
 
 ## 📚Stacks
 
@@ -28,6 +28,8 @@
 | Firebase | <img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white"> <img src="https://img.shields.io/badge/Storage-FFCA28?style=for-the-badge"> <img src="https://img.shields.io/badge/Authentication-4285F4?style=for-the-badge"> <img src="https://img.shields.io/badge/Firestore-854C1D?style=for-the-badge"> <img src="https://img.shields.io/badge/RealTimeDataBase-EE84EA?style=for-the-badge"> |
 | 이미지 로더 | <img src="https://img.shields.io/badge/Coil-18BED4?style=for-the-badge">  |
 | UI Frameworks | <img src="https://img.shields.io/badge/Fragment-492f64?style=for-the-badge"> <img src="https://img.shields.io/badge/RecyclerViewAdapter-6e3630?style=for-the-badge"> <img src="https://img.shields.io/badge/ArrayAdapter-373737?style=for-the-badge"> <img src="https://img.shields.io/badge/XML-89632a?style=for-the-badge"> <img src="https://img.shields.io/badge/MaterialDesign-757575?style=for-the-badge"> <img src="https://img.shields.io/badge/ViewPager-a0a0a0?style=for-the-badge"> <img src="https://img.shields.io/badge/Photo Picker-FF8E99?style=for-the-badge"> <img src="https://img.shields.io/badge/Date Picker-41a541?style=for-the-badge">   <img src="https://img.shields.io/badge/Number Picker-6EE0FF?style=for-the-badge">   
+
+</br>
 
 ## 👍애플리케이션 기능
 - 모임 CRUD
@@ -54,10 +56,9 @@
 |---|---|---|
 |<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/989ab360-1653-4238-bba2-9626a7a6c317" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/d6910315-231f-4e33-b2ae-542b95d35412" width="200" height="420"/>|<img src="https://github.com/Android-3rd-Momo/MOMO/assets/161282085/41aaed19-863b-436e-b894-4dff01822c34" width="200" height="420"/>|
 
-## 🛠프로젝트 기획
-### 프라이머리 컬러 
-<img src="https://img.shields.io/badge/326DF7-326DF7?&logoColor=white">
+</br>
 
+## 🛠프로젝트 기획
 ### 와이어프레임
 [![텍스트](https://velog.velcdn.com/images/qhdrb123/post/d2671390-a56c-45ba-8222-aa944f16e0f8/image.png)](https://www.figma.com/design/e2hRJCDTkadbtvh8wlWzbC/5%EC%A1%B0_%EB%AA%A8%EC%9D%B4%EA%B0%9C?node-id=358-1070&t=fNIG7Qw02b5hX2gF-0)
 
@@ -107,3 +108,60 @@ del : 버그 수정
 │ └─userinfo # 사용자 정보 프래그먼트</br>
 │</br>
 └─util # 유틸리티 파일</br>
+
+</br>
+
+## 🤝기술적 의사결정
+### 아키텍처 플로우 차트
+![모이개 아키텍처](https://github.com/Android-3rd-Momo/MOMO/assets/161282085/5b957b74-ad1d-4168-a260-63ef8624589e)
+
+#### Architecture
+
+<details>
+<summary>Clean Architecture</summary>
+
+&nbsp;&nbsp;코드의  유지 보수성을 위해 사용</br>
+&nbsp;&nbsp;presentation - domain - data의 3 layer로 구성</br>
+&nbsp;&nbsp;하나의 UseCase는 Repository구현체의 메서드 하나를 리턴하는 구조
+
+</details>
+
+
+
+#### Design Pattern
+
+
+<details>
+<summary>MVVM</summary>
+
+&nbsp;&nbsp;UI로직과 비즈니스 로직을 분리하여 가독성 및 테스트 용이성 향상</br>
+&nbsp;&nbsp;AAC ViewModel을 활용</br>
+
+</details>
+
+
+<details>
+<summary>Repository</summary>
+
+&nbsp;&nbsp;Clean Architecture의 의존성 역전 원칙을 위해 interface와 구현체 사용</br>
+
+</details>
+
+<details>
+<summary>DI(Dependency Injection)</summary>
+
+&nbsp;&nbsp;객체 간의 결합도를 낮추기 위해 사용</br>
+&nbsp;&nbsp;구글 제공 라이브러리인 Hilt 사용</br>
+&nbsp;&nbsp;Clean Architecture의 단일책임 원칙 준수</br>
+
+</details>
+
+
+### **Coil** vs <s>Glide</s>
+  - Context를 사용하지 않음
+  - Glide에 비해 가볍고 사용법이 간단함
+
+### **FireBase** vs <s>MySQL</s>
+- MySQL을 이용한 DB구축은 좋은 경험이 되겠지만 뎁스가 맞지 않는다는 판단
+- 사용하는 데이터의 관계성이 크게 복잡하지 않음
+- 회원가입을 FireBase Auth를 사용할 예정이었기 때문에 용이한 데이터 관리를 위해 도입
