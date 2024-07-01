@@ -219,7 +219,7 @@ class EditMyPageFragment : Fragment() {
     }
 
     private fun pickVisualMediaRequest(launcher: ActivityResultLauncher<PickVisualMediaRequest>) {
-        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun deleteImage(imageType: ImageType) {
