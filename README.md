@@ -21,7 +21,8 @@
 |사용 언어|<img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white"/>|
 |개발 툴|<img src="https://img.shields.io/badge/Android Studio-3DDC84?style=for-the-badge&logo=Android Studio&logoColor=white"/>|
 |형상 관리 툴|<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">|
-| 디자인 패턴 | <img src="https://img.shields.io/badge/MVVM-FDECC8?style=for-the-badge"> 
+| 디자인 패턴 | <img src="https://img.shields.io/badge/MVVM-FDECC8?style=for-the-badge"> <img src="https://img.shields.io/badge/DI-C73DA3?style=for-the-badge"> |
+|의존성 관리| <img src="https://img.shields.io/badge/Hilt-C6FF70?style=for-the-badge"> |
 | Jetpack | <img src="https://img.shields.io/badge/ViewModel-FF3232?style=for-the-badge"> <img src="https://img.shields.io/badge/Flow-373737?style=for-the-badge"> <img src="https://img.shields.io/badge/LifeCycle-FFDC3C?style=for-the-badge"> <img src="https://img.shields.io/badge/ViewBinding-5A5A5A?style=for-the-badge"> <img src="https://img.shields.io/badge/AAC-2C593F?style=for-the-badge">  <img src="https://img.shields.io/badge/Navigation-E1B771?style=for-the-badge"> |
 | 비동기 처리 | <img src="https://img.shields.io/badge/Coroutine-29456C?style=for-the-badge">
 | Firebase | <img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white"> <img src="https://img.shields.io/badge/Storage-FFCA28?style=for-the-badge"> <img src="https://img.shields.io/badge/Authentication-4285F4?style=for-the-badge"> <img src="https://img.shields.io/badge/Firestore-854C1D?style=for-the-badge"> <img src="https://img.shields.io/badge/RealTimeDataBase-EE84EA?style=for-the-badge"> |
