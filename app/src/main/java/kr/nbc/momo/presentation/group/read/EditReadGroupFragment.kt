@@ -491,7 +491,7 @@ class EditReadGroupFragment : Fragment() {
         val builder = android.app.AlertDialog.Builder(requireContext())
         builder.setItems(options) { _, position ->
             when (ImageOption.entries[position]) {
-                ImageOption.PICK_IMAGE -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+                ImageOption.PICK_IMAGE -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 ImageOption.DELETE_IMAGE -> {
                     imageUri = null
                     isGroupImageChange = true

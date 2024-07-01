@@ -190,7 +190,7 @@ class CreateGroupFragment : Fragment() {
 
             ivGroupImage.clipToOutline = true
             ivGroupImage.setOnClickListener {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
             btnCreateProject.setOnClickListener {
