@@ -21,7 +21,7 @@
 |사용 언어|<img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white"/>|
 |개발 툴|<img src="https://img.shields.io/badge/Android Studio-3DDC84?style=for-the-badge&logo=Android Studio&logoColor=white"/>|
 |형상 관리 툴|<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">|
-| 디자인 패턴 | <img src="https://img.shields.io/badge/MVVM-FDECC8?style=for-the-badge"> <img src="https://img.shields.io/badge/DI-C73DA3?style=for-the-badge"> |
+| 디자인 패턴 | <img src="https://img.shields.io/badge/MVVM-FDECC8?style=for-the-badge"> <img src="https://img.shields.io/badge/DI-C73DA3?style=for-the-badge"> <img src="https://img.shields.io/badge/Repository-FFDBC1?style=for-the-badge">| 
 |의존성 관리| <img src="https://img.shields.io/badge/Hilt-C6FF70?style=for-the-badge"> |
 | Jetpack | <img src="https://img.shields.io/badge/ViewModel-FF3232?style=for-the-badge"> <img src="https://img.shields.io/badge/Flow-373737?style=for-the-badge"> <img src="https://img.shields.io/badge/LifeCycle-FFDC3C?style=for-the-badge"> <img src="https://img.shields.io/badge/ViewBinding-5A5A5A?style=for-the-badge"> <img src="https://img.shields.io/badge/AAC-2C593F?style=for-the-badge">  <img src="https://img.shields.io/badge/Navigation-E1B771?style=for-the-badge"> |
 | 비동기 처리 | <img src="https://img.shields.io/badge/Coroutine-29456C?style=for-the-badge">
@@ -83,5 +83,27 @@ del : 버그 수정
 ![](https://velog.velcdn.com/images/qhdrb123/post/908dda56-db3a-445b-8c5e-93e0b9b7a582/image.png)
 
 ### 프로젝트 파일 구조
-![image](https://github.com/Android-3rd-Momo/MOMO/assets/161282085/5064b988-8e11-4e3e-823b-5bf82b56bd14)
-    
+└─momo </br>
+├─data # 데이터 소스 관련 파일</br>
+│ ├─di # 의존성 주입 설정 파일</br>
+│ ├─model # 데이터 모델 파일</br>
+│ └─repository # 데이터 저장소 관련 파일</br>
+│</br>
+├─domain # 비즈니스 로직 관련 파일</br>
+│ ├─model # 도메인 모델 파일</br>
+│ ├─repository # 도메인 저장소 인터페이스 파일</br>
+│ └─usecase # 유즈케이스(비즈니스 로직) 파일</br>
+│</br>
+├─presentation # UI 관련 파일</br>
+│ ├─chatting # 채팅 프래그먼트 및 채팅 관련 클래스</br>
+│ ├─group # 그룹 프래그먼트 및 그룹 관련 클래스</br>
+│ ├─home # 홈 프래그먼트</br>
+│ ├─main # 메인 액티비티</br>
+│ ├─mypage # 마이페이지 프래그먼트 및 유저 관련 클래스</br>
+│ ├─notification # 알림 프래그먼트</br>
+│ ├─onboarding # 온보딩 프래그먼트</br>
+│ ├─search # 그룹 검색 프래그먼트</br>
+│ ├─setup # 설정 프래그먼트</br>
+│ └─userinfo # 사용자 정보 프래그먼트</br>
+│</br>
+└─util # 유틸리티 파일</br>
