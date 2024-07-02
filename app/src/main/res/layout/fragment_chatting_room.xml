@@ -83,10 +83,10 @@
             android:paddingBottom="4dp"
             android:textColorHint="@color/hint_grey"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@id/ivSend"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivSend"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ivSend" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivSend"
@@ -95,7 +95,7 @@
             android:padding="10dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/icon_send"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintVertical_bias="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
