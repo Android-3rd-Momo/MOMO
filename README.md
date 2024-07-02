@@ -9,7 +9,7 @@
 - 구글 플레이스토어 배포
 
 ### 팀원소개
-|<img src="https://img.shields.io/badge/PL-red?&logoColor=white"></br>[이성민](https://github.com/winterwood0118)  |<img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> </br> [김재혁](https://github.com/Combro-Kim) | <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[김현아](https://github.com/kmtso434) | <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[임봉규](https://github.com/bonggyulim) |
+|<img src="https://img.shields.io/badge/PL-red?&logoColor=white"></br>[이성민](https://github.com/winterwood0118)  |<img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white">  <img src="https://img.shields.io/badge/PE-4B89DC?"> </br> [김재혁](https://github.com/Combro-Kim) | <img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[김현아](https://github.com/kmtso434) | <img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[임봉규](https://github.com/bonggyulim) |
 | --- | --- | --- | --- |
 
 </br>
@@ -23,7 +23,7 @@
 |형상 관리 툴|<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">|
 | 디자인 패턴 | <img src="https://img.shields.io/badge/MVVM-FDECC8?style=for-the-badge"> <img src="https://img.shields.io/badge/DI-C73DA3?style=for-the-badge"> <img src="https://img.shields.io/badge/Repository-FFDBC1?style=for-the-badge">| 
 |의존성 관리| <img src="https://img.shields.io/badge/Hilt-C6FF70?style=for-the-badge"> |
-| Jetpack | <img src="https://img.shields.io/badge/ViewModel-FF3232?style=for-the-badge"> <img src="https://img.shields.io/badge/Flow-373737?style=for-the-badge"> <img src="https://img.shields.io/badge/LifeCycle-FFDC3C?style=for-the-badge"> <img src="https://img.shields.io/badge/ViewBinding-5A5A5A?style=for-the-badge"> <img src="https://img.shields.io/badge/AAC-2C593F?style=for-the-badge">  <img src="https://img.shields.io/badge/Navigation-E1B771?style=for-the-badge"> |
+| Jetpack | <img src="https://img.shields.io/badge/ViewModel-FF3232?style=for-the-badge"> <img src="https://img.shields.io/badge/Flow-373737?style=for-the-badge"> <img src="https://img.shields.io/badge/LifeCycle-FFDC3C?style=for-the-badge"> <img src="https://img.shields.io/badge/ViewBinding-5A5A5A?style=for-the-badge"> <img src="https://img.shields.io/badge/Navigation-E1B771?style=for-the-badge"> |
 | 비동기 처리 | <img src="https://img.shields.io/badge/Coroutine-29456C?style=for-the-badge">
 | Firebase | <img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white"> <img src="https://img.shields.io/badge/Storage-FFCA28?style=for-the-badge"> <img src="https://img.shields.io/badge/Authentication-4285F4?style=for-the-badge"> <img src="https://img.shields.io/badge/Firestore-854C1D?style=for-the-badge"> <img src="https://img.shields.io/badge/RealTimeDataBase-EE84EA?style=for-the-badge"> |
 | 이미지 로더 | <img src="https://img.shields.io/badge/Coil-18BED4?style=for-the-badge">  |
@@ -135,7 +135,6 @@ del : 버그 수정
 <summary>MVVM</summary>
 
 &nbsp;&nbsp;UI로직과 비즈니스 로직을 분리하여 가독성 및 테스트 용이성 향상</br>
-&nbsp;&nbsp;AAC ViewModel을 활용</br>
 
 </details>
 
