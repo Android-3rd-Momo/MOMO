@@ -9,7 +9,7 @@
 - 구글 플레이스토어 배포
 
 ### 팀원소개
-|<img src="https://img.shields.io/badge/PL-red?&logoColor=white"></br>[이성민](https://github.com/winterwood0118)  |<img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> </br> [김재혁](https://github.com/Combro-Kim) | <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[김현아](https://github.com/kmtso434) | <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[임봉규](https://github.com/bonggyulim) |
+|<img src="https://img.shields.io/badge/PL-red?&logoColor=white"></br>[이성민](https://github.com/winterwood0118)  |<img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white">  <img src="https://img.shields.io/badge/PE-4B89DC?"> </br> [김재혁](https://github.com/Combro-Kim) | <img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[김현아](https://github.com/kmtso434) | <img src="https://img.shields.io/badge/QA-6DB33F?&logoColor=white"> <img src="https://img.shields.io/badge/PE-4B89DC?"> </br>[임봉규](https://github.com/bonggyulim) |
 | --- | --- | --- | --- |
 
 </br>
