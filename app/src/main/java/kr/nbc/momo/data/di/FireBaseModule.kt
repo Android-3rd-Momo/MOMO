@@ -9,7 +9,9 @@ import com.google.firebase.storage.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,6 +20,7 @@ object FireBaseModule {
         setPersistenceEnabled(true)
         setPersistenceCacheSizeBytes(1024 * 1024 * 100)
     }
+
     @Provides
     fun provideFireBaseDataBase(): FirebaseDatabase {
         return firebaseDatabase
