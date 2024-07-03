@@ -113,7 +113,7 @@ del : 버그 수정
 
 ## 🤝기술적 의사결정
 ### 아키텍처 플로우 차트
-![모이개 아키텍처](https://github.com/Android-3rd-Momo/MOMO/assets/161282085/5b957b74-ad1d-4168-a260-63ef8624589e)
+![image](https://github.com/Android-3rd-Momo/MOMO/assets/161282085/04727cc9-49bd-4dac-acb7-2295a3ecd0ad)
 
 #### Architecture
 
